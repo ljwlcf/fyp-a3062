@@ -7,6 +7,78 @@ Did:
 Broke:
 Next:
 
+## 2026-09-13 (3)
+Did: Reviewed the big 29-paper batch dropped in papers/, added a literature.md entry for
+every one. This was the real haul — most of the project's actual reference list, not just
+cross-domain flavor:
+- SWE-Debate itself (arXiv:2507.23348), read in full against the earlier repo inspection.
+  Confirmed exact ablation numbers (chains -10.0, edit plan -6.0, debate -4.2), confirmed the
+  "3-round debate" is actually 2 agent rounds + 1 discriminator round, confirmed the 5 agents
+  are one DeepSeek-V3-0324 model under different system prompts (paper's own words, Sec 6.2),
+  confirmed zero cost reporting anywhere, confirmed the 75-instance subset is django+sympy+
+  sphinx-doc (three repos, not two as previously assumed). Full discrepancy list written to
+  deviations.md.
+- Core comparators: LocAgent, Agentless, SWE-bench (the benchmark itself), SWE-Search (origin
+  of the excluded MCTS repair stage), SWE-Effi (closest existing precedent to our own cost-
+  accuracy-frontier deliverable — needs an explicit "how we differ" paragraph in the report).
+- Multi-agent debate lineage: Du et al. (the original debate paper SWE-Debate's mechanism
+  descends from), Huang et al. (earliest compute-matched critique of that exact mechanism),
+  Cemri et al. MAST (14-failure-mode taxonomy, usable as an analysis tool for our own results).
+- The three most load-bearing methodology papers: Tran & Kiela (DPI-based proof + the
+  boundary-condition H4 is built on — important caveat: their distractor-injection condition,
+  closest analogue to "candidate density," was their WEAKEST crossover lever, so H4 may need a
+  stronger operationalization than plain additive distractors), "Inside the Scaffold" (near-
+  verbatim precedent for our confounded-comparisons premise), ColMAD (shows debate CAN beat
+  compute-matched single-agent under incentive redesign, but only with heterogeneous backbones
+  — flagged as a threat to validity against our single-backbone decision, logged in
+  decisions.md).
+- GraphRAG terminology: Peng et al.'s survey and Microsoft's original GraphRAG paper — critical
+  finding that "GraphRAG" in the literature usually means LLM-extracted graphs (real inference
+  cost to build), NOT our static-analysis AST graph (zero LLM cost to build). Report needs to
+  disambiguate this explicitly on first use of the term.
+- Closest kin found: LLM4FL (Defects4J fault localization, graph-nav + Reflexion, leave-one-out
+  ablation, actually reports cost) and Agent Scaling Science / MAS Capability Saturation
+  (Nature MI) — the single most methodologically relevant paper in the whole batch, a large-
+  scale compute-matched 5-architecture study whose own SWE-bench-Verified arm shows every
+  multi-agent architecture losing to single-agent under matched budget.
+- Several SE-agent and issue-resolution surveys (LLM Agents for SE, LLM-Agent-SE, LLM-based
+  Issue Resolution) that independently name SWE-Debate and confirm "no efficiency-aware
+  evaluation" as a recognized field-wide gap.
+- Historical grounding: BugLocator and BLUiR, pre-LLM IR-based bug localization — gives a
+  concrete numeric anchor (~24-55% Top-1 depending on project) for what "baseline" localization
+  accuracy meant before graphs/agents existed.
+- Several more compute-matching-adjacent papers (MacNet, Agent Forest, Reasoning in Token
+  Economies, Entropy Perspective on MAS, FJ-MoE, OneFlow) — all converging on the same pattern:
+  debate's advantage shrinks or inverts once properly budget-matched, in domains from GSM8K to
+  general agentic benchmarks.
+Broke: Nothing — investigation only.
+Next: See (4) below — the last 5 papers are now done too. Check with supervisor whether CoSIL,
+OrcaLoca, KGCompass, and Prometheus (named as fallback/competitor systems in CLAUDE.md but not
+yet in papers/) still need dedicated review, or whether the current set already covers what's
+needed for the report's Related Work.
+
+## 2026-09-13 (4)
+Did: Reviewed the last 5 papers (Software Testing LLM Survey, LLMAO, AutoFL, Agent4SE Survey,
+LLM4SE SLR). Literature review is now at 40 unique papers reviewed, 40 entries in
+literature.md (41 PDFs in papers/, one is an accidental duplicate of 2601.12307v1). Two
+flagged as uncertain/low relevance for student review (Software Testing LLM Survey — no
+multi-agent or graph-grounded FL in its 102-paper corpus at all; LLM4SE SLR — corpus cutoff
+predates the entire multi-agent-debate-for-FL literature, near-zero overlap). One genuinely
+new load-bearing finding: Agent4SE Survey (ACM TOSEM, 124-paper survey of LLM-agents-for-SE)
+reports that only 46.7% of surveyed agentic SE papers report ANY cost/efficiency data — the
+best available field-scale statistic backing the "no cost reporting" half of A3062's
+motivation, better than any single-paper anecdote. AutoFL (arXiv:2308.05487) and LLMAO
+(arXiv:2310.01726) add two more single-agent, non-graph fault-localization baselines that
+trade compute for accuracy without ever compute-matching against a stronger single model —
+useful contrast points for describing SWE-Debate's heavier design.
+Broke: Nothing.
+Next: Literature review is effectively saturated for now. Good time to pause and discuss
+direction in Chat — particularly: (a) whether to chase down CoSIL/OrcaLoca/KGCompass/
+Prometheus specifically, (b) how to operationalize "candidate density" for H4 given Tran &
+Kiela's own distractor-injection result was their weakest crossover lever (see literature.md),
+(c) whether/how to address the single-backbone-debate threat to validity flagged from ColMAD
+(see decisions.md). All findings pushed to GitHub once the student confirms.
+
 ## 2026-09-13 (2)
 Did: Reviewed 6 papers dropped in papers/ (multi-agent + graph-RAG systems in industrial
 maintenance, multi-hop QA, software testing, medical QA, OSINT, and news bias/fact-checking)
