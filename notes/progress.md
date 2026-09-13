@@ -7,6 +7,22 @@ Did:
 Broke:
 Next:
 
+## 2026-09-13 (2)
+Did: Reviewed 6 papers dropped in papers/ (multi-agent + graph-RAG systems in industrial
+maintenance, multi-hop QA, software testing, medical QA, OSINT, and news bias/fact-checking)
+and added a literature.md entry for each. None are code/SWE-bench-adjacent competitors to
+LocAgent/CoSIL/KGCompass/SWE-Debate; all six serve mainly as cross-domain evidence for the
+report's Motivation section — every one has an ablation that is one-factor-at-a-time (never
+factorial), not compute-matched, single-run with no seeds/CIs, and reports little-to-no real
+inference cost (tokens/latency/$), even when they narrate cost/ROI qualitatively. Flagged the
+news bias/fact-checking paper (KG-News-Agents) as borderline-relevant given domain mismatch —
+worth a supervisor call on whether to keep it in the review at all.
+Broke: Nothing.
+Next: Decide with supervisor whether KG-News-Agents stays in the lit review. Continue
+literature review toward the actual competitor set (LocAgent, CoSIL, OrcaLoca, KGCompass,
+Prometheus, the budget-controlled multi-agent-debate papers) once more of those PDFs are on
+hand.
+
 ## 2026-09-13
 Did: Scaffolded repo directories (notes/, papers/, report/, ablation/{configs,harness,results}),
 .gitignore, and notes/{literature,deviations,decisions}.md. Recorded the four founding decisions
