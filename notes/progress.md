@@ -7,6 +7,22 @@ Did:
 Broke:
 Next:
 
+## 2026-09-19
+Did: Project plan submitted 14 Sep. Plan discussion with A/P Chen: she read it as a
+reproduction and suggested testing other datasets and modifying the debate, so the plan is now
+three phases (diagnose, modify, validate) — see decisions.md and FYP_A3062_Project_Plan.md.
+Renamed the 41 PDFs in papers/ to their titles with A/B/C/D reading-order labels
+(notes/reading-order.md). Added a SWE-bench-Live entry to literature.md and wrote
+notes/literature-summary.md. Found that "Agent Scaling Science" is the preprint of the Nature
+MI paper (one study, not two), and that SWE-Debate's -4.2 debate effect is end-to-end Pass@1,
+not localization — gap statement corrected in decisions.md. Updated CLAUDE.md.
+Broke: No SWE-Debate run recorded yet. DeepSeek-V3-0324 is no longer served by DeepSeek, so
+the backbone moves to a self-hosted open model (deviations.md). GPU access pending: MLDA
+application first, at the supervisor's request.
+Next: Get one SWE-Debate instance running end to end by 30 Sep, or switch to LocAgent/CoSIL.
+Start the reachability measurement (no GPU needed). Confirm localization-only scope with
+A/P Chen. Pick the backbone once GPU memory is known. Read A1-A9.
+
 ## 2026-09-13 (3)
 Did: Reviewed the big 29-paper batch dropped in papers/, added a literature.md entry for
 every one. This was the real haul — most of the project's actual reference list, not just

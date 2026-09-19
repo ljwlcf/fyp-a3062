@@ -11,6 +11,9 @@ Cost reporting:
 Relation to A3062:
 Report section:
 
+Reading order and A/B/C/D labels: `notes/reading-order.md`. Synthesis across all
+entries: `notes/literature-summary.md`.
+
 ## MAKG — DOI:10.1016/j.jmsy.2026.02.016 (J. Manuf. Syst. 85, 2026)
 Claim: A multi-agent + knowledge-graph RAG framework (MAKG) for industrial equipment
 fault diagnosis beats non-RAG, NaiveRAG, HyDE RAG, GraphRAG and LightRAG baselines,
@@ -986,6 +989,9 @@ Report section: Related Work — graph-grounded code retrieval background, multi
 taxonomy; also citable in Introduction for the "coordination-cost evaluation gap" claim.
 
 ## Agent Scaling Science — arXiv:2512.08296 (arXiv preprint, cs.AI, v3 Apr 2026)
+**SAME STUDY as "MAS Capability Saturation" below** (identical authors, Kim et al.; this is
+the arXiv preprint, the Nature MI paper is the published version). Cite the Nature MI
+version and never count the two as independent evidence. Reading-order label C14.
 Claim: Establishes quantitative "scaling principles" predicting when multi-agent coordination
 helps vs hurts: controlled comparisons across 5 architectures (SAS; MAS-Independent;
 MAS-Centralized/orchestrator; MAS-Decentralized = peer debate+voting; MAS-Hybrid), 3 LLM
@@ -1170,6 +1176,10 @@ precedent, pre-LLM baseline accuracy, flat->structured->graph trajectory). Not a
 ablation/results/discussion.
 
 ## MAS Capability Saturation — DOI:10.1038/s42256-026-01268-y (Nature Machine Intelligence, Jul 2026)
+**SAME STUDY as "Agent Scaling Science" above** (published version of arXiv:2512.08296).
+Its SWE-bench Verified arm uses n = 20 instances per (model, architecture) cell, full
+issue resolution, all MAS slightly below SAS (SAS mean 0.488) — suggestive, not conclusive,
+for localization. Reading-order label A2.
 Claim: Whether multi-agent coordination beats a single strong agent depends predictably on
 measurable properties — chiefly SAS baseline performance (a capability-saturation proxy) —
 rather than a universal "more agents is all you need" scaling law. Derives an empirical ~45%
@@ -1369,3 +1379,37 @@ the review.
 Report section: Uncertain relevance, needs student/supervisor review — does not clearly anchor
 any specific section; at most a passing introductory citation, redundant with surveys already
 cited.
+
+## SWE-bench-Live ("SWE-bench Goes Live!") — arXiv:2505.23419 (arXiv preprint, Microsoft, v2 Jun 2025)
+Claim: A continuously updated, contamination-resistant issue-resolution benchmark: 1,319
+tasks from GitHub issues created 1 Jan 2024 - 20 Apr 2025 across 93 Python repositories, each
+with its own Docker image, built by an automated curation pipeline with monthly updates
+planned. The best agent-model pair (OpenHands + Claude 3.7 Sonnet) resolves only 19.25% on
+the Lite subset, versus 43.20% for the same pair re-run on SWE-bench Verified under identical
+settings — more than double.
+Task/benchmark: Full set (1,319) plus a Lite subset of 300 (50 per month, Oct 2024 - Mar
+2025, sampled with seed 42). Metrics: Resolved Rate, Patch Apply Rate, and file-level
+Localization Success Rate — whether the files edited by the generated patch match the gold
+patch's files. Repos average 85k lines of Python and 423 files.
+Method: Benchmark paper. Evaluates OpenHands (60-iteration cap), SWE-Agent (100-call cap) and
+Agentless (single localization and repair sample, regression reranking dropped) with GPT-4o,
+GPT-4.1, Claude 3.7 Sonnet and DeepSeek-V3-0324.
+Ablation: None in the method sense. Controlled comparisons instead: same agent-model pair on
+Verified vs Live; repository-origin split (216 instances from 8 original SWE-bench repos
+resolve at 22.96% vs 18.89% on 1,103 from new repos, even though the new repos are smaller);
+difficulty analysis (single-file patches under 5 lines solved ~48%; 3+ files or 100+ lines
+below 10%; 7+ files never). Single runs, no seeds or CIs.
+Cost reporting: None for inference — budgets are capped by iteration/call limits but tokens
+and dollars are not reported. "Cost" appears only as dataset-curation cost.
+Relation to A3062: The Phase 3 validation dataset. Directly supports the contamination
+argument: agents score more than twice as high on SWE-bench Verified as on fresh issues, and
+better on original SWE-bench repos than new ones. Two cautions: (1) instances start in Jan
+2024, so they must be filtered to issues created AFTER the chosen backbone's training cutoff,
+or the "unseen data" claim does not hold for that model; (2) its Localization Success Rate is
+patch-derived (files the final patch edits), weaker than A3062's recall/selection split, so
+A3062 should score localization directly against gold-patch files as it does on SWE-bench.
+Python-only, so the AST graph construction transfers with no new parsers, and
+localization-only evaluation needs no Docker. Its multi-file difficulty gradient is a
+candidate proxy for H4's candidate density.
+Report section: Methodology — Phase 3 dataset; Threats to validity — contamination (pair with
+the SWE-Bench Illusion paper, not yet reviewed); Discussion — generalisation beyond SWE-bench.

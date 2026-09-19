@@ -1,92 +1,127 @@
-# FYP A3062 — Compute-Matched Ablation of Graph-Grounded Multi-Agent Fault Localization
+# FYP A3062 — Diagnosing and Improving Multi-Agent Debate for Code Fault Localization
 
 ## What this project is
 
-Final Year Project at NTU (IEM), supervised by A/P Chen Lihui. Due dates are fixed by the
-school: plan 14 Sep 2026, interim report 10 Nov 2026, draft final 25 Mar 2027,
-final report 9 Apr 2027, oral 10-12 May 2027.
+Final Year Project at NTU (IEM), supervised by A/P Chen Lihui. Fixed dates: interim report
+10 Nov 2026, draft final 25 Mar 2027, final report 9 Apr 2027, demonstration 12-16 Apr 2027,
+oral 10-12 May 2027. (Project plan was submitted 14 Sep 2026.)
 
-**The research question.** SWE-Debate (arXiv:2507.23348) reports SOTA on software issue
-resolution by combining a static code dependency graph with a five-agent, three-round
-competitive debate. Its published ablation removes multi-agent debate for a 4.2 point drop.
-That ablation is not compute-matched: removing the debate also removes five agents' worth of
-inference tokens. This project re-runs the ablation with the token budget held constant.
+**Target system.** SWE-Debate (arXiv:2507.23348, ICSE 2026) localizes bugs by walking a static
+code dependency graph to build candidate fault chains, then has five copies of one LLM vote on
+a chain and debate a modification plan (2 debate rounds + 1 discriminator).
 
-**Hypotheses.**
+**Three phases** (decided 2026-09-19 after supervisor feedback — see `notes/decisions.md`):
+1. **Diagnose (Sem 1).** Measure the graph's reachability ceiling, reproduce the localization
+   baseline, then run a compute-matched 2x2 factorial: which component does the work?
+2. **Modify (Sem 2, first half).** Change the debate mechanism, ONE modification chosen from
+   Phase 1 evidence. Primary candidate: graph-grounded debate (agents cite checkable graph facts;
+   disagreements settled against the graph). Fallback: ColMAD's collaborative protocol with
+   heterogeneous backbones. Consensus-seeking debate alone is ruled out.
+3. **Validate (Sem 2, second half).** Re-test on SWE-bench-Live (arXiv:2505.23419), keeping only
+   issues created after the backbone's training cutoff.
+
+**The gap, stated precisely.** SWE-Debate's -4.2 debate ablation is end-to-end Pass@1 on
+SWE-bench Verified (41.4 -> 37.2), removes the debate's tokens along with the mechanism, and is a
+single run. Debate was never ablated at the localization level (~80% accuracy), where the
+Nature MI capability-saturation finding predicts it adds little. Do NOT describe this as "two
+papers contradicting each other" — see `notes/literature-summary.md` section 2.
+
+**Hypotheses (Phase 1).**
 - H1: graph grounding survives compute matching (it adds information, not just tokens)
-- H2: debate's measured contribution shrinks substantially under compute matching
+- H2: debate's contribution to localization is small under compute matching
 - H3: the two factors interact rather than sum
 - H4: any surviving debate benefit concentrates on instances with high candidate density
 
-H4 is the risk hedge. If debate's advantage vanishes, H4 turns a null into a positive result
-about when coordination is worth its cost.
-
 ## Scope boundaries — do not drift past these
 
-- **Localization only.** Do not touch the MCTS patch generation stage. It is a third heavy
-  component that neither factor of interest involves, and excluding it removes the Docker
-  test-harness dependency and most of the API cost.
-- **One model backbone: DeepSeek-V3-0324.** Matching the original paper is what isolates
-  architecture from model effects. Never substitute a different LLM for experiment runs.
-  (Claude is the research assistant here, not the system under test.)
-- **75-instance subset** (SWE-Bench-Verified-S, built on verified-mini, ~5GB not ~130GB).
-- **Python repositories only.** Graph construction uses Python's `ast` module.
-- **No new architecture.** The contribution is measurement.
+- **Localization only.** Do not touch the MCTS patch-generation stage. (Still needs the
+  supervisor's explicit confirmation.)
+- **One self-hosted backbone, pinned checkpoint, fixed across all arms of a comparison.**
+  DeepSeek-V3-0324 (the paper's model) is no longer served by DeepSeek. Serve an open-weights
+  model with vLLM on NTU GPUs. The only planned exception is the Phase 2 heterogeneous-agent
+  fallback. Claude is the research assistant here, never the system under test.
+- **Phase 1 data:** the 75-instance SWE-Bench-Verified-S subset (django 23, sympy 26,
+  sphinx-doc 26; `utils/verified75.txt`). Expand to the 300-instance SWE-bench Lite if
+  statistical power is marginal.
+- **Python repositories only.** The graph is built with Python's `ast` module.
+- **One modification in Phase 2**, not two.
 
-## Experimental design
+## Experimental design (Phase 1)
 
-2x2 factorial: graph grounding (multiple chains vs single chain) x debate (multi-agent vs
-single agent). Debate rounds nested at 1, 2, 3. Every multi-agent cell has a compute-matched
-single-agent counterpart granted the same token budget via extended reasoning or best-of-N.
-A compute-matched majority-voting arm is included as the cheap baseline.
+2x2 factorial: graph grounding (multiple chains vs single chain) x debate (multi-agent vs single
+agent). Every multi-agent cell gets a compute-matched single-agent counterpart with the same
+token budget (extended reasoning or best-of-N), plus compute-matched majority-vote and
+self-consistency arms. Debate round count is NOT a factor (hardcoded in the implementation).
 
-Multiple seeds per cell, bootstrap confidence intervals. Never report a single run.
+- **Hold candidate-chain ordering fixed or randomised across arms.** Ordering alone moved Top-1
+  by 22 points in LLM4FL.
+- **Paired analysis:** all arms run on the same instances, so compare per instance (McNemar or
+  paired bootstrap). Several seeds per cell. Never report a single run.
 
 ### Metrics to log on every run
 
-- Acc@1 (File) — comparable to published figures
-- Chain recall @ K — does the true location appear in ANY candidate chain (graph's job)
-- Selection precision — does the CHOSEN chain contain it, given recall (debate's job)
-- Total tokens per instance, split by stage
-- Wall-clock latency per instance
-- Cost per correctly localized instance
+- Acc@1 (File), scored against gold-patch files
+- Structural reachability: is the true file reachable in the graph from the entry nodes?
+- Chain recall @ K: does the true location appear in ANY candidate chain (the graph's job)
+- Selection precision: does the CHOSEN chain contain it, given recall (the debate's job)
+- Tokens per instance, split by stage — the primary cost metric
+- Wall-clock latency — only meaningful when the GPU is exclusively allocated
 - Inter-agent agreement rate per debate round
 
 The recall/selection split is a core contribution. The source paper never separates them.
 
+## Compute
+
+- Inference only, no training. vLLM serves the model; the harness calls it over HTTP.
+- GPU: applying for MLDA workstation access first (supervisor's request). Alternative: EEE GPU
+  Cluster (Slurm). On first login run `nvidia-smi`: vLLM needs compute capability 7.0+ (Volta
+  or newer); bf16 and FlashAttention-2 need Ampere or newer. Older MLDA documentation lists
+  GTX 1080 Ti workstations, which are too old.
+- **If working on the EEE GPU Cluster:** load its AI-facing digest
+  (https://github.com/NTUEEECluster/docs/blob/main/agent.md) at the start of the session and
+  follow it. Never run heavy processes on login nodes (16 GB cgroup; exceeding it kills all your
+  processes). Login-node processes die on disconnect, including tmux/nohup, so the vLLM server
+  and the harness must start and stop inside the same `sbatch` job.
+
 ## Repository layout
 
 ```
-fyp-a3062/
-├── CLAUDE.md              # this file
-├── notes/literature.md    # paper notes, one entry per paper
-├── swe-debate/            # instrumented fork
-├── ablation/
-│   ├── configs/           # one versioned config per cell
-│   ├── harness/           # runner, token accounting, result parsing
-│   └── results/           # raw JSON, one dir per run
+FYP-A3062/
+├── CLAUDE.md                     # this file
+├── FYP_A3062_Project_Plan.md     # current plan (three phases)
+├── notes/
+│   ├── decisions.md              # what was decided and why (append, mark superseded)
+│   ├── progress.md               # one entry per session, newest first
+│   ├── deviations.md             # differences from the published setup (threats to validity)
+│   ├── literature.md             # one entry per paper
+│   ├── literature-summary.md     # synthesis across papers, tied to the phases
+│   └── reading-order.md          # A/B/C/D labels matching papers/ filenames
+├── papers/                       # PDFs (gitignored), named "A1 - Title (Venue).pdf" etc.
+├── swe-debate/                   # instrumented fork (gitignored for now)
+├── ablation/{configs,harness,results}/
 └── report/
 ```
 
 ## Working conventions
 
-- Every experiment run gets a versioned config file. No ad-hoc CLI overrides that don't get
-  recorded — a result that can't be traced to a config is not a result.
-- Token accounting is instrumentation, not an afterthought. It goes in before the first
-  factorial pass, not after.
-- Write results as raw JSON first, analyse separately. Do not compute summary statistics
-  inside the run loop.
-- Flag any deviation from the published SWE-Debate setup in `notes/deviations.md`. These
-  become threats-to-validity entries in the report.
-- Prefer running one instance end to end over batch runs when debugging. API spend is a real
-  constraint.
+- Every experiment run gets a versioned config file. A result that can't be traced to a config
+  is not a result.
+- Token accounting goes in before the first factorial pass, not after.
+- Write results as raw JSON first; analyse separately.
+- Log any deviation from the published SWE-Debate setup in `notes/deviations.md`.
+- Debug on one instance end to end before running batches.
+- Write three lines in `notes/progress.md` at the end of each session. The research reasoning
+  lives in the claude.ai Project chat; decisions land here.
 
 ## Known unknowns
 
-- Whether SWE-Debate reproduces its reported localization numbers. Verify before anything
-  depends on it. Fallback: same factorial on LocAgent (arXiv:2503.09089) or CoSIL
-  (arXiv:2503.22424).
-- Whether DeepSeek-V3 responds usefully to reasoning-budget control, which determines whether
-  compute matching uses extended reasoning or best-of-N.
-- An ambiguous line in the source paper's implementation notes about a testbed setup that was
-  not used. Resolve early.
+- Whether SWE-Debate runs and reproduces. **Decision point 30 Sep 2026**: if one instance does
+  not run end to end, use the same design on LocAgent (arXiv:2503.09089) or CoSIL
+  (arXiv:2503.22424). Known defects: empty hardcoded API credentials, inconsistent model name,
+  absolute cache path at filesystem root (see progress.md 2026-09-13).
+- Which backbone: depends on GPU memory (a 32B code model needs ~64 GB in bf16; 14B ~28 GB).
+- Whether compute matching uses extended reasoning or best-of-N — depends on the chosen model.
+- How to operationalize candidate density for H4. Tran & Kiela found plain distractors their
+  weakest lever; SWE-bench-Live's multi-file difficulty gradient is a candidate proxy.
+- Same-model agents may suppress debate regardless of compute (ColMAD). Threat to validity,
+  logged in decisions.md.

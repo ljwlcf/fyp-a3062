@@ -65,3 +65,19 @@ threats-to-validity section can cite them precisely rather than rediscovering th
    our ablation study confirms significant performance gains from the debate mechanism,
    integrating multiple heterogeneous models... could further enhance the diversity." This
    confirms CLAUDE.md's characterization exactly and can be quoted directly in the report.
+
+## 2026-09-19 — Backbone: DeepSeek-V3-0324 is no longer available from DeepSeek
+What changed: The source paper ran on DeepSeek-V3-0324 through DeepSeek's API (the code calls
+`deepseek/deepseek-chat` in one place and a hardcoded `deepseek-v3` in another). DeepSeek retired
+the `deepseek-chat` alias on 24 Jul 2026 and no longer serves V3-0324 itself. A3062 will run a
+self-hosted open-weights model at a pinned checkpoint instead (model to be chosen once GPU
+memory is known).
+Why: The original backbone is unavailable first-party. Self-hosting also keeps the model fixed
+for the whole project and gives direct control of sampling and seeds, which compute matching
+needs.
+Expected impact: Absolute localization accuracy will not match the published 81.67% Acc@1
+(File). Comparisons inside A3062 stay valid because every arm shares the backbone. The report
+should describe the reproduction as "same pipeline, different backbone" and compare deltas,
+not absolute numbers. A lower single-agent baseline may make any coordination benefit easier
+to detect (Nature MI capability-saturation finding). If a third-party host still serves
+V3-0324, one reproduction arm on the original model would strengthen the comparison.

@@ -1,207 +1,168 @@
-# FYP A3062 — Project Plan
+# FYP A3062 — Project Plan (current)
 
-**Student:** Li Jingwei
-**Supervisor:** A/P Chen Lihui
-**Programme:** Information Engineering and Media (IEM), NTU
-**Submission:** Week 6, FYP 2026 S1 — 14 September 2026
+**Student:** Li Jingwei · **Supervisor:** A/P Chen Lihui · **Programme:** Information
+Engineering and Media, NTU
 
----
+> Living document, updated 2026-09-19. The version submitted on 14 Sep 2026 framed the project
+> as a compute-matched ablation only. After supervisor feedback it now has three phases:
+> diagnose, modify, validate. The earlier draft is in git history.
 
 ## 1. Title
 
-**Does Debate Earn Its Tokens? A Compute-Matched Factorial Ablation of Graph-Grounded Multi-Agent Fault Localization**
-
----
+**Diagnosing and Improving Multi-Agent Debate for Code Fault Localization**
 
 ## 2. Objective
 
-To determine whether the performance attributed to multi-agent debate in graph-guided software issue localization survives a compute-matched comparison, through a factorial ablation of graph grounding and debate mechanisms on the SWE-Debate framework, evaluated on file-level localization accuracy against measured token and latency cost, in order to inform cost-aware design of future software engineering agents.
-
----
+To determine which component of graph-guided multi-agent fault localization does the work —
+dependency-graph grounding, multi-agent debate, or their interaction — under matched compute;
+to use that diagnosis to design and evaluate one improved debate mechanism; and to validate the
+findings on issues the model cannot have seen during training.
 
 ## 3. Background
 
-### 3.1 LLMs for repository-level software engineering
+Automated issue resolution asks a system to read a bug report, find the responsible code in a
+whole repository, and fix it. Finding the code — fault localization — is the bottleneck. Two
+techniques dominate current systems: searching a code dependency graph recovered by static
+analysis, and having several LLM agents debate the answer. SWE-Debate (Li et al., ICSE 2026)
+combines both and reports 81.67% file-level localization accuracy on SWE-bench Lite.
 
-Large language models have moved from function-level code completion to repository-level tasks, of which automated issue resolution is the most demanding. Given a natural-language issue report and a full codebase, a system must identify the defective code and produce a patch. The SWE-bench family of benchmarks (Jimenez et al., ICLR 2024) formalised this task on real GitHub issues and has become the standard measure of progress.
+Controlled studies now question the debate half. When a single agent is given the same token
+budget, multi-agent debate usually stops helping (Huang et al., ICLR 2024; Tran & Kiela, 2026).
+A large controlled study (Kim et al., Nature Machine Intelligence 2026) finds coordination helps
+less as the single-agent baseline rises, with little benefit above about 45%, while costing
+58-515% extra tokens. Debate can work, but only with incentives that reward information and
+genuinely different agents (ColMAD, 2025) — SWE-Debate uses competitive debate among five
+copies of one model. Full synthesis: `notes/literature-summary.md`.
 
-The task decomposes into two stages: **fault localization**, identifying which code must change, and **patch generation**, producing the change. Localization is widely treated as the bottleneck, since a patch generator cannot repair code it never retrieves.
+## 4. Gap and motivation
 
-### 3.2 From flat retrieval to graph-grounded retrieval
+SWE-Debate's debate ablation measures end-to-end Pass@1 on SWE-bench Verified (41.4% with
+debate, 37.2% without). It removes the debate's tokens along with the mechanism, varies one
+component at a time, reports no cost, and is a single run. Debate was never ablated at the
+localization level, where accuracy is about 80% and the capability-saturation account predicts
+it adds little. No study has crossed a graph factor with a coordination factor under matched
+compute, and none has measured whether the true fix location is even reachable in the graph.
 
-Early systems retrieved code by embedding similarity over chunks. This loses structure: an embedding of a function body does not encode which functions call it, which class it inherits from, or which module imports it. Since defects propagate along exactly those relationships, flat retrieval systematically misses multi-file faults.
+This matters because graph construction is free while debate multiplies inference cost. Teams
+building software engineering agents currently cannot tell which one earns its place. And if
+debate does not pay as designed, the next question is whether a better-designed debate can.
 
-Graph-based retrieval-augmented generation (GraphRAG) addresses this by indexing an explicit graph of entities and relations and retrieving over paths rather than points (Peng et al., *Graph Retrieval-Augmented Generation: A Survey*, ACM TOIS). In the code domain the graph is not extracted by an LLM from prose but recovered by static analysis: nodes are files, classes and functions; edges are calls, inheritance, imports and variable references. LocAgent, CoSIL, OrcaLoca, KGCompass and Prometheus all instantiate this idea, and all report gains over flat retrieval on SWE-bench localization.
+## 5. Research questions
 
-### 3.3 Multi-agent coordination and debate
+**Phase 1 — Diagnose**
+- RQ1. What fraction of true fix locations is reachable in the dependency graph, and why are
+  the rest not?
+- RQ2. Does graph grounding keep its contribution under matched compute? (H1: yes)
+- RQ3. Does debate add to localization under matched compute? (H2: little)
+- RQ4. Do graph and debate interact? (H3: yes)
+- RQ5. Does any debate benefit concentrate on high-candidate-density instances? (H4: yes)
 
-In parallel, a second line of work replaces the single reasoning agent with several. Multi-agent debate (Du et al., ICML 2024) has multiple model instances propose answers, critique one another over several rounds, and converge. The mechanism was reported to improve factuality and reasoning across arithmetic and factual QA.
+**Phase 2 — Modify**
+- RQ6. Does one evidence-led change to the debate beat both the original debate and a
+  compute-matched single agent?
 
-Scepticism followed quickly. Huang et al. (*LLMs Cannot Self-Correct Reasoning Yet*) found debate failing to beat plain self-consistency. Later work found debate on par with a single agent once demonstrations are available, and found it failing to reliably surpass simple majority voting. Cemri et al.'s MAST taxonomy, built from over 1,600 annotated traces across seven frameworks, opens by observing that multi-agent performance gains on popular benchmarks are often minimal, and catalogues fourteen failure modes across specification, inter-agent misalignment and task verification.
+**Phase 3 — Validate**
+- RQ7. Do the Phase 1 and 2 findings hold on issues created after the model's training cutoff?
 
-Most recently, Tran and Kiela gave the scepticism a theoretical basis. Modelling inter-agent messages as a lossy function of the full context, they apply the Data Processing Inequality to show that a single agent with full context is information-theoretically guaranteed to do at least as well as a multi-agent system operating on summaries of that context. Empirically, across two datasets, three model families and five multi-agent architectures under matched thinking-token budgets, single-agent systems matched or outperformed every multi-agent variant. Their conclusion is that many reported multi-agent gains are better explained by unaccounted computation than by architecture.
+## 6. Approach
 
-Crucially, the same analysis identifies a **boundary condition**. When a single agent's effective context utilisation degrades — long contexts, noise, or distractors that are topically similar but irrelevant — the guarantee no longer holds, and structured multi-agent pipelines become competitive. In their degradation experiments the crossover was clearest under corruption that injects misleading content rather than merely removing information.
+### Phase 1 — Diagnose (Semester 1)
 
-### 3.4 Where the two lines meet
+1. **Reachability ceiling.** Build the dependency graph as SWE-Debate does, take the true fix
+   location from the gold patch, and check whether a path exists from the issue's entry nodes.
+   Categorise unreachable cases (dynamic dispatch, decorators, `getattr`, configuration-driven
+   wiring). Static analysis only — no model inference.
+2. **Reproduction and instrumentation.** Serve an open-weights model at a pinned checkpoint with
+   vLLM on NTU GPUs (the paper's model is no longer served). Reproduce the localization pipeline
+   on the 75-instance SWE-Bench-Verified-S subset. Add per-stage token accounting, and log
+   separately whether the true file appears in any candidate chain (retrieval, the graph's job)
+   and whether it survives selection (the debate's job).
+3. **Compute-matched factorial.** Cross graph grounding (multiple chains vs one) with debate
+   (multi-agent vs single agent). Give each single-agent arm the same token budget as its
+   multi-agent counterpart. Add majority-vote and self-consistency arms. Hold candidate ordering
+   fixed across arms. Several seeds per cell; paired per-instance statistics (McNemar or paired
+   bootstrap), expanding to the 300-instance SWE-bench Lite if power is marginal.
 
-SWE-Debate (Li et al., arXiv:2507.23348) sits at the intersection. It traverses a static dependency graph to generate candidate fault propagation chains, runs a three-round competitive debate among five specialised agents to select a chain and synthesise a modification plan, then hands that plan to an MCTS-based repair agent. It reports 41.4% Pass@1 on SWE-bench-Verified and 81.67% file-level localization accuracy on SWE-bench-Lite, both state of the art among open-source frameworks.
+### Phase 2 — Modify (Semester 2, first half)
 
-Its ablation removes three components individually: multiple chain generation (−10.0 points), the edit plan (−6.0), and multi-agent debate (−4.2).
+Build ONE modification, chosen from Phase 1 evidence:
+- **Default: graph-grounded debate.** Agents must cite checkable graph facts — whether a
+  claimed path exists, its length, its edge types — and disagreements are settled against the
+  graph. Models cannot reliably correct themselves without an external signal; the graph is
+  such a signal and costs nothing to consult.
+- **Fallback: collaborative protocol (ColMAD) with agents from two model families.** The only
+  protocol shown to beat a compute-matched single agent, and only with different models.
+- Evaluate against the original debate and the compute-matched single agent, under the same
+  controls as Phase 1.
 
-### 3.5 The unresolved question
+### Phase 3 — Validate (Semester 2, second half)
 
-That ablation has four properties that leave the central question open.
+Re-run the key configurations on SWE-bench-Live (arXiv:2505.23419), starting from its
+300-instance Lite subset and keeping only issues created after the backbone's training cutoff.
+It is Python-only, so the graph construction carries over, and localization-only evaluation
+needs no Docker. Its multi-file tasks double as a candidate-density stratum for H4.
 
-1. **It is not compute-matched.** Removing the debate removes five agents across three rounds of inference. The 4.2-point drop therefore conflates architectural contribution with inference budget — precisely the confound the budget-controlled literature identifies as the usual explanation for multi-agent gains.
-2. **It is one-factor-at-a-time, not factorial.** Components are removed singly and never crossed, so any interaction between graph grounding and debate is unmeasured.
-3. **It reports no cost.** No token counts, no latency, no monetary cost appear anywhere in the paper, despite the practical claim being about whether a heavier architecture is worth adopting.
-4. **It is a single run of a single model** (DeepSeek-V3-0324) with no seeds and no confidence intervals. The paper's own threats-to-validity section concedes the scope was budget-limited.
+## 7. Scope
 
-A related taxonomy of coding-agent architectures makes the same point at field level: SWE-bench comparisons confound scaffold design, model choice and configuration, and existing evaluations do not perform the architectural decomposition needed to separate them.
+**Included:** fault localization; the static dependency graph; SWE-Debate's chain voting and
+plan debate; one debate modification; token and latency cost as outcomes; SWE-bench subsets and
+SWE-bench-Live.
 
----
+**Excluded, with reasons:**
+- Patch generation and end-to-end resolve rate — neither factor operates there, and it
+  dominates cost and needs Docker test harnesses. (Pending the supervisor's confirmation.)
+- Varying the model within a comparison — would reintroduce the confound being removed. The
+  Phase 2 fallback's two-model arm is the one deliberate exception.
+- Debate round count as a factor — hardcoded in the implementation.
+- Non-Python repositories — the graph is built with Python's `ast`; Multi-SWE-bench is a
+  stretch goal only.
+- Training or fine-tuning models.
 
-## 4. Motivation
+## 8. Schedule
 
-Two literatures make opposite predictions about the same system, and no experiment adjudicates between them.
+| Period | Phase | Work | Milestone |
+|---|---|---|---|
+| Sep 2026 | 1 | Environment; one SWE-Debate instance end to end; GPU access; reachability measurement | Plan submitted 14 Sep; go/no-go on the framework 30 Sep |
+| Oct 2026 | 1 | Serve backbone; reproduce localization baseline; token accounting; component switches; ordering control; retrieval/selection logging | Baseline reproduced |
+| Early Nov 2026 | 1 | First factorial pass (not yet compute-matched); interim report and video | Interim report 10 Nov |
+| Nov–Dec 2026 | 1 | Compute-matched arms, majority vote, self-consistency, multiple seeds, paired analysis | Phase 1 results |
+| Jan – mid-Feb 2027 | 2 | Build and evaluate the chosen debate modification | Phase 2 results |
+| Mid-Feb – early Mar 2027 | 3 | SWE-bench-Live validation; H4 stratification | Phase 3 results |
+| Mar 2027 | — | Writing, figures, demonstration build | Draft final report 25 Mar |
+| Apr 2027 | — | Revision; demonstration | Final report 9 Apr; demo 12–16 Apr |
+| May 2027 | — | Oral presentation; final submissions | Oral 10–12 May; library 19 May |
 
-The budget-controlled literature predicts that SWE-Debate's debate component should contribute little once compute is held fixed, because message-passing between agents is a lossy channel and the extra tokens would buy more if spent inside one reasoning trajectory. The boundary condition in that same analysis predicts the opposite for this particular task: a large repository presents exactly the degraded-context regime that favours multi-agent structure, since dozens of files are topically similar to the issue text but only one or two are correct. Distractor-rich contexts are where multi-agent pipelines were found to close the gap and occasionally win.
+The December vacation carries the compute-matched runs; the schedule depends on it.
 
-Software issue localization is therefore not just another application of multi-agent debate. It is the most likely place for debate to genuinely earn its cost, and it has never been tested under the controls that would establish that. Confirming the benefit would be the first compute-controlled evidence that coordination pays for itself in a real engineering task. Failing to confirm it would show that a state-of-the-art result rests on unaccounted compute.
+## 9. Deliverables
 
-The practical stake is direct. Teams building agentic software engineering tools are choosing today between graph-grounded single-agent systems and heavier multi-agent ones, without any published measurement of what the coordination overhead buys. This project produces that measurement.
+1. Reachability analysis of code dependency graphs, with a taxonomy of unreachable cases.
+2. An instrumented SWE-Debate fork with component switches and token accounting.
+3. Compute-matched factorial results with paired statistics and cost-accuracy plots.
+4. One improved debate mechanism, evaluated under matched compute.
+5. Validation results on SWE-bench-Live.
+6. A demonstration: original debate, improved debate and single agent on the same bug, with
+   token counters.
+7. Interim report and video, final report, demonstration, oral presentation.
 
----
-
-## 5. Research questions and hypotheses
-
-**RQ1.** Does graph grounding retain its contribution to localization accuracy under a matched token budget?
-
-**RQ2.** Does multi-agent debate retain its contribution to localization accuracy under a matched token budget, relative to a compute-equivalent single-agent baseline?
-
-**RQ3.** Do graph grounding and debate interact, or are their contributions additive?
-
-**RQ4.** Does the benefit of debate vary with the degree of context degradation in the instance — that is, is debate worth its cost only on hard instances?
-
-Corresponding hypotheses:
-
-- **H1.** Graph grounding survives compute matching, because it supplies information the model does not otherwise have rather than merely spending more tokens.
-- **H2.** The measured contribution of debate shrinks substantially under compute matching, relative to the 4.2 points reported.
-- **H3.** The two factors interact rather than sum: debate helps mainly when the graph has produced several plausible competing chains.
-- **H4.** Any surviving debate benefit concentrates on instances with high candidate density — many topically similar files — consistent with the degraded-context boundary condition.
-
-H4 matters for project risk. If H2 holds and debate's advantage largely disappears, H4 converts a negative result into a positive characterisation of *when* coordination is worth paying for.
-
----
-
-## 6. Scope
-
-### Included
-
-- **Fault localization only.** Graph grounding and debate both operate entirely within SWE-Debate's localization stage, so this is where the research question lives.
-- **The static code dependency graph** as constructed by SWE-Debate: call, inheritance, import and variable-reference edges recovered by AST analysis.
-- **The multi-agent debate pipeline**, at both levels at which it operates: chain-level competitive ranking and modification-plan refinement.
-- **A factorial design** crossing graph grounding against debate, with a compute-matched single-agent arm at each cell.
-- **Cost as a first-class outcome:** tokens, wall-clock latency and monetary cost reported alongside every accuracy figure.
-- **Instance-level stratification** by candidate density, to test H4.
-- **A single model backbone,** DeepSeek-V3-0324, matching the original paper.
-
-### Excluded, with reasons
-
-- **Patch generation and resolve rate.** The MCTS repair stage is a third heavy component that neither factor of interest touches. Excluding it removes the dominant cost driver and the Docker test-harness dependency, at the price of not reporting end-to-end Pass@1.
-- **The full SWE-bench-Verified set of 500 instances.** Compute budget. The project uses the 75-instance SWE-Bench-Verified-S subset defined in the original paper, which is built on a mini variant requiring roughly 5GB rather than 130GB of storage.
-- **Varying the LLM backbone.** Holding the model fixed is what isolates architectural effects from model effects; varying it would reintroduce the confound the project exists to remove.
-- **Multilingual repositories.** The dependency graph construction is Python-specific; extending it is engineering effort that answers no research question here.
-- **RL-trained or fine-tuned localization agents.** Out of compute and time budget.
-- **Proposing a new architecture.** The contribution is measurement, not a system.
-
----
-
-## 7. Methodology
-
-### 7.1 Experimental design
-
-A 2×2 factorial over graph grounding (multiple chains vs. single chain) and debate (multi-agent vs. single agent), with debate rounds as a nested third factor at 1, 2 and 3 rounds. Each cell is run with multiple seeds and reported with bootstrap confidence intervals, following the practice of the budget-controlled literature rather than the single-run practice of the source paper.
-
-### 7.2 Compute matching
-
-The central methodological control. For every multi-agent cell, the total inference tokens consumed are measured, and the corresponding single-agent cell is granted the same budget through extended reasoning or best-of-N sampling with selection. Reported differences are then attributable to architecture rather than spend. A compute-matched majority-voting arm is included as a cheap baseline, since prior work finds debate frequently fails to beat it.
-
-### 7.3 Separating recall from selection
-
-SWE-Debate's two stages have distinct jobs, and the paper never measures them separately. The graph's job is recall: does the true fix location appear in *any* generated chain? The debate's job is selection: does the *chosen* chain contain it? Logging both yields a decomposition of every failure into retrieval failure or selection failure, and attributes each to the responsible component. This diagnostic is adapted from the error-bucketing methodology of the budget-controlled study.
-
-### 7.4 Debate diversity audit
-
-The original paper concedes that its five agents are one model differentiated only by system prompts. Logging inter-agent agreement rates at each round tests whether the agents genuinely disagree. Near-total agreement would indicate the debate is largely ceremonial and would independently explain a small ablation delta.
-
-### 7.5 Metrics
-
-- Acc@1 (File) — file-level localization accuracy, comparable to published figures
-- Chain recall @ K — whether the true location appears in any candidate chain
-- Selection precision — whether the chosen chain contains it, conditioned on recall
-- Total tokens per instance, split by stage
-- Wall-clock latency per instance
-- Cost per correctly localized instance
-- Inter-agent agreement rate per debate round
-
----
-
-## 8. Deliverables
-
-1. An instrumented fork of SWE-Debate with per-component switches and token accounting.
-2. A reproducible ablation harness with versioned configurations for every cell.
-3. A results dataset covering all cells with seeds and confidence intervals.
-4. Cost-accuracy frontier plots for the architectural choices studied.
-5. Interim report and video presentation.
-6. Final report, project demonstration and oral presentation.
-
----
-
-## 9. Schedule
-
-| Period | Work | Milestone |
-|---|---|---|
-| Sep 2026 | Literature review; clone and run SWE-Debate and Moatless end to end on one instance | **Project Plan — 14 Sep 2026** |
-| Late Sep – Oct 2026 | Reproduce reported localization baseline on the 75-instance subset; build token accounting and per-component switches | Baseline reproduced |
-| Oct – early Nov 2026 | First factorial pass without compute matching; interim analysis | **Interim Report + Video — 10 Nov 2026** |
-| Nov 2026 – Jan 2027 | Compute-matched arms; majority-voting baseline; multi-seed runs | Main results complete |
-| Jan – Feb 2027 | Recall/selection decomposition; debate diversity audit; H4 stratification | Diagnostic results complete |
-| Feb – Mar 2027 | Analysis, figures, writing | **Draft Final Report — 25 Mar 2027** |
-| Mar – Apr 2027 | Revision | **Final Report — 9 Apr 2027** |
-| Apr 2027 | Demonstration | **Project Demonstration — 12–16 Apr 2027** |
-| May 2027 | Oral presentation; final revisions | **Oral — 10–12 May 2027; Library submission — 19 May 2027** |
-
----
-
-## 10. Risks and contingencies
+## 10. Risks
 
 | Risk | Likelihood | Mitigation |
 |---|---|---|
-| SWE-Debate does not run or does not reproduce | Medium | Verified in September, before any dependent work. Fallback: run the same factorial on LocAgent or CoSIL, both open with graph-guided localization. |
-| API cost exceeds available budget | Medium | Localization-only scope removes the MCTS stage entirely. DeepSeek-V3 pricing is low. Cell count reducible by dropping the round-count factor. |
-| Differences between arms fall within noise | Medium | Multi-seed runs with confidence intervals from the outset. A precisely bounded null result under proper controls is itself the finding, and H4 stratification provides a positive result path. |
-| Ambiguity in the original implementation notes | Medium | Resolve in September; document any deviation from the published setup as a threat to validity. |
-| Judged as derivative of an existing ablation | Low–Medium | The compute-matched and factorial framing is not what the source paper did; positioning against the budget-controlled literature makes the distinction explicit in the report's framing. |
-
----
+| SWE-Debate does not run or reproduce | High | Decision point 30 Sep; same design on LocAgent or CoSIL. The reachability analysis does not depend on it. |
+| GPU unavailable or too old | Medium | MLDA first; EEE GPU Cluster (48–96 GB cards) as fallback; smaller model if needed. |
+| The modification does not beat the baseline | Medium | A bounded null under proper controls is a result; Phase 1 findings stand; ColMAD fallback. |
+| Too few post-cutoff SWE-bench-Live instances | Low–Medium | The benchmark updates monthly; a backbone with an earlier cutoff leaves more instances. |
+| Differences within noise | Medium | Paired design, multiple seeds, expand to 300 instances. |
+| Scope creep | Medium | One modification only; decisions logged in `notes/decisions.md`. |
 
 ## 11. Key references
 
-- Li, H. et al. (2025). SWE-Debate: Competitive Multi-Agent Debate for Software Issue Resolution. arXiv:2507.23348
-- Tran, D. & Kiela, D. (2026). Single-Agent LLMs Outperform Multi-Agent Systems on Multi-Hop Reasoning Under Equal Thinking Token Budgets. arXiv:2604.02460
-- Cemri, M. et al. (2025). Why Do Multi-Agent LLM Systems Fail? arXiv:2503.13657
-- Inside the Scaffold: A Source-Code Taxonomy of Coding Agent Architectures. arXiv:2604.03515
-- When and Why Does Multi-Agent Debate Fail and Does It Really Underperform? arXiv:2510.20963
-- Jimenez, C. E. et al. (2024). SWE-bench: Can Language Models Resolve Real-world GitHub Issues? ICLR. arXiv:2310.06770
-- Xia, C. S. et al. (2024). Agentless: Demystifying LLM-based Software Engineering Agents. arXiv:2407.01489
-- Chen, Z. et al. (2025). LocAgent: Graph-Guided LLM Agents for Code Localization. arXiv:2503.09089
-- Jiang, Z. et al. (2025). CoSIL: Software Issue Localization via LLM-Driven Code Repository Graph Searching. arXiv:2503.22424
-- Prometheus: Unified Knowledge Graphs for Issue Resolution in Multilingual Codebases. arXiv:2507.19942
-- Antoniades, A. et al. (2024). SWE-Search: Enhancing Software Agents with Monte Carlo Tree Search. arXiv:2410.20285
-- SWE-Effi: Re-Evaluating Software AI Agent System Effectiveness Under Resource Constraints. arXiv:2509.09853
-- Du, Y. et al. (2024). Improving Factuality and Reasoning in Language Models through Multiagent Debate. ICML
-- Huang, J. et al. Large Language Models Cannot Self-Correct Reasoning Yet. arXiv:2310.01798
-- Debate or Vote: Which Yields Better Decisions in Multi-Agent Large Language Models? arXiv:2508.17536
-- Peng, B. et al. Graph Retrieval-Augmented Generation: A Survey. ACM TOIS. arXiv:2408.08921
+Li et al., SWE-Debate, ICSE 2026 (arXiv:2507.23348) · Kim et al., Capable language models can
+outgrow the benefits of collaboration, Nature Machine Intelligence 2026
+(doi:10.1038/s42256-026-01268-y) · Chen et al., When and Why Does Multi-Agent Debate Fail,
+arXiv:2510.20963 · Tran & Kiela, arXiv:2604.02460 · Huang et al., ICLR 2024 · Du et al.,
+ICML 2024 · Rafi et al., LLM4FL, arXiv:2409.13642 · Chen et al., LocAgent, arXiv:2503.09089 ·
+Jimenez et al., SWE-bench, ICLR 2024 · Zhang et al., SWE-bench Goes Live!, arXiv:2505.23419 ·
+Cemri et al., NeurIPS 2025 · Liu et al., ACM TOSEM (doi:10.1145/3796507). Full list:
+`notes/reading-order.md`.
