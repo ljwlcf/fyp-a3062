@@ -92,6 +92,8 @@ FYP-A3062/
 ├── notes/
 │   ├── decisions.md              # what was decided and why (append, mark superseded)
 │   ├── progress.md               # one entry per session, newest first
+│   ├── results.md                # readable result summaries, each tied to a config
+│   ├── for-chat.md               # open questions for chat (direction, scope, writing)
 │   ├── deviations.md             # differences from the published setup (threats to validity)
 │   ├── literature.md             # one entry per paper
 │   ├── literature-summary.md     # synthesis across papers, tied to the phases
@@ -110,8 +112,26 @@ FYP-A3062/
 - Write results as raw JSON first; analyse separately.
 - Log any deviation from the published SWE-Debate setup in `notes/deviations.md`.
 - Debug on one instance end to end before running batches.
-- Write three lines in `notes/progress.md` at the end of each session. The research reasoning
-  lives in the claude.ai Project chat; decisions land here.
+
+## Hand-off between Claude Code and chat
+
+This repo is the single source of truth. Claude Code does the engineering and the technical
+design; the claude.ai Project chat handles direction, scope, supervisor communication and
+writing (reports, slides). Chat reads this folder rather than relying on a retold summary.
+
+**At the end of every Claude Code session, before stopping:**
+1. `notes/progress.md` — a new Did / Broke / Next entry at the top.
+2. `notes/results.md` — an entry for any run that produced numbers.
+3. `notes/decisions.md` — any decision made, with the reason; mark superseded ones.
+4. `notes/for-chat.md` — any question that isn't about the code (scope, direction, what to
+   tell A/P Chen, how to frame something in the report). Don't guess an answer to those here.
+5. Commit and push, so chat sees the current state.
+
+**When a session starts after a chat discussion,** read `notes/decisions.md` and the Answered
+section of `notes/for-chat.md` for anything new, and follow it.
+
+Switch between the two by task, not mid-task: finish a chunk of work, update the notes, then
+move over.
 
 ## Known unknowns
 
