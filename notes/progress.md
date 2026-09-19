@@ -15,7 +15,8 @@ Renamed the 41 PDFs in papers/ to their titles with A/B/C/D reading-order labels
 (notes/reading-order.md). Added a SWE-bench-Live entry to literature.md and wrote
 notes/literature-summary.md. Found that "Agent Scaling Science" is the preprint of the Nature
 MI paper (one study, not two), and that SWE-Debate's -4.2 debate effect is end-to-end Pass@1,
-not localization — gap statement corrected in decisions.md. Updated CLAUDE.md.
+not localization — gap statement corrected in decisions.md. Updated CLAUDE.md. Moved the
+repo out of iCloud to ~/IM4080/FYP-A3062 (fresh clone plus copied papers and swe-debate).
 Broke: No SWE-Debate run recorded yet. DeepSeek-V3-0324 is no longer served by DeepSeek, so
 the backbone moves to a self-hosted open model (deviations.md). GPU access pending: MLDA
 application first, at the supervisor's request.
