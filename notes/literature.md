@@ -11,8 +11,8 @@ Cost reporting:
 Relation to A3062:
 Report section:
 
-Reading order and A/B/C/D labels: `notes/reading-order.md`. Synthesis across all
-entries: `notes/literature-summary.md`.
+Reading order and A/B/C/D labels: `notes/reading-order.md`. Plain-language gist of
+each paper: `notes/literature-summary.md`.
 
 ## MAKG — DOI:10.1016/j.jmsy.2026.02.016 (J. Manuf. Syst. 85, 2026)
 Claim: A multi-agent + knowledge-graph RAG framework (MAKG) for industrial equipment

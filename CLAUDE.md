@@ -96,7 +96,7 @@ FYP-A3062/
 │   ├── for-chat.md               # open questions for chat (direction, scope, writing)
 │   ├── deviations.md             # differences from the published setup (threats to validity)
 │   ├── literature.md             # one entry per paper
-│   ├── literature-summary.md     # synthesis across papers, tied to the phases
+│   ├── literature-summary.md     # plain-language gist of each paper + big picture
 │   └── reading-order.md          # A/B/C/D labels matching papers/ filenames
 ├── papers/                       # PDFs (gitignored), named "A1 - Title (Venue).pdf" etc.
 ├── swe-debate/                   # instrumented fork (gitignored for now)

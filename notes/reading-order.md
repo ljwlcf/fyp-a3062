@@ -1,6 +1,6 @@
 # Reading order — FYP A3062
 
-Sorted for the three-phase plan: **diagnose** SWE-Debate (Sem 1), **modify** its debate mechanism (Sem 2, first half), **validate** on uncontaminated data (Sem 2, second half). The PDFs live in `papers/` (gitignored) and their filenames start with these labels: A = read fully, B = method and results, C = skim and cite, D = cross-domain only. Original filenames are in brackets so any paper can be matched to its arXiv ID or DOI. Per-paper notes: `notes/literature.md`. Synthesis: `notes/literature-summary.md`.
+Sorted for the three-phase plan: **diagnose** SWE-Debate (Sem 1), **modify** its debate mechanism (Sem 2, first half), **validate** on uncontaminated data (Sem 2, second half). The PDFs live in `papers/` (gitignored) and their filenames start with these labels: A = read fully, B = method and results, C = skim and cite, D = cross-domain only. Original filenames are in brackets so any paper can be matched to its arXiv ID or DOI. Per-paper notes: `notes/literature.md`. Plain-language gist of each paper: `notes/literature-summary.md`.
 
 ## A — Read fully (A1–A9)
 

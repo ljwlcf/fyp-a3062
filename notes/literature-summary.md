@@ -1,151 +1,315 @@
-# Literature review summary — FYP A3062
+# Literature summary — the gist of each paper
 
-A synthesis of the 41 papers in `notes/literature.md`, read against the three-phase plan
-(diagnose SWE-Debate → modify its debate → validate on fresh data). Labels such as A1 refer
-to `notes/reading-order.md`. Last updated 2026-09-19.
+Plain-language summaries of all 41 papers, in reading order (A1, A2 … match the PDF names in
+`papers/`). Each paper gets three lines: what it is, what they found, and why it matters to us.
+For the detailed technical notes used when writing the report, see `notes/literature.md`.
 
-## 1. What the field has established
+## 1. Key terms
 
-### 1.1 Localization is the bottleneck, and graphs help — but nobody has bounded them
+- **Fault localization** — finding which file or function a bug is in. Our focus.
+- **Issue resolution** — the whole job: find the bug *and* write a fix that passes the tests.
+- **Agent** — an AI model that works in steps (search, open files, decide), not in one reply.
+- **Multi-agent debate** — several AI agents answer, read each other's answers, and revise.
+- **Single agent** — one AI doing the whole task alone.
+- **Tokens** — the chunks of text an AI reads and writes. The unit of AI cost.
+- **Same budget / compute-matched** — comparing systems that are each allowed the same number
+  of tokens, so nobody wins just by thinking more.
+- **Ablation** — switching one part off to see how much it mattered.
+- **Majority vote / self-consistency** — asking one AI the same question several times and
+  taking the most common answer.
+- **Code map / dependency graph** — which functions call, import or inherit from which.
+- **GraphRAG** — AI retrieval that follows a graph of connections instead of searching text.
+- **SWE-bench** — the standard test set of real GitHub bugs from Python projects.
+- **Pass@1** — share of bugs fully fixed on the first try.
+- **Acc@1 (File)** — share of bugs where the AI's first-guess file is correct.
+- **Contamination** — the AI saw the test answers during training, so scores look too good.
 
-- **Repository-level localization is the hard part of issue resolution**, yet SWE-bench (A7)
-  never scores it. Later work invents its own metrics: LocAgent's Acc@k (A6), Agentless's
-  patch-superset check (B7), SWE-bench-Live's patch-derived file match (A8). There is no
-  standard localization metric.
-- **The approach has evolved** from flat text retrieval (BugLocator, C5) to structure-aware
-  retrieval (BLUiR, C6) to static dependency graphs (LocAgent A6, LLM4FL A5) to graphs plus
-  multi-agent debate (SWE-Debate, A1). Pre-LLM file-level Top-1 ranged from about 24% to 55%
-  per project (C6).
-- **Every localization ablation reviewed that removes the graph component loses accuracy**:
-  SWE-Debate's multiple-chain generation is its largest component (−10.0 Pass@1 points), and
-  LLM4FL drops 16.5% Top-1 (relative) without graph navigation. All of these are
-  one-factor-at-a-time, single runs, never compute-matched.
-- **No paper measures the structural ceiling**: whether the true fix location is even
-  reachable in the graph from the issue's entry points. This is open, and cheap to measure.
-- **"GraphRAG" is ambiguous.** In the survey literature (C8) and Microsoft's GraphRAG (C9) it
-  means graphs extracted by an LLM, which cost inference to build. SWE-Debate's graph comes
-  from static analysis of Python ASTs and costs nothing to build. The report must say which
-  one it means on first use.
+## 2. The big picture, and where our project fits
 
-### 1.2 The evidence on multi-agent debate has turned
+**What the papers add up to**
 
-- **The origin** (Du et al., B1) showed debate gains on arithmetic, GSM8K and MMLU, but never
-  gave the single-agent baseline the same compute.
-- **Once compute is matched, the gains shrink or reverse.** Huang et al. (B9): debate loses to
-  self-consistency at equal response counts on full GSM8K. Token Economies (B5): multi-agent
-  debate's advantage shrinks or inverts under equal budgets, and answer diversity collapses
-  across rounds. More Agents (B6): much of the gain comes from sampling and voting, and
-  stacking debate on top can hurt. OneFlow (A9): one model can simulate a same-model
-  multi-agent workflow at lower cost.
-- **There is now theory behind the scepticism.** Tran & Kiela (A4) show, via the Data
-  Processing Inequality, that a single agent with full context should do at least as well at
-  a fixed token budget. Multi-agent setups become competitive only when the single agent's
-  context is degraded — clearly under corrupted context, but not under plain distractors,
-  which was their weakest lever.
-- **A large controlled study agrees.** Kim et al. (A2, Nature Machine Intelligence; C14 is
-  its preprint — one study, not two) ran 260 configurations. Coordination helps less as the
-  single-agent baseline rises, with little benefit above about 45%. Coordination costs 58% to
-  515% extra tokens. On SWE-bench Verified every multi-agent setup came out slightly below the
-  single agent — but on only 20 instances per cell, and for full issue resolution, not
-  localization.
-- **Failure analyses explain why.** MAST (B4) catalogues 14 failure modes. The entropy study
-  (B2) finds a single agent wins in about 43% of cases, outcomes are largely fixed in round
-  one, and only ~6% of samples show genuine improvement from interaction versus ~83% that look
-  like anchoring.
-- **Debate can work, but under narrow conditions.** ColMAD (A3) shows both competitive debate
-  (SWE-Debate's style) and consensus-seeking debate fail through "debate hacking": agents
-  mislead to win, or agree too early. Its collaborative protocol beats a compute-matched single
-  agent — **but only when the debaters are different models**; with the same model on both
-  sides it loses. The mixture-of-experts analysis (B3) adds that debate helps when influence
-  follows competence, and fails when it follows confidence.
+1. **Finding where a bug lives is the hard part, and a code map helps.** Every study here that
+   removes the map loses accuracy.
+2. **Debate looked powerful at first (B1), but mostly stops helping once a single AI gets the
+   same budget** (B9, B5, A4, A2). Much of its gain turns out to be "more thinking" or
+   "voting", not the arguing itself (B6).
+3. **Debate can still win under specific conditions:** the agents are *different* models and
+   are rewarded for sharing useful information rather than winning (A3), and influence goes to
+   the competent agent rather than the confident one (B3).
+4. **Most papers in this area don't report cost**, and test one part at a time in a single run
+   (C1, B10, D1–D6).
+5. **Old benchmarks may be memorised:** agents fix about twice as many old SWE-bench bugs as
+   fresh ones (A8).
 
-**Net position:** with compute matched, the default expectation is that same-model debate does
-not beat a single agent. The known exceptions need (a) incentives that reward information over
-persuasion, (b) genuinely different agents, or (c) a single agent whose context is badly
-degraded. SWE-Debate meets neither (a) nor (b) by design: five copies of one model, competitive
-framing. Whether code localization supplies (c) is exactly what H4 tests.
+**Where our project fits**
 
-### 1.3 Evaluation practice is weak across the field
+SWE-Debate (A1) uses a code map plus five copies of the *same* AI in a *competitive* debate —
+exactly the setup the recent evidence says should struggle. Its evidence for debate: switching
+it off drops the full fix rate from 41.4% to 37.2%. But that was measured on the whole fixing
+pipeline, in one run, with the debate's extra thinking removed at the same time. And because
+37.2% is below A2's ~45% line, the two papers don't actually contradict each other.
 
-- Only 46.7% of 124 agentic software-engineering papers report any efficiency data (C1).
-- The issue-resolution survey (B10) names "lack of efficiency-aware evaluation" as a top open
-  challenge, in a survey that covers SWE-Debate among graph-based localization methods.
-- SWE-bench comparisons confound scaffold, model and configuration in one number (B11).
-- SWE-Effi (B12) re-ranks agents by cost and finds failed attempts are the expensive ones
-  (over 4x the tokens in one pairing).
-- All six cross-domain systems (D1–D6) use one-factor-at-a-time, single-run ablations with
-  little or no cost reporting. Supporting breadth only: these are mostly regional venues.
-- **Contamination is real.** The same agent and model score 43.2% on SWE-bench Verified but
-  19.25% on fresh issues (A8), and do better on original SWE-bench repositories than new ones.
+What nobody has tested: **does debate help at the file-finding step itself** — where accuracy
+is about 80% and A2 predicts little benefit — once a single AI gets the same budget? And **can
+the map even reach the right file** in the first place? That's Phase 1. Phase 2 improves the
+debate (ideas from B9 and A3). Phase 3 re-tests on fresh bugs (A8).
 
-## 2. The specific gap
+Caution: A2's 45% line was measured on task success in other benchmarks. Applying it to
+file-finding accuracy is our assumption to test, not an established fact.
 
-SWE-Debate's ablation (A1) removes the debate together with its tokens, varies one factor at a
-time, reports no cost anywhere, and is a single run. Reading the paper against the code also
-shows the "three-round debate" is two rounds of five same-model agents plus one discriminator,
-and chain selection is a one-shot vote (`notes/deviations.md`).
+---
 
-**Be precise about what SWE-Debate measured.** Its debate ablation (Table 2) is on end-to-end
-Pass@1 on SWE-bench Verified: 41.4% with debate, 37.2% without. That no-debate figure is
-*below* A2's ~45% threshold, so A2 does not contradict it — below the threshold, coordination
-is expected to help sometimes. The paper's 81.67% file-level localization accuracy is a
-separate result on SWE-bench Lite, and debate is never ablated at the localization level.
+## 3. A — Read fully
 
-So the open question is narrower and cleaner than "two papers disagree": **what does debate
-add to localization, the stage where it actually runs, once compute is matched?** At
-localization-level accuracy (roughly 80%), A2's capability-saturation account predicts little
-or nothing. Nobody has tested that, and nobody has crossed a graph factor with a coordination
-factor.
+### A1 · SWE-Debate (ICSE 2026)
+**What it is:** The system we study. It builds a map of the code, follows it to make about 20
+candidate "trails" from the bug report to possibly-buggy code, then five copies of the same AI
+vote on the best trail and argue over a fix plan before a separate search step writes the fix.
+**What they found:** Best open-source results at the time: 41.4% of bugs fixed on SWE-bench
+Verified, and 81.67% right file on first guess on SWE-bench Lite. Switching debate off dropped
+fixes to 37.2%; switching off the multiple trails dropped them to 31.4%.
+**Why it matters to us:** Every number is a single run with no cost reported, and removing
+debate also removed a lot of thinking. The "three-round debate" is really two rounds plus one
+judge. The released code doesn't run as-is.
 
-**Weakest joint:** A2's threshold is defined on task success in its own benchmarks. Applying it
-to file-level localization accuracy is an assumption — state it as the hypothesis being tested,
-not as a known result.
+### A2 · Capable language models can outgrow the benefits of collaboration (Nature Machine Intelligence 2026)
+**What it is:** A large controlled experiment — 260 setups, 6 benchmarks, 3 model families —
+comparing one agent with several team designs, all with the same budget, prompts and tools.
+**What they found:** Whether teamwork helps depends on how good a single agent already is.
+Above about 45% success, adding agents rarely helps. Teams cost 58% to 515% more tokens. On
+SWE-bench every team did slightly worse than one agent, but that test used only 20 bugs.
+**Why it matters to us:** The main prediction we test: at file-finding (~80% accuracy), debate
+should add little. C14 is the same study's preprint.
 
-## 3. What this means for each phase
+### A3 · When and Why Does Multi-Agent Debate Fail and Does It Really Underperform? (arXiv 2025)
+**What it is:** Explains, with game theory, why debate often loses to one AI. Splits debate into
+*competitive* (agents try to win) and *consensus-seeking* (agents try to agree).
+**What they found:** Both fail through "debate hacking": competitive agents mislead to win;
+consensus agents agree too early. Their fix, ColMAD, rewards agents for adding useful
+information. It beats a single AI on the same budget — but only when the debaters are
+*different* models. With the same model on both sides, it loses.
+**Why it matters to us:** SWE-Debate is competitive *and* uses one model: both failure
+conditions. This is the basis for Phase 2's backup option.
 
-### Phase 1 — Diagnose (Semester 1)
+### A4 · Single-Agent LLMs Outperform Multi-Agent Systems on Multi-Hop Reasoning Under Equal Thinking Token Budgets (Stanford, arXiv 2026)
+**What it is:** Theory plus experiments on whether one AI beats a team when both get the same
+thinking budget, on questions that need several reasoning steps.
+**What they found:** One AI matched or beat every team design at almost every budget. The
+reason: passing messages between agents loses information, while a single agent keeps
+everything in view. Teams only caught up when the single AI's input was badly corrupted —
+adding plain distracting material wasn't enough.
+**Why it matters to us:** Our template for a fair, same-budget comparison. Its one exception is
+why bug-finding is an interesting test: a repository is full of similar-looking files.
 
-- **Reachability ceiling:** no precedent. Novel, and needs no GPU.
-- **Compute matching:** follow A4's structural budget split and B5's accuracy-versus-budget
-  curves. Include a majority-vote arm (B6) and a self-consistency arm (B9).
-- **Control candidate ordering:** ordering alone moved Top-1 by 22 points in A5.
-- **Log retrieval and selection separately:** did the graph surface the right file, and did the
-  debate pick it? C1 calls for this kind of fine-grained metric; no existing evaluation does it.
-- **Statistics:** every arm runs on the same instances, so analyse per-instance pairs (McNemar
-  or paired bootstrap) with several seeds. A2's own SWE-bench arm had wide intervals at n = 20.
-- **Threat to validity:** same-model agents may suppress any debate benefit regardless of
-  compute (A3). Logged in `notes/decisions.md`.
+### A5 · A Multi-Agent Approach to Fault Localization via Graph-Based Retrieval and Reflexion — LLM4FL (arXiv 2025)
+**What it is:** Three AI agents find buggy methods in Java projects: one reads the test
+results, one navigates a call graph, one re-checks and re-ranks the answer.
+**What they found:** Beats earlier AI bug-finders on 675 real Java bugs at about $0.05 per bug.
+Removing graph navigation cuts top-1 accuracy by about 16%. But simply changing the order the
+candidates were shown in swung accuracy by up to 22 points — more than any component.
+**Why it matters to us:** Our closest cousin. Warning: we must show candidates in the same order
+in every test, or ordering effects will look like map effects.
 
-### Phase 2 — Modify (Semester 2, first half)
+### A6 · LocAgent — Graph-Guided LLM Agents for Code Localization (arXiv 2025)
+**What it is:** One AI agent finds bug locations by exploring a code map with three tools:
+search for a name, walk the map, open the code.
+**What they found:** 77.74% right file on first guess on SWE-bench Lite. A fine-tuned open 32B
+model got similar accuracy at about 86% lower cost. Better bug-finding led to more bugs fixed.
+**Why it matters to us:** Shows a map plus a single agent, with no debate, already works well.
+Our fallback platform if SWE-Debate won't run, and a model for letting agents query the map.
 
-The literature ranks the candidate changes:
+### A7 · SWE-bench — Can Language Models Resolve Real-World GitHub Issues? (ICLR 2024)
+**What it is:** The standard benchmark: 2,294 real bugs from 12 Python projects. A fix counts
+only if the project's own tests pass.
+**What they found:** At launch the best model fixed under 2% of bugs. Performance fell as more
+code was stuffed into the AI's context.
+**Why it matters to us:** Our dataset. It doesn't score file-finding itself, so we check the AI's
+guess against the files the real fix changed. Our 75-bug set comes from its Verified subset.
 
-1. **Graph-grounded debate (primary).** Agents must cite checkable graph facts — does the
-   claimed path exist, how long is it, which edge types — and disagreements are settled
-   against the graph. B9 shows models can't correct themselves without an external signal; the
-   dependency graph is exactly such a signal, and it costs nothing. No paper does this.
-2. **ColMAD protocol with different models (fallback).** The only protocol shown to beat a
-   compute-matched single agent (A3), but only with heterogeneous debaters, so it means
-   serving two model families. Compute matching becomes harder when the agents differ.
-3. **Adaptive stopping (cost only).** Stop when round-one agreement is high (B2). Cheaper, but
-   not much of a contribution on its own.
+### A8 · SWE-bench Goes Live! (Microsoft, arXiv 2025)
+**What it is:** A fresh, automatically updated version: 1,319 bugs from GitHub issues opened
+between Jan 2024 and Apr 2025, across 93 Python projects.
+**What they found:** The best agent fixed 19.25% of these fresh bugs, versus 43.2% on the old
+SWE-bench with identical settings — a sign agents are tuned to, or have memorised, the old
+benchmark. Small single-file fixes succeed about half the time; fixes touching 7+ files never.
+**Why it matters to us:** Our Phase 3 dataset. Use only bugs opened after our model's training
+cutoff. The single-file vs multi-file split could measure "how many look-alike candidates"
+for H4.
 
-Ruled out: switching to consensus-seeking debate alone. A3 shows it fails too.
+### A9 · Rethinking the Value of Multi-Agent Workflow — A Strong Single Agent Baseline (OneFlow, arXiv 2026)
+**What it is:** Tests whether a "team" whose agents all use the same model is really a team, or
+just one model talking to itself.
+**What they found:** One model playing every role in a single conversation matched the team's
+accuracy, at lower cost.
+**Why it matters to us:** SWE-Debate's five agents are one model with different instructions, so
+one agent may do the same job. Supports trying *different* models in Phase 2.
 
-### Phase 3 — Validate (Semester 2, second half)
+---
 
-- **SWE-bench-Live (A8):** start from the 300-instance Lite subset and keep only issues created
-  after the backbone's training cutoff. Localization-only evaluation needs no Docker, and the
-  repositories are all Python, so the AST graph construction carries over.
-- **H4:** A8's multi-file difficulty gradient is a candidate proxy for candidate density. A4
-  warns that merely adding look-alike candidates may narrow the gap without reversing it.
+## 4. B — Method and results
 
-## 4. Gaps in the review itself
+### B1 · Improving Factuality and Reasoning in Language Models through Multiagent Debate (ICML 2024)
+**What it is:** The original multi-agent debate paper: several copies of ChatGPT answer, read
+each other's answers and update over a few rounds.
+**What they found:** Big gains on maths and knowledge tests (GSM8K maths: 77% → 85%), growing
+with more agents and rounds.
+**Why it matters to us:** The ancestor of SWE-Debate's debate — but the single-AI comparison
+never got the same budget. That's the gap later papers attack.
 
-- **Not yet reviewed:** The SWE-Bench Illusion; Debate or Vote (arXiv 2508.17536); CoSIL
-  (arXiv 2503.22424); OrcaLoca; KGCompass; Prometheus; Multi-SWE-bench.
-- **Venue-published software engineering work is under-represented** because most papers were
-  found through arXiv. Search ACM DL and IEEE Xplore (ICSE, FSE, ASE, ISSTA, TSE, TOSEM, 2020
-  onward) before writing related work.
-- **Many entries are preprints.** Check DBLP for a published version before citing.
-- **Peripheral papers:** C2, C10, C12 and D1–D6 earn at most one citation each.
+### B2 · When Does Multi-Agent Collaboration Help? An Entropy Perspective (arXiv 2026)
+**What it is:** Tracks how uncertain each agent is during teamwork to predict when teams help.
+**What they found:** A single agent beat the team in about 43% of cases. Success is mostly
+decided in round one; extra rounds rarely help. Only about 6% of cases showed real improvement
+from interaction; about 83% looked like agents copying each other.
+**Why it matters to us:** Basis for "stop early if agents already agree", and for checking
+whether SWE-Debate's agents actually disagree.
+
+### B3 · Multi-Agent Systems are Mixtures of Experts: Who Becomes an Influencer? (arXiv 2026)
+**What it is:** Models how agents change each other's minds during discussion.
+**What they found:** Teams beat single agents when the most *competent* agent gets the most
+influence. In practice the most *confident* agent does, and confidence isn't competence — then
+the advantage disappears.
+**Why it matters to us:** A reason to weight agents by checkable evidence from the map, not by
+how sure they sound.
+
+### B4 · Why Do Multi-Agent LLM Systems Fail? — MAST (NeurIPS 2025)
+**What it is:** Studied 1,600+ logs from 7 multi-agent frameworks and classified what went wrong.
+**What they found:** 14 failure types in 3 groups: poor system design (44%), agents out of sync
+with each other (32%), weak checking of results (24%). Gains over single agents were often small.
+**Why it matters to us:** A ready-made checklist for labelling why our debate runs fail.
+
+### B5 · Reasoning in Token Economies — Budget-Aware Evaluation of LLM Reasoning Strategies (EMNLP 2024)
+**What it is:** Re-tests fancy reasoning methods (debate, self-reflection, tree search) with
+every method given the same budget.
+**What they found:** Plain majority voting matched or beat the fancy methods almost everywhere.
+Debate can even get worse with more budget, because the agents' answers grow too similar.
+**Why it matters to us:** The template for what we do — a fair, same-budget re-test — applied to
+general reasoning instead of bug-finding.
+
+### B6 · More Agents Is All You Need (TMLR 2024)
+**What it is:** Simply sample many answers from the same model and take a vote.
+**What they found:** Accuracy keeps rising with more samples. Adding debate on top sometimes
+made things worse.
+**Why it matters to us:** Justifies our cheap majority-vote comparison: much of debate's gain may
+just be voting.
+
+### B7 · Agentless — Demystifying LLM-based Software Engineering Agents (arXiv 2024)
+**What it is:** No agent at all — a fixed three-step pipeline: narrow down files, then
+functions, then lines; generate fixes; test them.
+**What they found:** Fixed 32% of SWE-bench Lite bugs at $0.70 each, better and cheaper than
+most agents at the time. Reports the cost of every step.
+**Why it matters to us:** Evidence that simple can beat complex, and a model for reporting cost
+step by step.
+
+### B8 · SWE-Search — Enhancing Software Agents with Monte Carlo Tree Search (ICLR 2025)
+**What it is:** Adds a game-style search tree to a coding agent to explore possible fixes, with
+a debate among agents to pick the final patch.
+**What they found:** About 23% relative improvement over the same agent without search — at 5 to
+14 times the cost.
+**Why it matters to us:** SWE-Debate is built on this code. Its fixing stage is the part we leave
+out: it's the expensive bit and needs test infrastructure.
+
+### B9 · Large Language Models Cannot Self-Correct Reasoning Yet (ICLR 2024)
+**What it is:** Tests whether AIs improve answers by criticising themselves without outside
+feedback, and re-runs the original debate on a fair budget.
+**What they found:** Self-correction usually made answers *worse*. Debate lost to plain majority
+voting at the same number of answers (83.0% vs 88.2% with 9 answers on GSM8K).
+**Why it matters to us:** The earliest fair test of debate. And its lesson — AIs need an outside
+check to fix mistakes — is the idea behind graph-grounded debate: the code map is that check.
+
+### B10 · Advances and Frontiers of LLM-based Issue Resolution in Software Engineering (survey, arXiv 2026)
+**What it is:** Survey of 175 papers on AI bug-fixing: datasets, methods, open problems.
+**What they found:** Names "ignoring cost" as a top open problem, and groups SWE-Debate with
+other map-based bug finders.
+**Why it matters to us:** Map of the field, outside support for our cost argument, and a list of
+other datasets.
+
+### B11 · Inside the Scaffold — A Source-Code Taxonomy of Coding Agent Architectures (arXiv 2026)
+**What it is:** Reads the source code of 13 coding agents and classifies how they're built.
+**What they found:** Reports no scores on purpose: benchmark scores mix up the agent's design,
+the model and the settings, so they can't say which design is better.
+**Why it matters to us:** Close to a direct statement of our premise, and support for treating
+"map" and "debate" as separate parts we can test one against the other.
+
+### B12 · SWE-Effi — Re-Evaluating Software AI Agent Effectiveness Under Resource Constraints (arXiv 2025)
+**What it is:** Re-ranks 15 agent-plus-model combinations by accuracy per unit of cost (tokens,
+money, time).
+**What they found:** Efficiency depends on the pairing of agent and model. Failed attempts are
+the expensive ones — over 4 times the tokens in one case.
+**Why it matters to us:** The closest prior work to our cost plots. The report needs a paragraph
+on the difference: they compare whole systems; we test parts inside one system on a fixed budget.
+
+---
+
+## 5. C — Skim and cite
+
+- **C1 · LLM-Based Agents for Software Engineering: A Survey (TOSEM 2026)** — Survey of 124
+  papers on AI agents for software tasks. Only 46.7% report any cost or efficiency data.
+  *For us:* the statistic that shows missing cost reporting is field-wide.
+- **C2 · LLMs for Software Engineering: A Systematic Literature Review (TOSEM 2024)** — Review of
+  395 papers up to Jan 2024. Bug localization is a tiny slice, treated as simple classification.
+  *For us:* general background only.
+- **C3 · AutoFL — LLM-Based Explainable Fault Localization (FSE 2024)** — One AI with a few
+  repository tools names the buggy method from one failing test and explains why; reports time
+  per bug. *For us:* a cost-aware single-agent bug-finding baseline.
+- **C4 · LLMAO — LLMs for Test-Free Fault Localization (ICSE 2024)** — Trains a small add-on on a
+  frozen code model to flag buggy lines without running tests. *For us:* a lightweight contrast;
+  background only.
+- **C5 · BugLocator — Where Should the Bugs Be Fixed? (ICSE 2012)** — Pre-AI method: match the bug
+  report's words to source files, boosted by similar past bugs. *For us:* where the history of
+  bug localization starts.
+- **C6 · BLUiR — Improving Bug Localization using Structured Information Retrieval (ASE 2013)** —
+  Like BugLocator, but searches class names, method names and comments separately. Top-1 file
+  accuracy of about 24–55% depending on the project. *For us:* a pre-AI baseline number and the
+  "text → structure → map → AI agents" storyline.
+- **C7 · MacNet — Scaling LLM-based Multi-Agent Collaboration (ICLR 2025)** — Arranges up to 1,000+
+  agents in networks and studies scaling; giving one agent more calls instead helped little.
+  *For us:* background on team structure.
+- **C8 · Graph Retrieval-Augmented Generation: A Survey (ACM TOIS)** — The main GraphRAG survey.
+  Almost all its graphs are built by an AI reading text, which costs a lot. *For us:* cite for
+  GraphRAG background, and to point out our map comes from code analysis and costs nothing.
+- **C9 · From Local to Global — Microsoft GraphRAG (arXiv 2024)** — An AI reads a document
+  collection, builds a graph of people, things and relations, then summarises clusters to answer
+  broad questions. *For us:* the "other" GraphRAG, to distinguish from ours.
+- **C10 · Evaluation and Benchmarking of LLM Agents: A Survey (KDD 2025)** — A framework for
+  evaluating AI agents; calls for cost-limited evaluation but doesn't do it. *For us:* weak
+  general support.
+- **C11 · A Comprehensive Survey on Benchmarks and Solutions in SE of LLM-Empowered Agentic
+  Systems (arXiv 2025)** — Links 150+ papers to their benchmarks; says the field ignores the cost
+  of agents coordinating. *For us:* background.
+- **C12 · Software Testing With Large Language Models (IEEE TSE 2024)** — Review of 102 papers on
+  AI for testing; none use debate or maps. *For us:* peripheral, one citation at most.
+- **C13** — Earlier arXiv version of C1. Read C1.
+- **C14** — Preprint of A2 (same study, same authors). Read A2.
+
+---
+
+## 6. D — Cross-domain (for one point only)
+
+Six multi-agent + knowledge-graph systems from other fields. None uses debate. All of them test
+parts one at a time, in a single run, with little or no cost reporting — useful only to show
+that weak evaluation is common. Most come from smaller venues, so they support the point but
+shouldn't carry it.
+
+- **D1 · Industrial maintenance (J Manuf Syst 2026)** — Four agents plus two equipment knowledge
+  graphs answer robot-fault questions; 90.1% on a private 210-question set.
+- **D2 · Agentic Graph-RAG (IEEE ICCC 2025)** — Planner, graph and text agents for multi-step
+  question answering; claims best scores on HotpotQA and similar sets.
+- **D3 · Agentic RAG for software testing (IEEE ICoDSE 2025)** — Five agents write test plans for
+  an SAP migration; claims 94.8% on private data, with "accuracy" never defined.
+- **D4 · MedRAG-Agent (IEEE GCAT 2025)** — Four agents plus a medical knowledge graph for medical
+  exam questions; 78.5% on MedQA.
+- **D5 · Multi-agent OSINT (IEEE INISTA 2025)** — An intelligence-gathering pipeline; the only
+  measured result is a faster duplicate filter, not the AI part.
+- **D6 · News bias and fact-checking (Neural Comput Appl 2026)** — Agents share a news knowledge
+  graph; strong scores, but the comparison system used a much smaller model.
+
+---
+
+## 7. Not yet reviewed
+
+- **The SWE-Bench Illusion** (2025) — evidence that models memorise SWE-bench. Pairs with A8.
+- **Debate or Vote** (arXiv 2508.17536) — whether debate beats plain voting.
+- **CoSIL** (arXiv 2503.22424) — a second fallback platform.
+- Lower priority: OrcaLoca, KGCompass, Prometheus (competing systems); Multi-SWE-bench (only if
+  Phase 3 goes beyond Python).
