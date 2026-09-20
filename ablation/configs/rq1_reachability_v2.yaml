@@ -1,0 +1,42 @@
+# RQ1 — structural reachability ceiling of SWE-Debate's dependency graph.
+# Phase 1, diagnose. No LLM, no GPU: pure graph measurement at the base commit.
+name: rq1_reachability_v2
+version: 2
+created: 2026-09-20
+question: >
+  Before any agent speaks, can the gold location even be reached in the graph from the
+  entities the issue names? Everything the localizer scores is bounded by this.
+
+paths:
+  dataset: data/swebench_verified.parquet          # princeton-nlp/SWE-bench_Verified
+  instance_ids: swe-debate/utils/verified75.txt    # the paper's 75-instance subset
+  repos_root: data/repos
+  graph_cache: data/graphs
+  results: ablation/results/rq1_reachability_v2
+
+graph:
+  # SWE-Debate's own builder, imported unmodified from swe-debate/localization.
+  version: v2.3
+  global_import: true      # matches batch_build_graph.py
+  fuzzy_search: true       # build_graph default
+
+entry_set:
+  # Deterministic stand-in for stage-1 LLM entity extraction: every non-test node whose
+  # short name appears verbatim in the issue text. The LLM cannot name what the issue
+  # does not mention, so this is an upper bound on the real entry set.
+  method: issue_identifier_match
+  min_name_len: 3
+  max_nodes_per_name: null   # null = keep every node a name resolves to (most generous)
+
+reach:
+  # _dfs_traversal(max_depth=5) keeps paths of at most 5 nodes, i.e. 4 edges, from each
+  # start entity; stage 2 moves roughly one hop off the issue-named entity first. 6 hops
+  # is therefore already generous. Distances are recorded so any budget can be read off.
+  max_hops: 6
+  policies: [all, no_dir, dep_only]
+
+# v2 adds the control v1 was missing: alongside the gold node's distance, record how many
+# of ALL file and class/function nodes fall within each hop budget. A graph dense enough to
+# put most of the repository three hops from anything makes "the gold file is reachable in
+# three hops" a statement about density, not about localization. v1 produced no recorded
+# result and is superseded.

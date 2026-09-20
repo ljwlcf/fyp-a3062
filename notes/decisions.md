@@ -98,7 +98,50 @@ processes killed on disconnect; AI coding agents must be given the cluster's age
 Cite the Nature MI version only. Its SWE-bench arm is 20 instances per cell, full issue
 resolution.
 
+## 2026-09-20 — The instrumented fork stays gitignored; its changes are tracked as patches
+`swe-debate/` is a clone of upstream and is gitignored, so nothing done to it was backed up or
+visible to chat. Rather than vendoring 19 MB of someone else's repository into this one, the
+fork now carries a local branch `a3062-instrumented` on top of upstream `8a7d462`, and every
+commit on it is exported to `ablation/patches/swe-debate-instrumentation.patch`, which IS
+tracked. `ablation/patches/README.md` gives the three commands that rebuild the fork from
+upstream. Run manifests already record the fork's HEAD SHA, so a result can be traced to the
+exact code that produced it.
+Revisit if: the fork's diff grows past a few hundred lines, at which point a proper GitHub
+fork plus a git submodule is cleaner. That needs a fork created under the user's account, so
+it is not something to do unilaterally.
+
+## 2026-09-20 — RQ1 entry set: issue-identifier matching, as a deterministic stand-in for stage 1
+Measuring the graph's reachability ceiling needs a starting set, and SWE-Debate's real one
+comes from an LLM (stage 1 extracts entity names from the issue; stage 2 expands them into
+code-snippet neighbours). Running that would need the backbone, which is what the whole point
+of an LLM-free ceiling is to avoid.
+Decision: the entry set is every non-test graph node whose short name appears verbatim in the
+issue text, matched against the same `global_name_dict` the pipeline itself uses. The LLM
+cannot name an entity the issue never mentions, so this set is a superset of what stage 1 can
+produce, and reachability measured from it is an UPPER bound on the real pipeline's. Reported
+as such. The per-instance entry-set size is logged so the generosity is visible.
+Rejected: seeding from the gold file (circular), and seeding from every node (trivially
+reachable, measures nothing).
+
+## 2026-09-20 — RQ1 reports reachability under three edge policies, not one
+`_dfs_traversal` filters neighbours by edge type but not by node type, so directory nodes are
+traversable and the containment tree acts as a hub: any two files in one directory are three
+hops apart regardless of whether they depend on each other. Reporting a single reachability
+number would hide that. Every RQ1 figure is therefore reported three ways: `all` (faithful to
+the implementation), `no_dir` (directory nodes removed), and `dep_only` (imports/invokes/
+inherits only, no containment at all). The gap between them is itself the result: it says how
+much of the graph's apparent connectivity is dependency structure and how much is filesystem
+layout.
+
 ## Still pending
 - Localization-only scope: still needs A/P Chen's explicit confirmation.
 - Reproduction decision point: 30 Sep 2026. If one SWE-Debate instance does not run end to end,
   run the same design on LocAgent or CoSIL.
+
+## 2026-09-20 — Raw run outputs are tracked in git; only bulky artifacts are excluded
+`.gitignore` blanket-ignored `ablation/results/`, so no result would ever have reached chat or
+a backup. The RQ1 run's complete raw output for all 75 instances is about 250 KB of JSON. The
+ignore is now narrowed to `ablation/results/**/*.pkl`, `**/trajectories/` and `**/*.log`, so
+raw JSONL, manifests and summaries are tracked and a reported number can always be traced back
+to the record that produced it. Revisit when the first LLM runs land: agent trajectories are
+large and should stay under a `trajectories/` directory so the existing rule covers them.

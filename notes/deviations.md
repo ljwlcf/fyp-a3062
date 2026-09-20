@@ -81,3 +81,48 @@ should describe the reproduction as "same pipeline, different backbone" and comp
 not absolute numbers. A lower single-agent baseline may make any coordination benefit easier
 to detect (Nature MI capability-saturation finding). If a third-party host still serves
 V3-0324, one reproduction arm on the original model would strengthen the comparison.
+
+## 2026-09-20 — Correction: SWE-Bench-Verified-S is 25/25/25, not 23/26/26
+What changed: The composition recorded on 2026-09-13 (item 4 above) and in CLAUDE.md said
+django 23, sympy 26, sphinx-doc 26. Counting `swe-debate/utils/verified75.txt` directly gives
+django 25, sympy 25, sphinx-doc 25 — 75 unique IDs, no duplicates, and all 75 are present in
+princeton-nlp/SWE-bench_Verified. The earlier split appears to be a misreading of Appendix A
+Table 4.
+Why: Noticed while loading the subset for the RQ1 reachability run.
+Expected impact: None on the design; the subset is perfectly balanced, which is slightly
+better for per-repo analysis than the recorded split suggested. Both CLAUDE.md and item 4
+above should be read as 25/25/25.
+
+## 2026-09-20 — Defects fixed in the instrumented fork so the pipeline can run at all
+What changed: Five hardcoded values in `swe-debate/localization/` were made
+environment-configurable. Each is marked with an `# A3062:` comment at the edit site.
+  1. `EntityLocalizationPipeline.__init__` created `OpenAI(base_url="", api_key="")`, so every
+     LLM call fails. Now reads `LLM_BASE_URL` / `LLM_API_KEY` (falling back to
+     `OPENAI_BASE_URL` / `OPENAI_API_KEY`, and to the literal "EMPTY" key vLLM expects).
+  2. The constructor advertised `model_name="deepseek/deepseek-chat"` but both call sites
+     hardcoded `model="deepseek-v3"`, so the argument did nothing. Both call sites now use
+     `self.model_name`, defaulting to `$LLM_MODEL`.
+  3. `self.cache_dir = "/entity_pipeline_cache"` — an absolute path at the filesystem root,
+     unwritable on a shared cluster. Now `$ENTITY_PIPELINE_CACHE_DIR`, default `tmp/`.
+  4. `LocalizationChainEmbedding.__init__` hardcoded the authors' own model cache,
+     `/data/swebench/workspace_agentless/Agentless/models`. Now `$CHAIN_EMBED_CACHE_DIR`,
+     defaulting to the standard HuggingFace cache.
+  5. (not a code change, recorded here) `localization/requirements.txt` omits `transformers`,
+     which `entity_embedding.py` imports at module load. The published requirements file is
+     incomplete; a from-scratch install of the localization stage fails on import.
+Why: Items 1-4 are hard blockers for the 30 Sep reproduction decision point; none of them
+changes any algorithm.
+Expected impact: No effect on behaviour, only on whether the code starts. Worth one line in
+the report's reproducibility discussion, not the threats-to-validity section.
+
+## 2026-09-20 — The localization stage needs a second model (a local embedding model)
+What changed: Nothing yet — recording a planning fact found while reading the code.
+`EntityLocalizationPipeline.__init__` eagerly constructs `LocalizationChainEmbedding`, which
+loads `intfloat/multilingual-e5-large-instruct` (~2.2 GB) through `transformers` and uses it in
+`_select_diverse_chains` to pick the 6 diverse candidate chains. The localization stage is
+therefore not "one backbone": it is one generative backbone plus one local embedding model.
+Why: Relevant to the GPU application and to compute matching.
+Expected impact: Adds ~2.2 GB of GPU (or CPU) memory next to the vLLM server, and the
+embedding model must be pinned and held fixed across arms like the backbone is. It consumes no
+LLM tokens, so it does not disturb the token-based compute matching, but it should be named in
+the experimental setup so the "single backbone" claim is not overstated.

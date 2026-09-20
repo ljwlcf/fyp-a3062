@@ -40,9 +40,9 @@ papers contradicting each other" — see `notes/literature-summary.md` section 2
   DeepSeek-V3-0324 (the paper's model) is no longer served by DeepSeek. Serve an open-weights
   model with vLLM on NTU GPUs. The only planned exception is the Phase 2 heterogeneous-agent
   fallback. Claude is the research assistant here, never the system under test.
-- **Phase 1 data:** the 75-instance SWE-Bench-Verified-S subset (django 23, sympy 26,
-  sphinx-doc 26; `utils/verified75.txt`). Expand to the 300-instance SWE-bench Lite if
-  statistical power is marginal.
+- **Phase 1 data:** the 75-instance SWE-Bench-Verified-S subset (django 25, sympy 25,
+  sphinx-doc 25; `utils/verified75.txt` — counted 2026-09-20, correcting an earlier
+  23/26/26). Expand to the 300-instance SWE-bench Lite if statistical power is marginal.
 - **Python repositories only.** The graph is built with Python's `ast` module.
 - **One modification in Phase 2**, not two.
 

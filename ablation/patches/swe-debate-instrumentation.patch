@@ -1,0 +1,106 @@
+From 21a2435fd816e3933001dffa3ea16f268febf093 Mon Sep 17 00:00:00 2001
+From: will <dllijingwei@gmail.com>
+Date: Sun, 20 Sep 2026 15:24:40 +0800
+Subject: [PATCH] A3062: make hardcoded endpoint, model, and cache paths
+ configurable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream ships base_url=""/api_key="", hardcodes model="deepseek-v3" at both
+call sites while advertising a model_name argument, and writes caches to
+/entity_pipeline_cache and /data/swebench/... — absolute paths at the filesystem
+root. None of these can work outside the authors' own machine. Each edit is
+marked with an '# A3062:' comment; no algorithm is changed.
+---
+ localization/entity_embedding.py             | 11 +++++++--
+ localization/entity_localization_pipeline.py | 25 +++++++++++++-------
+ 2 files changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/localization/entity_embedding.py b/localization/entity_embedding.py
+index 7de7df0..bc0f699 100644
+--- a/localization/entity_embedding.py
++++ b/localization/entity_embedding.py
+@@ -8,8 +8,15 @@ import logging
+ class LocalizationChainEmbedding:
+     """Localization chain embedding calculator"""
+     
+-    def __init__(self, model_name: str = "intfloat/multilingual-e5-large-instruct", 
+-                 cache_dir: str = '/data/swebench/workspace_agentless/Agentless/models'):
++    def __init__(self, model_name: str = None, cache_dir: str = None):
++        # A3062: upstream hardcodes the author's own absolute paths
++        # ('/data/swebench/workspace_agentless/Agentless/models'), which do not exist
++        # anywhere else. Env-configurable, falling back to the HF default cache.
++        import os
++        model_name = model_name or os.environ.get(
++            "CHAIN_EMBED_MODEL", "intfloat/multilingual-e5-large-instruct")
++        cache_dir = cache_dir or os.environ.get("CHAIN_EMBED_CACHE_DIR")  # None = HF default
++        self.model_name = model_name
+         self.tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+         self.model = AutoModel.from_pretrained(model_name, cache_dir=cache_dir)
+         
+diff --git a/localization/entity_localization_pipeline.py b/localization/entity_localization_pipeline.py
+index b3b44dd..97ee189 100644
+--- a/localization/entity_localization_pipeline.py
++++ b/localization/entity_localization_pipeline.py
+@@ -498,8 +498,10 @@ class EntityLocalizationPipeline:
+     3. Generate localization chains for each related entity, grouped by initial entity
+     """
+ 
+-    def __init__(self, model_name: str = "deepseek/deepseek-chat", max_depth: int = 5):
+-        self.model_name = model_name
++    def __init__(self, model_name: str = None, max_depth: int = 5):
++        # A3062: upstream defaults to "deepseek/deepseek-chat" but then hardcodes
++        # "deepseek-v3" at both call sites, so model_name had no effect. One source now.
++        self.model_name = model_name or os.environ.get("LLM_MODEL", "deepseek-chat")
+         self.max_depth = max_depth
+         self.logger = logging.getLogger(__name__)
+ 
+@@ -511,15 +513,22 @@ class EntityLocalizationPipeline:
+         self.chain_embedding = LocalizationChainEmbedding()
+         
+         # Cache related configuration
+-        self.cache_dir = "/entity_pipeline_cache"
++        # A3062: upstream hardcodes "/entity_pipeline_cache" at the filesystem root,
++        # which is unwritable on a shared cluster. Env-configurable, relative default.
++        self.cache_dir = os.environ.get(
++            "ENTITY_PIPELINE_CACHE_DIR", os.path.join("tmp", "entity_pipeline_cache"))
+         self.enable_cache = True
+         self._ensure_cache_dir_exists()
+         
+         # Initialize the OpenAI client
++        # A3062: upstream ships base_url="" / api_key="", so every call fails. Read the
++        # endpoint from the environment; for a self-hosted vLLM server the key is unused
++        # but the OpenAI client still requires a non-empty string.
+         self.client = OpenAI(
+-            base_url="",
+-            api_key="",
+-            timeout=60.0
++            base_url=os.environ.get("LLM_BASE_URL") or os.environ.get("OPENAI_BASE_URL"),
++            api_key=(os.environ.get("LLM_API_KEY")
++                     or os.environ.get("OPENAI_API_KEY") or "EMPTY"),
++            timeout=float(os.environ.get("LLM_TIMEOUT", "60.0")),
+         )
+ 
+     def _call_llm_simple(self, messages: List[Dict], temp: float = 0.1, max_tokens: int = 1000) -> str:
+@@ -536,7 +545,7 @@ class EntityLocalizationPipeline:
+         """
+         try:
+             response = self.client.chat.completions.create(
+-                model="deepseek-v3",
++                model=self.model_name,
+                 messages=messages,
+                 temperature=temp,
+                 max_tokens=max_tokens,
+@@ -1000,7 +1009,7 @@ class EntityLocalizationPipeline:
+         try:
+             logging.info("Call LLM to extract entity...")
+             response = self.client.chat.completions.create(
+-                model="deepseek-v3",
++                model=self.model_name,
+                 messages=messages,
+                 temperature=0.7,
+             )
+-- 
+2.39.5 (Apple Git-154)
+
