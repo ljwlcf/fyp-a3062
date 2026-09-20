@@ -130,6 +130,12 @@ writing (reports, slides). Chat reads this folder rather than relying on a retol
 **When a session starts after a chat discussion,** read `notes/decisions.md` and the Answered
 section of `notes/for-chat.md` for anything new, and follow it.
 
+**Enforced by hooks** (`.claude/settings.json`). The SessionStart hook pulls the repo and loads
+the latest progress entry and `for-chat.md` into context. The Stop hook blocks the end of any
+session that changed something until progress.md has a new entry, results.md is updated when
+`ablation/results/` changed, everything is committed and everything is pushed. If it blocks,
+fix what it lists; don't work around it.
+
 Switch between the two by task, not mid-task: finish a chunk of work, update the notes, then
 move over.
 
