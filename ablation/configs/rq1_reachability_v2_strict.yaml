@@ -1,6 +1,6 @@
 # RQ1 — structural reachability ceiling of SWE-Debate's dependency graph.
 # Phase 1, diagnose. No LLM, no GPU: pure graph measurement at the base commit.
-name: rq1_reachability_v2
+name: rq1_reachability_v2_strict
 version: 2
 created: 2026-09-20
 question: >
@@ -12,7 +12,7 @@ paths:
   instance_ids: swe-debate/utils/verified75.txt    # the paper's 75-instance subset
   repos_root: data/repos
   graph_cache: data/graphs
-  results: ablation/results/rq1_reachability_v2
+  results: ablation/results/rq1_reachability_v2_strict
 
 graph:
   # SWE-Debate's own builder, imported unmodified from swe-debate/localization.
@@ -26,7 +26,8 @@ entry_set:
   # does not mention, so this is an upper bound on the real entry set.
   method: issue_identifier_match
   min_name_len: 3
-  max_nodes_per_name: null   # null = keep every node a name resolves to (most generous)
+  max_nodes_per_name: 5
+  use_stopwords: true
 
 reach:
   # _dfs_traversal(max_depth=5) keeps paths of at most 5 nodes, i.e. 4 edges, from each
@@ -40,3 +41,6 @@ reach:
 # put most of the repository three hops from anything makes "the gold file is reachable in
 # three hops" a statement about density, not about localization. v1 produced no recorded
 # result and is superseded.
+
+# Sensitivity arm of rq1_reachability_v2: drop names that resolve to more than 5 nodes: a much smaller, more plausible stage-1 entry set.
+# Run after the main arm so the graph cache is warm; the measurement is BFS-only.

@@ -59,13 +59,17 @@ def measure(G) -> dict:
     name_counts = Counter(short_name(n) for n in G.nodes() if ":" in n)
     ambiguous_names = sum(1 for c in name_counts.values() if c > 1)
 
-    # what the test-name filter hides. A file under a TOP-LEVEL tests/ directory is the
-    # repository's own suite and is meant to be hidden; anything else is production code
-    # the traversal has been made blind to.
+    # What the test-name filter hides. Hiding the repository's own suite is the point, so
+    # only count what it takes with it: a file is the suite if it sits in a directory
+    # named exactly "tests" (django/tests/..., sympy/core/tests/...) or its basename
+    # starts with "test_". Everything else the filter catches is production code the
+    # traversal has been made blind to -- django/test/ (django.test.Client, TestCase, the
+    # whole shipped testing framework), sympy/testing/, django/contrib/admin/tests.py.
     files = [n for n, d in G.nodes(data=True) if d.get("type") == "file"]
     hidden = [f for f in files if is_test_file(f)]
     hidden_production = sorted(
-        f for f in hidden if f.split("/")[0] not in ("tests", "test", "testing"))
+        f for f in hidden
+        if "tests" not in f.split("/")[:-1] and not f.split("/")[-1].startswith("test_"))
 
     return {
         "nodes": G.number_of_nodes(),
@@ -92,7 +96,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--graphs", default="data/graphs")
     ap.add_argument("--limit", type=int)
-    ap.add_argument("--out", default="ablation/results/rq1_reachability_v1/graph_quality.json")
+    ap.add_argument("--out", default="ablation/results/rq1_reachability_v2/graph_quality.json")
     args = ap.parse_args()
 
     paths = sorted(glob.glob(osp.join(args.graphs, "*.pkl")))

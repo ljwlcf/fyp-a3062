@@ -7,6 +7,41 @@ Did:
 Broke:
 Next:
 
+## 2026-09-20
+Did: First real measurement of the project. Built the RQ1 harness
+(`ablation/harness/{swe_graph,reachability,analyze_reachability,graph_quality}.py`, config
+`ablation/configs/rq1_reachability_v2.yaml`) and ran it over all 75 SWE-Bench-Verified-S
+instances with no LLM and no GPU — see results.md for the numbers. Headline: the graph's
+reachability ceiling is not the bottleneck (gold file reachable within 2 hops in 96% of
+instances, 100% by 4 hops, 0 unreachable), but the control shows why that is almost vacuous —
+by hop 3 the traversal has 84% of the repository in reach and the gold file is only 1.2x
+likelier to be in that set than any other file. The traversal's information is spent in the
+first one or two hops; `_dfs_traversal` runs to depth 5. Robust across three entry-set
+definitions and five edge policies. Supporting result: 75-80% of the graph's `invokes` edges
+are unresolved name matches (one django call site naming `get` is wired to 618 methods), and
+invokes is 77.5% of all edges.
+Also: fixed five hardcoded values in the fork (empty API credentials, the dead `model_name`
+argument, and three absolute paths at the filesystem root) so the pipeline can start at all;
+found that `localization/requirements.txt` omits `transformers`, which `entity_embedding.py`
+imports at load, and that the localization stage quietly needs a second model (a 2.2 GB local
+embedding model for chain diversity). Made the graph builder 6-12x faster by hoisting a
+per-entity file read and line split out of `CodeAnalyzer` — verified graph-identical against
+pre-fix builds on three instances; a sympy graph went from 44 min to 6-8 min. Corrected the
+subset composition to 25/25/25 (it was recorded as 23/26/26). Narrowed `.gitignore` so raw run
+output is tracked, and started exporting the gitignored fork's changes to
+`ablation/patches/`.
+Broke: Nothing regressed. Two things are slower or uglier than they should be. (1) The graph
+builder still spends ~50% of its time in `find_all_possible_callee`, which redoes per-file
+import resolution once per entity; the file-level part of it is cacheable and provably
+identical, and it matters for Phase 3 where hundreds of graphs are needed. (2) The 75 graph
+builds took 10.6 CPU-hours total even after the fix. Still no SWE-Debate end-to-end run: that
+needs an LLM endpoint, so it is blocked on GPU access, not on the code.
+Next: 30 Sep decision point — get one SWE-Debate instance through the localization stage end
+to end as soon as an endpoint exists; the non-LLM parts are now unblocked. Cache the file-level
+part of `find_all_possible_callee`. Confirm localization-only scope with A/P Chen. Pick the
+backbone once GPU memory is known. Read A1-A9. Chat has two new questions in for-chat.md,
+including whether the unresolved-edge finding weakens Phase 2's primary candidate.
+
 ## 2026-09-19
 Did: Project plan submitted 14 Sep. Plan discussion with A/P Chen: she read it as a
 reproduction and suggested testing other datasets and modifying the debate, so the plan is now

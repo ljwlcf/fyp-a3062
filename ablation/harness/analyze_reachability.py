@@ -19,14 +19,21 @@ def pct(n, d):
 
 
 def load(run_dir):
-    recs = []
+    """Every raw shard in the run, de-duplicated by instance_id (last write wins).
+
+    Shards and resumed runs can overlap, and a double-counted instance would quietly
+    skew every share in this report.
+    """
+    by_id = {}
     for path in sorted(glob.glob(osp.join(run_dir, "raw.*.jsonl"))):
         with open(path) as f:
             for line in f:
                 line = line.strip()
-                if line:
-                    recs.append(json.loads(line))
-    return recs
+                if not line:
+                    continue
+                rec = json.loads(line)
+                by_id[rec["instance_id"]] = rec
+    return [by_id[k] for k in sorted(by_id)]
 
 
 def cdf_row(values, budgets, total):
@@ -86,24 +93,37 @@ def main():
     print(f"Gold ENTITY named directly in the issue: {named_ent}/{n} ({pct(named_ent, n)}).")
 
     # ---- the control: how much of the repository is within k hops anyway --
-    policies = [p for p in ("all", "no_dir", "dep_only") if ok and p in ok[0]["reach"]]
+    policies = [p for p in ("all", "no_dir", "dep_only", "no_invokes", "resolved_only")
+                if ok and p in ok[0]["reach"]]
     print("\n## Control — share of the repository already within k hops of the entry set\n")
     print("Mean over instances. Read every reachability number below against this row: a "
           "graph\nthat puts most of the repository inside three hops makes reaching the gold "
           "file easy\nfor reasons that have nothing to do with localization.\n")
     print("| policy | target | " + " | ".join(f"k={b}" for b in budgets) + " |")
     print("|---|---|" + "---:|" * len(budgets))
-    control = {}
+    control, control_abs = {}, {}
     for p in policies:
         for t in ("files", "entities"):
-            means = []
+            means, absol = [], []
             for b in budgets:
-                vals = [r["reach"][p]["coverage"][t]["within_k"].get(str(b),
-                        r["reach"][p]["coverage"][t]["within_k"].get(b, 0))
-                        / max(r["reach"][p]["coverage"][t]["pool"], 1) for r in ok]
-                means.append(sum(vals) / len(vals) if vals else 0.0)
+                counts = [r["reach"][p]["coverage"][t]["within_k"].get(
+                              str(b), r["reach"][p]["coverage"][t]["within_k"].get(b, 0))
+                          for r in ok]
+                pools = [max(r["reach"][p]["coverage"][t]["pool"], 1) for r in ok]
+                means.append(sum(c / q for c, q in zip(counts, pools)) / len(ok) if ok else 0.0)
+                absol.append(sum(counts) / len(ok) if ok else 0)
             control[(p, t)] = means
+            control_abs[(p, t)] = absol
             print(f"| {p} | {t} | " + " | ".join(f"{m*100:5.1f}%" for m in means) + " |")
+
+    print("\nSame rows as absolute counts — the number of candidates a localizer would have "
+          "to\ndiscriminate between at that budget (mean over instances):\n")
+    print("| policy | target | " + " | ".join(f"k={b}" for b in budgets) + " |")
+    print("|---|---|" + "---:|" * len(budgets))
+    for p in policies:
+        for t in ("files", "entities"):
+            print(f"| {p} | {t} | " +
+                  " | ".join(f"{a:,.0f}" for a in control_abs[(p, t)]) + " |")
 
     # ---- ceiling B/C: reachability ---------------------------------------
     for target, label in (("files", "gold FILE"), ("entities", "gold ENTITY")):
@@ -144,6 +164,26 @@ def main():
             enrichment[f"{p}|{t}"] = row
             print(f"| {p} | {t} | " +
                   " | ".join("  -  " if v is None else f"{v:5.1f}x" for v in row) + " |")
+
+    # ---- where the ceiling actually binds ---------------------------------
+    print("\n## Gold-file reachability by how much the issue text names\n")
+    print("Instances split into quartiles by entry-set size. If the ceiling binds anywhere it\n"
+          "is here, on issues whose text names almost nothing the graph can match.\n")
+    ranked = sorted(ok, key=lambda r: r["entry_set"]["n_nodes"])
+    q = max(len(ranked) // 4, 1)
+    pol = "no_dir" if "no_dir" in policies else policies[0]
+    print(f"| entry-set size | instances | gold file at k=0 | <=1 | <=2 | <=3 | unreachable ({pol}) |")
+    print("|---|---:|---:|---:|---:|---:|---:|")
+    for qi in range(4):
+        chunk = ranked[qi * q: (qi + 1) * q if qi < 3 else len(ranked)]
+        if not chunk:
+            continue
+        sizes = [r["entry_set"]["n_nodes"] for r in chunk]
+        vals = [r["reach"][pol]["files"]["min_hops"] for r in chunk]
+        c = cdf_row(vals, [0, 1, 2, 3], len(chunk))
+        print(f"| {min(sizes)}-{max(sizes)} | {len(chunk)} | " +
+              " | ".join(pct(x, len(chunk)) for x in c) +
+              f" | {sum(1 for v in vals if v is None)} |")
 
     # ---- multi-file -------------------------------------------------------
     multi = [r for r in ok if r["gold_summary"]["n_files"] > 1]
@@ -200,6 +240,7 @@ def main():
         },
         "edge_mix": dict(etypes),
         "coverage_control": {f"{p}|{t}": control[(p, t)] for (p, t) in control},
+        "coverage_control_abs": {f"{p}|{t}": control_abs[(p, t)] for (p, t) in control_abs},
         "enrichment": enrichment,
     }
     out = osp.join(args.run, "summary.json")

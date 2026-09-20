@@ -262,8 +262,8 @@ def name_index(G) -> Dict[str, List[str]]:
 
 
 def issue_entry_nodes(G, problem_statement: str, index: Dict[str, List[str]],
-                      min_name_len: int = 3, max_nodes_per_name: Optional[int] = None
-                      ) -> Tuple[Set[str], Dict[str, int]]:
+                      min_name_len: int = 3, max_nodes_per_name: Optional[int] = None,
+                      use_stopwords: bool = True) -> Tuple[Set[str], Dict[str, int]]:
     """Nodes whose name is mentioned verbatim in the issue text.
 
     A deterministic stand-in for SWE-Debate's stage-1 LLM entity extraction: whatever
@@ -280,8 +280,9 @@ def issue_entry_nodes(G, problem_statement: str, index: Dict[str, List[str]],
             matched_names[path] = 1
         tokens.add(path.split("/")[-1])
 
+    stop = _STOPWORDS if use_stopwords else frozenset()
     for tok in tokens:
-        if len(tok) < min_name_len or tok in _STOPWORDS:
+        if len(tok) < min_name_len or tok in stop:
             continue
         hits = index.get(tok)
         if not hits:

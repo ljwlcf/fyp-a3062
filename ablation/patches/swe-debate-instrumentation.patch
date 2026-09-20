@@ -1,7 +1,7 @@
 From 21a2435fd816e3933001dffa3ea16f268febf093 Mon Sep 17 00:00:00 2001
 From: will <dllijingwei@gmail.com>
 Date: Sun, 20 Sep 2026 15:24:40 +0800
-Subject: [PATCH] A3062: make hardcoded endpoint, model, and cache paths
+Subject: [PATCH 1/2] A3062: make hardcoded endpoint, model, and cache paths
  configurable
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -101,6 +101,115 @@ index b3b44dd..97ee189 100644
                  messages=messages,
                  temperature=0.7,
              )
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 5ee0e25a96f8614af54359fd52a3e60d128469e9 Mon Sep 17 00:00:00 2001
+From: will <dllijingwei@gmail.com>
+Date: Sun, 20 Sep 2026 16:56:19 +0800
+Subject: [PATCH 2/2] A3062: stop re-reading and re-splitting each file once
+ per entity
+
+CodeAnalyzer._get_source_segment opened the file from disk and called
+ast.get_source_segment for every class and function, and get_source_segment
+re-splits the whole source each call. A file with N entities was therefore read
+and split N times: quadratic in file size, and 80% of build time on sphinx.
+
+Read the source once (analyze_file already has it) and hoist the line split to
+one call per file. The segment extractor is the stdlib function's own body
+against pre-split lines, and the split uses ast._splitlines_no_ff, which unlike
+str.splitlines does not break on form feed -- django and sympy sources contain
+form feeds, so the distinction matters.
+
+sphinx 180s -> 15s. sympy 2650s -> 400-500s. Verified graph-identical (nodes,
+edges and node attributes) against pre-fix builds for sphinx-10323,
+django-11790 and sympy-13852.
+---
+ localization/dependency_graph/build_graph.py | 54 ++++++++++++++++++--
+ 1 file changed, 49 insertions(+), 5 deletions(-)
+
+diff --git a/localization/dependency_graph/build_graph.py b/localization/dependency_graph/build_graph.py
+index dba8843..e76fdfd 100644
+--- a/localization/dependency_graph/build_graph.py
++++ b/localization/dependency_graph/build_graph.py
+@@ -117,9 +117,55 @@ def find_imports(filepath, repo_path, tree=None):
+     return imports
+ 
+ 
++def _split_lines_like_ast(source):
++    """ast's own line split, computed once per file instead of once per entity.
++
++    ast.get_source_segment() calls the private ast._splitlines_no_ff(), which differs from
++    str.splitlines(): it breaks on \r, \n and \r\n only, and NOT on form feed or the
++    other Unicode line boundaries. Form feeds do occur in django and sympy sources, so
++    using str.splitlines() here would shift every line index in those files. Use ast's own
++    helper when it is available and fall back to an equivalent regex.
++    """
++    helper = getattr(ast, "_splitlines_no_ff", None)
++    if helper is not None:
++        return helper(source)
++    return re.findall(r"[^\r\n]*(?:\r\n|[\r\n])|[^\r\n]+$", source)
++
++
++def _source_segment(lines, node):
++    """ast.get_source_segment(source, node, padded=False), against pre-split lines.
++
++    Same body as the stdlib function; only the split is hoisted out. Upstream called
++    get_source_segment() once per class and function AND re-read the file from disk each
++    time, so a file with N entities was read and split N times -- quadratic in file size.
++    That was 80% of build time on sphinx and made a large sympy graph take 44 minutes.
++    """
++    try:
++        if node.end_lineno is None or node.end_col_offset is None:
++            return None
++        lineno = node.lineno - 1
++        end_lineno = node.end_lineno - 1
++        col_offset = node.col_offset
++        end_col_offset = node.end_col_offset
++    except AttributeError:
++        return None
++
++    if end_lineno == lineno:
++        return lines[lineno].encode()[col_offset:end_col_offset].decode()
++
++    first = lines[lineno].encode()[col_offset:].decode()
++    last = lines[end_lineno].encode()[:end_col_offset].decode()
++    middle = lines[lineno + 1:end_lineno]
++    return ''.join([first] + middle + [last])
++
++
+ class CodeAnalyzer(ast.NodeVisitor):
+-    def __init__(self, filename):
++    def __init__(self, filename, source=None):
+         self.filename = filename
++        if source is None:
++            with open(filename, 'r') as file:
++                source = file.read()
++        self._lines = _split_lines_like_ast(source)
+         self.nodes = []
+         self.node_name_stack = []
+         self.node_type_stack = []
+@@ -168,9 +214,7 @@ class CodeAnalyzer(ast.NodeVisitor):
+         self.node_type_stack.pop()
+ 
+     def _get_source_segment(self, node):
+-        with open(self.filename, 'r') as file:
+-            source_code = file.read()
+-        return ast.get_source_segment(source_code, node)
++        return _source_segment(self._lines, node)
+ 
+ 
+ # Parese the given file, use CodeAnalyzer to extract classes and helper functions from the file
+@@ -182,7 +226,7 @@ def analyze_file(filepath):
+             tree = ast.parse(code, filename=filepath)
+         except:
+             raise SyntaxError
+-    analyzer = CodeAnalyzer(filepath)
++    analyzer = CodeAnalyzer(filepath, source=code)
+     try:
+         analyzer.visit(tree)
+     except RecursionError:
 -- 
 2.39.5 (Apple Git-154)
 

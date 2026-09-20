@@ -33,18 +33,36 @@ sys.path.insert(0, osp.dirname(osp.abspath(__file__)))
 import swe_graph as sg
 
 POLICIES = {
-    "all": {"drop_directories": False, "edge_types": None},
-    "no_dir": {"drop_directories": True, "edge_types": None},
+    # faithful to _dfs_traversal: it filters neighbours by edge type but not by node
+    # type, so directory nodes are traversable and the containment tree is a hub
+    "all": {"drop_directories": False, "edge_types": None, "drop_ambiguous_invokes": False},
+    "no_dir": {"drop_directories": True, "edge_types": None,
+               "drop_ambiguous_invokes": False},
     "dep_only": {"drop_directories": True,
-                 "edge_types": {"imports", "invokes", "inherits"}},
+                 "edge_types": {"imports", "invokes", "inherits"},
+                 "drop_ambiguous_invokes": False},
+    # invokes edges are ~80% unresolved name matches (see graph_quality.py), so these two
+    # views ask what the graph connects through structure it actually got right
+    "no_invokes": {"drop_directories": True,
+                   "edge_types": {"contains", "imports", "inherits"},
+                   "drop_ambiguous_invokes": False},
+    "resolved_only": {"drop_directories": True, "edge_types": None,
+                      "drop_ambiguous_invokes": True},
 }
 
 
-def build_adjacency(G, drop_directories: bool, edge_types: Optional[Set[str]]):
+def build_adjacency(G, drop_directories: bool, edge_types: Optional[Set[str]],
+                    drop_ambiguous_invokes: bool = False):
     """Undirected adjacency over traversable nodes.
 
     Test files are dropped because RepoDependencySearcher.get_neighbors is called with
     ignore_test_file=True everywhere in the pipeline; the traversal cannot see them.
+
+    drop_ambiguous_invokes keeps only those invokes edges whose (source, callee short
+    name) group has exactly one target. build_graph never resolves a call to one callee:
+    it keeps every node sharing the name, so a group larger than one is a name match, and
+    at most one member of it is the real dependency. Dropping those leaves the edges the
+    builder did resolve.
     """
     allowed = set()
     for nid, data in G.nodes(data=True):
@@ -54,11 +72,24 @@ def build_adjacency(G, drop_directories: bool, edge_types: Optional[Set[str]]):
             continue
         allowed.add(nid)
 
+    ambiguous = set()
+    if drop_ambiguous_invokes:
+        groups: Dict[tuple, list] = {}
+        for u, v, data in G.edges(data=True):
+            if data["type"] != "invokes":
+                continue
+            groups.setdefault((u, v.split(":")[-1].split(".")[-1]), []).append(v)
+        for (u, name), targets in groups.items():
+            if len(targets) > 1:
+                ambiguous.update((u, t) for t in targets)
+
     adj: Dict[str, Set[str]] = {n: set() for n in allowed}
     for u, v, data in G.edges(data=True):
         if u not in adj or v not in adj:
             continue
         if edge_types is not None and data["type"] not in edge_types:
+            continue
+        if data["type"] == "invokes" and (u, v) in ambiguous:
             continue
         adj[u].add(v)
         adj[v].add(u)
@@ -167,6 +198,7 @@ def measure_instance(instance: dict, cfg: dict) -> dict:
         G, instance["problem_statement"], index,
         min_name_len=entry_cfg["min_name_len"],
         max_nodes_per_name=entry_cfg.get("max_nodes_per_name"),
+        use_stopwords=entry_cfg.get("use_stopwords", True),
     )
     rec["entry_set"] = {
         "method": entry_cfg["method"],
@@ -182,7 +214,8 @@ def measure_instance(instance: dict, cfg: dict) -> dict:
     ntype = {n: d.get("type") for n, d in G.nodes(data=True)}
     for name in cfg["reach"]["policies"]:
         pol = POLICIES[name]
-        adj = build_adjacency(G, pol["drop_directories"], pol["edge_types"])
+        adj = build_adjacency(G, pol["drop_directories"], pol["edge_types"],
+                              pol["drop_ambiguous_invokes"])
         dist = bfs_distances(adj, entry, max_hops)
 
         # control: how much of the repository is inside k hops anyway
@@ -215,6 +248,9 @@ def main():
     ap.add_argument("--config", required=True)
     ap.add_argument("--repo", help="restrict to one repo, e.g. django/django")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--shard", help="split one repo across parallel workers, e.g. 1/2")
+    ap.add_argument("--repos-root", help="override paths.repos_root, so a second worker "
+                                         "can use its own git worktree of the same clone")
     args = ap.parse_args()
 
     with open(args.config) as f:
@@ -227,25 +263,38 @@ def main():
         if not osp.isabs(val):
             cfg["paths"][key] = osp.join(root, val)
 
+    if args.repos_root:
+        cfg["paths"]["repos_root"] = (args.repos_root if osp.isabs(args.repos_root)
+                                      else osp.join(root, args.repos_root))
+
     instances = sg.load_instances(cfg["paths"]["dataset"], cfg["paths"]["instance_ids"])
     if args.repo:
         instances = [i for i in instances if i["repo"] == args.repo]
+    shard_tag = ""
+    if args.shard:
+        idx, total = (int(x) for x in args.shard.split("/"))
+        instances = [inst for j, inst in enumerate(instances) if j % total == idx - 1]
+        shard_tag = f".shard{idx}of{total}"
     if args.limit:
         instances = instances[:args.limit]
 
     out_dir = cfg["paths"]["results"]
     os.makedirs(out_dir, exist_ok=True)
-    suffix = args.repo.replace("/", "__") if args.repo else "all"
+    suffix = (args.repo.replace("/", "__") if args.repo else "all") + shard_tag
     raw_path = osp.join(out_dir, f"raw.{suffix}.jsonl")
 
+    # skip anything any shard of this run has already recorded, not just this file
     done = set()
-    if osp.exists(raw_path):
-        with open(raw_path) as f:
+    import glob as _glob
+    for path in _glob.glob(osp.join(out_dir, "raw.*.jsonl")):
+        with open(path) as f:
             for line in f:
                 try:
-                    done.add(json.loads(line)["instance_id"])
+                    rec = json.loads(line)
                 except json.JSONDecodeError:
-                    pass
+                    continue
+                if "error" not in rec:
+                    done.add(rec["instance_id"])
 
     manifest = {
         "run": cfg["name"], "config": osp.relpath(osp.abspath(args.config), root),
@@ -259,6 +308,7 @@ def main():
         "started": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "n_instances": len(instances),
         "repo_filter": args.repo,
+        "shard": args.shard,
     }
     with open(osp.join(out_dir, f"manifest.{suffix}.json"), "w") as f:
         json.dump(manifest, f, indent=2)

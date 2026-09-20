@@ -126,3 +126,20 @@ Expected impact: Adds ~2.2 GB of GPU (or CPU) memory next to the vLLM server, an
 embedding model must be pinned and held fixed across arms like the backbone is. It consumes no
 LLM tokens, so it does not disturb the token-based compute matching, but it should be named in
 the experimental setup so the "single backbone" claim is not overstated.
+
+## 2026-09-20 — Graph builder made ~6-12x faster; graphs verified identical
+What changed: `CodeAnalyzer._get_source_segment` in `dependency_graph/build_graph.py` opened
+the file from disk and called `ast.get_source_segment` once per class and per function, and
+`get_source_segment` re-splits the entire source on every call. A file with N entities was
+read and split N times — quadratic in file size. The fix reads the source once (the caller
+already has it) and hoists the line split to one call per file, using the stdlib's own segment
+logic against the pre-split lines.
+Why: a single sympy graph took 44 minutes to build, which makes 75 instances impractical and
+Phase 3's SWE-bench-Live set impossible. This is a performance defect only.
+Expected impact: none on results, by construction and by test. sphinx 180s -> 15s; sympy
+2650s -> ~400-500s. The rebuilt graphs were compared node-for-node, edge-for-edge and
+attribute-for-attribute against graphs built by the unmodified code for sphinx-doc__sphinx-
+10323, django__django-11790 and sympy__sympy-13852: identical in all three. The split uses
+`ast._splitlines_no_ff` rather than `str.splitlines` because the two disagree on form feeds,
+which occur in django and sympy sources; a regex fallback covers Python versions without the
+private helper. Worth one line in the report as a reproducibility contribution.
