@@ -15,6 +15,7 @@ Engineering and Media, NTU · **Version:** 22 Sep 2026 (supersedes the plan subm
   part of the graph. This is one of the points for discussion below.
 - **Model:** the model used in the paper (DeepSeek-V3-0324) is no longer offered by DeepSeek.
   The project will self-host one open-weights model on NTU GPUs instead.
+- **GPU access secured** on both the MLDA workstations and the EEE GPU Cluster.
 
 ## Points for discussion
 
@@ -25,10 +26,7 @@ Engineering and Media, NTU · **Version:** 22 Sep 2026 (supersedes the plan subm
    reliable edges (containment, inheritance, imports, resolved calls) — my recommendation;
    (b) make resolving the call edges part of the contribution; or (c) switch to the fallback,
    collaborative debate with two different models (ColMAD).
-3. **GPU:** MLDA application submitted as requested; awaiting access. May I also apply for the
-   EEE GPU Cluster as a backup? The next step (running SWE-Debate end to end, decision point
-   30 Sep) needs a GPU to serve the model.
-4. **Interim report (10 Nov):** is it acceptable to lead with the graph analysis (Section 6),
+3. **Interim report (10 Nov):** is it acceptable to lead with the graph analysis (Section 6),
    which needs no GPU, plus the first baseline runs?
 
 ## 1. Title
@@ -135,7 +133,8 @@ tracked in the project repository.
 ### Phase 1 — Diagnose (Semester 1)
 
 1. **Graph analysis (done).** Section 6.
-2. **Reproduction.** Serve one open-weights model at a fixed version with vLLM on NTU GPUs.
+2. **Reproduction.** Serve one open-weights model at a fixed version with vLLM on the MLDA or
+   EEE cluster GPUs.
    Reproduce SWE-Debate's localization stage on the 75-instance subset. Record tokens per stage,
    and log separately whether the correct file appears in any candidate chain (retrieval, the
    graph's job) and whether the debate picks it (selection, the debate's job).
@@ -185,7 +184,7 @@ and SWE-bench-Live.
 
 | Period | Phase | Work | Milestone |
 |---|---|---|---|
-| Sep 2026 | 1 | Graph analysis (done); GPU access; one SWE-Debate instance end to end | Go/no-go on SWE-Debate, 30 Sep |
+| Sep 2026 | 1 | Graph analysis (done); GPU access (done); one SWE-Debate instance end to end | Go/no-go on SWE-Debate, 30 Sep |
 | Oct 2026 | 1 | Serve model; reproduce localization baseline; token accounting; retrieval/selection logging | Baseline reproduced |
 | Early Nov 2026 | 1 | First 2×2 pass; interim report and video | Interim report, 10 Nov |
 | Nov–Dec 2026 | 1 | Equal-budget single-agent settings, majority vote, self-consistency, repeated runs, paired analysis | Phase 1 results |
@@ -214,7 +213,7 @@ The December vacation carries the equal-budget runs.
 | Risk | Likelihood | Mitigation |
 |---|---|---|
 | SWE-Debate does not run or reproduce | Medium (non-LLM parts now run) | Decision point 30 Sep; same design on LocAgent or CoSIL. The graph analysis stands either way. |
-| GPU unavailable or too old | Medium | MLDA first; EEE GPU Cluster as backup; smaller model if needed. |
+| GPU queue time or memory limits | Low–Medium | Access to both MLDA and the EEE GPU Cluster; choose model size to fit the cards; smaller model if needed. |
 | Graph too noisy to ground the debate | Medium (Section 6) | Use reliable edges only, or switch to the ColMAD fallback (discussion point 2). |
 | The modification does not beat the baseline | Medium | A clear negative result under proper controls is still a finding; Phase 1 results stand. |
 | Too few post-cutoff SWE-bench-Live instances | Low–Medium | The benchmark adds issues monthly; a model with an earlier cutoff leaves more. |

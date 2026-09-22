@@ -145,3 +145,10 @@ ignore is now narrowed to `ablation/results/**/*.pkl`, `**/trajectories/` and `*
 raw JSONL, manifests and summaries are tracked and a reported number can always be traced back
 to the record that produced it. Revisit when the first LLM runs land: agent trajectories are
 large and should stay under a `trajectories/` directory so the existing rule covers them.
+
+## 2026-09-22 — GPU access secured on both MLDA and the EEE GPU Cluster (supersedes "GPU access" 2026-09-19)
+Jingwei now has access to both the MLDA workstations and the EEE GPU Cluster. GPU access is
+no longer a blocker for the 30 Sep go/no-go. Next: run `nvidia-smi` on each to record the card
+model, memory and compute capability (vLLM needs 7.0+), then pick the backbone size to fit.
+The EEE cluster's rules in CLAUDE.md (load its agent.md digest; vLLM server and harness inside
+one `sbatch` job) apply whenever work runs there.
