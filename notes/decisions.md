@@ -175,3 +175,16 @@ Until A/P Chen confirms: do not start new ablation-only work (compute-matched 2x
 the reproduction and one-instance end-to-end run (30 Sep) are needed under either plan.
 Supersedes, once confirmed: the three-phase diagnose/modify/validate framing (2026-09-19) and
 the scope decision "Localization only" (2026-09-13).
+
+## 2026-09-22 — Refinement to the proposed direction (still PENDING A/P Chen)
+- Lead modification: ADAPTIVE debate. Use the existing chain vote (5 agents + confidence) and,
+  where available, token-level uncertainty (logprobs from self-hosted vLLM) as a trigger: clear
+  vote -> accept, skip debate; split or low-confidence vote -> full debate, with the hard cases
+  optionally debated by heterogeneous-model agents. Motivation: A2 (debate stops helping once a
+  single agent is strong; SWE-Debate localizes ~80%), B2 (round-1 uncertainty predicts whether
+  multi-agent helps). Goal: same-or-better accuracy than the original debate at fewer tokens,
+  and better than an equal-token single agent.
+- Keep ONE equal-token single-agent baseline as a comparison arm (not a 2x2 factorial), to
+  answer "is the gain just more tokens?".
+- The RQ1 graph finding (reachability near-total, invoke edges mostly unresolved) is reused in
+  step 1 as supporting analysis of why debate evidence must be checkable.
