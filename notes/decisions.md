@@ -152,3 +152,26 @@ no longer a blocker for the 30 Sep go/no-go. Next: run `nvidia-smi` on each to r
 model, memory and compute capability (vLLM needs 7.0+), then pick the backbone size to fit.
 The EEE cluster's rules in CLAUDE.md (load its agent.md digest; vLLM server and harness inside
 one `sbatch` job) apply whenever work runs there.
+
+## 2026-09-22 — Proposed direction: improve the debate, not ablate it (PENDING A/P Chen's go-ahead)
+Jingwei's call, following A/P Chen's comment that the ablation is already done in the SWE-Debate
+paper. The project is no longer framed as an ablation study. Proposed plan, to be discussed with
+A/P Chen before any engineering changes direction:
+1. Understand how SWE-Debate debates: reproduce the localization stage and analyse the debate
+   transcripts (do agents change their minds, is the final answer just the first vote, where do
+   debates fail).
+2. Modify the debate — one or two modifications done well, chosen from step 1. Targets the
+   paper's own admitted weakness (five agents = one model with different prompts). Candidates:
+   heterogeneous models, collaborative (ColMAD-style) instead of competitive debate,
+   evidence-backed claims.
+3. Test on other datasets — answers the paper's stated external threat (single Python-only
+   dataset): SWE-bench-Live (post-cutoff issues) plus ONE extra language from Multi-SWE-bench
+   (e.g. Java; needs a non-Python graph builder).
+4. Localization is the core metric (Acc@1 File + tokens). A small end-to-end check (full
+   pipeline incl. MCTS patching, ~50-75 Python instances, original vs improved debate) is a
+   firm part of the plan, not optional, to show better localization also fixes more bugs.
+Guard against overreach: not all languages, not three modifications.
+Until A/P Chen confirms: do not start new ablation-only work (compute-matched 2x2 factorial);
+the reproduction and one-instance end-to-end run (30 Sep) are needed under either plan.
+Supersedes, once confirmed: the three-phase diagnose/modify/validate framing (2026-09-19) and
+the scope decision "Localization only" (2026-09-13).
