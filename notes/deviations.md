@@ -65,6 +65,8 @@ threats-to-validity section can cite them precisely rather than rediscovering th
    our ablation study confirms significant performance gains from the debate mechanism,
    integrating multiple heterogeneous models... could further enhance the diversity." This
    confirms CLAUDE.md's characterization exactly and can be quoted directly in the report.
+   **But the released code does not do this (2026-10-01):** every agent gets an identical
+   prompt. See the 2026-10-01 entry "Agents are not differentiated by prompt in the code".
 
 ## 2026-09-19 — Backbone: DeepSeek-V3-0324 is no longer available from DeepSeek
 What changed: The source paper ran on DeepSeek-V3-0324 through DeepSeek's API (the code calls
@@ -172,4 +174,36 @@ moatless-tree-search package (instructor 1.5.2, docstring-parser, json-repair, t
 python/java 0.21.0), and jiter lowered 0.7.0 -> 0.5.0 because no instructor release accepts
 both the pinned tenacity 8.5.0 and jiter 0.7. Same expected impact: none; none of these are on
 the localization stage's call path.
+
+## 2026-10-01 — Agents are not differentiated by prompt in the code (paper says they are)
+Found in a side chat, verified against the fork (upstream `8a7d462`, unmodified here):
+in `entity_localization_pipeline.py`, `vote_worker` (stage 6, ~line 1744) and
+`analyze_worker` (stage 7 round 1, ~line 1977) send all five agents the same system message
+("You are an expert software engineer with deep experience in code analysis and debugging.")
+and the same user template. `agent_id` is only a label for logging and parsing; it never
+enters the prompt. All calls use temperature 0.7, so the five agents differ only by
+sampling. Round 2 (`analyze_worker_round2`, ~line 2049) is a real exchange: each agent gets
+its own round-1 answer plus a summary of the others', so inputs differ only in which answer
+is labelled "yours". The whole file has four distinct system messages, one per stage, none
+per agent. The voting pool also runs only 3 agents at a time (`max_workers=min(num_agents, 3)`),
+which affects latency only.
+Paper: Sec 4.5 "different system prompts to simulate diverse reasoning perspectives";
+Sec 6.2 "our specialized prompts enforce distinct analytical viewpoints".
+Impact: we reproduce the code, not the paper's description, and say so. Mechanistically,
+stage 6 and stage 7 round 1 are five independent samples pooled by majority or summary
+(self-consistency), with one exchange round on top. This bears on Phase 2 (for-chat.md):
+"heterogeneous agents" would be adding diversity the paper claims but the code lacks.
+
+## 2026-10-01 — Stage 4 narrows chains by dissimilarity, not relevance, and fixes the order
+`_select_diverse_chains` (~line 1526) -> `entity_embedding.select_diverse_chains`: drop empty
+and duplicate chains; keep the longest; add the k=5 chains whose e5 embeddings are LEAST
+similar to the longest (ascending cosine). The issue text is never used, so a chain that
+contains the bug can be discarded for being too similar to the longest one. In the smoke run
+6 of 12 chains contained the gold file and 1 of the 6 kept did. Also, the longest chain is
+always placed first and shown to the voters as `chain_1`; in the smoke run it won 5/5. Chain
+order is therefore not neutral by construction, which is the LLM4FL ordering threat CLAUDE.md
+asks us to control. Impact: two things to measure on every run, recall lost at stage 4
+(gold in any built chain vs gold in a kept chain) and how often the winner is `chain_1`.
+Both are reproduced as-is in the baseline; an ordering control has to be added deliberately.
+Stage 3 chain building (`_dfs_traversal`) is single LLM calls steering the walk, not the agents.
 

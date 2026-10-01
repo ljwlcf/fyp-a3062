@@ -32,6 +32,10 @@ Fixes found on the way, all in the repo: vLLM pinned to 0.9.2 + transformers 4.5
 vLLM needs CUDA 13, gpu21's driver is 12.7); `ablation/gpu21/requirements-swed.txt` (litellm
 1.52.1 gone from PyPI, five missing moatless deps, jiter 0.5.0); git via conda; the pipeline
 needs full graphs, not RQ1's code-stripped ones (`data/graphs_full`); manifest date bug.
+Also: EEE cluster login works (user i230002, key-based `ssh eee`). Verified two code findings
+from a side chat and logged them in deviations.md: all five agents get identical prompts
+(the paper says different ones), and stage 4 keeps chains by dissimilarity to the longest,
+not by relevance, and always shows the longest first.
 Next: Choose the real backbone (for-chat.md), then scale from 1 to the 75 instances with a
 scorer (Acc@1 File, chain recall, selection precision, agreement, per-stage tokens) and
 counters for dropped agents and non-existent entities. Check why total_chains_generated (20)

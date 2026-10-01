@@ -9,6 +9,14 @@ Answered with a pointer.
 
 ## Open
 
+- **The released code's agents are identical; how to frame that?** The paper says the five
+  agents have "different system prompts" (Sec 4.5, 6.2); the code sends all five the same
+  prompt at temperature 0.7, so stage 6 and debate round 1 are self-consistency sampling,
+  with one real exchange round (deviations.md 2026-10-01). Two questions: whether to raise
+  it with A/P Chen or the authors, and how it reshapes the Phase 2 story (heterogeneous
+  agents would add diversity the paper claims but the code lacks; adaptive debate would be
+  gating what is mostly self-consistency). Related: stage 4 keeps chains by dissimilarity,
+  not relevance, and always shows the longest chain first.
 - **Which backbone for the real runs: a 32B coder model 4-bit quantized, or 14B in bf16?**
   Both fit two RTX 3090s on gpu21 (decisions.md 2026-10-01). 32B 4-bit is the stronger
   model, but quantization is another departure from the paper (which used DeepSeek-V3, a
