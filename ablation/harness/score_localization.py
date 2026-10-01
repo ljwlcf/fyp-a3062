@@ -42,6 +42,59 @@ STAGE_GROUP = {  # pipeline method that made the call -> cost bucket
     "_conduct_final_discrimination": "debate",
 }
 FILE_IN_CONTEXT = re.compile(r"File:\s*([^\s,]+\.py)")
+ENTITY_NUM = re.compile(r"Entity\s+(\d+)\s*:?\s*")
+PY_PATH = re.compile(r"([\w./-]+\.py)")
+
+
+def resolve_location(text, chain):
+    """Map an agent's free-text location onto a winning-chain node id, or None.
+    Agents write it three ways: a full node id ('a/b.py:C.f'), 'Entity N: ...' where N is
+    the entity's 1-based position in the chain as numbered in their prompt, or a bare
+    qualified name ('C.f')."""
+    text = str(text or "").strip()
+    m = PY_PATH.search(text)
+    if m:
+        path = m.group(1)
+        rest = text[m.end():].lstrip(":").strip()
+        full = f"{path}:{rest}" if rest else path
+        for n in chain:
+            if n == full:
+                return n
+        same_file = [n for n in chain if node_file(n) == path]
+        return same_file[0] if same_file else path      # file is right even if entity unknown
+    m = ENTITY_NUM.match(text)
+    if m and 1 <= int(m.group(1)) <= len(chain):
+        return chain[int(m.group(1)) - 1]
+    name = ENTITY_NUM.sub("", text)
+    for n in chain:
+        q = n.split(":", 1)[1] if ":" in n else ""
+        if name and (q == name or q.endswith("." + name)):
+            return n
+    return None
+
+
+def round_answers(analyses, key, chain):
+    """Each valid agent's top location (first 'high'-priority one, else the first), as a
+    file. Returns (files, n_unresolved)."""
+    files, unresolved = [], 0
+    for a in analyses:
+        locs = (a.get("analysis") or {}).get(key) or []
+        if not locs:
+            continue
+        top = next((l for l in locs if str(l.get("priority", "")).lower() == "high"), locs[0])
+        node = resolve_location(top.get("entity_id"), chain)
+        if node is None:
+            unresolved += 1
+        else:
+            files.append(node_file(node))
+    return files, unresolved
+
+
+def majority(files):
+    if not files:
+        return None, None
+    (top, n), = Counter(files).most_common(1)
+    return top, n / len(files)
 
 
 def load_gold():
@@ -129,6 +182,14 @@ def score_instance(rec, cache, gold_files, gold_entities):
     r2 = data(cache, "stage_7_round2_analysis").get("second_round_analyses") or []
     s["debate_round1_valid"] = sum(1 for a in r1 if a.get("analysis"))
     s["debate_round2_valid"] = sum(1 for a in r2 if a.get("analysis"))
+    # The debate's answer before and after: round-1 majority file (five independent
+    # proposals, before any exchange) vs round-2 majority vs the final plan's first file.
+    f1, u1 = round_answers(r1, "modification_locations", winner)
+    f2, u2 = round_answers(r2, "refined_modification_locations", winner)
+    s["round1_files"], s["round2_files"] = f1, f2
+    s["unresolved_locations"] = u1 + u2
+    s["round1_answer"], s["round1_agreement"] = majority(f1)
+    s["round2_answer"], s["round2_agreement"] = majority(f2)
 
     plan = (data(cache, "stage_8_edit_agent_prompt").get("modification_plan") or {}).get(
         "final_plan") or {}
@@ -140,6 +201,15 @@ def score_instance(rec, cache, gold_files, gold_entities):
     s["plan_files"] = plan_files
     s["acc1_file"] = bool(plan_files) and plan_files[0] in gold_files
     s["plan_has_gold_file"] = any(f in gold_files for f in plan_files)
+    before, after = s["round1_answer"], plan_files[0] if plan_files else None
+    if before and after:
+        b, a = before in gold_files, after in gold_files
+        s["debate_effect"] = ("unchanged_right" if before == after and b else
+                              "unchanged_wrong" if before == after else
+                              "fixed" if a and not b else
+                              "broke" if b and not a else "changed_wrong")
+    else:
+        s["debate_effect"] = None
     return s
 
 
@@ -170,6 +240,11 @@ def summarize(rows):
     summ["instances_with_dropped_debate_agent"] = sum(
         1 for r in ok if r["debate_round1_valid"] < 5 or r["debate_round2_valid"] < 5)
     summ["instances_with_invalid_votes"] = sum(1 for r in ok if r["invalid_votes"])
+    summ["debate_effect"] = Counter(r.get("debate_effect") for r in ok)
+    for k in ("round1_agreement", "round2_agreement"):
+        vals = [r[k] for r in ok if r.get(k) is not None]
+        summ[f"mean_{k}"] = round(sum(vals) / len(vals), 3) if vals else None
+    summ["unresolved_locations"] = sum(r.get("unresolved_locations", 0) for r in ok)
     return summ
 
 
