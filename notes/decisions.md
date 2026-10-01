@@ -228,3 +228,10 @@ starts empty: the pipeline clones the repo at the base commit, builds the full g
 same builder and options RQ1 used (`build_graph(global_import=True)`), and caches it. The
 full caches live on the GPU machine only and are not copied back.
 
+## 2026-10-01 — Go/no-go met: stay on SWE-Debate
+The 30 Sep decision point asked whether one SWE-Debate instance runs end to end; if not, the
+design would move to LocAgent or CoSIL. On 2026-10-01 (one day late) sphinx-doc__sphinx-8269
+ran through all 8 localization stages on gpu21 with a self-hosted model (results.md). The
+project stays on SWE-Debate. Supersedes the "Reproduction decision point" item under Still
+pending.
+

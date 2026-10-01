@@ -25,10 +25,18 @@ for-chat.md). Wrote the one-instance smoke test: config `smoke_localization_v1.y
 call and per stage), and step-by-step gpu21 setup in `ablation/gpu21/README.md`. Fork change:
 the hardcoded 60 s per-call timeout now follows LLM_TIMEOUT (deviations.md). The runner is
 compiled but not yet executed anywhere: this Mac has no Python 3.12 env with the fork's deps.
-Next: Jingwei does the setup in ablation/gpu21/README.md by hand and runs the smoke test on
-sphinx-doc__sphinx-8269 with Qwen2.5-Coder-7B on one GPU; fix whatever breaks. Then pick the
-real backbone. Get A/P Chen's go-ahead on the
-2026-09-22 direction and the localization-only scope, then update CLAUDE.md to match.
+Then, the same session: Jingwei did the gpu21 setup by hand with step-by-step guidance and ran
+the smoke test. SWE-Debate's localization stage ran end to end on sphinx-doc__sphinx-8269
+(483.6 s, 71 calls, ~162k tokens, correct file; results.md). Go/no-go met (decisions.md).
+Fixes found on the way, all in the repo: vLLM pinned to 0.9.2 + transformers 4.53.x (newest
+vLLM needs CUDA 13, gpu21's driver is 12.7); `ablation/gpu21/requirements-swed.txt` (litellm
+1.52.1 gone from PyPI, five missing moatless deps, jiter 0.5.0); git via conda; the pipeline
+needs full graphs, not RQ1's code-stripped ones (`data/graphs_full`); manifest date bug.
+Next: Choose the real backbone (for-chat.md), then scale from 1 to the 75 instances with a
+scorer (Acc@1 File, chain recall, selection precision, agreement, per-stage tokens) and
+counters for dropped agents and non-existent entities. Check why total_chains_generated (20)
+differs from all_chains (12). Get A/P Chen's go-ahead on the 2026-09-22 direction and the
+localization-only scope, then update CLAUDE.md to match.
 
 ## 2026-09-20
 Did: First real measurement of the project. Built the RQ1 harness

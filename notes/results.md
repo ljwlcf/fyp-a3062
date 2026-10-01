@@ -17,6 +17,47 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-01 — Smoke test: SWE-Debate localization runs end to end on gpu21 (Phase 1, setup)
+Config: `ablation/configs/smoke_localization_v1.yaml` · Raw:
+`ablation/results/smoke_localization_v1/20261001-133650/` (`raw.jsonl` = output + every LLM
+call; `stage_cache/` = the pipeline's own record of all 8 stages, every vote and debate turn)
+Earlier folders in the same directory are the three failed attempts that led to the fixes
+(see that directory's README).
+
+**Setup.** One instance, sphinx-doc__sphinx-8269 (gold: `sphinx/builders/linkcheck.py`,
+`CheckExternalLinksBuilder.check_thread.check_uri`). Debugging backbone
+Qwen/Qwen2.5-Coder-7B-Instruct, bf16, vLLM 0.9.2, one RTX 3090 on MLDA gpu21. Pipeline called
+exactly as workflow.py does; graph built by the pipeline itself. Single run, single seed.
+Repo `8582411`, fork `2f252f9`.
+
+**Numbers.**
+- Completed all 8 stages: 483.6 s wall clock, 71 LLM calls, 0 failed, 0 truncated.
+- Tokens: 142,453 prompt + 19,535 completion = 161,988 per instance. By stage:
+  graph walk (stages 1-3: entity extraction, neighbour expansion, chain building) 92,371
+  (57%), of which chain building alone is 81,656; chain vote 29,148 (18%); debate (two
+  analysis rounds + discriminator) 40,469 (25%).
+- Chain recall: the gold file is in 6 of the 12 chains built (3 contain the gold function);
+  diversity selection keeps 6 chains, of which exactly 1 contains it.
+- Vote: unanimous, 5/5 for that chain, mean confidence 90.4. Selection correct.
+- Final plan's first edit location: `check_uri` in `sphinx/builders/linkcheck.py`. Acc@1
+  (File) correct on this instance.
+
+**Takeaway.** The 30 Sep go/no-go is met: SWE-Debate's localization stage runs end to end
+on self-hosted hardware with full token accounting, so the project stays on SWE-Debate (no
+switch to LocAgent/CoSIL). The per-stage split is already informative: most tokens go to the
+graph walk, not the debate, which matters for any compute-matched comparison.
+
+**Caveats.** n = 1, one seed, a 7B debugging model rather than the real backbone; none of the
+numbers above are results. Two behaviours worth counting on every future run: (1) stage 1
+named entities that do not exist (e.g. `sphinx/linkcheck.py`; the pipeline drops them with a
+warning), and (2) agent 2's round-1 answer was malformed JSON, so it was silently dropped and
+only 4 agents debated in round 2. The winning chain was also the first-ranked and longest of
+the 6 shown to the voters, so position cannot be ruled out (the ordering control in
+CLAUDE.md). `total_chains_generated` reports 20 while `all_chains` holds 12; not yet checked
+why.
+
+---
+
 ## 2026-09-20 — RQ1: the graph's reachability ceiling is not the bottleneck (Phase 1)
 Config: `ablation/configs/rq1_reachability_v2.yaml` · Raw: `ablation/results/rq1_reachability_v2/`
 (`raw.*.jsonl`, `summary.json`, `graph_quality.json`, `manifest.*.json`)

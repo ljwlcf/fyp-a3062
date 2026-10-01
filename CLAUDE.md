@@ -141,9 +141,8 @@ move over.
 
 ## Known unknowns
 
-- Whether SWE-Debate runs and reproduces. **Decision point 30 Sep 2026**: if one instance does
-  not run end to end, use the same design on LocAgent (arXiv:2503.09089) or CoSIL
-  (arXiv:2503.22424). Known defects: empty hardcoded API credentials, inconsistent model name,
+- Whether SWE-Debate reproduces. It RUNS: one instance went end to end on 2026-10-01 (results.md),
+  so the LocAgent/CoSIL fallback is off. Whether it reproduces the paper's ~80% is still open. Known defects: empty hardcoded API credentials, inconsistent model name,
   absolute cache path at filesystem root (see progress.md 2026-09-13).
 - Which backbone: MLDA gpu21 gives 24-48 GB (2x RTX 3090 max), so 14B in bf16 or 32B 4-bit
   quantized; 32B bf16 does not fit. Open in for-chat.md. Debug runs use a 7B model.
