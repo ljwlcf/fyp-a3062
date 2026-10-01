@@ -18,9 +18,16 @@ inference endpoint; Jingwei ruled that vLLM inside a research job is fine (decis
 Broke: Git failed on this Mac until the Xcode license was accepted, so the SessionStart pull
 failed and the stop hook's session-start SHA was empty (fixed by hand; the 2026-09-22 edits
 were already pushed). The 30 Sep go/no-go passed without an end-to-end SWE-Debate instance.
-Next: Jingwei runs `nvidia-smi` on MLDA (gpu21) and changes the MLDA password (it was pasted
-into chat). Pick the backbone from the GPU memory, then get one instance through
-localization end to end (or switch to LocAgent/CoSIL). Get A/P Chen's go-ahead on the
+Later: Jingwei confirmed SSH key login to gpu21 and a changed password; gpu21 is 4x RTX 3090
+(24 GB). Recorded the hardware and the open backbone choice (32B 4-bit vs 14B bf16, in
+for-chat.md). Wrote the one-instance smoke test: config `smoke_localization_v1.yaml`, runner
+`ablation/harness/run_localization.py` (calls the pipeline as workflow.py does, logs tokens per
+call and per stage), and step-by-step gpu21 setup in `ablation/gpu21/README.md`. Fork change:
+the hardcoded 60 s per-call timeout now follows LLM_TIMEOUT (deviations.md). The runner is
+compiled but not yet executed anywhere: this Mac has no Python 3.12 env with the fork's deps.
+Next: Jingwei does the setup in ablation/gpu21/README.md by hand and runs the smoke test on
+sphinx-doc__sphinx-8269 with Qwen2.5-Coder-7B on one GPU; fix whatever breaks. Then pick the
+real backbone. Get A/P Chen's go-ahead on the
 2026-09-22 direction and the localization-only scope, then update CLAUDE.md to match.
 
 ## 2026-09-20

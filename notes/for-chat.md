@@ -9,6 +9,12 @@ Answered with a pointer.
 
 ## Open
 
+- **Which backbone for the real runs: a 32B coder model 4-bit quantized, or 14B in bf16?**
+  Both fit two RTX 3090s on gpu21 (decisions.md 2026-10-01). 32B 4-bit is the stronger
+  model, but quantization is another departure from the paper (which used DeepSeek-V3, a
+  671B model, at full precision) and has to be argued in the threats to validity. 14B bf16
+  is unquantized but weaker, which could push localization accuracy well below the paper's
+  ~80%. A/P Chen may have a view. The debugging runs use a 7B model and do not depend on this.
 - **Localization-only scope — supervisor confirmation.** Still unconfirmed with A/P Chen.
   Chat: draft the email or meeting point. (progress.md 2026-09-19)
 - **How to operationalize candidate density for H4.** Tran & Kiela's distractor injection was

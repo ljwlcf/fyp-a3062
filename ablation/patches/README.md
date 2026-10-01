@@ -25,4 +25,4 @@ cd swe-debate && git format-patch --stdout 8a7d462..HEAD > ../ablation/patches/s
 
 | patch | what it does |
 |---|---|
-| `swe-debate-instrumentation.patch` | Makes the hardcoded LLM endpoint, model name and cache paths environment-configurable (see notes/deviations.md 2026-09-20). No algorithm changes. |
+| `swe-debate-instrumentation.patch` | Makes the hardcoded LLM endpoint, model name, cache paths and per-call timeout environment-configurable, and speeds up the graph builder (see notes/deviations.md 2026-09-20 and 2026-10-01). No algorithm changes. |

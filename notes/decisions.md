@@ -196,3 +196,24 @@ same `sbatch` job as the harness, used only by that job for FYP research, is all
 plan in CLAUDE.md (server and harness start and stop inside one job) stands on both MLDA and
 the EEE cluster. Keep the server bound to localhost and never leave it running after the
 harness finishes. Revisit if the cluster admins say otherwise.
+
+## 2026-10-01 — MLDA gpu21 hardware, and what fits on it
+Measured by Jingwei with `nvidia-smi` on 2026-10-01: 4x NVIDIA RTX 3090, 24 GB each, Ampere
+(compute capability 8.6), driver 565.57.01 (CUDA up to 12.7), power capped at 180 W. vLLM,
+bf16 and FlashAttention-2 are all supported. MLDA allows 1-2 GPUs per user, so 24 GB or 48 GB.
+What fits: a 7-8B model in bf16 on one GPU; 14B in bf16 on two; 32B only 4-bit quantized
+(AWQ/GPTQ) on two. 32B in bf16 does not fit. The 180 W cap makes generation slower than a
+stock 3090; it does not change outputs. The workstation is shared, so latency measured here
+is not reportable (decisions 2026-09-19, design controls). Which backbone to use for the real
+runs is open (for-chat.md).
+
+## 2026-10-01 — Debug runs use a 7B model on one GPU; their numbers are not results
+The first end-to-end run only has to prove the pipeline works against a self-hosted endpoint.
+It uses Qwen/Qwen2.5-Coder-7B-Instruct in bf16 on one 3090, which needs no decision about the
+real backbone and leaves a GPU free. Instance: sphinx-doc__sphinx-8269 (single gold file,
+"<15 min fix", one of the smallest graphs). Config: `ablation/configs/smoke_localization_v1.yaml`;
+runner: `ablation/harness/run_localization.py`, which calls the pipeline exactly as
+workflow.py does and wraps its OpenAI client to log tokens per call and per stage from the
+first run onward. Setup steps: `ablation/gpu21/README.md`. vLLM and the pipeline live in
+separate conda environments because they pin different torch versions. The server binds to
+127.0.0.1:8765, not 8000, since other users on gpu21 may hold 8000.

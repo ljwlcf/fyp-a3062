@@ -145,7 +145,8 @@ move over.
   not run end to end, use the same design on LocAgent (arXiv:2503.09089) or CoSIL
   (arXiv:2503.22424). Known defects: empty hardcoded API credentials, inconsistent model name,
   absolute cache path at filesystem root (see progress.md 2026-09-13).
-- Which backbone: depends on GPU memory (a 32B code model needs ~64 GB in bf16; 14B ~28 GB).
+- Which backbone: MLDA gpu21 gives 24-48 GB (2x RTX 3090 max), so 14B in bf16 or 32B 4-bit
+  quantized; 32B bf16 does not fit. Open in for-chat.md. Debug runs use a 7B model.
 - Whether compute matching uses extended reasoning or best-of-N — depends on the chosen model.
 - How to operationalize candidate density for H4. Tran & Kiela found plain distractors their
   weakest lever; SWE-bench-Live's multi-file difficulty gradient is a candidate proxy.

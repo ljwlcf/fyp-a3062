@@ -143,3 +143,19 @@ attribute-for-attribute against graphs built by the unmodified code for sphinx-d
 `ast._splitlines_no_ff` rather than `str.splitlines` because the two disagree on form feeds,
 which occur in django and sympy sources; a regex fallback covers Python versions without the
 private helper. Worth one line in the report as a reproducibility contribution.
+
+## 2026-10-01 — Per-call LLM timeout made configurable (was hardcoded 60 s)
+What changed: `_call_llm_simple` passed `timeout=60` on every call, overriding the client's
+own timeout. It now uses the client's timeout, which reads `LLM_TIMEOUT` (default still 60).
+The smoke config sets 600. Fork commit `2f252f9`, in the patch file.
+Why: calls request up to 6000 completion tokens (stage 7 debate rounds). The authors used a
+hosted API; one power-capped RTX 3090 cannot produce that in 60 s, and a timeout makes the
+OpenAI client retry and then raise, so stages would fail for hardware reasons.
+Expected impact: none on what the model sees or returns. It only stops slow calls from being
+cut off. Calls that still fail are logged per call by the runner.
+
+## 2026-10-01 — The runner passes only four instance fields to the pipeline
+workflow.py passes the full moatless record, which also holds the gold patch, gold spans and
+tests. The pipeline never reads those fields (grep, 2026-10-01), so the runner passes only
+`instance_id`, `repo`, `base_commit` and `problem_statement`. Expected impact: none; it makes
+gold-patch leakage impossible instead of merely absent.

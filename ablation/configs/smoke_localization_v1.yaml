@@ -1,0 +1,37 @@
+# Smoke test — SWE-Debate's localization stage, one instance, end to end.
+# Purpose: prove the pipeline runs against a self-hosted vLLM endpoint and that token
+# accounting works. NOT a result: the backbone here is a small debugging model, not the
+# experimental backbone (still undecided, see notes/for-chat.md).
+name: smoke_localization_v1
+version: 1
+created: 2026-10-01
+
+instances:
+  # sphinx-doc 8269: "<15 min fix", one gold file (sphinx/builders/linkcheck.py), one of
+  # the smallest graphs in the subset (~2 MB), so failures show up fast.
+  - sphinx-doc__sphinx-8269
+
+paths:
+  graph_index_dir: data/graphs        # prebuilt by RQ1; the pipeline builds one if missing
+  results: ablation/results/smoke_localization_v1
+
+llm:
+  # OpenAI-compatible endpoint served by vLLM on the same machine, localhost only. Port 8765,
+  # not vLLM's default 8000: gpu21 is shared and other users may already hold 8000.
+  base_url: http://127.0.0.1:8765/v1
+  model: Qwen/Qwen2.5-Coder-7B-Instruct   # debugging model, fits one 24 GB RTX 3090 in bf16
+  timeout_seconds: 600                    # upstream hardcodes 60 s; calls ask for up to 6000 tokens
+
+pipeline:
+  # Exactly as workflow.py calls it: run_pipeline(instance, "context", max_initial_entities=5).
+  # Temperatures, agent count (5) and debate rounds are hardcoded inside the pipeline.
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct   # runs on CPU
+
+instance_fields:
+  # Pass only what the pipeline needs. The moatless record also carries the gold patch and
+  # gold spans; the pipeline never reads them (checked 2026-10-01), and dropping them makes
+  # leakage impossible rather than merely absent.
+  keep: [instance_id, repo, base_commit, problem_statement]
