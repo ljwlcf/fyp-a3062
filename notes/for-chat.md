@@ -17,12 +17,18 @@ Answered with a pointer.
   agents would add diversity the paper claims but the code lacks; adaptive debate would be
   gating what is mostly self-consistency). Related: stage 4 keeps chains by dissimilarity,
   not relevance, and always shows the longest chain first.
-- **Which backbone for the real runs: a 32B coder model 4-bit quantized, or 14B in bf16?**
-  Both fit two RTX 3090s on gpu21 (decisions.md 2026-10-01). 32B 4-bit is the stronger
-  model, but quantization is another departure from the paper (which used DeepSeek-V3, a
-  671B model, at full precision) and has to be argued in the threats to validity. 14B bf16
-  is unquantized but weaker, which could push localization accuracy well below the paper's
-  ~80%. A/P Chen may have a view. The debugging runs use a 7B model and do not depend on this.
+- **Which backbone for the real runs?** Updated 2026-10-01: the EEE cluster fits a 32B model
+  in bf16 (one 96 GB pro6000, or two 48 GB cards), so the MLDA-only trade-off (32B 4-bit vs
+  14B bf16) no longer forces quantization. Remaining trade-off is queue time and budget:
+  32B bf16 on EEE (busy cluster, 180k SU/month) vs smaller/quantized models on MLDA (free,
+  no queue, 2x 24 GB). The paper used DeepSeek-V3 (671B) at full precision, so any choice
+  is a logged deviation; unquantized 32B is the smallest one available. A/P Chen may have a
+  view. Debug runs use 7B and do not depend on this.
+- **Ask A/P Chen about her EEE faculty project.** The EEE cluster lists QoS entries
+  `chen_lihui_2026_05_00` and `_01`. As a student (`ug`) Jingwei gets 2 GPUs per model and
+  180k SU/month; project members get the project's limits and budget instead. Worth asking
+  whether Jingwei can be added, since the Phase 1 factorial needs several seeds over 75
+  instances. (decisions.md 2026-10-01)
 - **Localization-only scope — supervisor confirmation.** Still unconfirmed with A/P Chen.
   Chat: draft the email or meeting point. (progress.md 2026-09-19)
 - **How to operationalize candidate density for H4.** Tran & Kiela's distractor injection was

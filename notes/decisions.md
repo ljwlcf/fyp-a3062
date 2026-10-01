@@ -235,3 +235,20 @@ ran through all 8 localization stages on gpu21 with a self-hosted model (results
 project stays on SWE-Debate. Supersedes the "Reproduction decision point" item under Still
 pending.
 
+## 2026-10-01 — EEE GPU Cluster: what the account allows, and what it changes
+Measured by Jingwei on login-1 (2026-10-01). Account `ug-proj`, default QoS `ug`: at most 2
+GPUs per model at once (1 rtx5090), 2 running jobs, 5 queued. Also `override-limits-but-killable`:
+up to 8 GPUs on idle cards, requeued when a regular job needs them. Budget 180,000 SU/month,
+reset on the 1st (0 used).
+Cluster inventory (sinfo, 2026-10-01): pro6000 (Blackwell, 96 GB) 90 GPUs on 14 nodes; a40
+18; a6000 10; 6000ada 12; l40 8 (all 48 GB); rtx5090 (Blackwell, 32 GB) 20; gh200 1. At the
+time of measurement every pro6000, a40 and l40 was in use, so queue waits are expected.
+Billing: pro6000 480 SU/GPU-h, rtx5090 360, l40/6000ada 240, a40/a6000 180, so the monthly
+budget is ~187 h on 2 pro6000, ~375 h on 2 l40/6000ada, ~500 h on 2 a40/a6000.
+What it changes: 32B in bf16 (~64 GB) fits on ONE pro6000 or two 48 GB cards, so the EEE
+cluster removes the "32B only 4-bit" constraint that MLDA imposes (for-chat.md backbone
+question updated). Driver 595 supports CUDA 13, so the newest vLLM should work here, unlike
+gpu21 (CUDA 12.7); Blackwell cards need CUDA 12.8+ builds. Each machine gets its own
+environment. A/P Chen has faculty-project QoS entries on this cluster (`chen_lihui_2026_05_00`,
+`_01`); membership would give project limits and budget instead of student ones (for-chat.md).
+

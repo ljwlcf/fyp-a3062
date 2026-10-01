@@ -144,8 +144,9 @@ move over.
 - Whether SWE-Debate reproduces. It RUNS: one instance went end to end on 2026-10-01 (results.md),
   so the LocAgent/CoSIL fallback is off. Whether it reproduces the paper's ~80% is still open. Known defects: empty hardcoded API credentials, inconsistent model name,
   absolute cache path at filesystem root (see progress.md 2026-09-13).
-- Which backbone: MLDA gpu21 gives 24-48 GB (2x RTX 3090 max), so 14B in bf16 or 32B 4-bit
-  quantized; 32B bf16 does not fit. Open in for-chat.md. Debug runs use a 7B model.
+- Which backbone: MLDA gpu21 gives 24-48 GB (2x RTX 3090), so 14B bf16 or 32B 4-bit there;
+  the EEE cluster fits 32B bf16 (96 GB pro6000, or 2x 48 GB). Open in for-chat.md. Debug runs
+  use a 7B model.
 - Whether compute matching uses extended reasoning or best-of-N — depends on the chosen model.
 - How to operationalize candidate density for H4. Tran & Kiela found plain distractors their
   weakest lever; SWE-bench-Live's multi-file difficulty gradient is a candidate proxy.
