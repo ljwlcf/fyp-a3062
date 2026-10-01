@@ -26,22 +26,27 @@ export HF_HUB_OFFLINE=1                        # models were downloaded by setup
 mkdir -p "$TMPDIR"
 
 module load Miniforge3
-# vLLM 0.30 samples with FlashInfer, which JIT-compiles its kernel on first use and needs nvcc
-# (job 179268 died on "Could not find nvcc"). CUDA 13.0 matches torch 2.13+cu130; nvcc hands
-# host code to g++, hence GCC. Compiled kernels are cached on the SSD and reused.
-module load CUDA/13.0.0 GCC/13.3.0
-export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
-export FLASHINFER_WORKSPACE_BASE=$P/.tmp
+export FLASHINFER_WORKSPACE_BASE=$P/.tmp     # FlashInfer's compiled-kernel cache, on the SSD
 eval "$(conda shell.bash hook)"
-echo "== nvcc: $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
 echo "== job $SLURM_JOB_ID on $(hostname), GPU $CUDA_VISIBLE_DEVICES, $(date)"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 
 # 1. Start the model server in the background.
+# vLLM 0.30 samples with FlashInfer, which JIT-compiles a kernel on first use and needs nvcc
+# (job 179268: "Could not find nvcc"). CUDA 13.0 matches torch 2.13+cu130; nvcc hands host
+# code to g++, hence GCC. But the GCC module puts its older libstdc++ first on the library
+# path, and the conda env's libs need the newer one (job 179269: CXXABI_1.3.15 not found).
+# So: the modules, with conda's lib dir in front, apply to the server process only, and are
+# unloaded again before the pipeline runs.
 conda activate vllm
-vllm serve "$MODEL" --host 127.0.0.1 --port "$PORT" --dtype bfloat16 \
+module load CUDA/13.0.0 GCC/13.3.0
+export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
+echo "nvcc $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
+LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+    vllm serve "$MODEL" --host 127.0.0.1 --port "$PORT" --dtype bfloat16 \
     --max-model-len 32768 --gpu-memory-utilization 0.90 --seed 0 > "$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
+module unload GCC/13.3.0 CUDA/13.0.0
 trap 'kill $VLLM_PID 2>/dev/null; wait $VLLM_PID 2>/dev/null; rm -rf "$TMPDIR"; echo "== server stopped $(date)"' EXIT
 echo "vllm $(python -c 'import vllm; print(vllm.__version__)'), pid $VLLM_PID, log $VLLM_LOG"
 conda deactivate
