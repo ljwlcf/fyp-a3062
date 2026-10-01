@@ -64,6 +64,7 @@ Transformers config".
 ```bash
 # the pipeline
 conda create -n swed python=3.12 -y && conda activate swed
+conda install -c conda-forge git -y   # gpu21 has no system git; the pipeline clones repos
 cd ~/FYP-A3062
 pip install -r ablation/gpu21/requirements-swed.txt   # upstream list + 2 fixes, see file header
 python -c "import sys; sys.path[:0]=['swe-debate/localization','swe-debate']; import entity_localization_pipeline; print('imports ok')"
