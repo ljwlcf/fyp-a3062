@@ -167,4 +167,9 @@ the upstream list with litellm 1.53.1 (nearest surviving release; satisfies ever
 and transformers 4.46.3 (matches the pinned tokenizers 0.20.3). All other 161 pins resolved
 on PyPI for Python 3.12 Linux. Expected impact: none on localization. litellm is only imported
 by the moatless MCTS stage; the localization stage calls the model through the openai client.
+Also added: five packages moatless needs at import time and upstream leaves to the separate
+moatless-tree-search package (instructor 1.5.2, docstring-parser, json-repair, tree-sitter-
+python/java 0.21.0), and jiter lowered 0.7.0 -> 0.5.0 because no instructor release accepts
+both the pinned tenacity 8.5.0 and jiter 0.7. Same expected impact: none; none of these are on
+the localization stage's call path.
 
