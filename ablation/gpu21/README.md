@@ -65,13 +65,12 @@ Transformers config".
 # the pipeline
 conda create -n swed python=3.12 -y && conda activate swed
 cd ~/FYP-A3062
-pip install -r swe-debate/localization/requirements.txt
-pip install "transformers==4.46.3"   # missing from requirements.txt; matches its tokenizers==0.20.3
+pip install -r ablation/gpu21/requirements-swed.txt   # upstream list + 2 fixes, see file header
 python -c "import sys; sys.path[:0]=['swe-debate/localization','swe-debate']; import entity_localization_pipeline; print('imports ok')"
 ```
 
 If the last line fails with `ModuleNotFoundError`, `pip install` the missing package and try
-again. Note every package you add; requirements.txt is known to be incomplete.
+again, and add it to `requirements-swed.txt` so the next setup gets it.
 
 ## 4. Download the model once
 

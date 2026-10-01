@@ -159,3 +159,12 @@ workflow.py passes the full moatless record, which also holds the gold patch, go
 tests. The pipeline never reads those fields (grep, 2026-10-01), so the runner passes only
 `instance_id`, `repo`, `base_commit` and `problem_statement`. Expected impact: none; it makes
 gold-patch leakage impossible instead of merely absent.
+
+## 2026-10-01 — Pipeline environment: litellm 1.53.1 instead of 1.52.1, transformers added
+The fork's `localization/requirements.txt` pins `litellm==1.52.1`, which is no longer on PyPI,
+and omits `transformers`. The gpu21 environment installs `ablation/gpu21/requirements-swed.txt`:
+the upstream list with litellm 1.53.1 (nearest surviving release; satisfies every other pin)
+and transformers 4.46.3 (matches the pinned tokenizers 0.20.3). All other 161 pins resolved
+on PyPI for Python 3.12 Linux. Expected impact: none on localization. litellm is only imported
+by the moatless MCTS stage; the localization stage calls the model through the openai client.
+
