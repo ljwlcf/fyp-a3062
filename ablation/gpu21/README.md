@@ -66,7 +66,7 @@ Transformers config".
 conda create -n swed python=3.12 -y && conda activate swed
 cd ~/FYP-A3062
 pip install -r swe-debate/localization/requirements.txt
-pip install transformers
+pip install "transformers==4.46.3"   # missing from requirements.txt; matches its tokenizers==0.20.3
 python -c "import sys; sys.path[:0]=['swe-debate/localization','swe-debate']; import entity_localization_pipeline; print('imports ok')"
 ```
 
