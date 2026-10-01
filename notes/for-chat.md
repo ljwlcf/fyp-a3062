@@ -9,6 +9,13 @@ Answered with a pointer.
 
 ## Open
 
+- **Is a vLLM server inside an EEE `sbatch` job allowed?** The EEE cluster terms forbid
+  "serving a personal chatbot or inference endpoint from compute nodes". Our plan runs vLLM on
+  localhost inside the same job as the harness, used only by that job, which is arguably not
+  an endpoint, but a ban costs the account. Options: ask the EEE admins (email the address that
+  sent the login details), use MLDA for anything that needs the server, or switch to vLLM's
+  offline Python API (needs harness changes). (progress.md 2026-10-01)
+
 - **Localization-only scope — supervisor confirmation.** Still unconfirmed with A/P Chen.
   Chat: draft the email or meeting point. (progress.md 2026-09-19)
 - **How to operationalize candidate density for H4.** Tran & Kiela's distractor injection was

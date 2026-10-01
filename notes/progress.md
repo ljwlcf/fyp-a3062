@@ -17,7 +17,12 @@ already pushed). The
 30 Sep go/no-go passed without an end-to-end SWE-Debate instance.
 Next: Run
 `nvidia-smi` on MLDA and the EEE cluster, pick the backbone, and get one instance through
-localization end to end (or switch to LocAgent/CoSIL). Get A/P Chen's go-ahead on the
+localization end to end (or switch to LocAgent/CoSIL).
+Also (later the same session): walked Jingwei through using MLDA (direct SSH to one shared
+workstation, no queue) versus the EEE cluster (login node + Slurm `sbatch`), no commands run on
+either. Read the EEE docs: the AI digest is now `skill.md` (`agent.md` is gone; CLAUDE.md link
+fixed), and the terms ban "serving a personal chatbot or inference endpoint from compute
+nodes", which may cover our vLLM-inside-a-job plan (parked in for-chat.md). Get A/P Chen's go-ahead on the
 2026-09-22 direction and the localization-only scope, then update CLAUDE.md to match.
 
 ## 2026-09-20

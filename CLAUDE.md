@@ -78,7 +78,7 @@ The recall/selection split is a core contribution. The source paper never separa
   or newer); bf16 and FlashAttention-2 need Ampere or newer. Older MLDA documentation lists
   GTX 1080 Ti workstations, which are too old.
 - **If working on the EEE GPU Cluster:** load its AI-facing digest
-  (https://github.com/NTUEEECluster/docs/blob/main/agent.md) at the start of the session and
+  (https://github.com/NTUEEECluster/docs/blob/main/skill.md) at the start of the session and
   follow it. Never run heavy processes on login nodes (16 GB cgroup; exceeding it kills all your
   processes). Login-node processes die on disconnect, including tmux/nohup, so the vLLM server
   and the harness must start and stop inside the same `sbatch` job.
