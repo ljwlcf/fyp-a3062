@@ -25,4 +25,6 @@ there by `~/.bashrc`. Logs: `/projects/fypA3062/logs/`. Cluster rules: NTUEEEClu
 
 Differences from MLDA (ablation/gpu21/README.md): no tmux (batch jobs survive logout); the
 port is per job; vLLM 0.30.0 instead of 0.9.2 (driver supports CUDA 13); a GPU is billed in SU
-only while a job runs; `HF_HUB_OFFLINE=1` in runs, so download models in setup first.
+only while a job runs; `HF_HUB_OFFLINE=1` in runs, so download models in setup first; the
+run job loads `CUDA/13.0.0` + `GCC/13.3.0` because vLLM 0.30's FlashInfer sampler compiles a
+kernel with nvcc on first use (compute nodes have no system CUDA).

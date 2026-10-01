@@ -26,7 +26,14 @@ export HF_HUB_OFFLINE=1                        # models were downloaded by setup
 mkdir -p "$TMPDIR"
 
 module load Miniforge3
+# vLLM 0.30 samples with FlashInfer, which JIT-compiles its kernel on first use and needs nvcc
+# (job 179268 died on "Could not find nvcc"). CUDA 13.0 matches torch 2.13+cu130; nvcc hands
+# host code to g++, hence GCC. Compiled kernels are cached on the SSD and reused.
+module load CUDA/13.0.0 GCC/13.3.0
+export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
+export FLASHINFER_WORKSPACE_BASE=$P/.tmp
 eval "$(conda shell.bash hook)"
+echo "== nvcc: $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
 echo "== job $SLURM_JOB_ID on $(hostname), GPU $CUDA_VISIBLE_DEVICES, $(date)"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 
