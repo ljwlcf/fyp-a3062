@@ -252,3 +252,12 @@ gpu21 (CUDA 12.7); Blackwell cards need CUDA 12.8+ builds. Each machine gets its
 environment. A/P Chen has faculty-project QoS entries on this cluster (`chen_lihui_2026_05_00`,
 `_01`); membership would give project limits and budget instead of student ones (for-chat.md).
 
+## 2026-10-01 — EEE runs: environments built in a CPU job; server and pipeline in one GPU job
+`ablation/eee/setup_envs.sh` (CPU-only, free) builds both conda environments under
+`/projects/fypA3062/envs` and downloads models, because the cluster forbids installs on login
+nodes. `ablation/eee/run_localization_job.sh` starts vLLM on 127.0.0.1 with a per-job port
+(20000 + job id mod 10000; compute nodes are shared), waits for it, runs the pipeline with
+`--base-url`, and kills the server on exit via a trap. vLLM is 0.30.0 on EEE but 0.9.2 on MLDA
+(driver limits), so model outputs are only comparable within one machine: every arm of a
+comparison runs on the same machine and vLLM version, recorded in the run manifest.
+

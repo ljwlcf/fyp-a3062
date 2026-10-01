@@ -103,6 +103,7 @@ class CallLog:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("config")
+    ap.add_argument("--base-url", help="override llm.base_url, e.g. a per-job port on a shared node")
     args = ap.parse_args()
 
     cfg_path = os.path.abspath(args.config)
@@ -115,6 +116,8 @@ def main():
     os.makedirs(work, exist_ok=True)
 
     llm, pipe = cfg["llm"], cfg["pipeline"]
+    if args.base_url:
+        llm["base_url"] = args.base_url
     # The fork reads all of these at import or construction time, so set them first.
     os.environ["LLM_BASE_URL"] = llm["base_url"]
     os.environ["LLM_MODEL"] = llm["model"]
@@ -136,6 +139,7 @@ def main():
         "python": sys.version, "repo_sha": git_sha(ROOT), "fork_sha": git_sha(FORK),
         "served_models": served_model(llm["base_url"]),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+        "base_url": llm["base_url"], "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
     }
     with open(os.path.join(out, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2, default=str)
