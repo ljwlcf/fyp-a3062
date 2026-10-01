@@ -188,3 +188,11 @@ the scope decision "Localization only" (2026-09-13).
   answer "is the gain just more tokens?".
 - The RQ1 graph finding (reachability near-total, invoke edges mostly unresolved) is reused in
   step 1 as supporting analysis of why debate evidence must be checkable.
+
+## 2026-10-01 — vLLM inside an EEE cluster job is within the rules
+The EEE terms forbid "serving a personal chatbot or inference endpoint from compute nodes".
+Jingwei's reading: the rule targets personal use, and a vLLM server on localhost inside the
+same `sbatch` job as the harness, used only by that job for FYP research, is allowed. So the
+plan in CLAUDE.md (server and harness start and stop inside one job) stands on both MLDA and
+the EEE cluster. Keep the server bound to localhost and never leave it running after the
+harness finishes. Revisit if the cluster admins say otherwise.
