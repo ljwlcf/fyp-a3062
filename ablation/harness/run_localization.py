@@ -138,7 +138,7 @@ def main():
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
     }
     with open(os.path.join(out, "manifest.json"), "w") as f:
-        json.dump(manifest, f, indent=2)
+        json.dump(manifest, f, indent=2, default=str)
     print(f"run {run_id} -> {out}")
     print(f"endpoint serves: {manifest['served_models']}")
 
@@ -174,7 +174,7 @@ def main():
 
     manifest["finished"] = datetime.now().isoformat()
     with open(os.path.join(out, "manifest.json"), "w") as f:
-        json.dump(manifest, f, indent=2)
+        json.dump(manifest, f, indent=2, default=str)
 
 
 if __name__ == "__main__":
