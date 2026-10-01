@@ -217,3 +217,14 @@ workflow.py does and wraps its OpenAI client to log tokens per call and per stag
 first run onward. Setup steps: `ablation/gpu21/README.md`. vLLM and the pipeline live in
 separate conda environments because they pin different torch versions. The server binds to
 127.0.0.1:8765, not 8000, since other users on gpu21 may hold 8000.
+
+## 2026-10-01 — Two graph caches: data/graphs (structure only) vs data/graphs_full (pipeline)
+RQ1's `data/graphs/*.pkl` are stripped on purpose (`swe_graph.strip_graph`): node source code
+is dropped because 75 full graphs are too large to cache, and RQ1 only needs structure. The
+localization pipeline shows that code to the agents, so it cannot use those files; the first
+smoke run died on `KeyError: 'start_line'` (start/end lines are only filled in for nodes that
+carry code). Pipeline runs therefore point `GRAPH_INDEX_DIR` at `data/graphs_full/`, which
+starts empty: the pipeline clones the repo at the base commit, builds the full graph with the
+same builder and options RQ1 used (`build_graph(global_import=True)`), and caches it. The
+full caches live on the GPU machine only and are not copied back.
+

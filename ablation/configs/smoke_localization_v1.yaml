@@ -12,7 +12,11 @@ instances:
   - sphinx-doc__sphinx-8269
 
 paths:
-  graph_index_dir: data/graphs        # prebuilt by RQ1; the pipeline builds one if missing
+  # NOT data/graphs: RQ1 caches strip every node's source code (swe_graph.strip_graph), and
+  # the pipeline shows that code to the agents (first attempt died on KeyError 'start_line').
+  # With an empty directory the pipeline clones the repo at base_commit, builds the full
+  # graph itself with build_graph(global_import=True) and caches it here for reuse.
+  graph_index_dir: data/graphs_full
   results: ablation/results/smoke_localization_v1
 
 llm:
