@@ -47,7 +47,7 @@ vLLM and SWE-Debate pin different versions of torch, so each gets its own enviro
 ```bash
 # the model server
 conda create -n vllm python=3.12 -y && conda activate vllm
-pip install "vllm==0.9.2"
+pip install "vllm==0.9.2" "transformers>=4.53.2,<4.54"
 python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"
 vllm --version
 pip cache purge
@@ -57,7 +57,9 @@ The check must print CUDA `12.x` and `True`. Do not install vLLM unpinned: on 20
 plain `pip install vllm` gave vLLM 0.30.0 with torch 2.13.0+cu130 (CUDA 13), and gpu21's
 driver (565.57.01) supports only CUDA 12.7, so torch reported "driver too old" and `False`.
 vLLM 0.9.2 uses torch 2.7.0+cu126, below the driver's limit. A newer backbone may need a
-newer vLLM; any version whose torch is built for CUDA 12.7 or lower works.
+newer vLLM; any version whose torch is built for CUDA 12.7 or lower works. vLLM 0.9.2 also
+needs transformers 4.53.x: with 4.54+ it fails at import with "'aimv2' is already used by a
+Transformers config".
 
 ```bash
 # the pipeline
