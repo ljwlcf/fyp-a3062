@@ -261,3 +261,23 @@ nodes. `ablation/eee/run_localization_job.sh` starts vLLM on 127.0.0.1 with a pe
 (driver limits), so model outputs are only comparable within one machine: every arm of a
 comparison runs on the same machine and vLLM version, recorded in the run manifest.
 
+
+## 2026-10-01 — A/P Chen APPROVED the new direction (confirms the 2026-09-22 proposal)
+Her reply: "all three directions look good to me. We can first focus on making sure one of them
+works, and then see if it's feasible to get more done if time permits." She asked for a title
+and abstract for the school system by 2026-10-02.
+Title: **Adaptive Multi-Agent Debate for Code Fault Localization**
+The 2026-09-22 proposal and its 2026-09-22 refinement are therefore in force, superseding the
+three-phase diagnose/modify/validate framing (2026-09-19) and the compute-matched 2x2 factorial
+as the project's centrepiece. One equal-token single-agent baseline is kept as a comparison arm.
+Priority order, per her instruction (make ONE work first):
+1. Measure the debate in practice (reproduce localization, log agreement before debate, how
+   often debate changes the answer and in which direction, tokens per stage).
+2. Adaptive debate (skip the debate on clear, confident votes; full debate — with heterogeneous
+   agents for the hardest cases — when the vote is split or uncertain).
+3. Other datasets: SWE-bench-Live first, then ONE extra language (e.g. Java, Multi-SWE-bench)
+   only if time permits. The abstract sent to her says "if feasible" for the second language.
+4. End-to-end check on 50-75 Python instances (original vs adaptive debate) to show better
+   localization also resolves more issues.
+Localization-only scope is implicitly accepted (she raised no objection to the question asked in
+the email), with the small end-to-end check as the exception. TODO: update CLAUDE.md to match.
