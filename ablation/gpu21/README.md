@@ -47,15 +47,17 @@ vLLM and SWE-Debate pin different versions of torch, so each gets its own enviro
 ```bash
 # the model server
 conda create -n vllm python=3.12 -y && conda activate vllm
-pip install vllm
+pip install "vllm==0.9.2"
 python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"
 vllm --version
+pip cache purge
 ```
 
-The last two lines must print `True` and a version. gpu21's driver supports CUDA up to
-12.7. If `is_available()` is `False` or you see "driver too old", the newest vLLM wants a
-newer driver: `pip install "vllm<0.11"` and check again. Write the working version down;
-it goes in the notes.
+The check must print CUDA `12.x` and `True`. Do not install vLLM unpinned: on 2026-10-01
+plain `pip install vllm` gave vLLM 0.30.0 with torch 2.13.0+cu130 (CUDA 13), and gpu21's
+driver (565.57.01) supports only CUDA 12.7, so torch reported "driver too old" and `False`.
+vLLM 0.9.2 uses torch 2.7.0+cu126, below the driver's limit. A newer backbone may need a
+newer vLLM; any version whose torch is built for CUDA 12.7 or lower works.
 
 ```bash
 # the pipeline
