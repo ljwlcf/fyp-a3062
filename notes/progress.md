@@ -36,11 +36,25 @@ Also: EEE cluster login works (user i230002, key-based `ssh eee`). Verified two 
 from a side chat and logged them in deviations.md: all five agents get identical prompts
 (the paper says different ones), and stage 4 keeps chains by dissimilarity to the longest,
 not by relevance, and always shows the longest first.
-Next: Choose the real backbone (for-chat.md), then scale from 1 to the 75 instances with a
-scorer (Acc@1 File, chain recall, selection precision, agreement, per-stage tokens) and
-counters for dropped agents and non-existent entities. Check why total_chains_generated (20)
-differs from all_chains (12). Get A/P Chen's go-ahead on the 2026-09-22 direction and the
-localization-only scope, then update CLAUDE.md to match.
+EEE cluster, same session, all typed by Jingwei: login and key auth, limits read (ug QoS:
+2 GPUs/model, 180k SU/month; 32B bf16 fits there), SSD project folder /projects/fypA3062 with
+caches redirected, first srun and sbatch jobs, job dependencies. Built `ablation/eee/`
+(setup_envs.sh CPU job: vLLM 0.30.0 + pipeline env + models, succeeded; build_graphs_job.sh;
+run_localization_job.sh with server + pipeline in one job). The EEE smoke run needed two fixes:
+nvcc for FlashInfer's JIT sampler (CUDA/13.0.0 module) and a libstdc++ clash with the GCC
+module (scoped to the vLLM process). Job 179270's server reached "startup complete"; the run
+result was not yet seen when the session ended. Also built: score_localization.py (built ->
+kept -> selected recall, Acc@1 File, chain_1 wins, dropped agents, debate before/after),
+parallel worker processes in the runner, build_full_graphs.py, shakeout10 config. A/P Chen
+approved the adaptive-debate direction (decisions.md, committed from another session);
+CLAUDE.md rewritten to match.
+Broke: Nothing known. Unverified: the runner's parallel mode and build_full_graphs.py
+(graphs job 179267 had built 7/10 when last seen), and job 179270's outcome.
+Next: Read job 179270's log and graphs job 179267; rsync EEE results home and score them.
+Then the 10-instance shakeout (`sbatch --time=02:00:00 ablation/eee/run_localization_job.sh
+ablation/configs/shakeout10_localization_v1.yaml`). Choose the real backbone (for-chat.md).
+Ask A/P Chen about her EEE project QoS. Check why total_chains_generated (20) differs from
+all_chains (12). New hypotheses (for-chat.md).
 
 ## 2026-09-20
 Did: First real measurement of the project. Built the RQ1 harness

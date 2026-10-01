@@ -9,6 +9,11 @@ Answered with a pointer.
 
 ## Open
 
+- **New hypotheses for the approved plan.** H1-H4 belonged to the retired graph x debate
+  factorial (CLAUDE.md). The measurement and adaptive-debate work needs its own, e.g. "on
+  instances with a unanimous, confident vote, skipping the debate costs no accuracy". Chat
+  should draft them; Claude Code can say what is measurable (scorer:
+  `ablation/harness/score_localization.py`).
 - **The released code's agents are identical; how to frame that?** The paper says the five
   agents have "different system prompts" (Sec 4.5, 6.2); the code sends all five the same
   prompt at temperature 0.7, so stage 6 and debate round 1 are self-consistency sampling,
@@ -29,8 +34,6 @@ Answered with a pointer.
   180k SU/month; project members get the project's limits and budget instead. Worth asking
   whether Jingwei can be added, since the Phase 1 factorial needs several seeds over 75
   instances. (decisions.md 2026-10-01)
-- **Localization-only scope — supervisor confirmation.** Still unconfirmed with A/P Chen.
-  Chat: draft the email or meeting point. (progress.md 2026-09-19)
 - **How to operationalize candidate density for H4.** Tran & Kiela's distractor injection was
   their weakest lever; SWE-bench-Live multi-file tasks are a candidate proxy. Decide before
   the Phase 1 factorial design is frozen. (CLAUDE.md Known unknowns)
@@ -57,5 +60,7 @@ Answered with a pointer.
 ## Answered
 
 <!-- - YYYY-MM-DD — question → answer, see decisions.md YYYY-MM-DD -->
+- 2026-10-01 — Localization-only scope? → Accepted by A/P Chen (no objection), with the small
+  end-to-end check as the exception. See decisions.md 2026-10-01 (direction approved).
 - 2026-10-01 — Is a vLLM server inside an EEE `sbatch` job allowed? → Yes, Jingwei's call:
   the ban targets personal chatbots, and ours is research use only. See decisions.md 2026-10-01.

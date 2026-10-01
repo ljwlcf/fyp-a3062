@@ -1,4 +1,4 @@
-# FYP A3062 — Diagnosing and Improving Multi-Agent Debate for Code Fault Localization
+# FYP A3062 — Adaptive Multi-Agent Debate for Code Fault Localization
 
 ## What this project is
 
@@ -10,15 +10,27 @@ oral 10-12 May 2027. (Project plan was submitted 14 Sep 2026.)
 code dependency graph to build candidate fault chains, then has five copies of one LLM vote on
 a chain and debate a modification plan (2 debate rounds + 1 discriminator).
 
-**Three phases** (decided 2026-09-19 after supervisor feedback — see `notes/decisions.md`):
-1. **Diagnose (Sem 1).** Measure the graph's reachability ceiling, reproduce the localization
-   baseline, then run a compute-matched 2x2 factorial: which component does the work?
-2. **Modify (Sem 2, first half).** Change the debate mechanism, ONE modification chosen from
-   Phase 1 evidence. Primary candidate: graph-grounded debate (agents cite checkable graph facts;
-   disagreements settled against the graph). Fallback: ColMAD's collaborative protocol with
-   heterogeneous backbones. Consensus-seeking debate alone is ruled out.
-3. **Validate (Sem 2, second half).** Re-test on SWE-bench-Live (arXiv:2505.23419), keeping only
-   issues created after the backbone's training cutoff.
+**Plan** (approved by A/P Chen 2026-10-01; supersedes the 2026-09-19 three-phase plan and the
+2x2 factorial, see `notes/decisions.md` 2026-09-22 and 2026-10-01). Her instruction: make ONE
+direction work first, then add more if time permits. Priority order:
+1. **Measure the debate in practice.** Reproduce SWE-Debate's localization; log agreement
+   before the debate, how often the debate changes the answer and in which direction, where the
+   gold location is lost (chains built -> kept -> selected), and tokens per stage.
+2. **Adaptive debate** (the lead modification). Use the vote's agreement and confidence (and
+   vLLM logprobs) as a trigger: clear vote -> accept and skip the debate; split or uncertain ->
+   full debate, optionally with heterogeneous agents for the hardest cases. Goal: same-or-better
+   accuracy than the original debate at fewer tokens, and better than an equal-token single
+   agent (the one baseline kept from the old design).
+3. **Other datasets.** SWE-bench-Live (arXiv:2505.23419, post-cutoff issues) first; ONE extra
+   language (e.g. Java, Multi-SWE-bench) only if feasible.
+4. **Small end-to-end check:** original vs adaptive debate through MCTS patching on 50-75
+   Python instances, to show better localization also resolves more issues.
+
+**What the code actually does** (verified 2026-10-01, `notes/deviations.md`): the five agents
+get identical prompts at temperature 0.7, so the vote and debate round 1 are self-consistency
+sampling with one real exchange round on top (the paper says "different system prompts");
+stage 4 keeps chains by dissimilarity to the longest one, not relevance, and always shows the
+longest chain first.
 
 **The gap, stated precisely.** SWE-Debate's -4.2 debate ablation is end-to-end Pass@1 on
 SWE-bench Verified (41.4 -> 37.2), removes the debate's tokens along with the mechanism, and is a
@@ -26,37 +38,35 @@ single run. Debate was never ablated at the localization level (~80% accuracy), 
 Nature MI capability-saturation finding predicts it adds little. Do NOT describe this as "two
 papers contradicting each other" — see `notes/literature-summary.md` section 2.
 
-**Hypotheses (Phase 1).**
-- H1: graph grounding survives compute matching (it adds information, not just tokens)
-- H2: debate's contribution to localization is small under compute matching
-- H3: the two factors interact rather than sum
-- H4: any surviving debate benefit concentrates on instances with high candidate density
+**Hypotheses.** The Phase 1 hypotheses H1-H4 (graph x debate factorial) are retired with the
+factorial; their text is in git history and `notes/decisions.md` 2026-09-19. New ones for the
+measurement and adaptive-debate work are still to be written (`notes/for-chat.md`).
 
 ## Scope boundaries — do not drift past these
 
-- **Localization only.** Do not touch the MCTS patch-generation stage. (Still needs the
-  supervisor's explicit confirmation.)
+- **Localization only**, accepted by A/P Chen 2026-10-01. Do not modify the MCTS
+  patch-generation stage; its only use is the small end-to-end check (plan item 4).
 - **One self-hosted backbone, pinned checkpoint, fixed across all arms of a comparison.**
   DeepSeek-V3-0324 (the paper's model) is no longer served by DeepSeek. Serve an open-weights
-  model with vLLM on NTU GPUs. The only planned exception is the Phase 2 heterogeneous-agent
-  fallback. Claude is the research assistant here, never the system under test.
-- **Phase 1 data:** the 75-instance SWE-Bench-Verified-S subset (django 25, sympy 25,
+  model with vLLM on NTU GPUs. The only planned exception is heterogeneous agents inside
+  adaptive debate. Claude is the research assistant here, never the system under test.
+- **Main data:** the 75-instance SWE-Bench-Verified-S subset (django 25, sympy 25,
   sphinx-doc 25; `utils/verified75.txt` — counted 2026-09-20, correcting an earlier
   23/26/26). Expand to the 300-instance SWE-bench Lite if statistical power is marginal.
-- **Python repositories only.** The graph is built with Python's `ast` module.
-- **One modification in Phase 2**, not two.
+- **Python repositories only**, except ONE extra language if feasible (plan item 3), which
+  needs a non-Python graph builder. The graph is built with Python's `ast` module.
+- **One modification at a time:** adaptive debate first; nothing else until it works.
 
-## Experimental design (Phase 1)
+## Experimental design
 
-2x2 factorial: graph grounding (multiple chains vs single chain) x debate (multi-agent vs single
-agent). Every multi-agent cell gets a compute-matched single-agent counterpart with the same
-token budget (extended reasoning or best-of-N), plus compute-matched majority-vote and
-self-consistency arms. Debate round count is NOT a factor (hardcoded in the implementation).
+Arms, all on the same instances: original SWE-Debate (as released), adaptive debate, and one
+single-agent arm with the same token budget as the original. Debate round count is NOT a
+factor (hardcoded in the implementation).
 
 - **Hold candidate-chain ordering fixed or randomised across arms.** Ordering alone moved Top-1
-  by 22 points in LLM4FL.
+  by 22 points in LLM4FL, and the released code always shows the longest chain first.
 - **Paired analysis:** all arms run on the same instances, so compare per instance (McNemar or
-  paired bootstrap). Several seeds per cell. Never report a single run.
+  paired bootstrap). Several seeds per arm. Never report a single run.
 
 ### Metrics to log on every run
 
