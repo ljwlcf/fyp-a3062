@@ -28,8 +28,7 @@ import sys
 from collections import Counter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-MOATLESS = os.path.join(ROOT, "swe-debate", "moatless", "benchmark",
-                        "swebench_verified_all_evaluations.json")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # for instances.py
 RQ1_RAW = os.path.join(ROOT, "ablation", "results", "rq1_reachability_v2", "raw.*.jsonl")
 
 STAGE_GROUP = {  # pipeline method that made the call -> cost bucket
@@ -197,12 +196,12 @@ def vote_logprob_signal(rec, n_chains):
             "lp_mean_p_voted": round(sum(p_voted) / len(p_voted), 4) if p_voted else None}
 
 
-def load_gold():
-    files = {}
-    with open(MOATLESS) as f:
-        for rec in json.load(f):
-            files[rec["instance_id"]] = sorted(set(
-                re.findall(r"^diff --git a/(\S+) b/", rec["golden_patch"], re.M)))
+def load_gold(cfg=None):
+    """Gold files from the run's own instance source (config `dataset_file`, default the fork's
+    SWE-bench Verified records); gold entities only where RQ1 mapped them (the 75-instance set)."""
+    from instances import load_records
+    files = {iid: sorted(set(re.findall(r"^diff --git a/(\S+) b/", rec["golden_patch"], re.M)))
+             for iid, rec in load_records(cfg).items()}
     entities = {}
     for path in glob.glob(RQ1_RAW):
         with open(path) as f:
@@ -434,8 +433,13 @@ def summarize(rows):
 
 
 def main(run_dirs):
-    gold_files, gold_entities = load_gold()
+    gold_cache = {}
     for run_dir in run_dirs:
+        with open(os.path.join(run_dir, "manifest.json")) as f:
+            source = (json.load(f).get("config_body") or {}).get("dataset_file")
+        if source not in gold_cache:
+            gold_cache[source] = load_gold({"dataset_file": source} if source else None)
+        gold_files, gold_entities = gold_cache[source]
         rows = []
         with open(os.path.join(run_dir, "raw.jsonl")) as f:
             for line in f:

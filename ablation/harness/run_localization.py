@@ -148,23 +148,23 @@ class CallLog:
 
 
 def _init_worker():
-    """Make the fork importable in this process. The pipeline keeps the current issue in
+    """Make the fork (and this harness directory) importable in this process. The pipeline keeps the current issue in
     module-level globals (repo_ops.CURRENT_ISSUE_ID, DP_GRAPH, ...), so instances run in
     parallel must be separate processes, never threads."""
-    for p in (FORK, os.path.join(FORK, "localization")):
+    for p in (FORK, os.path.join(FORK, "localization"), os.path.dirname(os.path.abspath(__file__))):
         if p not in sys.path:
             sys.path.insert(0, p)
 
 
-def run_one(iid, keep_fields, pipe, vote_logprobs=0):
+def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None):
     """Run the pipeline on one instance; return the raw record. Runs in a worker process."""
     _init_worker()
-    from moatless.benchmark.utils import get_moatless_instance
     from entity_localization_pipeline import EntityLocalizationPipeline
+    from instances import get_instance   # default source = the fork's get_moatless_instance
     import entity_localization_pipeline as elp
     getattr(elp, "A3062_PARSE_STATS", {}).clear()  # per instance, also when workers == 1
 
-    full = get_moatless_instance(instance_id=iid)
+    full = get_instance(iid, {"dataset_file": dataset} if dataset else None)
     instance = {k: full[k] for k in keep_fields}
     pipeline = EntityLocalizationPipeline(max_depth=pipe["max_depth"])
     calls = CallLog(pipeline.client, vote_logprobs)
@@ -244,7 +244,8 @@ def result_relevant(cfg):
             "instances_slice": cfg.get("instances_slice"),
             "model": cfg["llm"]["model"], "timeout_seconds": cfg["llm"].get("timeout_seconds"),
             "pipeline": cfg["pipeline"], "instance_fields": cfg.get("instance_fields"),
-            "graph_index_dir": cfg["paths"]["graph_index_dir"]}
+            "graph_index_dir": cfg["paths"]["graph_index_dir"],
+            "dataset_file": cfg.get("dataset_file")}
 
 
 def prepare_resume(run_dir, cfg):
@@ -386,7 +387,7 @@ def main():
 
     if workers <= 1:
         for i, iid in enumerate(ids, 1):
-            record(run_one(iid, keep, pipe, vote_lp), i)
+            record(run_one(iid, keep, pipe, vote_lp, cfg.get("dataset_file")), i)
     else:
         import multiprocessing as mp
         from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -404,7 +405,8 @@ def main():
             broken = []
             with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context("spawn"),
                                      initializer=_init_worker, max_tasks_per_child=1) as ex:
-                futs = {ex.submit(run_one, iid, keep, pipe, vote_lp): iid for iid in pending}
+                futs = {ex.submit(run_one, iid, keep, pipe, vote_lp, cfg.get("dataset_file")): iid
+                        for iid in pending}
                 for fut in as_completed(futs):
                     iid = futs[fut]
                     try:

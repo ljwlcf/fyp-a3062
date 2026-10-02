@@ -613,3 +613,22 @@ Side observation for the order analysis: the vote prompt's worked example answer
 voters towards that label; check chain_2's win rate under shuffled order when the 72B order
 check runs.
 
+## 2026-10-02 — SWE-bench-Live loader; cutoff = Qwen2.5 release date (cutoff PENDING confirmation)
+Built (plan item 3): `ablation/harness/swebench_live.py` downloads one SWE-bench-Live split at a
+pinned revision (SWE-bench-Live/SWE-bench-Live @ b51a86422e10cfd403beb4773e5a2947953e36ec, MIT),
+keeps instances created after a cutoff whose gold patch touches a .py file, and writes
+instance records, an id list and a meta file to data/swebench_live/ (not in git; rebuilt from the
+pinned revision). `ablation/harness/instances.py` is now the single instance source for the
+runner, graph builder and scorer: with no `dataset_file` in a config it is exactly the released
+path (get_moatless_instance / the fork's SWE-bench Verified records), so existing configs and the
+queued runs are unaffected (rescoring a run gave an identical summary); with `dataset_file` it
+reads the prepared records, and the scorer takes gold files from the run's own source.
+Split sizes at that revision: test 1,000, lite 300, verified 500, full 1,888.
+Cutoff: Qwen2.5's training-data cutoff is not published; its release date, 2024-09-19, bounds it
+from above, so "created after 2024-09-19" is conservative. On `verified` that keeps 388/500
+(104 earlier, 8 without Python in the gold patch), 96 repositories, 2024-09-19 .. 2025-04-30;
+213/388 gold patches touch >= 2 files (a candidate-density proxy for H4; `difficulty` has files/
+hunks/lines). Draft config `live_72b_released_v1.yaml`. Practical issue before running: 96
+repositories mean 96 clones and graph builds (tens of GB in the 50 GB home); start with a pilot
+slice and decide where repos live. Confirm the cutoff choice (Jingwei / chat) before Live runs.
+

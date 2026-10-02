@@ -27,7 +27,7 @@ from swe_graph import checkout, repo_dir  # noqa: E402
 sys.path.insert(0, os.path.join(FORK, "localization"))
 from dependency_graph.build_graph import build_graph  # noqa: E402
 
-MOATLESS = os.path.join(FORK, "moatless", "benchmark", "swebench_verified_all_evaluations.json")
+from instances import load_records  # noqa: E402  (default: the fork's SWE-bench Verified records)
 
 
 def main(cfg_path):
@@ -36,8 +36,7 @@ def main(cfg_path):
     out_dir = os.path.join(ROOT, cfg["paths"]["graph_index_dir"])
     repos_root = os.path.join(ROOT, "data", "repos")
     os.makedirs(out_dir, exist_ok=True)
-    with open(MOATLESS) as f:
-        meta = {r["instance_id"]: r for r in json.load(f)}
+    meta = load_records(cfg)
 
     ids = instance_ids(cfg)
     for i, iid in enumerate(ids, 1):
