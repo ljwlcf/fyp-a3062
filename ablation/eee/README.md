@@ -12,7 +12,10 @@ there by `~/.bashrc`. Logs: `/projects/fypA3062/logs/`. Cluster rules: NTUEEEClu
 3. Pre-build the full graphs the config needs (CPU job, free; otherwise the GPU job idles
    for minutes per instance while the pipeline clones and builds):
    `sbatch ~/FYP-A3062/ablation/eee/build_graphs_job.sh ablation/configs/<config>.yaml`
-4. A run (GPU job; server and pipeline inside it):
+4. A run (GPU job; server and pipeline inside it). Pick the GPU first (decisions.md
+   2026-10-02: best free, pro6000 > rtx5090 > 6000ada/l40 > a6000/a40):
+   `G=$(ablation/eee/pick_gpu.sh 24)` (24 = GB the model needs), then add `--gres=gpu:$G:1`
+   (and `-C highmem` on pro6000 for more RAM) to the sbatch line below.
    `sbatch ~/FYP-A3062/ablation/eee/run_localization_job.sh [config] [model]`
    Defaults: the smoke config and the 7B model on one a6000. Watch with `squeue --me`; read
    `logs/loc-<id>.out` (job) and `logs/vllm-<id>.log` (server).

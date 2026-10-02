@@ -298,3 +298,23 @@ answers per round, and the shakeout and backbone choice will show how often it h
 the real model. If the chosen backbone still loses agents often, adopt (b) for ALL arms,
 including the original-debate baseline, and log it in deviations.md. Revisit after the shakeout.
 
+## 2026-10-02 — EEE GPU choice: best free GPU by a fixed priority; budget is not a constraint
+Jingwei's instruction. For every EEE job, check `sinfo` at submission and use the best GPU that
+is free: pro6000 first; then rtx5090 if the model fits in its 32 GB; then 6000ada / l40; then
+a6000 / a40. The 180k SU/month budget is not to be treated as a constraint. Implemented as
+`ablation/eee/pick_gpu.sh [GB_NEEDED] [N_GPUS]`, which reads sinfo, skips drained nodes,
+respects the ug QoS per-model limits (2 GPUs, 1 rtx5090), and queues on the highest-priority
+qualifying model if none is free. Job scripts keep an a6000 default; the choice is applied at
+submission with `sbatch --gres=gpu:<model>:<n> ...`, which overrides the script.
+Consequence for comparisons: one comparison still runs on one GPU model and one vLLM version
+(decisions 2026-10-01), so a run's GPU model is recorded in its manifest and, for paired arms,
+all arms of one comparison are submitted with the same `--gres`.
+RAM per GPU (measured from node data 2026-10-02): a6000 job 24 GB; regular pro6000 node
+~33 GB per GPU (337,920 MB allocated over 10 GPUs on gpu-pro6000-5). pro6000 nodes tagged
+`highmem` (e.g. gpu-pro6000-4: 396 GB for 4 GPUs) and `midmem` give more with `-C highmem`.
+First pro6000 job = Blackwell + RAM test: the 10-instance shakeout with 4 workers on one
+pro6000 with `-C highmem`. It checks that vLLM 0.30 + FlashInfer's JIT kernel work on
+Blackwell (sm_120), records the RAM a highmem pro6000 job is given and the job's peak with 4
+workers (the a6000 job with 4 workers was OOM-killed at 24 GB), and gives a speed comparison on
+the same 10 instances as the a6000 run (job 180175, 2 workers).
+
