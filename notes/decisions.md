@@ -297,6 +297,11 @@ Decision for now: no change. The runner now stores every reply, the scorer count
 answers per round, and the shakeout and backbone choice will show how often it happens with
 the real model. If the chosen backbone still loses agents often, adopt (b) for ALL arms,
 including the original-debate baseline, and log it in deviations.md. Revisit after the shakeout.
+Update 2026-10-02: the extreme case crashes the instance. When all five round-1 answers fail to
+parse, `_conduct_second_round_analysis` builds `ThreadPoolExecutor(max_workers=min(0, 1))` and
+raises (order check, sphinx-8056, shuffle seed 1). Not patched; the scorer counts it as
+`debate_collapsed`. The same line caps round 2 at one worker, so its "parallel" agents run one
+after another (latency only). Both go to deviations.md if (b) is adopted.
 
 ## 2026-10-02 — EEE GPU choice: best free GPU by a fixed priority; budget is not a constraint
 Jingwei's instruction. For every EEE job, check `sinfo` at submission and use the best GPU that
@@ -352,6 +357,9 @@ permutation of positions in every arm; it is recorded per instance (`chain_order
 raw.jsonl and `stage_cache/<instance>/chain_order.json`) and per run (the seed in the
 manifest's config). The default stays `fixed`, so the baseline matches the released code. The scorer reports, per instance, the winner's shown position, its stage-4 position
 and whether it is the longest kept chain; `ablation/harness/analyze_order.py` compares arms.
+Note: "pro6000" nodes mix two variants of the same Blackwell chip (RTX PRO 6000 Max-Q
+Workstation, 300 W, and Server Edition, 600 W); outputs are comparable, speed is not (manifests
+record `gpu_names`).
 Check (config `order_check_v1.yaml`, the 10 shakeout instances, 7B model, all on pro6000
 highmem, 8 workers): fixed order x2 plus the earlier fixed pro6000 run (job 180200), and
 shuffle seeds 1, 2, 3. Pass if, under shuffle, P(winner shown first) falls to about chance while

@@ -147,6 +147,11 @@ def score_instance(rec, cache, gold_files, gold_entities):
     s["truncated"] = rec.get("tokens", {}).get("total", {}).get("truncated")
     if rec["status"] != "ok" or cache is None:
         s["error"] = rec.get("error") or "no stage cache"
+        # Upstream defect: when EVERY round-1 answer fails to parse, round 2 builds
+        # ThreadPoolExecutor(max_workers=min(0, 1)) and the instance crashes. It is the extreme
+        # case of agents dropped by JSON parsing: the debate collapsed completely.
+        s["failure_kind"] = ("debate_collapsed" if "max_workers must be greater than 0" in s["error"]
+                             else "other")
         return s
 
     built = [c["chain"] for c in data(cache, "stage_3_localization_chains").get("all_chains", [])
@@ -250,6 +255,7 @@ def rate(rows, key):
 def summarize(rows):
     ok = [r for r in rows if r["status"] == "ok" and "error" not in r]
     summ = {"n_instances": len(rows), "n_ok": len(ok),
+            "n_debate_collapsed": sum(r.get("failure_kind") == "debate_collapsed" for r in rows),
             "errors": Counter(r.get("error", "")[:80] for r in rows if r not in ok)}
     for k in ("built_has_gold_file", "kept_has_gold_file", "selected_has_gold_file",
               "acc1_file", "plan_has_gold_file", "built_has_gold_entity",
