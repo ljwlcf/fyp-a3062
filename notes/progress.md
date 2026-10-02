@@ -69,8 +69,15 @@ start entities, plan-failed outcome, plan locations in any format. Runner: fresh
 instance, retries after a killed worker, peak RAM logged, reply text saved.
 Broke: Nothing open. Known limits: 32k context overflows on sympy (64k planned, decisions.md);
 JSON parse losses (parser decision pending, decisions.md).
-Next: Choose the real backbone (for-chat.md), serve it at >=64k context, decide the parser
-question from the saved replies, then the full 75 with several seeds on the best free GPU.
+Later: order check done (failed weakly; agreement partly order-driven, released order helps
+accuracy; decision pending). Backbone trial set up per Jingwei (Qwen2.5-Coder-32B on 1 pro6000
+vs Qwen2.5-72B on 2, pinned, 64k via YaRN; 72B weights on new HDD folder /projects/fypA3062models).
+32B with the released parser: 8/10 debate collapses (JSON wrapped in prose) -> opt-in lenient
+parser added to the fork (default off). Jobs queued: 32B lenient (180367, running), 72B released
+(180343), 72B lenient (180368). Fixed on the way: download script fetched no weights; YaRN
+override needs rope_parameters + scaled max_position_embeddings in vLLM 0.30.
+Next: finish the trial, write the comparison into for-chat.md's backbone question; decide the
+parser setting and the order-check fallback with the chosen backbone; then the full 75.
 Ask A/P Chen about her EEE project QoS. New hypotheses (for-chat.md).
 
 ## 2026-09-20

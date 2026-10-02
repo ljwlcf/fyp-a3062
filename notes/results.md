@@ -17,6 +17,30 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-02 — Backbone trial, interim: Qwen2.5-Coder-32B with the released parser (Phase 1, backbone choice)
+Config: `ablation/configs/backbone_trial_32b_v1.yaml` · Raw + scores:
+`ablation/results/backbone_trial_32b_v1/20261002-065000/` (EEE job 180342; 1 pro6000 highmem,
+6 workers, 64k context via YaRN, released JSON parser). Interim: the lenient-parser pass and
+both 72B passes are still running; the full comparison will replace this entry.
+Provenance note: the fork was updated on disk during this run (opt-in lenient parser added);
+with the option off that code path is identical, but the manifest's fork_sha is the start state.
+
+**Numbers** (10 instances):
+- Debate collapsed (all five round-1 answers unparseable, upstream crash) on 8/10; 2 completed.
+- Up to the vote: gold file in built chains 10/10, kept 9/10, selected chain 7/10.
+- Votes lost to unparseable JSON: up to 3 of 5 per instance; surviving votes were unanimous on
+  all 10 instances, so the split-vote rate (0/10) is over surviving votes only.
+- Hallucinated start entities 74/200 (37%; 7B: 22-27%).
+- 0 context-overflow errors at 64k; 95 calls hit max_tokens, mostly `_prefilter_neighbors_with_llm`
+  (limit 1000), whose truncated replies also fail to parse.
+- 1,308 s per instance (6 sharing one GPU); 388k tokens per instance (graph walk 304k).
+
+**Takeaway so far.** With the released parser a 32B backbone has effectively no debate: it wraps
+JSON in prose, so votes and analyses are dropped. Everything before the debate behaves like the
+7B, with more hallucinated start entities.
+
+---
+
 ## 2026-10-02 — Order check: vote agreement partly reflects display order; released order helps accuracy (Phase 1, precondition)
 Config: `ablation/configs/order_check_v1.yaml` · Raw + scores: `ablation/results/order_check_v1/`
 (fixed: `20261002-055659` job 180271, `20261002-055750` job 180272, plus the shakeout's

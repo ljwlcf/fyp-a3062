@@ -1,0 +1,1999 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-02T06:50:53.080457",
+    "data": {
+      "initial_entities": [
+        "get_foo_bar_display",
+        "FooBar",
+        "foo_bar",
+        "choices",
+        "models"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 512
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-02T06:54:10.539140",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "get_foo_bar_display",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:_get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This is the actual method being called when you invoke get_foo_bar_display(). Understanding how it works and why your override isn't taking effect is crucial.",
+              "diversity_value": "Represents the model layer where the method is defined and used."
+            },
+            {
+              "entity_id": "your_app/models.py:FooBar.get_foo_bar_display",
+              "entity_type": "function",
+              "relevance_reason": "Your attempt to override this method in your model class indicates where the issue is occurring.",
+              "diversity_value": "Represents the specific implementation in your application's model layer."
+            },
+            {
+              "entity_id": "django/contrib/admin/options.py:get_empty_value_display",
+              "entity_type": "function",
+              "relevance_reason": "While not directly related to the issue, understanding how similar methods are handled in other parts of Django (specifically in the admin site) can provide insights into how Django manages overrides and displays.",
+              "diversity_value": "Represents a different part of Django (admin site) and how it handles method overriding and display logic."
+            },
+            {
+              "entity_id": "your_app/models.py:FooBar.__str__",
+              "entity_type": "function",
+              "relevance_reason": "This method uses the get_foo_bar_display() method, and its behavior change might be a direct result of the overridden method not working as expected.",
+              "diversity_value": "Represents the usage context within your model, showing how the overridden method is applied."
+            }
+          ]
+        },
+        {
+          "initial_entity": "FooBar",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+              "diversity_value": "Core model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_choices_default",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for setting up field choices, which directly impacts the behavior of get_FOO_display().",
+              "diversity_value": "Field-specific logic from different file"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+              "diversity_value": "Meta-class logic from different file"
+            },
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py",
+              "entity_type": "file",
+              "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+              "diversity_value": "Migration-related functionality from different module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "foo_bar",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains core implementation of Django models and how field methods are managed.",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "Handles the contribution of metadata to model classes, which includes field method generation.",
+              "diversity_value": "Different file and function handling model metadata"
+            },
+            {
+              "entity_id": "django/forms/models.py",
+              "entity_type": "file",
+              "relevance_reason": "Involves interaction between forms and model methods, which could explain why overriding fails.",
+              "diversity_value": "Forms layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+              "diversity_value": "Fields layer from different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "choices",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_FOO_display",
+              "entity_type": "function",
+              "relevance_reason": "This is the default implementation of the get_FOO_display method which might have changed in Django 2.2, affecting the ability to override it.",
+              "diversity_value": "Core model fields implementation"
+            },
+            {
+              "entity_id": "django/db/models/options.py:_get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for generating the display method for fields with choices, which is where the overridden method might be failing.",
+              "diversity_value": "Model options handling, different file"
+            },
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+              "diversity_value": "Enum choices handling, different file"
+            },
+            {
+              "entity_id": "django/forms/models.py:model_to_dict",
+              "entity_type": "function",
+              "relevance_reason": "This function converts model instances to dictionaries, potentially using get_FOO_display methods. Understanding its usage can help pinpoint where the override is being ignored.",
+              "diversity_value": "Forms model conversion, different file and layer"
+            }
+          ]
+        },
+        {
+          "initial_entity": "models",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_choice_coercer_function",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for creating the coercer used in get_FOO_display(), understanding it can help in overriding.",
+              "diversity_value": "Function from the field handling module"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.get_field_by_name",
+              "entity_type": "function",
+              "relevance_reason": "This function retrieves field options, which could affect how get_FOO_display() behaves.",
+              "diversity_value": "Function from the model options module"
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.__init_subclass__",
+              "entity_type": "function",
+              "relevance_reason": "This method initializes subclasses of Model, which includes setting up dynamic methods like get_FOO_display().",
+              "diversity_value": "Function from the base model class"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "entity_type": "function",
+              "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+              "diversity_value": "Different function within the field handling module"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-02T07:05:10.205728",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "get_foo_bar_display",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:_get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This is the actual method being called when you invoke get_foo_bar_display(). Understanding how it works and why your override isn't taking effect is crucial.",
+              "diversity_value": "Represents the model layer where the method is defined and used."
+            },
+            {
+              "entity_id": "your_app/models.py:FooBar.get_foo_bar_display",
+              "entity_type": "function",
+              "relevance_reason": "Your attempt to override this method in your model class indicates where the issue is occurring.",
+              "diversity_value": "Represents the specific implementation in your application's model layer."
+            },
+            {
+              "entity_id": "django/contrib/admin/options.py:get_empty_value_display",
+              "entity_type": "function",
+              "relevance_reason": "While not directly related to the issue, understanding how similar methods are handled in other parts of Django (specifically in the admin site) can provide insights into how Django manages overrides and displays.",
+              "diversity_value": "Represents a different part of Django (admin site) and how it handles method overriding and display logic."
+            },
+            {
+              "entity_id": "your_app/models.py:FooBar.__str__",
+              "entity_type": "function",
+              "relevance_reason": "This method uses the get_foo_bar_display() method, and its behavior change might be a direct result of the overridden method not working as expected.",
+              "diversity_value": "Represents the usage context within your model, showing how the overridden method is applied."
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:_get_FIELD_display",
+                "entity_type": "function",
+                "relevance_reason": "This is the actual method being called when you invoke get_foo_bar_display(). Understanding how it works and why your override isn't taking effect is crucial.",
+                "diversity_value": "Represents the model layer where the method is defined and used."
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "your_app/models.py:FooBar.get_foo_bar_display",
+                "entity_type": "function",
+                "relevance_reason": "Your attempt to override this method in your model class indicates where the issue is occurring.",
+                "diversity_value": "Represents the specific implementation in your application's model layer."
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/admin/options.py:get_empty_value_display",
+                "entity_type": "function",
+                "relevance_reason": "While not directly related to the issue, understanding how similar methods are handled in other parts of Django (specifically in the admin site) can provide insights into how Django manages overrides and displays.",
+                "diversity_value": "Represents a different part of Django (admin site) and how it handles method overriding and display logic."
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "your_app/models.py:FooBar.__str__",
+                "entity_type": "function",
+                "relevance_reason": "This method uses the get_foo_bar_display() method, and its behavior change might be a direct result of the overridden method not working as expected.",
+                "diversity_value": "Represents the usage context within your model, showing how the overridden method is applied."
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "FooBar",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+              "diversity_value": "Core model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_choices_default",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for setting up field choices, which directly impacts the behavior of get_FOO_display().",
+              "diversity_value": "Field-specific logic from different file"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+              "diversity_value": "Meta-class logic from different file"
+            },
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py",
+              "entity_type": "file",
+              "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+              "diversity_value": "Migration-related functionality from different module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:Model",
+                "entity_type": "class",
+                "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+                "diversity_value": "Core model layer from different file"
+              },
+              "chain": [
+                "django/db/models/base.py:Model",
+                "django/db/models/base.py:Model.from_db",
+                "django/db/models/query.py:ModelIterable.__iter__",
+                "django/db/models/sql/query.py:Query.get_compiler",
+                "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:get_choices_default",
+                "entity_type": "function",
+                "relevance_reason": "Responsible for setting up field choices, which directly impacts the behavior of get_FOO_display().",
+                "diversity_value": "Field-specific logic from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+                "entity_type": "function",
+                "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+                "diversity_value": "Meta-class logic from different file"
+              },
+              "chain": [
+                "django/db/models/options.py:Options.contribute_to_class",
+                "django/db/__init__.py",
+                "django/db/__init__.py:DefaultConnectionProxy",
+                "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/core/management/commands/makemigrations.py",
+                "entity_type": "file",
+                "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+                "diversity_value": "Migration-related functionality from different module"
+              },
+              "chain": [
+                "django/core/management/commands/makemigrations.py",
+                "django/core/management/commands/makemigrations.py:Command",
+                "django/core/management/commands/makemigrations.py:Command.add_arguments"
+              ],
+              "chain_length": 3
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "foo_bar",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains core implementation of Django models and how field methods are managed.",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "Handles the contribution of metadata to model classes, which includes field method generation.",
+              "diversity_value": "Different file and function handling model metadata"
+            },
+            {
+              "entity_id": "django/forms/models.py",
+              "entity_type": "file",
+              "relevance_reason": "Involves interaction between forms and model methods, which could explain why overriding fails.",
+              "diversity_value": "Forms layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+              "diversity_value": "Fields layer from different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py",
+                "entity_type": "file",
+                "relevance_reason": "Contains core implementation of Django models and how field methods are managed.",
+                "diversity_value": "Model layer from different file"
+              },
+              "chain": [
+                "django/db/models/base.py",
+                "django/db/models/base.py:Deferred",
+                "django/db/models/base.py:Deferred.__repr__"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+                "entity_type": "function",
+                "relevance_reason": "Handles the contribution of metadata to model classes, which includes field method generation.",
+                "diversity_value": "Different file and function handling model metadata"
+              },
+              "chain": [
+                "django/db/models/options.py:Options.contribute_to_class",
+                "django/db/__init__.py",
+                "django/db/__init__.py:DefaultConnectionProxy",
+                "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/models.py",
+                "entity_type": "file",
+                "relevance_reason": "Involves interaction between forms and model methods, which could explain why overriding fails.",
+                "diversity_value": "Forms layer from different file"
+              },
+              "chain": [
+                "django/forms/models.py",
+                "django/forms/models.py:construct_instance",
+                "django/db/models/__init__.py",
+                "django/core/exceptions.py:ObjectDoesNotExist",
+                "django/core/exceptions.py"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py",
+                "entity_type": "file",
+                "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+                "diversity_value": "Fields layer from different file"
+              },
+              "chain": [
+                "django/db/models/fields/__init__.py",
+                "django/db/models/fields/__init__.py:Empty",
+                "django/db/models/fields/__init__.py:_empty"
+              ],
+              "chain_length": 3
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "choices",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_FOO_display",
+              "entity_type": "function",
+              "relevance_reason": "This is the default implementation of the get_FOO_display method which might have changed in Django 2.2, affecting the ability to override it.",
+              "diversity_value": "Core model fields implementation"
+            },
+            {
+              "entity_id": "django/db/models/options.py:_get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for generating the display method for fields with choices, which is where the overridden method might be failing.",
+              "diversity_value": "Model options handling, different file"
+            },
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+              "diversity_value": "Enum choices handling, different file"
+            },
+            {
+              "entity_id": "django/forms/models.py:model_to_dict",
+              "entity_type": "function",
+              "relevance_reason": "This function converts model instances to dictionaries, potentially using get_FOO_display methods. Understanding its usage can help pinpoint where the override is being ignored.",
+              "diversity_value": "Forms model conversion, different file and layer"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:get_FOO_display",
+                "entity_type": "function",
+                "relevance_reason": "This is the default implementation of the get_FOO_display method which might have changed in Django 2.2, affecting the ability to override it.",
+                "diversity_value": "Core model fields implementation"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/options.py:_get_FIELD_display",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for generating the display method for fields with choices, which is where the overridden method might be failing.",
+                "diversity_value": "Model options handling, different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+                "entity_type": "function",
+                "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+                "diversity_value": "Enum choices handling, different file"
+              },
+              "chain": [
+                "django/db/models/enums.py:ChoicesMeta.choices",
+                "django/db/models/enums.py:ChoicesMeta",
+                "django/db/models/enums.py:ChoicesMeta.__new__",
+                "django/contrib/gis/gdal/geometries.py:Point.tuple",
+                "django/contrib/gis/gdal/geometries.py:Point"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/models.py:model_to_dict",
+                "entity_type": "function",
+                "relevance_reason": "This function converts model instances to dictionaries, potentially using get_FOO_display methods. Understanding its usage can help pinpoint where the override is being ignored.",
+                "diversity_value": "Forms model conversion, different file and layer"
+              },
+              "chain": [
+                "django/forms/models.py:model_to_dict",
+                "django/db/models/fields/related.py:ManyToManyField.value_from_object",
+                "django/db/utils.py:ConnectionHandler.all",
+                "django/db/utils.py:ConnectionHandler",
+                "django/db/utils.py:ConnectionHandler.databases"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "models",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_choice_coercer_function",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for creating the coercer used in get_FOO_display(), understanding it can help in overriding.",
+              "diversity_value": "Function from the field handling module"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.get_field_by_name",
+              "entity_type": "function",
+              "relevance_reason": "This function retrieves field options, which could affect how get_FOO_display() behaves.",
+              "diversity_value": "Function from the model options module"
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.__init_subclass__",
+              "entity_type": "function",
+              "relevance_reason": "This method initializes subclasses of Model, which includes setting up dynamic methods like get_FOO_display().",
+              "diversity_value": "Function from the base model class"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "entity_type": "function",
+              "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+              "diversity_value": "Different function within the field handling module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:get_choice_coercer_function",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for creating the coercer used in get_FOO_display(), understanding it can help in overriding.",
+                "diversity_value": "Function from the field handling module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/options.py:Options.get_field_by_name",
+                "entity_type": "function",
+                "relevance_reason": "This function retrieves field options, which could affect how get_FOO_display() behaves.",
+                "diversity_value": "Function from the model options module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:Model.__init_subclass__",
+                "entity_type": "function",
+                "relevance_reason": "This method initializes subclasses of Model, which includes setting up dynamic methods like get_FOO_display().",
+                "diversity_value": "Function from the base model class"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+                "entity_type": "function",
+                "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+                "diversity_value": "Different function within the field handling module"
+              },
+              "chain": [
+                "django/db/models/fields/__init__.py:Field.get_prep_value",
+                "django/db/models/fields/__init__.py:Field",
+                "django/db/models/fields/__init__.py:Field._description",
+                "django/utils/translation/__init__.py",
+                "django/utils/translation/__init__.py:TranslatorCommentWarning"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "django/db/models/base.py:Model",
+            "django/db/models/base.py:Model.from_db",
+            "django/db/models/query.py:ModelIterable.__iter__",
+            "django/db/models/sql/query.py:Query.get_compiler",
+            "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+          ],
+          "chain_length": 5,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+            "diversity_value": "Core model layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/options.py:Options.contribute_to_class",
+            "django/db/__init__.py",
+            "django/db/__init__.py:DefaultConnectionProxy",
+            "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+          ],
+          "chain_length": 4,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+            "entity_type": "function",
+            "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+            "diversity_value": "Meta-class logic from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/core/management/commands/makemigrations.py",
+            "django/core/management/commands/makemigrations.py:Command",
+            "django/core/management/commands/makemigrations.py:Command.add_arguments"
+          ],
+          "chain_length": 3,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/core/management/commands/makemigrations.py",
+            "entity_type": "file",
+            "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+            "diversity_value": "Migration-related functionality from different module"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/base.py",
+            "django/db/models/base.py:Deferred",
+            "django/db/models/base.py:Deferred.__repr__"
+          ],
+          "chain_length": 3,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py",
+            "entity_type": "file",
+            "relevance_reason": "Contains core implementation of Django models and how field methods are managed.",
+            "diversity_value": "Model layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/options.py:Options.contribute_to_class",
+            "django/db/__init__.py",
+            "django/db/__init__.py:DefaultConnectionProxy",
+            "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+          ],
+          "chain_length": 4,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+            "entity_type": "function",
+            "relevance_reason": "Handles the contribution of metadata to model classes, which includes field method generation.",
+            "diversity_value": "Different file and function handling model metadata"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/models.py",
+            "django/forms/models.py:construct_instance",
+            "django/db/models/__init__.py",
+            "django/core/exceptions.py:ObjectDoesNotExist",
+            "django/core/exceptions.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/forms/models.py",
+            "entity_type": "file",
+            "relevance_reason": "Involves interaction between forms and model methods, which could explain why overriding fails.",
+            "diversity_value": "Forms layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py",
+            "django/db/models/fields/__init__.py:Empty",
+            "django/db/models/fields/__init__.py:_empty"
+          ],
+          "chain_length": 3,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py",
+            "entity_type": "file",
+            "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+            "diversity_value": "Fields layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/enums.py:ChoicesMeta.choices",
+            "django/db/models/enums.py:ChoicesMeta",
+            "django/db/models/enums.py:ChoicesMeta.__new__",
+            "django/contrib/gis/gdal/geometries.py:Point.tuple",
+            "django/contrib/gis/gdal/geometries.py:Point"
+          ],
+          "chain_length": 5,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+            "entity_type": "function",
+            "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+            "diversity_value": "Enum choices handling, different file"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/models.py:model_to_dict",
+            "django/db/models/fields/related.py:ManyToManyField.value_from_object",
+            "django/db/utils.py:ConnectionHandler.all",
+            "django/db/utils.py:ConnectionHandler",
+            "django/db/utils.py:ConnectionHandler.databases"
+          ],
+          "chain_length": 5,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/forms/models.py:model_to_dict",
+            "entity_type": "function",
+            "relevance_reason": "This function converts model instances to dictionaries, potentially using get_FOO_display methods. Understanding its usage can help pinpoint where the override is being ignored.",
+            "diversity_value": "Forms model conversion, different file and layer"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py:Field.get_prep_value",
+            "django/db/models/fields/__init__.py:Field",
+            "django/db/models/fields/__init__.py:Field._description",
+            "django/utils/translation/__init__.py",
+            "django/utils/translation/__init__.py:TranslatorCommentWarning"
+          ],
+          "chain_length": 5,
+          "initial_entity": "models",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+            "entity_type": "function",
+            "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+            "diversity_value": "Different function within the field handling module"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-02T07:05:19.406759",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "django/db/models/base.py:Model",
+            "django/db/models/base.py:Model.from_db",
+            "django/db/models/query.py:ModelIterable.__iter__",
+            "django/db/models/sql/query.py:Query.get_compiler",
+            "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+          ],
+          "chain_length": 5,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+            "diversity_value": "Core model layer from different file"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "django/db/models/enums.py:ChoicesMeta.choices",
+            "django/db/models/enums.py:ChoicesMeta",
+            "django/db/models/enums.py:ChoicesMeta.__new__",
+            "django/contrib/gis/gdal/geometries.py:Point.tuple",
+            "django/contrib/gis/gdal/geometries.py:Point"
+          ],
+          "chain_length": 5,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+            "entity_type": "function",
+            "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+            "diversity_value": "Enum choices handling, different file"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8995624780654907,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/core/management/commands/makemigrations.py",
+            "django/core/management/commands/makemigrations.py:Command",
+            "django/core/management/commands/makemigrations.py:Command.add_arguments"
+          ],
+          "chain_length": 3,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/core/management/commands/makemigrations.py",
+            "entity_type": "file",
+            "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+            "diversity_value": "Migration-related functionality from different module"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.901659369468689,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py:Field.get_prep_value",
+            "django/db/models/fields/__init__.py:Field",
+            "django/db/models/fields/__init__.py:Field._description",
+            "django/utils/translation/__init__.py",
+            "django/utils/translation/__init__.py:TranslatorCommentWarning"
+          ],
+          "chain_length": 5,
+          "initial_entity": "models",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+            "entity_type": "function",
+            "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+            "diversity_value": "Different function within the field handling module"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.9065691828727722,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/options.py:Options.contribute_to_class",
+            "django/db/__init__.py",
+            "django/db/__init__.py:DefaultConnectionProxy",
+            "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+          ],
+          "chain_length": 4,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+            "entity_type": "function",
+            "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+            "diversity_value": "Meta-class logic from different file"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.9082999229431152,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py",
+            "django/db/models/fields/__init__.py:Empty",
+            "django/db/models/fields/__init__.py:_empty"
+          ],
+          "chain_length": 3,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py",
+            "entity_type": "file",
+            "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+            "diversity_value": "Fields layer from different file"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.9152064919471741,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-02T07:05:19.416118",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model",
+              "django/db/models/base.py:Model.from_db",
+              "django/db/models/query.py:ModelIterable.__iter__",
+              "django/db/models/sql/query.py:Query.get_compiler",
+              "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+            ],
+            "chain_length": 5,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+              "diversity_value": "Core model layer from different file"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "type": "class",
+              "code": "# Code too long (70511 chars) - omitted for brevity",
+              "start_line": 403,
+              "end_line": 1856,
+              "code_omitted": true,
+              "original_code_length": 70511
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.from_db",
+              "type": "function",
+              "code": "```\n505 | def from_db(cls, db, field_names, values):\n506 |         if len(values) != len(cls._meta.concrete_fields):\n507 |             values_iter = iter(values)\n508 |             values = [\n509 |                 next(values_iter) if f.attname in field_names else DEFERRED\n510 |                 for f in cls._meta.concrete_fields\n511 |             ]\n512 |         new = cls(*values)\n513 |         new._state.adding = False\n514 |         new._state.db = db\n515 |         return new\n```",
+              "start_line": 505,
+              "end_line": 515,
+              "code_omitted": false,
+              "original_code_length": 484
+            },
+            {
+              "entity_id": "django/db/models/query.py:ModelIterable.__iter__",
+              "type": "function",
+              "code": "```\n48 | def __iter__(self):\n49 |         queryset = self.queryset\n50 |         db = queryset.db\n51 |         compiler = queryset.query.get_compiler(using=db)\n52 |         # Execute the query. This will also fill compiler.select, klass_info,\n53 |         # and annotations.\n54 |         results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)\n55 |         select, klass_info, annotation_col_map = (compiler.select, compiler.klass_info,\n56 |                                                   compiler.annotation_col_map)\n57 |         model_cls = klass_info['model']\n58 |         select_fields = klass_info['select_fields']\n59 |         model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1\n60 |         init_list = [f[0].target.attname\n61 |                      for f in select[model_fields_start:model_fields_end]]\n62 |         related_populators = get_related_populators(klass_info, select, db)\n63 |         known_related_objects = [\n64 |             (field, related_objs, operator.attrgetter(*[\n65 |                 field.attname\n66 |                 if from_field == 'self' else\n67 |                 queryset.model._meta.get_field(from_field).attname\n68 |                 for from_field in field.from_fields\n69 |             ])) for field, related_objs in queryset._known_related_objects.items()\n70 |         ]\n71 |         for row in compiler.results_iter(results):\n72 |             obj = model_cls.from_db(db, init_list, row[model_fields_start:model_fields_end])\n73 |             for rel_populator in related_populators:\n74 |                 rel_populator.populate(row, obj)\n75 |             if annotation_col_map:\n76 |                 for attr_name, col_pos in annotation_col_map.items():\n77 |                     setattr(obj, attr_name, row[col_pos])\n78 | \n79 |             # Add the known related objects to the model.\n80 |             for field, rel_objs, rel_getter in known_related_objects:\n81 |                 # Avoid overwriting objects loaded by, e.g., select_related().\n82 |                 if field.is_cached(obj):\n83 |                     continue\n84 |                 rel_obj_id = rel_getter(obj)\n85 |                 try:\n86 |                     rel_obj = rel_objs[rel_obj_id]\n87 |                 except KeyError:\n88 |                     pass  # May happen in qs1 | qs2 scenarios.\n89 |                 else:\n90 |                     setattr(obj, field.name, rel_obj)\n91 | \n92 |             yield obj\n```",
+              "start_line": 48,
+              "end_line": 92,
+              "code_omitted": false,
+              "original_code_length": 2488
+            },
+            {
+              "entity_id": "django/db/models/sql/query.py:Query.get_compiler",
+              "type": "function",
+              "code": "```\n278 | def get_compiler(self, using=None, connection=None):\n279 |         if using is None and connection is None:\n280 |             raise ValueError(\"Need either using or connection\")\n281 |         if using:\n282 |             connection = connections[using]\n283 |         return connection.ops.compiler(self.compiler)(self, connection, using)\n```",
+              "start_line": 278,
+              "end_line": 283,
+              "code_omitted": false,
+              "original_code_length": 350
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler",
+              "type": "function",
+              "code": "```\n324 | def compiler(self, compiler_name):\n325 |         \"\"\"\n326 |         Return the SQLCompiler class corresponding to the given name,\n327 |         in the namespace corresponding to the `compiler_module` attribute\n328 |         on this backend.\n329 |         \"\"\"\n330 |         if self._cache is None:\n331 |             self._cache = import_module(self.compiler_module)\n332 |         return getattr(self._cache, compiler_name)\n```",
+              "start_line": 324,
+              "end_line": 332,
+              "code_omitted": false,
+              "original_code_length": 434
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/enums.py:ChoicesMeta.choices",
+              "django/db/models/enums.py:ChoicesMeta",
+              "django/db/models/enums.py:ChoicesMeta.__new__",
+              "django/contrib/gis/gdal/geometries.py:Point.tuple",
+              "django/contrib/gis/gdal/geometries.py:Point"
+            ],
+            "chain_length": 5,
+            "initial_entity": "choices",
+            "start_entity": {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+              "diversity_value": "Enum choices handling, different file"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8995624780654907,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "type": "function",
+              "code": "```\n48 | def choices(cls):\n49 |         empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []\n50 |         return empty + [(member.value, member.label) for member in cls]\n```",
+              "start_line": 48,
+              "end_line": 50,
+              "code_omitted": false,
+              "original_code_length": 189
+            },
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta",
+              "type": "class",
+              "code": "```\n 8 | class ChoicesMeta(enum.EnumMeta):\n 9 |     \"\"\"A metaclass for creating a enum choices.\"\"\"\n10 | \n11 |     def __new__(metacls, classname, bases, classdict):\n12 |         labels = []\n13 |         for key in classdict._member_names:\n14 |             value = classdict[key]\n15 |             if (\n16 |                 isinstance(value, (list, tuple)) and\n17 |                 len(value) > 1 and\n18 |                 isinstance(value[-1], (Promise, str))\n19 |             ):\n20 |                 *value, label = value\n21 |                 value = tuple(value)\n22 |             else:\n23 |                 label = key.replace('_', ' ').title()\n24 |             labels.append(label)\n25 |             # Use dict.__setitem__() to suppress defenses against double\n26 |             # assignment in enum's classdict.\n27 |             dict.__setitem__(classdict, key, value)\n28 |         cls = super().__new__(metacls, classname, bases, classdict)\n29 |         cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))\n30 |         # Add a label property to instances of enum which uses the enum member\n31 |         # that is passed in as \"self\" as the value to use when looking up the\n32 |         # label in the choices.\n33 |         cls.label = property(lambda self: cls._value2label_map_.get(self.value))\n34 |         return enum.unique(cls)\n35 | \n36 |     def __contains__(cls, member):\n37 |         if not isinstance(member, enum.Enum):\n38 |             # Allow non-enums to match against member values.\n39 |             return member in {x.value for x in cls}\n40 |         return super().__contains__(member)\n41 | \n42 |     @property\n43 |     def names(cls):\n44 |         empty = ['__empty__'] if hasattr(cls, '__empty__') else []\n45 |         return empty + [member.name for member in cls]\n46 | \n47 |     @property\n48 |     def choices(cls):\n49 |         empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []\n50 |         return empty + [(member.value, member.label) for member in cls]\n51 | \n52 |     @property\n53 |     def labels(cls):\n54 |         return [label for _, label in cls.choices]\n55 | \n56 |     @property\n57 |     def values(cls):\n58 |         return [value for value, _ in cls.choices]\n```",
+              "start_line": 8,
+              "end_line": 58,
+              "code_omitted": false,
+              "original_code_length": 2228
+            },
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.__new__",
+              "type": "function",
+              "code": "```\n11 | def __new__(metacls, classname, bases, classdict):\n12 |         labels = []\n13 |         for key in classdict._member_names:\n14 |             value = classdict[key]\n15 |             if (\n16 |                 isinstance(value, (list, tuple)) and\n17 |                 len(value) > 1 and\n18 |                 isinstance(value[-1], (Promise, str))\n19 |             ):\n20 |                 *value, label = value\n21 |                 value = tuple(value)\n22 |             else:\n23 |                 label = key.replace('_', ' ').title()\n24 |             labels.append(label)\n25 |             # Use dict.__setitem__() to suppress defenses against double\n26 |             # assignment in enum's classdict.\n27 |             dict.__setitem__(classdict, key, value)\n28 |         cls = super().__new__(metacls, classname, bases, classdict)\n29 |         cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))\n30 |         # Add a label property to instances of enum which uses the enum member\n31 |         # that is passed in as \"self\" as the value to use when looking up the\n32 |         # label in the choices.\n33 |         cls.label = property(lambda self: cls._value2label_map_.get(self.value))\n34 |         return enum.unique(cls)\n```",
+              "start_line": 11,
+              "end_line": 34,
+              "code_omitted": false,
+              "original_code_length": 1246
+            },
+            {
+              "entity_id": "django/contrib/gis/gdal/geometries.py:Point.tuple",
+              "type": "function",
+              "code": "```\n529 | def tuple(self):\n530 |         \"Return the tuple of this point.\"\n531 |         if self.coord_dim == 2:\n532 |             return (self.x, self.y)\n533 |         elif self.coord_dim == 3:\n534 |             return (self.x, self.y, self.z)\n```",
+              "start_line": 529,
+              "end_line": 534,
+              "code_omitted": false,
+              "original_code_length": 248
+            },
+            {
+              "entity_id": "django/contrib/gis/gdal/geometries.py:Point",
+              "type": "class",
+              "code": "```\n502 | class Point(OGRGeometry):\n503 | \n504 |     def _geos_ptr(self):\n505 |         from django.contrib.gis import geos\n506 |         return geos.Point._create_empty() if self.empty else super()._geos_ptr()\n507 | \n508 |     @classmethod\n509 |     def _create_empty(cls):\n510 |         return capi.create_geom(OGRGeomType('point').num)\n511 | \n512 |     @property\n513 |     def x(self):\n514 |         \"Return the X coordinate for this Point.\"\n515 |         return capi.getx(self.ptr, 0)\n516 | \n517 |     @property\n518 |     def y(self):\n519 |         \"Return the Y coordinate for this Point.\"\n520 |         return capi.gety(self.ptr, 0)\n521 | \n522 |     @property\n523 |     def z(self):\n524 |         \"Return the Z coordinate for this Point.\"\n525 |         if self.coord_dim == 3:\n526 |             return capi.getz(self.ptr, 0)\n527 | \n528 |     @property\n529 |     def tuple(self):\n530 |         \"Return the tuple of this point.\"\n531 |         if self.coord_dim == 2:\n532 |             return (self.x, self.y)\n533 |         elif self.coord_dim == 3:\n534 |             return (self.x, self.y, self.z)\n535 |     coords = tuple\n```",
+              "start_line": 502,
+              "end_line": 535,
+              "code_omitted": false,
+              "original_code_length": 1131
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/core/management/commands/makemigrations.py",
+              "django/core/management/commands/makemigrations.py:Command",
+              "django/core/management/commands/makemigrations.py:Command.add_arguments"
+            ],
+            "chain_length": 3,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/core/management/commands/makemigrations.py",
+              "entity_type": "file",
+              "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+              "diversity_value": "Migration-related functionality from different module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.901659369468689,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py",
+              "type": "file",
+              "code": "# Code too long (16407 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 311,
+              "code_omitted": true,
+              "original_code_length": 16407
+            },
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py:Command",
+              "type": "class",
+              "code": "# Code too long (15511 chars) - omitted for brevity",
+              "start_line": 23,
+              "end_line": 310,
+              "code_omitted": true,
+              "original_code_length": 15511
+            },
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py:Command.add_arguments",
+              "type": "function",
+              "code": "```\n26 | def add_arguments(self, parser):\n27 |         parser.add_argument(\n28 |             'args', metavar='app_label', nargs='*',\n29 |             help='Specify the app label(s) to create migrations for.',\n30 |         )\n31 |         parser.add_argument(\n32 |             '--dry-run', action='store_true',\n33 |             help=\"Just show what migrations would be made; don't actually write them.\",\n34 |         )\n35 |         parser.add_argument(\n36 |             '--merge', action='store_true',\n37 |             help=\"Enable fixing of migration conflicts.\",\n38 |         )\n39 |         parser.add_argument(\n40 |             '--empty', action='store_true',\n41 |             help=\"Create an empty migration.\",\n42 |         )\n43 |         parser.add_argument(\n44 |             '--noinput', '--no-input', action='store_false', dest='interactive',\n45 |             help='Tells Django to NOT prompt the user for input of any kind.',\n46 |         )\n47 |         parser.add_argument(\n48 |             '-n', '--name',\n49 |             help=\"Use this name for migration file(s).\",\n50 |         )\n51 |         parser.add_argument(\n52 |             '--no-header', action='store_false', dest='include_header',\n53 |             help='Do not add header comments to new migration file(s).',\n54 |         )\n55 |         parser.add_argument(\n56 |             '--check', action='store_true', dest='check_changes',\n57 |             help='Exit with a non-zero status if model changes are missing migrations.',\n58 |         )\n```",
+              "start_line": 26,
+              "end_line": 58,
+              "code_omitted": false,
+              "original_code_length": 1512
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "django/db/models/fields/__init__.py:Field",
+              "django/db/models/fields/__init__.py:Field._description",
+              "django/utils/translation/__init__.py",
+              "django/utils/translation/__init__.py:TranslatorCommentWarning"
+            ],
+            "chain_length": 5,
+            "initial_entity": "models",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "entity_type": "function",
+              "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+              "diversity_value": "Different function within the field handling module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.9065691828727722,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "type": "function",
+              "code": "```\n791 | def get_prep_value(self, value):\n792 |         \"\"\"Perform preliminary non-db specific value checks and conversions.\"\"\"\n793 |         if isinstance(value, Promise):\n794 |             value = value._proxy____cast()\n795 |         return value\n```",
+              "start_line": 791,
+              "end_line": 795,
+              "code_omitted": false,
+              "original_code_length": 253
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field",
+              "type": "class",
+              "code": "# Code too long (38074 chars) - omitted for brevity",
+              "start_line": 85,
+              "end_line": 919,
+              "code_omitted": true,
+              "original_code_length": 38074
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field._description",
+              "type": "function",
+              "code": "```\n125 | def _description(self):\n126 |         return _('Field of type: %(field_type)s') % {\n127 |             'field_type': self.__class__.__name__\n128 |         }\n```",
+              "start_line": 125,
+              "end_line": 128,
+              "code_omitted": false,
+              "original_code_length": 169
+            },
+            {
+              "entity_id": "django/utils/translation/__init__.py",
+              "type": "file",
+              "code": "# Code too long (12889 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 340,
+              "code_omitted": true,
+              "original_code_length": 12889
+            },
+            {
+              "entity_id": "django/utils/translation/__init__.py:TranslatorCommentWarning",
+              "type": "class",
+              "code": "```\n30 | class TranslatorCommentWarning(SyntaxWarning):\n31 |     pass\n```",
+              "start_line": 30,
+              "end_line": 31,
+              "code_omitted": false,
+              "original_code_length": 73
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/options.py:Options.contribute_to_class",
+              "django/db/__init__.py",
+              "django/db/__init__.py:DefaultConnectionProxy",
+              "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+            ],
+            "chain_length": 4,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+              "diversity_value": "Meta-class logic from different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9082999229431152,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "type": "function",
+              "code": "```\n149 | def contribute_to_class(self, cls, name):\n150 |         from django.db import connection\n151 |         from django.db.backends.utils import truncate_name\n152 | \n153 |         cls._meta = self\n154 |         self.model = cls\n155 |         # First, construct the default values for these options.\n156 |         self.object_name = cls.__name__\n157 |         self.model_name = self.object_name.lower()\n158 |         self.verbose_name = camel_case_to_spaces(self.object_name)\n159 | \n160 |         # Store the original user-defined values for each option,\n161 |         # for use when serializing the model definition\n162 |         self.original_attrs = {}\n163 | \n164 |         # Next, apply any overridden values from 'class Meta'.\n165 |         if self.meta:\n166 |             meta_attrs = self.meta.__dict__.copy()\n167 |             for name in self.meta.__dict__:\n168 |                 # Ignore any private attributes that Django doesn't care about.\n169 |                 # NOTE: We can't modify a dictionary's contents while looping\n170 |                 # over it, so we loop over the *original* dictionary instead.\n171 |                 if name.startswith('_'):\n172 |                     del meta_attrs[name]\n173 |             for attr_name in DEFAULT_NAMES:\n174 |                 if attr_name in meta_attrs:\n175 |                     setattr(self, attr_name, meta_attrs.pop(attr_name))\n176 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n177 |                 elif hasattr(self.meta, attr_name):\n178 |                     setattr(self, attr_name, getattr(self.meta, attr_name))\n179 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n180 | \n181 |             self.unique_together = normalize_together(self.unique_together)\n182 |             self.index_together = normalize_together(self.index_together)\n183 |             # App label/class name interpolation for names of constraints and\n184 |             # indexes.\n185 |             if not getattr(cls._meta, 'abstract', False):\n186 |                 for attr_name in {'constraints', 'indexes'}:\n187 |                     objs = getattr(self, attr_name, [])\n188 |                     setattr(self, attr_name, self._format_names_with_class(cls, objs))\n189 | \n190 |             # verbose_name_plural is a special case because it uses a 's'\n191 |             # by default.\n192 |             if self.verbose_name_plural is None:\n193 |                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n194 | \n195 |             # order_with_respect_and ordering are mutually exclusive.\n196 |             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)\n197 | \n198 |             # Any leftover attributes must be invalid.\n199 |             if meta_attrs != {}:\n200 |                 raise TypeError(\"'class Meta' got invalid attribute(s): %s\" % ','.join(meta_attrs))\n201 |         else:\n202 |             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n203 |         del self.meta\n204 | \n205 |         # If the db_table wasn't provided, use the app_label + model_name.\n206 |         if not self.db_table:\n207 |             self.db_table = \"%s_%s\" % (self.app_label, self.model_name)\n208 |             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())\n```",
+              "start_line": 149,
+              "end_line": 208,
+              "code_omitted": false,
+              "original_code_length": 3355
+            },
+            {
+              "entity_id": "django/db/__init__.py",
+              "type": "file",
+              "code": "```\n 1 | from django.core import signals\n 2 | from django.db.utils import (\n 3 |     DEFAULT_DB_ALIAS, DJANGO_VERSION_PICKLE_KEY, ConnectionHandler,\n 4 |     ConnectionRouter, DatabaseError, DataError, Error, IntegrityError,\n 5 |     InterfaceError, InternalError, NotSupportedError, OperationalError,\n 6 |     ProgrammingError,\n 7 | )\n 8 | \n 9 | __all__ = [\n10 |     'connection', 'connections', 'router', 'DatabaseError', 'IntegrityError',\n11 |     'InternalError', 'ProgrammingError', 'DataError', 'NotSupportedError',\n12 |     'Error', 'InterfaceError', 'OperationalError', 'DEFAULT_DB_ALIAS',\n13 |     'DJANGO_VERSION_PICKLE_KEY',\n14 | ]\n15 | \n16 | connections = ConnectionHandler()\n17 | \n18 | router = ConnectionRouter()\n19 | \n20 | \n21 | class DefaultConnectionProxy:\n22 |     \"\"\"\n23 |     Proxy for accessing the default DatabaseWrapper object's attributes. If you\n24 |     need to access the DatabaseWrapper object itself, use\n25 |     connections[DEFAULT_DB_ALIAS] instead.\n26 |     \"\"\"\n27 |     def __getattr__(self, item):\n28 |         return getattr(connections[DEFAULT_DB_ALIAS], item)\n29 | \n30 |     def __setattr__(self, name, value):\n31 |         return setattr(connections[DEFAULT_DB_ALIAS], name, value)\n32 | \n33 |     def __delattr__(self, name):\n34 |         return delattr(connections[DEFAULT_DB_ALIAS], name)\n35 | \n36 |     def __eq__(self, other):\n37 |         return connections[DEFAULT_DB_ALIAS] == other\n38 | \n39 | \n40 | # For backwards compatibility. Prefer connections['default'] instead.\n41 | connection = DefaultConnectionProxy()\n42 | \n43 | \n44 | # Register an event to reset saved queries when a Django request is started.\n45 | def reset_queries(**kwargs):\n46 |     for conn in connections.all():\n47 |         conn.queries_log.clear()\n48 | \n49 | \n50 | signals.request_started.connect(reset_queries)\n51 | \n52 | \n53 | # Register an event to reset transaction state and close connections past\n54 | # their lifetime.\n55 | def close_old_connections(**kwargs):\n56 |     for conn in connections.all():\n57 |         conn.close_if_unusable_or_obsolete()\n58 | \n59 | \n60 | signals.request_started.connect(close_old_connections)\n61 | signals.request_finished.connect(close_old_connections)\n62 | \n```",
+              "start_line": 1,
+              "end_line": 62,
+              "code_omitted": false,
+              "original_code_length": 2218
+            },
+            {
+              "entity_id": "django/db/__init__.py:DefaultConnectionProxy",
+              "type": "class",
+              "code": "```\n21 | class DefaultConnectionProxy:\n22 |     \"\"\"\n23 |     Proxy for accessing the default DatabaseWrapper object's attributes. If you\n24 |     need to access the DatabaseWrapper object itself, use\n25 |     connections[DEFAULT_DB_ALIAS] instead.\n26 |     \"\"\"\n27 |     def __getattr__(self, item):\n28 |         return getattr(connections[DEFAULT_DB_ALIAS], item)\n29 | \n30 |     def __setattr__(self, name, value):\n31 |         return setattr(connections[DEFAULT_DB_ALIAS], name, value)\n32 | \n33 |     def __delattr__(self, name):\n34 |         return delattr(connections[DEFAULT_DB_ALIAS], name)\n35 | \n36 |     def __eq__(self, other):\n37 |         return connections[DEFAULT_DB_ALIAS] == other\n```",
+              "start_line": 21,
+              "end_line": 37,
+              "code_omitted": false,
+              "original_code_length": 698
+            },
+            {
+              "entity_id": "django/db/__init__.py:DefaultConnectionProxy.__getattr__",
+              "type": "function",
+              "code": "```\n27 | def __getattr__(self, item):\n28 |         return getattr(connections[DEFAULT_DB_ALIAS], item)\n```",
+              "start_line": 27,
+              "end_line": 28,
+              "code_omitted": false,
+              "original_code_length": 106
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/__init__.py",
+              "django/db/models/fields/__init__.py:Empty",
+              "django/db/models/fields/__init__.py:_empty"
+            ],
+            "chain_length": 3,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+              "diversity_value": "Fields layer from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.9152064919471741,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py",
+              "type": "file",
+              "code": "# Code too long (103964 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 2422,
+              "code_omitted": true,
+              "original_code_length": 103964
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Empty",
+              "type": "class",
+              "code": "```\n42 | class Empty:\n43 |     pass\n```",
+              "start_line": 42,
+              "end_line": 43,
+              "code_omitted": false,
+              "original_code_length": 39
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:_empty",
+              "type": "function",
+              "code": "```\n74 | def _empty(of_cls):\n75 |     new = Empty()\n76 |     new.__class__ = of_cls\n77 |     return new\n```",
+              "start_line": 74,
+              "end_line": 77,
+              "code_omitted": false,
+              "original_code_length": 107
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-02T07:06:38.482976",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_1",
+        "winning_chain": {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model",
+              "django/db/models/base.py:Model.from_db",
+              "django/db/models/query.py:ModelIterable.__iter__",
+              "django/db/models/sql/query.py:Query.get_compiler",
+              "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+            ],
+            "chain_length": 5,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+              "diversity_value": "Core model layer from different file"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "type": "class",
+              "code": "# Code too long (70511 chars) - omitted for brevity",
+              "start_line": 403,
+              "end_line": 1856,
+              "code_omitted": true,
+              "original_code_length": 70511
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.from_db",
+              "type": "function",
+              "code": "```\n505 | def from_db(cls, db, field_names, values):\n506 |         if len(values) != len(cls._meta.concrete_fields):\n507 |             values_iter = iter(values)\n508 |             values = [\n509 |                 next(values_iter) if f.attname in field_names else DEFERRED\n510 |                 for f in cls._meta.concrete_fields\n511 |             ]\n512 |         new = cls(*values)\n513 |         new._state.adding = False\n514 |         new._state.db = db\n515 |         return new\n```",
+              "start_line": 505,
+              "end_line": 515,
+              "code_omitted": false,
+              "original_code_length": 484
+            },
+            {
+              "entity_id": "django/db/models/query.py:ModelIterable.__iter__",
+              "type": "function",
+              "code": "```\n48 | def __iter__(self):\n49 |         queryset = self.queryset\n50 |         db = queryset.db\n51 |         compiler = queryset.query.get_compiler(using=db)\n52 |         # Execute the query. This will also fill compiler.select, klass_info,\n53 |         # and annotations.\n54 |         results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)\n55 |         select, klass_info, annotation_col_map = (compiler.select, compiler.klass_info,\n56 |                                                   compiler.annotation_col_map)\n57 |         model_cls = klass_info['model']\n58 |         select_fields = klass_info['select_fields']\n59 |         model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1\n60 |         init_list = [f[0].target.attname\n61 |                      for f in select[model_fields_start:model_fields_end]]\n62 |         related_populators = get_related_populators(klass_info, select, db)\n63 |         known_related_objects = [\n64 |             (field, related_objs, operator.attrgetter(*[\n65 |                 field.attname\n66 |                 if from_field == 'self' else\n67 |                 queryset.model._meta.get_field(from_field).attname\n68 |                 for from_field in field.from_fields\n69 |             ])) for field, related_objs in queryset._known_related_objects.items()\n70 |         ]\n71 |         for row in compiler.results_iter(results):\n72 |             obj = model_cls.from_db(db, init_list, row[model_fields_start:model_fields_end])\n73 |             for rel_populator in related_populators:\n74 |                 rel_populator.populate(row, obj)\n75 |             if annotation_col_map:\n76 |                 for attr_name, col_pos in annotation_col_map.items():\n77 |                     setattr(obj, attr_name, row[col_pos])\n78 | \n79 |             # Add the known related objects to the model.\n80 |             for field, rel_objs, rel_getter in known_related_objects:\n81 |                 # Avoid overwriting objects loaded by, e.g., select_related().\n82 |                 if field.is_cached(obj):\n83 |                     continue\n84 |                 rel_obj_id = rel_getter(obj)\n85 |                 try:\n86 |                     rel_obj = rel_objs[rel_obj_id]\n87 |                 except KeyError:\n88 |                     pass  # May happen in qs1 | qs2 scenarios.\n89 |                 else:\n90 |                     setattr(obj, field.name, rel_obj)\n91 | \n92 |             yield obj\n```",
+              "start_line": 48,
+              "end_line": 92,
+              "code_omitted": false,
+              "original_code_length": 2488
+            },
+            {
+              "entity_id": "django/db/models/sql/query.py:Query.get_compiler",
+              "type": "function",
+              "code": "```\n278 | def get_compiler(self, using=None, connection=None):\n279 |         if using is None and connection is None:\n280 |             raise ValueError(\"Need either using or connection\")\n281 |         if using:\n282 |             connection = connections[using]\n283 |         return connection.ops.compiler(self.compiler)(self, connection, using)\n```",
+              "start_line": 278,
+              "end_line": 283,
+              "code_omitted": false,
+              "original_code_length": 350
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler",
+              "type": "function",
+              "code": "```\n324 | def compiler(self, compiler_name):\n325 |         \"\"\"\n326 |         Return the SQLCompiler class corresponding to the given name,\n327 |         in the namespace corresponding to the `compiler_module` attribute\n328 |         on this backend.\n329 |         \"\"\"\n330 |         if self._cache is None:\n331 |             self._cache = import_module(self.compiler_module)\n332 |         return getattr(self._cache, compiler_name)\n```",
+              "start_line": 324,
+              "end_line": 332,
+              "code_omitted": false,
+              "original_code_length": 434
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        "winning_votes": 3,
+        "total_valid_votes": 3,
+        "average_confidence": 91.66666666666667,
+        "vote_distribution": {
+          "chain_1": 3
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 includes the `from_db` method in `django/db/models/base.py`, which is responsible for initializing model instances from database rows. The `get_FOO_display()` method is called after the model instance is fully initialized. Since overriding `get_FOO_display()` in your model class does not work as expected, it suggests that there might be something in the initialization process that is causing the default method to be used instead of the overridden one. Chain 1 provides the clearest entry point for understanding how model instances are constructed and could potentially reveal why the override is not being respected.",
+            "modification_strategy": "Investigate if there's a specific condition in the `from_db` method or the surrounding code that might prevent the overridden `get_FOO_display()` method from being used. If necessary, ensure that the overridden method is correctly set up in the model's class dictionary before any instance methods are called.",
+            "chain_analysis": {
+              "chain_1": "This chain includes the `from_db` method, which is crucial for understanding how model instances are created from database data. It's the most direct place to check if the overridden `get_FOO_display()` method is being respected or not. The risk is moderate as changes need to be carefully made to avoid affecting other parts of the model instantiation process.",
+              "chain_2": "This chain is related to the `ChoicesMeta` class used for enum choices, but it does not involve the instantiation or method resolution of model instances. Therefore, it is unlikely to be the root cause of the issue with overriding `get_FOO_display()`.",
+              "chain_3": "This chain pertains to the `makemigrations` management command, which is unrelated to model instance behavior or method overriding. Thus, it is not relevant to the issue.",
+              "chain_4": "This chain involves field preparation and description methods, which do not directly relate to the method resolution or overriding of `get_FOO_display()` in model instances.",
+              "chain_5": "This chain deals with model options and metadata, which is essential for model configuration but not directly involved in the method resolution process for model instances.",
+              "chain_6": "This chain includes some utility classes and functions but does not pertain to model instantiation or method overriding."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 involves the creation and initialization of model instances from the database, which includes the `from_db` method that constructs the model instance. The `get_FIELD_display()` method is called on these instances after they are created. If overriding `get_FIELD_display()` does not work as expected, it suggests that the method is being called before or during the initialization process in a way that bypasses the custom method defined in the model. Chain 1 is the most relevant because it includes the instantiation process and could reveal why the overridden method is not being used.",
+            "modification_strategy": "Investigate the instantiation process within `from_db` and ensure that the overridden `get_FIELD_display()` method is being used correctly. This might involve checking if there are any calls to `get_FIELD_display()` within the `from_db` method or its related methods that need to be redirected to use the overridden method.",
+            "chain_analysis": {
+              "chain_1": "This chain is the most relevant as it includes the instantiation of model instances from the database. The `from_db` method and its surrounding code are crucial for understanding how model instances are initialized and how custom methods like `get_FIELD_display()` are integrated into this process. This is likely where the issue of the overridden method not being used is occurring.",
+              "chain_2": "This chain is related to the handling of choices in fields but does not directly involve the instantiation or method overriding mechanism of model instances. It is unlikely to contain the root cause of the issue.",
+              "chain_3": "This chain is related to the `makemigrations` command and its arguments. It has no relation to the instantiation of model instances or the overriding of methods on those instances, so it is irrelevant to the issue at hand.",
+              "chain_4": "This chain pertains to field preparation and description, which is unrelated to the instantiation process or method overriding in model instances. It is not relevant to the issue.",
+              "chain_5": "This chain deals with model options and metadata contribution to classes, which is part of the model setup but not directly related to the instantiation process or method overriding. While it might be indirectly involved in setting up the model, it is not the primary place to look for the issue.",
+              "chain_6": "This chain contains definitions for empty classes and objects, which are not directly related to the instantiation of model instances or the method overriding mechanism. It is irrelevant to the issue."
+            },
+            "agent_id": 2
+          },
+          {
+            "agent_id": 1,
+            "voted_chain_id": null,
+            "confidence": 0,
+            "reasoning": "fail: Extra data: line 16 column 1 (char 2599)",
+            "error": "Extra data: line 16 column 1 (char 2599)"
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `from_db` method in `django/db/models/base.py`, which is responsible for creating model instances from database rows. The `get_FOO_display()` method is called after the instance is initialized. If there's an issue with overriding `get_FOO_display()`, it likely stems from how the model instance is being constructed or how methods are being called post-construction. Since the issue is specifically about overriding a method, Chain 1 is the most relevant as it deals with the instantiation and initialization process of model instances, which could be affecting the ability to override methods.",
+            "modification_strategy": "Ensure that the overridden `get_foo_bar_display` method is correctly called and not shadowed or bypassed by internal Django mechanisms during the model instance creation or initialization process.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `from_db` method used to instantiate model instances from database rows. It's the most likely place where the behavior change from Django 2.1 to 2.2 might have affected the ability to override `get_FOO_display()`. The method creates an instance of the model and sets its fields based on the database row data, making it a critical part of the model lifecycle where custom methods might be bypassed or not called as expected.",
+              "chain_2": "This chain involves enumeration choices and labels. While related to model fields, it does not directly deal with the instantiation or method overriding process of model instances, making it less relevant to the specific issue described.",
+              "chain_3": "This chain is related to the `makemigrations` command-line tool and does not involve model instance creation or method overriding, thus it is not relevant to the issue.",
+              "chain_4": "This chain pertains to field preparation and serialization processes, which occur before the model instance is fully created and methods like `get_FOO_display()` are called. While it's part of the field handling process, it doesn't directly impact the method overriding issue.",
+              "chain_5": "This chain deals with model metadata and class contributions, which are crucial for defining model behavior but do not directly influence the instantiation or method overriding process of model instances.",
+              "chain_6": "This chain contains definitions for empty objects and utility functions related to field handling, which are not directly involved in the method overriding issue."
+            },
+            "agent_id": 5
+          },
+          {
+            "agent_id": 4,
+            "voted_chain_id": null,
+            "confidence": 0,
+            "reasoning": "fail: Extra data: line 16 column 1 (char 2703)",
+            "error": "Extra data: line 16 column 1 (char 2703)"
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 includes the `from_db` method in `django/db/models/base.py`, which is responsible for initializing model instances from database rows. The `get_FOO_display()` method is called after the model instance is fully initialized. Since overriding `get_FOO_display()` in your model class does not work as expected, it suggests that there might be something in the initialization process that is causing the default method to be used instead of the overridden one. Chain 1 provides the clearest entry point for understanding how model instances are constructed and could potentially reveal why the override is not being respected.",
+            "modification_strategy": "Investigate if there's a specific condition in the `from_db` method or the surrounding code that might prevent the overridden `get_FOO_display()` method from being used. If necessary, ensure that the overridden method is correctly set up in the model's class dictionary before any instance methods are called.",
+            "chain_analysis": {
+              "chain_1": "This chain includes the `from_db` method, which is crucial for understanding how model instances are created from database data. It's the most direct place to check if the overridden `get_FOO_display()` method is being respected or not. The risk is moderate as changes need to be carefully made to avoid affecting other parts of the model instantiation process.",
+              "chain_2": "This chain is related to the `ChoicesMeta` class used for enum choices, but it does not involve the instantiation or method resolution of model instances. Therefore, it is unlikely to be the root cause of the issue with overriding `get_FOO_display()`.",
+              "chain_3": "This chain pertains to the `makemigrations` management command, which is unrelated to model instance behavior or method overriding. Thus, it is not relevant to the issue.",
+              "chain_4": "This chain involves field preparation and description methods, which do not directly relate to the method resolution or overriding of `get_FOO_display()` in model instances.",
+              "chain_5": "This chain deals with model options and metadata, which is essential for model configuration but not directly involved in the method resolution process for model instances.",
+              "chain_6": "This chain includes some utility classes and functions but does not pertain to model instantiation or method overriding."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 involves the creation and initialization of model instances from the database, which includes the `from_db` method that constructs the model instance. The `get_FIELD_display()` method is called on these instances after they are created. If overriding `get_FIELD_display()` does not work as expected, it suggests that the method is being called before or during the initialization process in a way that bypasses the custom method defined in the model. Chain 1 is the most relevant because it includes the instantiation process and could reveal why the overridden method is not being used.",
+            "modification_strategy": "Investigate the instantiation process within `from_db` and ensure that the overridden `get_FIELD_display()` method is being used correctly. This might involve checking if there are any calls to `get_FIELD_display()` within the `from_db` method or its related methods that need to be redirected to use the overridden method.",
+            "chain_analysis": {
+              "chain_1": "This chain is the most relevant as it includes the instantiation of model instances from the database. The `from_db` method and its surrounding code are crucial for understanding how model instances are initialized and how custom methods like `get_FIELD_display()` are integrated into this process. This is likely where the issue of the overridden method not being used is occurring.",
+              "chain_2": "This chain is related to the handling of choices in fields but does not directly involve the instantiation or method overriding mechanism of model instances. It is unlikely to contain the root cause of the issue.",
+              "chain_3": "This chain is related to the `makemigrations` command and its arguments. It has no relation to the instantiation of model instances or the overriding of methods on those instances, so it is irrelevant to the issue at hand.",
+              "chain_4": "This chain pertains to field preparation and description, which is unrelated to the instantiation process or method overriding in model instances. It is not relevant to the issue.",
+              "chain_5": "This chain deals with model options and metadata contribution to classes, which is part of the model setup but not directly related to the instantiation process or method overriding. While it might be indirectly involved in setting up the model, it is not the primary place to look for the issue.",
+              "chain_6": "This chain contains definitions for empty classes and objects, which are not directly related to the instantiation of model instances or the method overriding mechanism. It is irrelevant to the issue."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `from_db` method in `django/db/models/base.py`, which is responsible for creating model instances from database rows. The `get_FOO_display()` method is called after the instance is initialized. If there's an issue with overriding `get_FOO_display()`, it likely stems from how the model instance is being constructed or how methods are being called post-construction. Since the issue is specifically about overriding a method, Chain 1 is the most relevant as it deals with the instantiation and initialization process of model instances, which could be affecting the ability to override methods.",
+            "modification_strategy": "Ensure that the overridden `get_foo_bar_display` method is correctly called and not shadowed or bypassed by internal Django mechanisms during the model instance creation or initialization process.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `from_db` method used to instantiate model instances from database rows. It's the most likely place where the behavior change from Django 2.1 to 2.2 might have affected the ability to override `get_FOO_display()`. The method creates an instance of the model and sets its fields based on the database row data, making it a critical part of the model lifecycle where custom methods might be bypassed or not called as expected.",
+              "chain_2": "This chain involves enumeration choices and labels. While related to model fields, it does not directly deal with the instantiation or method overriding process of model instances, making it less relevant to the specific issue described.",
+              "chain_3": "This chain is related to the `makemigrations` command-line tool and does not involve model instance creation or method overriding, thus it is not relevant to the issue.",
+              "chain_4": "This chain pertains to field preparation and serialization processes, which occur before the model instance is fully created and methods like `get_FOO_display()` are called. While it's part of the field handling process, it doesn't directly impact the method overriding issue.",
+              "chain_5": "This chain deals with model metadata and class contributions, which are crucial for defining model behavior but do not directly influence the instantiation or method overriding process of model instances.",
+              "chain_6": "This chain contains definitions for empty objects and utility functions related to field handling, which are not directly involved in the method overriding issue."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": [
+          {
+            "agent_id": 1,
+            "voted_chain_id": null,
+            "confidence": 0,
+            "reasoning": "fail: Extra data: line 16 column 1 (char 2599)",
+            "error": "Extra data: line 16 column 1 (char 2599)"
+          },
+          {
+            "agent_id": 4,
+            "voted_chain_id": null,
+            "confidence": 0,
+            "reasoning": "fail: Extra data: line 16 column 1 (char 2703)",
+            "error": "Extra data: line 16 column 1 (char 2703)"
+          }
+        ]
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model",
+              "django/db/models/base.py:Model.from_db",
+              "django/db/models/query.py:ModelIterable.__iter__",
+              "django/db/models/sql/query.py:Query.get_compiler",
+              "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+            ],
+            "chain_length": 5,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+              "diversity_value": "Core model layer from different file"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "type": "class",
+              "code": "# Code too long (70511 chars) - omitted for brevity",
+              "start_line": 403,
+              "end_line": 1856,
+              "code_omitted": true,
+              "original_code_length": 70511
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.from_db",
+              "type": "function",
+              "code": "```\n505 | def from_db(cls, db, field_names, values):\n506 |         if len(values) != len(cls._meta.concrete_fields):\n507 |             values_iter = iter(values)\n508 |             values = [\n509 |                 next(values_iter) if f.attname in field_names else DEFERRED\n510 |                 for f in cls._meta.concrete_fields\n511 |             ]\n512 |         new = cls(*values)\n513 |         new._state.adding = False\n514 |         new._state.db = db\n515 |         return new\n```",
+              "start_line": 505,
+              "end_line": 515,
+              "code_omitted": false,
+              "original_code_length": 484
+            },
+            {
+              "entity_id": "django/db/models/query.py:ModelIterable.__iter__",
+              "type": "function",
+              "code": "```\n48 | def __iter__(self):\n49 |         queryset = self.queryset\n50 |         db = queryset.db\n51 |         compiler = queryset.query.get_compiler(using=db)\n52 |         # Execute the query. This will also fill compiler.select, klass_info,\n53 |         # and annotations.\n54 |         results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)\n55 |         select, klass_info, annotation_col_map = (compiler.select, compiler.klass_info,\n56 |                                                   compiler.annotation_col_map)\n57 |         model_cls = klass_info['model']\n58 |         select_fields = klass_info['select_fields']\n59 |         model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1\n60 |         init_list = [f[0].target.attname\n61 |                      for f in select[model_fields_start:model_fields_end]]\n62 |         related_populators = get_related_populators(klass_info, select, db)\n63 |         known_related_objects = [\n64 |             (field, related_objs, operator.attrgetter(*[\n65 |                 field.attname\n66 |                 if from_field == 'self' else\n67 |                 queryset.model._meta.get_field(from_field).attname\n68 |                 for from_field in field.from_fields\n69 |             ])) for field, related_objs in queryset._known_related_objects.items()\n70 |         ]\n71 |         for row in compiler.results_iter(results):\n72 |             obj = model_cls.from_db(db, init_list, row[model_fields_start:model_fields_end])\n73 |             for rel_populator in related_populators:\n74 |                 rel_populator.populate(row, obj)\n75 |             if annotation_col_map:\n76 |                 for attr_name, col_pos in annotation_col_map.items():\n77 |                     setattr(obj, attr_name, row[col_pos])\n78 | \n79 |             # Add the known related objects to the model.\n80 |             for field, rel_objs, rel_getter in known_related_objects:\n81 |                 # Avoid overwriting objects loaded by, e.g., select_related().\n82 |                 if field.is_cached(obj):\n83 |                     continue\n84 |                 rel_obj_id = rel_getter(obj)\n85 |                 try:\n86 |                     rel_obj = rel_objs[rel_obj_id]\n87 |                 except KeyError:\n88 |                     pass  # May happen in qs1 | qs2 scenarios.\n89 |                 else:\n90 |                     setattr(obj, field.name, rel_obj)\n91 | \n92 |             yield obj\n```",
+              "start_line": 48,
+              "end_line": 92,
+              "code_omitted": false,
+              "original_code_length": 2488
+            },
+            {
+              "entity_id": "django/db/models/sql/query.py:Query.get_compiler",
+              "type": "function",
+              "code": "```\n278 | def get_compiler(self, using=None, connection=None):\n279 |         if using is None and connection is None:\n280 |             raise ValueError(\"Need either using or connection\")\n281 |         if using:\n282 |             connection = connections[using]\n283 |         return connection.ops.compiler(self.compiler)(self, connection, using)\n```",
+              "start_line": 278,
+              "end_line": 283,
+              "code_omitted": false,
+              "original_code_length": 350
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler",
+              "type": "function",
+              "code": "```\n324 | def compiler(self, compiler_name):\n325 |         \"\"\"\n326 |         Return the SQLCompiler class corresponding to the given name,\n327 |         in the namespace corresponding to the `compiler_module` attribute\n328 |         on this backend.\n329 |         \"\"\"\n330 |         if self._cache is None:\n331 |             self._cache = import_module(self.compiler_module)\n332 |         return getattr(self._cache, compiler_name)\n```",
+              "start_line": 324,
+              "end_line": 332,
+              "code_omitted": false,
+              "original_code_length": 434
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/enums.py:ChoicesMeta.choices",
+              "django/db/models/enums.py:ChoicesMeta",
+              "django/db/models/enums.py:ChoicesMeta.__new__",
+              "django/contrib/gis/gdal/geometries.py:Point.tuple",
+              "django/contrib/gis/gdal/geometries.py:Point"
+            ],
+            "chain_length": 5,
+            "initial_entity": "choices",
+            "start_entity": {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function defines how choices are handled in Django, which could be related to changes affecting the display methods.",
+              "diversity_value": "Enum choices handling, different file"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8995624780654907,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "type": "function",
+              "code": "```\n48 | def choices(cls):\n49 |         empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []\n50 |         return empty + [(member.value, member.label) for member in cls]\n```",
+              "start_line": 48,
+              "end_line": 50,
+              "code_omitted": false,
+              "original_code_length": 189
+            },
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta",
+              "type": "class",
+              "code": "```\n 8 | class ChoicesMeta(enum.EnumMeta):\n 9 |     \"\"\"A metaclass for creating a enum choices.\"\"\"\n10 | \n11 |     def __new__(metacls, classname, bases, classdict):\n12 |         labels = []\n13 |         for key in classdict._member_names:\n14 |             value = classdict[key]\n15 |             if (\n16 |                 isinstance(value, (list, tuple)) and\n17 |                 len(value) > 1 and\n18 |                 isinstance(value[-1], (Promise, str))\n19 |             ):\n20 |                 *value, label = value\n21 |                 value = tuple(value)\n22 |             else:\n23 |                 label = key.replace('_', ' ').title()\n24 |             labels.append(label)\n25 |             # Use dict.__setitem__() to suppress defenses against double\n26 |             # assignment in enum's classdict.\n27 |             dict.__setitem__(classdict, key, value)\n28 |         cls = super().__new__(metacls, classname, bases, classdict)\n29 |         cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))\n30 |         # Add a label property to instances of enum which uses the enum member\n31 |         # that is passed in as \"self\" as the value to use when looking up the\n32 |         # label in the choices.\n33 |         cls.label = property(lambda self: cls._value2label_map_.get(self.value))\n34 |         return enum.unique(cls)\n35 | \n36 |     def __contains__(cls, member):\n37 |         if not isinstance(member, enum.Enum):\n38 |             # Allow non-enums to match against member values.\n39 |             return member in {x.value for x in cls}\n40 |         return super().__contains__(member)\n41 | \n42 |     @property\n43 |     def names(cls):\n44 |         empty = ['__empty__'] if hasattr(cls, '__empty__') else []\n45 |         return empty + [member.name for member in cls]\n46 | \n47 |     @property\n48 |     def choices(cls):\n49 |         empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []\n50 |         return empty + [(member.value, member.label) for member in cls]\n51 | \n52 |     @property\n53 |     def labels(cls):\n54 |         return [label for _, label in cls.choices]\n55 | \n56 |     @property\n57 |     def values(cls):\n58 |         return [value for value, _ in cls.choices]\n```",
+              "start_line": 8,
+              "end_line": 58,
+              "code_omitted": false,
+              "original_code_length": 2228
+            },
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.__new__",
+              "type": "function",
+              "code": "```\n11 | def __new__(metacls, classname, bases, classdict):\n12 |         labels = []\n13 |         for key in classdict._member_names:\n14 |             value = classdict[key]\n15 |             if (\n16 |                 isinstance(value, (list, tuple)) and\n17 |                 len(value) > 1 and\n18 |                 isinstance(value[-1], (Promise, str))\n19 |             ):\n20 |                 *value, label = value\n21 |                 value = tuple(value)\n22 |             else:\n23 |                 label = key.replace('_', ' ').title()\n24 |             labels.append(label)\n25 |             # Use dict.__setitem__() to suppress defenses against double\n26 |             # assignment in enum's classdict.\n27 |             dict.__setitem__(classdict, key, value)\n28 |         cls = super().__new__(metacls, classname, bases, classdict)\n29 |         cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))\n30 |         # Add a label property to instances of enum which uses the enum member\n31 |         # that is passed in as \"self\" as the value to use when looking up the\n32 |         # label in the choices.\n33 |         cls.label = property(lambda self: cls._value2label_map_.get(self.value))\n34 |         return enum.unique(cls)\n```",
+              "start_line": 11,
+              "end_line": 34,
+              "code_omitted": false,
+              "original_code_length": 1246
+            },
+            {
+              "entity_id": "django/contrib/gis/gdal/geometries.py:Point.tuple",
+              "type": "function",
+              "code": "```\n529 | def tuple(self):\n530 |         \"Return the tuple of this point.\"\n531 |         if self.coord_dim == 2:\n532 |             return (self.x, self.y)\n533 |         elif self.coord_dim == 3:\n534 |             return (self.x, self.y, self.z)\n```",
+              "start_line": 529,
+              "end_line": 534,
+              "code_omitted": false,
+              "original_code_length": 248
+            },
+            {
+              "entity_id": "django/contrib/gis/gdal/geometries.py:Point",
+              "type": "class",
+              "code": "```\n502 | class Point(OGRGeometry):\n503 | \n504 |     def _geos_ptr(self):\n505 |         from django.contrib.gis import geos\n506 |         return geos.Point._create_empty() if self.empty else super()._geos_ptr()\n507 | \n508 |     @classmethod\n509 |     def _create_empty(cls):\n510 |         return capi.create_geom(OGRGeomType('point').num)\n511 | \n512 |     @property\n513 |     def x(self):\n514 |         \"Return the X coordinate for this Point.\"\n515 |         return capi.getx(self.ptr, 0)\n516 | \n517 |     @property\n518 |     def y(self):\n519 |         \"Return the Y coordinate for this Point.\"\n520 |         return capi.gety(self.ptr, 0)\n521 | \n522 |     @property\n523 |     def z(self):\n524 |         \"Return the Z coordinate for this Point.\"\n525 |         if self.coord_dim == 3:\n526 |             return capi.getz(self.ptr, 0)\n527 | \n528 |     @property\n529 |     def tuple(self):\n530 |         \"Return the tuple of this point.\"\n531 |         if self.coord_dim == 2:\n532 |             return (self.x, self.y)\n533 |         elif self.coord_dim == 3:\n534 |             return (self.x, self.y, self.z)\n535 |     coords = tuple\n```",
+              "start_line": 502,
+              "end_line": 535,
+              "code_omitted": false,
+              "original_code_length": 1131
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/core/management/commands/makemigrations.py",
+              "django/core/management/commands/makemigrations.py:Command",
+              "django/core/management/commands/makemigrations.py:Command.add_arguments"
+            ],
+            "chain_length": 3,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/core/management/commands/makemigrations.py",
+              "entity_type": "file",
+              "relevance_reason": "Handles migrations which might indirectly affect model behavior post-changes.",
+              "diversity_value": "Migration-related functionality from different module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.901659369468689,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py",
+              "type": "file",
+              "code": "# Code too long (16407 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 311,
+              "code_omitted": true,
+              "original_code_length": 16407
+            },
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py:Command",
+              "type": "class",
+              "code": "# Code too long (15511 chars) - omitted for brevity",
+              "start_line": 23,
+              "end_line": 310,
+              "code_omitted": true,
+              "original_code_length": 15511
+            },
+            {
+              "entity_id": "django/core/management/commands/makemigrations.py:Command.add_arguments",
+              "type": "function",
+              "code": "```\n26 | def add_arguments(self, parser):\n27 |         parser.add_argument(\n28 |             'args', metavar='app_label', nargs='*',\n29 |             help='Specify the app label(s) to create migrations for.',\n30 |         )\n31 |         parser.add_argument(\n32 |             '--dry-run', action='store_true',\n33 |             help=\"Just show what migrations would be made; don't actually write them.\",\n34 |         )\n35 |         parser.add_argument(\n36 |             '--merge', action='store_true',\n37 |             help=\"Enable fixing of migration conflicts.\",\n38 |         )\n39 |         parser.add_argument(\n40 |             '--empty', action='store_true',\n41 |             help=\"Create an empty migration.\",\n42 |         )\n43 |         parser.add_argument(\n44 |             '--noinput', '--no-input', action='store_false', dest='interactive',\n45 |             help='Tells Django to NOT prompt the user for input of any kind.',\n46 |         )\n47 |         parser.add_argument(\n48 |             '-n', '--name',\n49 |             help=\"Use this name for migration file(s).\",\n50 |         )\n51 |         parser.add_argument(\n52 |             '--no-header', action='store_false', dest='include_header',\n53 |             help='Do not add header comments to new migration file(s).',\n54 |         )\n55 |         parser.add_argument(\n56 |             '--check', action='store_true', dest='check_changes',\n57 |             help='Exit with a non-zero status if model changes are missing migrations.',\n58 |         )\n```",
+              "start_line": 26,
+              "end_line": 58,
+              "code_omitted": false,
+              "original_code_length": 1512
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "django/db/models/fields/__init__.py:Field",
+              "django/db/models/fields/__init__.py:Field._description",
+              "django/utils/translation/__init__.py",
+              "django/utils/translation/__init__.py:TranslatorCommentWarning"
+            ],
+            "chain_length": 5,
+            "initial_entity": "models",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "entity_type": "function",
+              "relevance_reason": "This function prepares the value for database storage, which could be part of the mechanism affecting get_FOO_display().",
+              "diversity_value": "Different function within the field handling module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.9065691828727722,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_prep_value",
+              "type": "function",
+              "code": "```\n791 | def get_prep_value(self, value):\n792 |         \"\"\"Perform preliminary non-db specific value checks and conversions.\"\"\"\n793 |         if isinstance(value, Promise):\n794 |             value = value._proxy____cast()\n795 |         return value\n```",
+              "start_line": 791,
+              "end_line": 795,
+              "code_omitted": false,
+              "original_code_length": 253
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field",
+              "type": "class",
+              "code": "# Code too long (38074 chars) - omitted for brevity",
+              "start_line": 85,
+              "end_line": 919,
+              "code_omitted": true,
+              "original_code_length": 38074
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field._description",
+              "type": "function",
+              "code": "```\n125 | def _description(self):\n126 |         return _('Field of type: %(field_type)s') % {\n127 |             'field_type': self.__class__.__name__\n128 |         }\n```",
+              "start_line": 125,
+              "end_line": 128,
+              "code_omitted": false,
+              "original_code_length": 169
+            },
+            {
+              "entity_id": "django/utils/translation/__init__.py",
+              "type": "file",
+              "code": "# Code too long (12889 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 340,
+              "code_omitted": true,
+              "original_code_length": 12889
+            },
+            {
+              "entity_id": "django/utils/translation/__init__.py:TranslatorCommentWarning",
+              "type": "class",
+              "code": "```\n30 | class TranslatorCommentWarning(SyntaxWarning):\n31 |     pass\n```",
+              "start_line": 30,
+              "end_line": 31,
+              "code_omitted": false,
+              "original_code_length": 73
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/options.py:Options.contribute_to_class",
+              "django/db/__init__.py",
+              "django/db/__init__.py:DefaultConnectionProxy",
+              "django/db/__init__.py:DefaultConnectionProxy.__getattr__"
+            ],
+            "chain_length": 4,
+            "initial_entity": "FooBar",
+            "start_entity": {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "Adds model options to the class, including methods like get_FOO_display(), potentially affecting overrides.",
+              "diversity_value": "Meta-class logic from different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9082999229431152,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "type": "function",
+              "code": "```\n149 | def contribute_to_class(self, cls, name):\n150 |         from django.db import connection\n151 |         from django.db.backends.utils import truncate_name\n152 | \n153 |         cls._meta = self\n154 |         self.model = cls\n155 |         # First, construct the default values for these options.\n156 |         self.object_name = cls.__name__\n157 |         self.model_name = self.object_name.lower()\n158 |         self.verbose_name = camel_case_to_spaces(self.object_name)\n159 | \n160 |         # Store the original user-defined values for each option,\n161 |         # for use when serializing the model definition\n162 |         self.original_attrs = {}\n163 | \n164 |         # Next, apply any overridden values from 'class Meta'.\n165 |         if self.meta:\n166 |             meta_attrs = self.meta.__dict__.copy()\n167 |             for name in self.meta.__dict__:\n168 |                 # Ignore any private attributes that Django doesn't care about.\n169 |                 # NOTE: We can't modify a dictionary's contents while looping\n170 |                 # over it, so we loop over the *original* dictionary instead.\n171 |                 if name.startswith('_'):\n172 |                     del meta_attrs[name]\n173 |             for attr_name in DEFAULT_NAMES:\n174 |                 if attr_name in meta_attrs:\n175 |                     setattr(self, attr_name, meta_attrs.pop(attr_name))\n176 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n177 |                 elif hasattr(self.meta, attr_name):\n178 |                     setattr(self, attr_name, getattr(self.meta, attr_name))\n179 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n180 | \n181 |             self.unique_together = normalize_together(self.unique_together)\n182 |             self.index_together = normalize_together(self.index_together)\n183 |             # App label/class name interpolation for names of constraints and\n184 |             # indexes.\n185 |             if not getattr(cls._meta, 'abstract', False):\n186 |                 for attr_name in {'constraints', 'indexes'}:\n187 |                     objs = getattr(self, attr_name, [])\n188 |                     setattr(self, attr_name, self._format_names_with_class(cls, objs))\n189 | \n190 |             # verbose_name_plural is a special case because it uses a 's'\n191 |             # by default.\n192 |             if self.verbose_name_plural is None:\n193 |                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n194 | \n195 |             # order_with_respect_and ordering are mutually exclusive.\n196 |             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)\n197 | \n198 |             # Any leftover attributes must be invalid.\n199 |             if meta_attrs != {}:\n200 |                 raise TypeError(\"'class Meta' got invalid attribute(s): %s\" % ','.join(meta_attrs))\n201 |         else:\n202 |             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n203 |         del self.meta\n204 | \n205 |         # If the db_table wasn't provided, use the app_label + model_name.\n206 |         if not self.db_table:\n207 |             self.db_table = \"%s_%s\" % (self.app_label, self.model_name)\n208 |             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())\n```",
+              "start_line": 149,
+              "end_line": 208,
+              "code_omitted": false,
+              "original_code_length": 3355
+            },
+            {
+              "entity_id": "django/db/__init__.py",
+              "type": "file",
+              "code": "```\n 1 | from django.core import signals\n 2 | from django.db.utils import (\n 3 |     DEFAULT_DB_ALIAS, DJANGO_VERSION_PICKLE_KEY, ConnectionHandler,\n 4 |     ConnectionRouter, DatabaseError, DataError, Error, IntegrityError,\n 5 |     InterfaceError, InternalError, NotSupportedError, OperationalError,\n 6 |     ProgrammingError,\n 7 | )\n 8 | \n 9 | __all__ = [\n10 |     'connection', 'connections', 'router', 'DatabaseError', 'IntegrityError',\n11 |     'InternalError', 'ProgrammingError', 'DataError', 'NotSupportedError',\n12 |     'Error', 'InterfaceError', 'OperationalError', 'DEFAULT_DB_ALIAS',\n13 |     'DJANGO_VERSION_PICKLE_KEY',\n14 | ]\n15 | \n16 | connections = ConnectionHandler()\n17 | \n18 | router = ConnectionRouter()\n19 | \n20 | \n21 | class DefaultConnectionProxy:\n22 |     \"\"\"\n23 |     Proxy for accessing the default DatabaseWrapper object's attributes. If you\n24 |     need to access the DatabaseWrapper object itself, use\n25 |     connections[DEFAULT_DB_ALIAS] instead.\n26 |     \"\"\"\n27 |     def __getattr__(self, item):\n28 |         return getattr(connections[DEFAULT_DB_ALIAS], item)\n29 | \n30 |     def __setattr__(self, name, value):\n31 |         return setattr(connections[DEFAULT_DB_ALIAS], name, value)\n32 | \n33 |     def __delattr__(self, name):\n34 |         return delattr(connections[DEFAULT_DB_ALIAS], name)\n35 | \n36 |     def __eq__(self, other):\n37 |         return connections[DEFAULT_DB_ALIAS] == other\n38 | \n39 | \n40 | # For backwards compatibility. Prefer connections['default'] instead.\n41 | connection = DefaultConnectionProxy()\n42 | \n43 | \n44 | # Register an event to reset saved queries when a Django request is started.\n45 | def reset_queries(**kwargs):\n46 |     for conn in connections.all():\n47 |         conn.queries_log.clear()\n48 | \n49 | \n50 | signals.request_started.connect(reset_queries)\n51 | \n52 | \n53 | # Register an event to reset transaction state and close connections past\n54 | # their lifetime.\n55 | def close_old_connections(**kwargs):\n56 |     for conn in connections.all():\n57 |         conn.close_if_unusable_or_obsolete()\n58 | \n59 | \n60 | signals.request_started.connect(close_old_connections)\n61 | signals.request_finished.connect(close_old_connections)\n62 | \n```",
+              "start_line": 1,
+              "end_line": 62,
+              "code_omitted": false,
+              "original_code_length": 2218
+            },
+            {
+              "entity_id": "django/db/__init__.py:DefaultConnectionProxy",
+              "type": "class",
+              "code": "```\n21 | class DefaultConnectionProxy:\n22 |     \"\"\"\n23 |     Proxy for accessing the default DatabaseWrapper object's attributes. If you\n24 |     need to access the DatabaseWrapper object itself, use\n25 |     connections[DEFAULT_DB_ALIAS] instead.\n26 |     \"\"\"\n27 |     def __getattr__(self, item):\n28 |         return getattr(connections[DEFAULT_DB_ALIAS], item)\n29 | \n30 |     def __setattr__(self, name, value):\n31 |         return setattr(connections[DEFAULT_DB_ALIAS], name, value)\n32 | \n33 |     def __delattr__(self, name):\n34 |         return delattr(connections[DEFAULT_DB_ALIAS], name)\n35 | \n36 |     def __eq__(self, other):\n37 |         return connections[DEFAULT_DB_ALIAS] == other\n```",
+              "start_line": 21,
+              "end_line": 37,
+              "code_omitted": false,
+              "original_code_length": 698
+            },
+            {
+              "entity_id": "django/db/__init__.py:DefaultConnectionProxy.__getattr__",
+              "type": "function",
+              "code": "```\n27 | def __getattr__(self, item):\n28 |         return getattr(connections[DEFAULT_DB_ALIAS], item)\n```",
+              "start_line": 27,
+              "end_line": 28,
+              "code_omitted": false,
+              "original_code_length": 106
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/__init__.py",
+              "django/db/models/fields/__init__.py:Empty",
+              "django/db/models/fields/__init__.py:_empty"
+            ],
+            "chain_length": 3,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains base implementations of model fields and their methods, directly related to the issue of overriding `get_FOO_display()`.",
+              "diversity_value": "Fields layer from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.9152064919471741,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py",
+              "type": "file",
+              "code": "# Code too long (103964 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 2422,
+              "code_omitted": true,
+              "original_code_length": 103964
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Empty",
+              "type": "class",
+              "code": "```\n42 | class Empty:\n43 |     pass\n```",
+              "start_line": 42,
+              "end_line": 43,
+              "code_omitted": false,
+              "original_code_length": 39
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:_empty",
+              "type": "function",
+              "code": "```\n74 | def _empty(of_cls):\n75 |     new = Empty()\n76 |     new.__class__ = of_cls\n77 |     return new\n```",
+              "start_line": 74,
+              "end_line": 77,
+              "code_omitted": false,
+              "original_code_length": 107
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_1",
+        "original_chain_info": {
+          "chain": [
+            "django/db/models/base.py:Model",
+            "django/db/models/base.py:Model.from_db",
+            "django/db/models/query.py:ModelIterable.__iter__",
+            "django/db/models/sql/query.py:Query.get_compiler",
+            "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler"
+          ],
+          "chain_length": 5,
+          "initial_entity": "FooBar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "Base class for all Django models where methods like get_FOO_display() are initially defined.",
+            "diversity_value": "Core model layer from different file"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/db/models/base.py:Model",
+            "type": "class",
+            "code": "# Code too long (70511 chars) - omitted for brevity",
+            "start_line": 403,
+            "end_line": 1856,
+            "code_omitted": true,
+            "original_code_length": 70511
+          },
+          {
+            "entity_id": "django/db/models/base.py:Model.from_db",
+            "type": "function",
+            "code": "```\n505 | def from_db(cls, db, field_names, values):\n506 |         if len(values) != len(cls._meta.concrete_fields):\n507 |             values_iter = iter(values)\n508 |             values = [\n509 |                 next(values_iter) if f.attname in field_names else DEFERRED\n510 |                 for f in cls._meta.concrete_fields\n511 |             ]\n512 |         new = cls(*values)\n513 |         new._state.adding = False\n514 |         new._state.db = db\n515 |         return new\n```",
+            "start_line": 505,
+            "end_line": 515,
+            "code_omitted": false,
+            "original_code_length": 484
+          },
+          {
+            "entity_id": "django/db/models/query.py:ModelIterable.__iter__",
+            "type": "function",
+            "code": "```\n48 | def __iter__(self):\n49 |         queryset = self.queryset\n50 |         db = queryset.db\n51 |         compiler = queryset.query.get_compiler(using=db)\n52 |         # Execute the query. This will also fill compiler.select, klass_info,\n53 |         # and annotations.\n54 |         results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)\n55 |         select, klass_info, annotation_col_map = (compiler.select, compiler.klass_info,\n56 |                                                   compiler.annotation_col_map)\n57 |         model_cls = klass_info['model']\n58 |         select_fields = klass_info['select_fields']\n59 |         model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1\n60 |         init_list = [f[0].target.attname\n61 |                      for f in select[model_fields_start:model_fields_end]]\n62 |         related_populators = get_related_populators(klass_info, select, db)\n63 |         known_related_objects = [\n64 |             (field, related_objs, operator.attrgetter(*[\n65 |                 field.attname\n66 |                 if from_field == 'self' else\n67 |                 queryset.model._meta.get_field(from_field).attname\n68 |                 for from_field in field.from_fields\n69 |             ])) for field, related_objs in queryset._known_related_objects.items()\n70 |         ]\n71 |         for row in compiler.results_iter(results):\n72 |             obj = model_cls.from_db(db, init_list, row[model_fields_start:model_fields_end])\n73 |             for rel_populator in related_populators:\n74 |                 rel_populator.populate(row, obj)\n75 |             if annotation_col_map:\n76 |                 for attr_name, col_pos in annotation_col_map.items():\n77 |                     setattr(obj, attr_name, row[col_pos])\n78 | \n79 |             # Add the known related objects to the model.\n80 |             for field, rel_objs, rel_getter in known_related_objects:\n81 |                 # Avoid overwriting objects loaded by, e.g., select_related().\n82 |                 if field.is_cached(obj):\n83 |                     continue\n84 |                 rel_obj_id = rel_getter(obj)\n85 |                 try:\n86 |                     rel_obj = rel_objs[rel_obj_id]\n87 |                 except KeyError:\n88 |                     pass  # May happen in qs1 | qs2 scenarios.\n89 |                 else:\n90 |                     setattr(obj, field.name, rel_obj)\n91 | \n92 |             yield obj\n```",
+            "start_line": 48,
+            "end_line": 92,
+            "code_omitted": false,
+            "original_code_length": 2488
+          },
+          {
+            "entity_id": "django/db/models/sql/query.py:Query.get_compiler",
+            "type": "function",
+            "code": "```\n278 | def get_compiler(self, using=None, connection=None):\n279 |         if using is None and connection is None:\n280 |             raise ValueError(\"Need either using or connection\")\n281 |         if using:\n282 |             connection = connections[using]\n283 |         return connection.ops.compiler(self.compiler)(self, connection, using)\n```",
+            "start_line": 278,
+            "end_line": 283,
+            "code_omitted": false,
+            "original_code_length": 350
+          },
+          {
+            "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler",
+            "type": "function",
+            "code": "```\n324 | def compiler(self, compiler_name):\n325 |         \"\"\"\n326 |         Return the SQLCompiler class corresponding to the given name,\n327 |         in the namespace corresponding to the `compiler_module` attribute\n328 |         on this backend.\n329 |         \"\"\"\n330 |         if self._cache is None:\n331 |             self._cache = import_module(self.compiler_module)\n332 |         return getattr(self._cache, compiler_name)\n```",
+            "start_line": 324,
+            "end_line": 332,
+            "code_omitted": false,
+            "original_code_length": 434
+          }
+        ],
+        "chain_length": 5,
+        "selection_rank": 1,
+        "is_longest": true
+      },
+      "winning_chain_id": "chain_1"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-02T07:09:24.875021",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 3,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Extra data: line 24 column 1 (char 4339)"
+        },
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "agent_id": 2,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "agent_id": 5,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "agent_id": 4,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_1):**\n\n**Entity 1: django/db/models/base.py:Model**\nType: class\nLines: 403-1856\nCode:\n```\n# Code too long (70511 chars) - omitted for brevity\n```\n\n**Entity 2: django/db/models/base.py:Model.from_db**\nType: function\nLines: 505-515\nCode:\n```\n```\n505 | def from_db(cls, db, field_names, values):\n506 |         if len(values) != len(cls._meta.concrete_fields):\n507 |             values_iter = iter(values)\n508 |             values = [\n509 |                 next(values_iter) if f.attname in field_names else DEFERRED\n510 |                 for f in cls._meta.concrete_fields\n511 |             ]\n512 |         new = cls(*values)\n513 |         new._state.adding = False\n514 |         new._state.db = db\n515 |         return new\n```\n```\n\n**Entity 3: django/db/models/query.py:ModelIterable.__iter__**\nType: function\nLines: 48-92\nCode:\n```\n```\n48 | def __iter__(self):\n49 |         queryset = self.queryset\n50 |         db = queryset.db\n51 |         compiler = queryset.query.get_compiler(using=db)\n52 |         # Execute the query. This will also fill compiler.select, klass_info,\n53 |         # and annotations.\n54 |         results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)\n55 |         select, klass_info, annotation_col_map = (compiler.select, compiler.klass_info,\n56 |                                                   compiler.annotation_col_map)\n57 |         model_cls = klass_info['model']\n58 |         select_fields = klass_info['select_fields']\n59 |         model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1\n60 |         init_list = [f[0].target.attname\n61 |                      for f in select[model_fields_start:model_fields_end]]\n62 |         related_populators = get_related_populators(klass_info, select, db)\n63 |         known_related_objects = [\n64 |             (field, related_objs, operator.attrgetter(*[\n65 |                 field.attname\n66 |                 if from_field == 'self' else\n67 |                 queryset.model._meta.get_field(from_field).attname\n68 |                 for from_field in field.from_fields\n69 |             ])) for field, related_objs in queryset._known_related_objects.items()\n70 |         ]\n71 |         for row in compiler.results_iter(results):\n72 |             obj = model_cls.from_db(db, init_list, row[model_fields_start:model_fields_end])\n73 |             for rel_populator in related_populators:\n74 |                 rel_populator.populate(row, obj)\n75 |             if annotation_col_map:\n76 |                 for attr_name, col_pos in annotation_col_map.items():\n77 |                     setattr(obj, attr_name, row[col_pos])\n78 | \n79 |             # Add the known related objects to the model.\n80 |             for field, rel_objs, rel_getter in known_related_objects:\n81 |                 # Avoid overwriting objects loaded by, e.g., select_related().\n82 |                 if field.is_cached(obj):\n83 |                     continue\n84 |                 rel_obj_id = rel_getter(obj)\n85 |                 try:\n86 |                     rel_obj = rel_objs[rel_obj_id]\n87 |                 except KeyError:\n88 |                     pass  # May happen in qs1 | qs2 scenarios.\n89 |                 else:\n90 |                     setattr(obj, field.name, rel_obj)\n91 | \n92 |             yield obj\n```\n```\n\n**Entity 4: django/db/models/sql/query.py:Query.get_compiler**\nType: function\nLines: 278-283\nCode:\n```\n```\n278 | def get_compiler(self, using=None, connection=None):\n279 |         if using is None and connection is None:\n280 |             raise ValueError(\"Need either using or connection\")\n281 |         if using:\n282 |             connection = connections[using]\n283 |         return connection.ops.compiler(self.compiler)(self, connection, using)\n```\n```\n\n**Entity 5: django/db/backends/base/operations.py:BaseDatabaseOperations.compiler**\nType: function\nLines: 324-332\nCode:\n```\n```\n324 | def compiler(self, compiler_name):\n325 |         \"\"\"\n326 |         Return the SQLCompiler class corresponding to the given name,\n327 |         in the namespace corresponding to the `compiler_module` attribute\n328 |         on this backend.\n329 |         \"\"\"\n330 |         if self._cache is None:\n331 |             self._cache = import_module(self.compiler_module)\n332 |         return getattr(self._cache, compiler_name)\n```\n```\n\n",
+      "num_agents": 5
+    }
+  }
+}
