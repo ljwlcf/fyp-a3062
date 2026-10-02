@@ -24,9 +24,27 @@ MAX_LEN=${MAX_LEN:-32768}
 GPU_UTIL=${GPU_UTIL:-0.90}
 export MODEL SERVED_NAME MAX_LEN ROPE_YARN GPU_UTIL   # the runner's manifest records them
 VLLM_EXTRA=()
-if [ -n "$ROPE_YARN" ]; then
-    VLLM_EXTRA+=(--hf-overrides "{\"rope_scaling\": {\"rope_type\": \"yarn\", \"factor\": $ROPE_YARN, \"original_max_position_embeddings\": 32768}}")
-fi
+yarn_overrides() {  # print vLLM --hf-overrides JSON enabling YaRN x$1 for model dir/id $2
+    # vLLM 0.30 + transformers 5 read `rope_parameters` (formerly rope_scaling, now carrying
+    # rope_theta too) and, for YaRN, expect max_position_embeddings ALREADY scaled; passing
+    # only rope_scaling left the limit at 32k (job 180310). Values come from the model's own
+    # config.json, so each model keeps its native length and rope_theta.
+    python - "$1" "$2" <<'PY'
+import json, os, sys
+factor, model = float(sys.argv[1]), sys.argv[2]
+path = os.path.join(model, "config.json")
+if not os.path.exists(path):  # an HF id: read the cached copy
+    from huggingface_hub import hf_hub_download
+    path = hf_hub_download(model, "config.json")
+c = json.load(open(path))
+native = int(c["max_position_embeddings"])
+theta = c.get("rope_theta") or (c.get("rope_parameters") or {}).get("rope_theta")
+print(json.dumps({"max_position_embeddings": int(native * factor),
+                  "rope_parameters": {"rope_type": "yarn", "factor": factor,
+                                      "original_max_position_embeddings": native,
+                                      "rope_theta": theta}}))
+PY
+}
 shift $(( $# < 2 ? $# : 2 )); EXTRA=("$@")     # anything else goes to the runner, e.g. --workers 2
 PORT=$((20000 + SLURM_JOB_ID % 10000))         # other users' jobs share the node
 URL=http://127.0.0.1:$PORT/v1
@@ -55,6 +73,11 @@ nvidia-smi --query-gpu=name,memory.total --format=csv,noheader | sort | uniq -c
 # So: the modules, with conda's lib dir in front, apply to the server process only, and are
 # unloaded again before the pipeline runs.
 conda activate vllm
+if [ -n "$ROPE_YARN" ]; then
+    YARN_JSON=$(yarn_overrides "$ROPE_YARN" "$MODEL")
+    VLLM_EXTRA+=(--hf-overrides "$YARN_JSON")
+    echo "yarn overrides: $YARN_JSON"
+fi
 module load CUDA/13.0.0 GCC/13.3.0
 export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
 echo "nvcc $(command -v nvcc), CUDA_HOME=$CUDA_HOME"

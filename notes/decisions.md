@@ -380,7 +380,10 @@ instances (released chain order) with:
 Both Apache/Qwen-licensed and ungated; same family, so the comparison is mostly size (code-
 specialised 32B vs general 72B). Rejected: Llama-3.3-70B (gated: Meta licence and token),
 Qwen3-32B (thinking mode by default, which breaks the pipeline's JSON parsing).
-Both served at 65,536 tokens (native 32,768, YaRN factor 2 via vLLM --hf-overrides): 32k
+Both served at 65,536 tokens (native 32,768, YaRN factor 2 via vLLM --hf-overrides; with vLLM
+0.30 + transformers 5 the override must set `rope_parameters` incl. rope_theta AND an already-
+scaled `max_position_embeddings`, built from the model's config.json by the job script;
+validated on a CPU node before use after job 180310 failed on the old `rope_scaling` form): 32k
 overflowed on sympy (decisions 2026-10-02), and the paper's API allowed 64k. GPU memory
 utilisation 0.95. Serving settings are job env vars, documented in each config's `serving:`
 block and recorded in the run manifest.
