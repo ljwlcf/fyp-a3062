@@ -24,8 +24,24 @@ while [ $# -gt 0 ]; do
     repo=$1 sha=$2 dest=$3; shift 3
     echo "== $repo @ $sha -> $dest  ($(date))"
     mkdir -p "$dest"
+    # One --include per pattern: after a single --include, further words are taken as file
+    # NAMES, which silently skipped every weight file in job 180295.
     hf download "$repo" --revision "$sha" --local-dir "$dest" \
-        --include "*.safetensors" "*.json" "*.txt" "*.model" "*.tiktoken" "LICENSE*" >/dev/null
+        --include "*.safetensors" --include "*.json" --include "*.txt" \
+        --include "*.model" --include "*.tiktoken" --include "LICENSE*" > /dev/null
+    # Only mark it pinned if every shard named in the index is present and non-empty.
+    python - "$dest" <<'PY'
+import json, os, sys
+d = sys.argv[1]
+idx = os.path.join(d, "model.safetensors.index.json")
+shards = (sorted(set(json.load(open(idx))["weight_map"].values())) if os.path.exists(idx)
+          else [f for f in os.listdir(d) if f.endswith(".safetensors")])
+missing = [f for f in shards if not os.path.exists(os.path.join(d, f))
+           or os.path.getsize(os.path.join(d, f)) == 0]
+if not shards or missing:
+    sys.exit(f"INCOMPLETE: {len(missing)} of {len(shards)} weight files missing, e.g. {missing[:3]}")
+print(f"verified {len(shards)} weight files")
+PY
     printf "repo: %s\ncommit: %s\ndownloaded: %s\n" "$repo" "$sha" "$(date -u +%FT%TZ)" > "$dest/PINNED.txt"
     du -sh "$dest"
 done
