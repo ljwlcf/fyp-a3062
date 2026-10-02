@@ -9,6 +9,16 @@ Answered with a pointer.
 
 ## Open
 
+- **Report framing: one model family throughout (threat to validity).** Every agent and both
+  backbone candidates in the trial are Qwen models (Qwen2.5-Coder-7B for debugging,
+  Qwen2.5-Coder-32B and Qwen2.5-72B for the real runs; decisions.md 2026-10-02), so findings
+  about the debate (agreement, order sensitivity, how often the debate changes the answer, JSON
+  failures) may not generalise to other model families. The paper used DeepSeek-V3, a different
+  family again. Suggested wording for the threats-to-validity section, plus a mitigation that
+  doubles as a design option: the heterogeneous agents in adaptive debate (CLAUDE.md plan item
+  2, "hardest cases") could come from a second family, e.g. DeepSeek or Mistral, which would
+  test cross-family generalisation at the same time. Chat: how to phrase it, and whether a
+  second family is worth the compute (it needs its own pinned checkpoint and a GPU slot).
 - **Order check failed (weakly): how should adaptive debate's trigger be framed?** With the 7B
   model, vote agreement partly tracks which chain is shown first, so it is not a clean
   confidence signal; and the released longest-first order itself raises accuracy by 15-25
