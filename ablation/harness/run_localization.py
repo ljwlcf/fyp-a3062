@@ -135,6 +135,8 @@ def run_one(iid, keep_fields, pipe):
     rec["seconds"] = round(time.time() - t0, 1)
     rec["tokens"] = calls.summary()
     rec["calls"] = calls.records
+    import resource  # peak RSS of this worker process; ru_maxrss is KiB on Linux
+    rec["peak_rss_gb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 2**20, 2)
     return rec
 
 
@@ -202,13 +204,20 @@ def main():
     raw_path = os.path.join(out, "raw.jsonl")
     keep = cfg["instance_fields"]["keep"]
 
+    empty_tokens = {"total": {"calls": 0, "errors": 0, "truncated": 0, "prompt_tokens": 0,
+                              "completion_tokens": 0}, "by_stage": {}}
+
     def record(rec, done):
+        rec.setdefault("seconds", None)
+        rec.setdefault("tokens", empty_tokens)
+        rec.setdefault("calls", [])
         with open(raw_path, "a") as f:
             f.write(json.dumps(rec, default=str) + "\n")
         t = rec["tokens"]["total"]
         print(f"[{done}/{len(ids)}] {rec['instance_id']}: {rec['status']} in {rec['seconds']} s, "
               f"{t['calls']} calls ({t['errors']} failed, {t['truncated']} hit max_tokens), "
-              f"{t['prompt_tokens']} prompt + {t['completion_tokens']} completion tokens",
+              f"{t['prompt_tokens']} prompt + {t['completion_tokens']} completion tokens"
+              + (f", peak RAM {rec['peak_rss_gb']} GB" if rec.get("peak_rss_gb") else ""),
               flush=True)
         if rec["status"] == "error":
             print(rec["traceback"], flush=True)
@@ -219,21 +228,43 @@ def main():
     else:
         import multiprocessing as mp
         from concurrent.futures import ProcessPoolExecutor, as_completed
-        # spawn, not fork: the parent has imported nothing heavy, but torch and threads
-        # inside the fork make fork unsafe in general.
-        with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context("spawn"),
-                                 initializer=_init_worker) as ex:
-            futs = {ex.submit(run_one, iid, keep, pipe): iid for iid in ids}
-            for i, fut in enumerate(as_completed(futs), 1):
-                try:
-                    rec = fut.result()
-                except Exception as e:  # the worker process itself died
-                    rec = {"instance_id": futs[fut], "status": "error", "error": repr(e),
-                           "traceback": traceback.format_exc(), "seconds": None,
-                           "tokens": {"total": {"calls": 0, "errors": 0, "truncated": 0,
-                                                "prompt_tokens": 0, "completion_tokens": 0},
-                                      "by_stage": {}}, "calls": []}
-                record(rec, i)
+        from concurrent.futures.process import BrokenProcessPool
+
+        # spawn, not fork (torch and threads make fork unsafe). max_tasks_per_child=1: a
+        # fresh process per instance, so nothing (embedding model, graph) accumulates.
+        # If a worker is killed (job 180136: the job hit its 24 GB RAM limit), the pool
+        # breaks and every pending future fails; rerun those in a new pool, at most twice
+        # per instance, instead of recording them as errors.
+        pending, attempts, done = list(ids), {iid: 0 for iid in ids}, 0
+        while pending:
+            for iid in pending:
+                attempts[iid] += 1
+            broken = []
+            with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context("spawn"),
+                                     initializer=_init_worker, max_tasks_per_child=1) as ex:
+                futs = {ex.submit(run_one, iid, keep, pipe): iid for iid in pending}
+                for fut in as_completed(futs):
+                    iid = futs[fut]
+                    try:
+                        rec = fut.result()
+                    except BrokenProcessPool:
+                        broken.append(iid)
+                        continue
+                    except Exception as e:
+                        rec = {"instance_id": iid, "status": "error", "error": repr(e),
+                               "traceback": traceback.format_exc()}
+                    done += 1
+                    record(rec, done)
+            pending = [iid for iid in broken if attempts[iid] < 3]
+            for iid in broken:
+                if attempts[iid] >= 3:
+                    done += 1
+                    record({"instance_id": iid, "status": "error",
+                            "error": "worker process died 3 times (likely out of memory)",
+                            "traceback": ""}, done)
+            if pending:
+                print(f"worker pool broke (a worker was killed); retrying {len(pending)} "
+                      f"instances in a new pool", flush=True)
 
     manifest["finished"] = datetime.now().isoformat()
     with open(os.path.join(out, "manifest.json"), "w") as f:

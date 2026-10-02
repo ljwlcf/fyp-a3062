@@ -14,6 +14,7 @@ P=/projects/fypA3062
 REPO=$HOME/FYP-A3062
 CONFIG=${1:-ablation/configs/smoke_localization_v1.yaml}
 MODEL=${2:-Qwen/Qwen2.5-Coder-7B-Instruct}     # must match llm.model in the config
+shift $(( $# < 2 ? $# : 2 )); EXTRA=("$@")     # anything else goes to the runner, e.g. --workers 2
 PORT=$((20000 + SLURM_JOB_ID % 10000))         # other users' jobs share the node
 URL=http://127.0.0.1:$PORT/v1
 VLLM_LOG=$P/logs/vllm-$SLURM_JOB_ID.log
@@ -47,7 +48,11 @@ LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
     --max-model-len 32768 --gpu-memory-utilization 0.90 --seed 0 > "$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
 module unload GCC/13.3.0 CUDA/13.0.0
-trap 'kill $VLLM_PID 2>/dev/null; wait $VLLM_PID 2>/dev/null; rm -rf "$TMPDIR"; echo "== server stopped $(date)"' EXIT
+mem_peak() {  # whole job's peak RAM from its cgroup (v2, else v1), best effort
+    local cg; cg=$(awk -F: '$1=="0"{print $3}' /proc/self/cgroup)
+    for f in /sys/fs/cgroup$cg/memory.peak /sys/fs/cgroup/memory$cg/memory.max_usage_in_bytes; do
+        [ -r "$f" ] && { awk '{printf "%.1f GB", $1/2^30}' "$f"; return; }; done; echo unknown; }
+trap 'kill $VLLM_PID 2>/dev/null; wait $VLLM_PID 2>/dev/null; rm -rf "$TMPDIR"; echo "== server stopped $(date), job RAM peak $(mem_peak) of ${SLURM_MEM_PER_NODE:-?} MB"' EXIT
 echo "vllm $(python -c 'import vllm; print(vllm.__version__)'), pid $VLLM_PID, log $VLLM_LOG"
 conda deactivate
 
@@ -63,5 +68,5 @@ echo "== server up $(date)"
 # 3. Run the pipeline against it.
 conda activate swed
 cd "$REPO"
-python ablation/harness/run_localization.py "$CONFIG" --base-url "$URL"
+python ablation/harness/run_localization.py "$CONFIG" --base-url "$URL" "${EXTRA[@]}"
 echo "== pipeline finished $(date)"
