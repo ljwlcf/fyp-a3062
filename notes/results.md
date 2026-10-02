@@ -35,9 +35,21 @@ with the option off that code path is identical, but the manifest's fork_sha is 
   (limit 1000), whose truncated replies also fail to parse.
 - 1,308 s per instance (6 sharing one GPU); 388k tokens per instance (graph walk 304k).
 
+**Same model, lenient parser** (`20261002-073451`, job 180367, 1 pro6000, `--lenient-json`):
+10/10 completed, 0 collapses; gold file built 10/10, kept 10/10, selected 8/10; Acc@1 (File) 7/10;
+debate effect 7 unchanged-right, 2 unchanged-wrong, 1 lost after the debate (empty final plan),
+0 changed; split votes 1/10, mean vote agreement 0.94; agents dropped on 1 instance; hallucinated
+start entities 67/200 (34%); 670k tokens per instance (graph walk 555k, vote 49k, debate 66k),
+3,090 s per instance with 6 workers on one GPU. Parse steps over 2,227 replies: strict 297,
+prose-wrapped (first object) 1,754, repaired 140, later object 3, failed 33; 210 calls hit
+max_tokens (mostly neighbour pre-filtering, limit 1000).
+
 **Takeaway so far.** With the released parser a 32B backbone has effectively no debate: it wraps
-JSON in prose, so votes and analyses are dropped. Everything before the debate behaves like the
-7B, with more hallucinated start entities.
+JSON in prose, so votes and analyses are dropped. With lenient parsing it completes every
+instance, but Acc@1 is no better than the 7B's (7/10) and the debate still changes no answer.
+Lenient parsing also changes the graph walk (more walk steps parse, so the walk goes further:
+555k walk tokens vs 304k), so the parser setting is not confined to the debate stage.
+These are 1-GPU runs; under the GPU rules the 32B is rerun on 2 pro6000 (`backbone_trial_32b_v2`).
 
 ---
 
