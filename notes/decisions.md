@@ -303,7 +303,7 @@ raises (order check, sphinx-8056, shuffle seed 1). Not patched; the scorer count
 `debate_collapsed`. The same line caps round 2 at one worker, so its "parallel" agents run one
 after another (latency only). Both go to deviations.md if (b) is adopted.
 
-## 2026-10-02 — EEE GPU choice: best free GPU by a fixed priority; budget is not a constraint
+## 2026-10-02 — EEE GPU choice: best free GPU by a fixed priority; budget is not a constraint (SUPERSEDED same day by "GPU rules" below)
 Jingwei's instruction. For every EEE job, check `sinfo` at submission and use the best GPU that
 is free: pro6000 first; then rtx5090 if the model fits in its 32 GB; then 6000ada / l40; then
 a6000 / a40. The 180k SU/month budget is not to be treated as a constraint. Implemented as
@@ -436,4 +436,37 @@ runs (released parser) measure agent loss and everything up to the vote; a secon
 `--lenient-json` measures Acc@1, the debate's effect and dropouts that remain. The scorer now
 keeps stage 1-6 metrics for instances that crash after the vote. Which setting the main
 experiments use is decided after both trial passes (it must be the same in every arm).
+
+## 2026-10-02 — GPU rules (supersede "EEE GPU choice: best free GPU..." and its GPU-count update)
+Confirmed by Jingwei. For every EEE run:
+1. All arms of one comparison run on the same GPU model and GPU count, decided once per
+   comparison (run `ablation/eee/pick_gpu.sh` once and reuse its output for every arm).
+2. 32B and 72B models always run on 2 pro6000 on one node (`--gres=gpu:pro6000:2 -C highmem`),
+   no fallback; they wait in the queue.
+3. Smaller models (7B debugging) also use 2 pro6000, unless `sbatch --test-only` shows a fallback
+   pair (2x 6000ada / l40, then 2x a6000 / a40) finishing clearly sooner: estimated start plus
+   expected run time from past manifests (`ablation/harness/runtime_estimates.py`); "clearly" =
+   at least 30 min and 25% sooner.
+4. Tensor parallel for 32B/72B (`PARALLEL=tp`, default); two replicas for 7B
+   (`PARALLEL=dp`, vLLM `--data-parallel-size 2`).
+Implemented in `pick_gpu.sh` (rewritten) and `run_localization_job.sh` (PARALLEL); the manifest
+records PARALLEL. Consequence for the backbone trial: its 32B arm ran on 1 pro6000, so both
+32B passes are rerun on 2 pro6000 (tensor parallel) after the 72B, as config
+`backbone_trial_32b_v2.yaml`; the 1-GPU runs are kept as a record only.
+Budget: still not treated as a constraint.
+Is the plan practical? Measurement under way:
+(a) History: `sacct -a` only shows our own jobs, and this Slurm has no `Reserved` field. Our 9
+    single-card pro6000 jobs since 2026-10-01 waited median 10 min (p90 21, max 21); there is
+    no 2-card history yet (the 72B job 180343, submitted 06:47 UTC, is the first; part of its
+    wait is our own 1-card job holding one of the two pro6000 the QoS allows).
+(b) Sampling: `ablation/eee/sample_gpu_wait.sh` runs on the Mac (under caffeinate, PID in
+    `ablation/results/gpu_wait_v1/sampler.pid`) every 30 min for 24 h from 2026-10-02 08:35 UTC,
+    logging per GPU pair the nodes with >= 2 free cards, free cards, and Slurm's estimated start
+    for a 2-card job (`sbatch --test-only`, nothing submitted) to
+    `ablation/results/gpu_wait_v1/samples.tsv`. Samples taken while the Mac is off NTUSECURE/VPN
+    are logged as skipped and sampling continues. First sample (16:35 SGT): no pro6000 node with
+    2 free cards; estimated start of 2x pro6000 in 58 h. Slurm's estimate assumes every running
+    job uses its full time limit (up to 3 days here), so it is an upper bound, and it includes
+    our own QoS limit. The summary by time of day, and whether the 32B/72B plan is practical,
+    will be written here when the 24 h are up.
 

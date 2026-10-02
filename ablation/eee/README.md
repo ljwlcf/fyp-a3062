@@ -12,12 +12,10 @@ there by `~/.bashrc`. Logs: `/projects/fypA3062/logs/`. Cluster rules: NTUEEEClu
 3. Pre-build the full graphs the config needs (CPU job, free; otherwise the GPU job idles
    for minutes per instance while the pipeline clones and builds):
    `sbatch ~/FYP-A3062/ablation/eee/build_graphs_job.sh ablation/configs/<config>.yaml`
-4. A run (GPU job; server and pipeline inside it). Pick the GPU first (decisions.md
-   2026-10-02: best free, pro6000 > rtx5090 > 6000ada/l40 > a6000/a40):
-   `G=$(ablation/eee/pick_gpu.sh 24)` (24 = GB the model needs; it prints `<model>:<count>`,
-   the fewest cards of the best free model that cover it), then add `--gres=gpu:$G` (and
-   `-C highmem` on pro6000 for more RAM) to the sbatch line below. The job script sets vLLM's
-   tensor parallelism to the number of GPUs it receives.
+4. A run (GPU job; server and pipeline inside it). GPU rules (decisions.md 2026-10-02):
+   decide the GPUs once per comparison with `G=$(ablation/eee/pick_gpu.sh <model> <GB> [n])`
+   (32B/72B always 2x pro6000; 7B 2x pro6000 unless a fallback pair finishes clearly sooner),
+   then `sbatch $G ...` for every arm, with `--export=ALL,PARALLEL=dp` for a 7B (two replicas).
    `sbatch ~/FYP-A3062/ablation/eee/run_localization_job.sh [config] [model]`
    Defaults: the smoke config and the 7B model on one a6000. Watch with `squeue --me`; read
    `logs/loc-<id>.out` (job) and `logs/vllm-<id>.log` (server).

@@ -19,10 +19,13 @@ MODEL=${2:-Qwen/Qwen2.5-Coder-7B-Instruct}     # HF id, or a local weights dir (
 #   MAX_LEN      context length (default 32768). 65536 for real runs (decisions 2026-10-02).
 #   ROPE_YARN    YaRN factor for models whose native context is shorter than MAX_LEN, e.g. 2
 #   GPU_UTIL     vLLM --gpu-memory-utilization (default 0.90)
+#   PARALLEL     tp (default): one model split over all GPUs (tensor parallel; 32B/72B);
+#                dp: one full replica per GPU (data parallel; small models), GPU rule 4
 SERVED_NAME=${SERVED_NAME:-$MODEL}
 MAX_LEN=${MAX_LEN:-32768}
 GPU_UTIL=${GPU_UTIL:-0.90}
-export MODEL SERVED_NAME MAX_LEN ROPE_YARN GPU_UTIL   # the runner's manifest records them
+PARALLEL=${PARALLEL:-tp}
+export MODEL SERVED_NAME MAX_LEN ROPE_YARN GPU_UTIL PARALLEL   # recorded in the run manifest
 VLLM_EXTRA=()
 yarn_overrides() {  # print vLLM --hf-overrides JSON enabling YaRN x$1 for model dir/id $2
     # vLLM 0.30 + transformers 5 read `rope_parameters` (formerly rope_scaling, now carrying
@@ -60,9 +63,15 @@ mkdir -p "$TMPDIR"
 module load Miniforge3
 export FLASHINFER_WORKSPACE_BASE=$P/.tmp     # FlashInfer's compiled-kernel cache, on the SSD
 eval "$(conda shell.bash hook)"
-# Split the model over every GPU the job was given (pick_gpu.sh chooses the count).
+# Use every GPU the job was given (pick_gpu.sh chooses them): split one model across them
+# (tensor parallel) or run one replica per GPU (data parallel), per PARALLEL.
 NGPU=$(echo "$CUDA_VISIBLE_DEVICES" | tr ',' '\n' | grep -c .)
-echo "== job $SLURM_JOB_ID on $(hostname), GPU(s) $CUDA_VISIBLE_DEVICES (tensor parallel $NGPU), $(date)"
+case "$PARALLEL" in
+    tp) PAR_ARGS=(--tensor-parallel-size "$NGPU") ;;
+    dp) PAR_ARGS=(--data-parallel-size "$NGPU" --tensor-parallel-size 1) ;;
+    *)  echo "PARALLEL must be tp or dp"; exit 1 ;;
+esac
+echo "== job $SLURM_JOB_ID on $(hostname), GPU(s) $CUDA_VISIBLE_DEVICES ($PARALLEL x $NGPU), $(date)"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader | sort | uniq -c
 
 # 1. Start the model server in the background.
@@ -84,7 +93,7 @@ echo "nvcc $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
 echo "serving $MODEL as $SERVED_NAME, context $MAX_LEN, yarn ${ROPE_YARN:-none}, gpu util $GPU_UTIL"
 LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
     vllm serve "$MODEL" --served-model-name "$SERVED_NAME" --host 127.0.0.1 --port "$PORT" \
-    --dtype bfloat16 --tensor-parallel-size "$NGPU" --max-model-len "$MAX_LEN" \
+    --dtype bfloat16 "${PAR_ARGS[@]}" --max-model-len "$MAX_LEN" \
     --gpu-memory-utilization "$GPU_UTIL" --seed 0 "${VLLM_EXTRA[@]}" > "$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
 module unload GCC/13.3.0 CUDA/13.0.0

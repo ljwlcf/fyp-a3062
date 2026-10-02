@@ -1,42 +1,50 @@
 #!/bin/bash
-# Print the best GPU that is free right now, as "<model>:<count>" for --gres=gpu:...,
-# by the project's priority order (decisions.md 2026-10-02):
-#   pro6000 > rtx5090 > 6000ada / l40 > a6000 / a40.
-#   ablation/eee/pick_gpu.sh [GB_NEEDED=24]
-# GB_NEEDED is the model's total GPU memory need (weights + KV cache). For each model, in
-# priority order, the count is the FEWEST cards that cover it (ceil(GB_NEEDED / card GB)); the
-# model qualifies if the ug QoS allows that many. The first qualifying model with that many free
-# cards wins. If none has enough free, it queues on the first qualifying model. One sinfo call,
-# light enough for a login node. Free counts go to stderr.
-# Use:  sbatch --gres=gpu:$(ablation/eee/pick_gpu.sh 80) ...   (job script sets tensor parallel)
-need=${1:-24}
-#            model    GB  ug-limit
-priority="pro6000  96 2
-rtx5090  32 1
-6000ada  48 2
-l40      48 2
-a6000    48 2
-a40      48 2"
+# Print the sbatch GPU options for a run, by the GPU rules (decisions.md 2026-10-02, "GPU rules"):
+#   1. all arms of one comparison use the same GPU model and count: run this ONCE per comparison
+#      and reuse its output for every arm;
+#   2. 32B / 72B (any model needing > 48 GB) always get 2 pro6000 on one node, no fallback;
+#   3. smaller models (7B debugging) also default to 2 pro6000, unless a fallback pair
+#      (2x 6000ada / l40, then a6000 / a40) would FINISH clearly sooner: estimated start
+#      (sbatch --test-only, nothing submitted) + expected run time (past manifests,
+#      ablation/harness/runtime_estimates.py); "clearly" = at least 30 min and 25% sooner;
+#   4. the job script then uses tensor parallel for 32B/72B and two replicas for 7B
+#      (PARALLEL=dp), which this script also prints as an --export hint on stderr.
+# Run on the EEE login node from ~/FYP-A3062 (one sbatch --test-only per GPU pair).
+#   ablation/eee/pick_gpu.sh <served-model> <GB_NEEDED> [N_INSTANCES=10]
+# Output (stdout), e.g.:  --gres=gpu:pro6000:2 -C highmem
+# Use:  sbatch $(ablation/eee/pick_gpu.sh Qwen/Qwen2.5-Coder-7B-Instruct 24) ... job.sh ...
+model=${1:?usage: pick_gpu.sh <served-model> <GB_NEEDED> [N_INSTANCES]}; need=${2:?GB needed}
+n=${3:-10}
+pro="--gres=gpu:pro6000:2 -C highmem"
 
-free=$(sinfo -N -h -O "Gres:40,GresUsed:50,StateCompact:12" | sort -u | awk '
-  $3 ~ /drain|down|maint|fail|\*/ {next}
-  $1 ~ /^gpu:/ {
-    split($1, t, ":"); m = t[2]; tot = t[3]; sub(/\(.*/, "", tot)
-    split($2, u, ":"); used = u[3]; sub(/\(.*/, "", used)
-    f[m] += tot - used
-  }
-  END { for (m in f) print m, f[m] }')
-echo "free now: $(echo $free | tr '\n' ' ')" >&2
+if [ "$need" -gt 48 ]; then
+    echo "rule 2: ${need} GB model -> 2x pro6000, tensor parallel, no fallback" >&2
+    echo "$pro"; exit 0
+fi
 
-first=""
-while read -r model gb limit; do
-    n=$(( (need + gb - 1) / gb ))              # fewest cards that cover the need
-    [ "$n" -le "$limit" ] || continue           # QoS would refuse it
-    [ -z "$first" ] && first="$model:$n"
-    have=$(echo "$free" | awk -v m="$model" '$1 == m {print $2}')
-    if [ "${have:-0}" -ge "$n" ]; then echo "$model:$n"; exit 0; fi
-done <<< "$priority"
+est_start_min() {  # minutes until Slurm's estimated start for these sbatch GPU options
+    local s
+    s=$(sbatch --test-only $1 --time=04:00:00 --wrap true 2>&1 | grep -o "start at [0-9T:-]*" | cut -d" " -f3)
+    [ -z "$s" ] && { echo 99999; return; }
+    echo $(( ( $(date -u -d "$s" +%s) - $(date -u +%s) ) / 60 ))
+}
+per_inst() {  # expected minutes per instance on GPU model $1 for this served model (past runs)
+    python3 ablation/harness/runtime_estimates.py "$model" 2>/dev/null | awk -F'\t' -v g="$1" \
+        '$1 == g { split($5, a, " "); print a[1]; exit }'
+}
 
-if [ -z "$first" ]; then echo "no GPU model can hold ${need} GB within the QoS limits" >&2; exit 1; fi
-echo "no qualifying GPU free; queueing on $first" >&2
-echo "$first"
+pro_run=$(per_inst pro6000); pro_run=${pro_run:-1}
+slow=$(per_inst a6000); slow=${slow:-$(awk -v p="$pro_run" 'BEGIN{print p*4}')}
+pro_finish=$(( $(est_start_min "$pro") + $(awk -v r="$pro_run" -v n="$n" 'BEGIN{printf "%d", r*n}') ))
+echo "2x pro6000: estimated finish in ${pro_finish} min (start + ${pro_run} min/instance x $n)" >&2
+best="$pro"; best_finish=$pro_finish
+for g in 6000ada l40 a6000 a40; do
+    r=$(per_inst $g); r=${r:-$slow}          # no history: assume a6000 speed (conservative)
+    f=$(( $(est_start_min "--gres=gpu:$g:2") + $(awk -v r="$r" -v n="$n" 'BEGIN{printf "%d", r*n}') ))
+    echo "2x $g: estimated finish in ${f} min (${r} min/instance)" >&2
+    if [ "$f" -le $(( pro_finish - 30 )) ] && [ "$f" -le $(( pro_finish * 3 / 4 )) ] && [ "$f" -lt "$best_finish" ]; then
+        best="--gres=gpu:$g:2"; best_finish=$f
+    fi
+done
+echo "rule 3: choose '$best' (estimated finish ${best_finish} min); small model -> PARALLEL=dp" >&2
+echo "$best"
