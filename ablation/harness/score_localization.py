@@ -152,7 +152,9 @@ def score_instance(rec, cache, gold_files, gold_entities):
         # case of agents dropped by JSON parsing: the debate collapsed completely.
         s["failure_kind"] = ("debate_collapsed" if "max_workers must be greater than 0" in s["error"]
                              else "other")
-        return s
+        if cache is None or not data(cache, "stage_6_voting_result"):
+            return s
+        # The crash comes after the vote, so stages 1-6 (graph walk, chains, vote) still count.
 
     built = [c["chain"] for c in data(cache, "stage_3_localization_chains").get("all_chains", [])
              if c.get("chain")]
@@ -254,6 +256,7 @@ def rate(rows, key):
 
 def summarize(rows):
     ok = [r for r in rows if r["status"] == "ok" and "error" not in r]
+    voted = [r for r in rows if r.get("winning_chain_id") is not None]  # reached stage 6
     summ = {"n_instances": len(rows), "n_ok": len(ok),
             "n_debate_collapsed": sum(r.get("failure_kind") == "debate_collapsed" for r in rows),
             "errors": Counter(r.get("error", "")[:80] for r in rows if r not in ok)}
@@ -262,6 +265,16 @@ def summarize(rows):
               "kept_has_gold_entity", "selected_has_gold_entity", "winner_is_chain_1",
               "winner_is_longest"):
         summ[k] = rate(ok, k)
+    # Stages 1-6 over every instance that reached the vote, including later crashes.
+    summ["n_reached_vote"] = len(voted)
+    for k in ("built_has_gold_file", "kept_has_gold_file", "selected_has_gold_file",
+              "winner_is_chain_1", "winner_is_longest"):
+        summ[f"{k}_incl_crashed"] = rate(voted, k)
+    summ["split_vote_rate_incl_crashed"] = rate(
+        [dict(r, split=(r.get("vote_agreement") or 0) < 0.8) for r in voted], "split")
+    summ["start_entities_not_in_graph_incl_crashed"] = {
+        "n": sum(r.get("n_start_entities_not_in_graph", 0) for r in voted),
+        "of_attempts": sum(r.get("n_chain_attempts", 0) for r in voted)}
     # recall lost at the diversity filter, and selection precision given kept
     kept_gold = [r for r in ok if r.get("kept_has_gold_file")]
     summ["selection_given_kept_file"] = rate(kept_gold, "selected_has_gold_file")

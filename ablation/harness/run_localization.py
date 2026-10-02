@@ -203,6 +203,8 @@ def main():
     ap.add_argument("--base-url", help="override llm.base_url, e.g. a per-job port on a shared node")
     ap.add_argument("--shuffle-seed", type=int, default=None,
                     help="show the kept chains in a seeded random order (overrides pipeline.chain_order)")
+    ap.add_argument("--lenient-json", action="store_true",
+                    help="opt-in lenient JSON parsing in the fork (overrides pipeline.lenient_json)")
     ap.add_argument("--workers", type=int, default=None,
                     help="instances run in parallel (separate processes); default run.workers or 1")
     args = ap.parse_args()
@@ -219,6 +221,8 @@ def main():
     os.makedirs(work, exist_ok=True)
 
     llm, pipe = cfg["llm"], cfg["pipeline"]
+    if args.lenient_json:
+        pipe["lenient_json"] = True
     if args.shuffle_seed is not None:
         pipe["chain_order"] = {"mode": "shuffle", "seed": args.shuffle_seed}
     if args.base_url:
@@ -231,12 +235,15 @@ def main():
     os.environ["GRAPH_INDEX_DIR"] = os.path.join(ROOT, cfg["paths"]["graph_index_dir"])
     os.environ["ENTITY_PIPELINE_CACHE_DIR"] = os.path.join(out, "stage_cache")
     os.environ["CHAIN_EMBED_MODEL"] = pipe["chain_embed_model"]
+    # Fork's opt-in lenient JSON parsing (default off = released behaviour); workers inherit it.
+    os.environ["A3062_LENIENT_JSON"] = "1" if pipe.get("lenient_json") else "0"
     # set_current_issue() makes playground/<uuid> relative to the working directory.
     os.chdir(work)
 
     manifest = {
         "run_id": run_id, "config": os.path.relpath(cfg_path, ROOT), "config_body": cfg,
         "instances": ids, "workers": workers,
+        "lenient_json": os.environ["A3062_LENIENT_JSON"] == "1",
         "started": datetime.now().isoformat(), "host": platform.node(),
         "python": sys.version, "repo_sha": git_sha(ROOT), "fork_sha": git_sha(FORK),
         "served_models": served_model(llm["base_url"]),

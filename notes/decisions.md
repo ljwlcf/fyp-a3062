@@ -425,3 +425,15 @@ to decide with the real backbone:
 Repeat the order check with the chosen backbone first; a near-saturated model may make votes
 unanimous regardless of order. Raised in for-chat.md because it shapes the adaptive-debate claim.
 
+## 2026-10-02 — Parser question: lenient parsing implemented as an opt-in; trial runs both ways
+Evidence settling the pending parser decision: Qwen2.5-Coder-32B (backbone trial, job 180342)
+lost all five round-1 debate answers on its first two instances because it wraps JSON in prose;
+the instance then crashed (`debate_collapsed`). With the released parser, a 32B backbone gives
+no debate at all, so Acc@1 and debate effects cannot be measured.
+Done: option (b) from the 2026-10-01 entry, as a fork option that is OFF by default
+(deviations.md 2026-10-02). The backbone trial therefore runs twice per model: the current
+runs (released parser) measure agent loss and everything up to the vote; a second run with
+`--lenient-json` measures Acc@1, the debate's effect and dropouts that remain. The scorer now
+keeps stage 1-6 metrics for instances that crash after the vote. Which setting the main
+experiments use is decided after both trial passes (it must be the same in every arm).
+

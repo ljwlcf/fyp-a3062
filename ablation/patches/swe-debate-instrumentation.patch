@@ -1,7 +1,7 @@
 From 21a2435fd816e3933001dffa3ea16f268febf093 Mon Sep 17 00:00:00 2001
 From: will <dllijingwei@gmail.com>
 Date: Sun, 20 Sep 2026 15:24:40 +0800
-Subject: [PATCH 1/3] A3062: make hardcoded endpoint, model, and cache paths
+Subject: [PATCH 1/4] A3062: make hardcoded endpoint, model, and cache paths
  configurable
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -108,7 +108,7 @@ index b3b44dd..97ee189 100644
 From 5ee0e25a96f8614af54359fd52a3e60d128469e9 Mon Sep 17 00:00:00 2001
 From: will <dllijingwei@gmail.com>
 Date: Sun, 20 Sep 2026 16:56:19 +0800
-Subject: [PATCH 2/3] A3062: stop re-reading and re-splitting each file once
+Subject: [PATCH 2/4] A3062: stop re-reading and re-splitting each file once
  per entity
 
 CodeAnalyzer._get_source_segment opened the file from disk and called
@@ -217,7 +217,7 @@ index dba8843..e76fdfd 100644
 From 2f252f98469d115d8e2368b3f111474d4388fe48 Mon Sep 17 00:00:00 2001
 From: will <w>
 Date: Thu, 1 Oct 2026 11:02:59 +0800
-Subject: [PATCH 3/3] A3062: let LLM_TIMEOUT govern per-call timeout instead of
+Subject: [PATCH 3/4] A3062: let LLM_TIMEOUT govern per-call timeout instead of
  hardcoded 60 s
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
@@ -241,6 +241,126 @@ index 97ee189..044333c 100644
              )
              return response.choices[0].message.content
          except Exception as e:
+-- 
+2.50.1 (Apple Git-155)
+
+
+From 93038abe37a8bfc43d44f1683837ccf8e907f455 Mon Sep 17 00:00:00 2001
+From: will <w>
+Date: Fri, 2 Oct 2026 15:10:29 +0800
+Subject: [PATCH 4/4] A3062: opt-in lenient JSON parsing
+ (A3062_LENIENT_JSON=1); default = released behaviour
+
+All seven json.loads call sites go through _a3062_loads. With the flag unset the code
+path is identical to upstream. Qwen2.5-Coder-32B wraps JSON in prose, so every round-1
+answer failed the strict parse and the instance crashed.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ localization/entity_localization_pipeline.py | 41 ++++++++++++++++----
+ 1 file changed, 34 insertions(+), 7 deletions(-)
+
+diff --git a/localization/entity_localization_pipeline.py b/localization/entity_localization_pipeline.py
+index 044333c..e3523fd 100644
+--- a/localization/entity_localization_pipeline.py
++++ b/localization/entity_localization_pipeline.py
+@@ -26,6 +26,33 @@ from dependency_graph.build_graph import (
+ from util.utils import convert_to_json
+ from entity_embedding import LocalizationChainEmbedding
+ 
++
++# A3062: opt-in lenient JSON parsing (env A3062_LENIENT_JSON=1; default OFF = released
++# behaviour, byte for byte). The released code strips a ```json fence at the very start and
++# end and then requires strict JSON, so a reply with prose before or after the JSON, or a raw
++# newline inside a string, drops that agent; with Qwen2.5-Coder-32B every round-1 answer was
++# dropped and the instance crashed (notes/decisions.md, 2026-10-02). When enabled, a failed
++# strict parse is retried with strict=False, then on the outermost {...} or [...] in the text.
++def _a3062_loads(text):
++    if os.environ.get("A3062_LENIENT_JSON") != "1":
++        return json.loads(text)
++    try:
++        return json.loads(text)
++    except Exception:
++        pass
++    try:
++        return json.loads(text, strict=False)
++    except Exception:
++        pass
++    starts = [i for i in (text.find("{"), text.find("[")) if i != -1]
++    if not starts:
++        raise ValueError("no JSON object or array in reply")
++    start = min(starts)
++    end = text.rfind("}" if text[start] == "{" else "]")
++    if end <= start:
++        raise ValueError("unterminated JSON in reply")
++    return json.loads(text[start:end + 1], strict=False)
++
+ # Extract the prompt template of the entity from the context (reuse ENTITY_EXTRACTION_PROMPT in entity_search_scorer.py)
+ ENTITY_EXTRACTION_PROMPT = """
+ You are a code analysis expert. Given an issue description, your task is to identify the most relevant code entities (classes, methods, functions, variables) that are likely involved in the issue.
+@@ -890,7 +917,7 @@ class EntityLocalizationPipeline:
+                 logging.info("Removed closing ``` tag")
+ 
+             logging.info(f"Cleaned response: {response_text}")
+-            entities = json.loads(response_text)
++            entities = _a3062_loads(response_text)
+ 
+             if isinstance(entities, list) and all(isinstance(entity, str) for entity in entities):
+                 entities = entities[:max_entities]
+@@ -1037,7 +1064,7 @@ class EntityLocalizationPipeline:
+             json_match = re.search(r'\[.*?\]', entities_text, re.DOTALL)
+             if json_match:
+                 entities_json = json_match.group()
+-                entities = json.loads(entities_json)
++                entities = _a3062_loads(entities_json)
+ 
+                 # Validate and clean entities
+                 validated_entities = []
+@@ -1128,7 +1155,7 @@ class EntityLocalizationPipeline:
+             if response_text.endswith('```'):
+                 response_text = response_text[:-3]
+ 
+-            decision = json.loads(response_text)
++            decision = _a3062_loads(response_text)
+ 
+             if isinstance(decision, dict) and 'should_continue' in decision:
+                 should_continue = decision.get('should_continue', False)
+@@ -1215,7 +1242,7 @@ class EntityLocalizationPipeline:
+             if response_text.endswith('```'):
+                 response_text = response_text[:-3]
+ 
+-            selection_result = json.loads(response_text)
++            selection_result = _a3062_loads(response_text)
+ 
+             if isinstance(selection_result, dict) and 'selected_neighbors' in selection_result:
+                 selected_neighbors = selection_result['selected_neighbors']
+@@ -1825,7 +1852,7 @@ class EntityLocalizationPipeline:
+             if response_text.endswith('```'):
+                 response_text = response_text[:-3]
+ 
+-            vote_data = json.loads(response_text)
++            vote_data = _a3062_loads(response_text)
+             vote_data['agent_id'] = agent_id
+ 
+             if 'voted_chain_id' not in vote_data:
+@@ -2178,7 +2205,7 @@ class EntityLocalizationPipeline:
+             if response_text.endswith('```'):
+                 response_text = response_text[:-3]
+ 
+-            analysis_data = json.loads(response_text)
++            analysis_data = _a3062_loads(response_text)
+ 
+             return {
+                 'agent_id': agent_id,
+@@ -2203,7 +2230,7 @@ class EntityLocalizationPipeline:
+             if response_text.endswith('```'):
+                 response_text = response_text[:-3]
+ 
+-            plan_data = json.loads(response_text)
++            plan_data = _a3062_loads(response_text)
+ 
+             final_plan = plan_data.get('final_plan', {})
+             if not final_plan.get('modifications'):
 -- 
 2.50.1 (Apple Git-155)
 

@@ -207,3 +207,21 @@ asks us to control. Impact: two things to measure on every run, recall lost at s
 Both are reproduced as-is in the baseline; an ordering control has to be added deliberately.
 Stage 3 chain building (`_dfs_traversal`) is single LLM calls steering the walk, not the agents.
 
+## 2026-10-02 — Opt-in lenient JSON parsing in the fork (default off)
+What changed: all seven `json.loads` calls in `entity_localization_pipeline.py` (graph walk,
+vote, both debate rounds, final plan) go through `_a3062_loads`. With `A3062_LENIENT_JSON`
+unset or 0 it is exactly `json.loads`, so default runs reproduce the released code. With 1, a
+failed strict parse is retried with `strict=False` (raw newlines/tabs in strings), then on the
+outermost `{...}`/`[...]` in the reply (prose before or after the JSON). Fork commit after
+`2f252f9`, in the patch file. Runner switch: `pipeline.lenient_json` or `--lenient-json`,
+recorded in each manifest.
+Why: Qwen2.5-Coder-32B wraps its JSON answers in prose ("Based on the issue... {json}" or a
+fenced block followed by an explanation), so the released parser rejected every round-1 debate
+answer on the first two trial instances and the instance crashed (upstream round-2 defect).
+That is a formatting convention, not a reasoning failure, and the paper's model evidently did
+not trigger it.
+Expected impact: when enabled, more agents survive to the debate and fewer instances crash;
+nothing changes in what the model is asked or how answers are combined. Any comparison must use
+the same setting in every arm; the original-debate baseline is reported with the setting
+stated. Agent loss under the released parser stays a measured property (run with it off).
+
