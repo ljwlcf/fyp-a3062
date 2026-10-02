@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 # Localization run on the EEE GPU Cluster: vLLM server + pipeline inside ONE job.
 # The server binds to 127.0.0.1 on a per-job port, serves only this job, and is killed
 # when the job ends, however it ends.

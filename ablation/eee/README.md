@@ -29,3 +29,7 @@ port is per job; vLLM 0.30.0 instead of 0.9.2 (driver supports CUDA 13); a GPU i
 only while a job runs; `HF_HUB_OFFLINE=1` in runs, so download models in setup first; the
 run job loads `CUDA/13.0.0` + `GCC/13.3.0` because vLLM 0.30's FlashInfer sampler compiles a
 kernel with nvcc on first use (compute nodes have no system CUDA).
+
+Job scripts start with `#!/bin/bash -l` (login shell): `module` is a shell function set up at
+login, so a job submitted from a non-interactive `ssh eee 'sbatch ...'` otherwise fails at once
+with `module: command not found` (job 180174).

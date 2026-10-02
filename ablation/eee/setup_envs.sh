@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 # One-time setup on the EEE GPU Cluster: both conda environments + model downloads.
 # CPU-only job (free): the cluster forbids installs on login nodes.
 #   sbatch ~/FYP-A3062/ablation/eee/setup_envs.sh

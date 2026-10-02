@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 # Pre-build full dependency graphs for a config on CPU (free), so GPU jobs never wait on them.
 #   sbatch ~/FYP-A3062/ablation/eee/build_graphs_job.sh ablation/configs/<config>.yaml
 #SBATCH --job-name=graphs
