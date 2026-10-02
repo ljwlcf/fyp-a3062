@@ -19,13 +19,16 @@ MODEL=${2:-Qwen/Qwen2.5-Coder-7B-Instruct}     # HF id, or a local weights dir (
 #   MAX_LEN      context length (default 32768). 65536 for real runs (decisions 2026-10-02).
 #   ROPE_YARN    YaRN factor for models whose native context is shorter than MAX_LEN, e.g. 2
 #   GPU_UTIL     vLLM --gpu-memory-utilization (default 0.90)
+#   SEED         vLLM --seed (default 0). Distinguishes repeated passes; with concurrent requests
+#                vLLM is not bit-reproducible, so a seed gives an independent sample, not a replay
 #   PARALLEL     tp (default): one model split over all GPUs (tensor parallel; 32B/72B);
 #                dp: one full replica per GPU (data parallel; small models), GPU rule 4
 SERVED_NAME=${SERVED_NAME:-$MODEL}
 MAX_LEN=${MAX_LEN:-32768}
 GPU_UTIL=${GPU_UTIL:-0.90}
 PARALLEL=${PARALLEL:-tp}
-export MODEL SERVED_NAME MAX_LEN ROPE_YARN GPU_UTIL PARALLEL   # recorded in the run manifest
+SEED=${SEED:-0}
+export MODEL SERVED_NAME MAX_LEN ROPE_YARN GPU_UTIL PARALLEL SEED   # recorded in the run manifest
 VLLM_EXTRA=()
 yarn_overrides() {  # print vLLM --hf-overrides JSON enabling YaRN x$1 for model dir/id $2
     # vLLM 0.30 + transformers 5 read `rope_parameters` (formerly rope_scaling, now carrying
@@ -90,11 +93,11 @@ fi
 module load CUDA/13.0.0 GCC/13.3.0
 export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
 echo "nvcc $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
-echo "serving $MODEL as $SERVED_NAME, context $MAX_LEN, yarn ${ROPE_YARN:-none}, gpu util $GPU_UTIL"
+echo "serving $MODEL as $SERVED_NAME, context $MAX_LEN, yarn ${ROPE_YARN:-none}, gpu util $GPU_UTIL, seed $SEED"
 LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
     vllm serve "$MODEL" --served-model-name "$SERVED_NAME" --host 127.0.0.1 --port "$PORT" \
     --dtype bfloat16 "${PAR_ARGS[@]}" --max-model-len "$MAX_LEN" \
-    --gpu-memory-utilization "$GPU_UTIL" --seed 0 "${VLLM_EXTRA[@]}" > "$VLLM_LOG" 2>&1 &
+    --gpu-memory-utilization "$GPU_UTIL" --seed "$SEED" "${VLLM_EXTRA[@]}" > "$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
 module unload GCC/13.3.0 CUDA/13.0.0
 mem_peak() {  # whole job's peak RAM from its cgroup (v2, else v1), best effort

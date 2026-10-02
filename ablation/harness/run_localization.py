@@ -304,7 +304,7 @@ def main():
         "slurm_gpus": os.environ.get("SLURM_JOB_GPUS") or os.environ.get("SLURM_GPUS_ON_NODE"),
         "gpu_names": _gpu_names(),
         "serving": {k.lower(): os.environ.get(k) for k in
-                    ("MODEL", "SERVED_NAME", "MAX_LEN", "ROPE_YARN", "GPU_UTIL", "PARALLEL")},
+                    ("MODEL", "SERVED_NAME", "MAX_LEN", "ROPE_YARN", "GPU_UTIL", "PARALLEL", "SEED")},
         "base_url": llm["base_url"], "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
     }
     if old_manifest is not None:
