@@ -220,6 +220,10 @@ def score_instance(rec, cache, gold_files, gold_entities):
                               "unchanged_wrong" if before == after else
                               "fixed" if a and not b else
                               "broke" if b and not a else "changed_wrong")
+    elif before and not after:
+        # every agent answered but the final discriminator produced no plan (usually its
+        # JSON failed to parse): the answer is lost after the debate, not by it
+        s["debate_effect"] = "plan_failed_after_right" if before in gold_files else "plan_failed_after_wrong"
     else:
         s["debate_effect"] = None
     return s

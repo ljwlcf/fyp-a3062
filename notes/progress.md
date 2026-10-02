@@ -58,10 +58,20 @@ overwrote local score files. Explained the 20-vs-12 chain count: one attempt per
 entity, and attempts whose entity id is not in the graph come back empty: 8/20 (MLDA) and 13/20
 (EEE) start entities were hallucinated. Scorer now counts them. Jingwei now lets Claude submit
 EEE jobs too (memory).
-Next: Run the 10-instance shakeout on EEE (`sbatch --time=02:00:00
-ablation/eee/run_localization_job.sh ablation/configs/shakeout10_localization_v1.yaml`), then
-score it: parse-failure rate per round decides the parser question. Choose the real backbone
-(for-chat.md). Ask A/P Chen about her EEE project QoS. New hypotheses (for-chat.md).
+Then: shakeout run twice. a6000 (job 180175, 2 workers, after an OOM at 4 workers and a
+`module: command not found` from a non-interactive submission, both fixed) and pro6000
+(job 180200, first Blackwell + RAM test, 4 workers, 90 GB RAM). Acc@1 (File) 7/10 both times,
+8/10 instances agree; the debate changed no file-level answer in 20 instance-runs; losses come
+from stage 4, the vote, JSON parsing and the final plan (results.md). New rules from Jingwei:
+Claude submits EEE jobs, always on the best free GPU via `ablation/eee/pick_gpu.sh`, which now
+also picks the GPU count; budget is not a constraint (decisions.md). Scorer: hallucinated
+start entities, plan-failed outcome, plan locations in any format. Runner: fresh process per
+instance, retries after a killed worker, peak RAM logged, reply text saved.
+Broke: Nothing open. Known limits: 32k context overflows on sympy (64k planned, decisions.md);
+JSON parse losses (parser decision pending, decisions.md).
+Next: Choose the real backbone (for-chat.md), serve it at >=64k context, decide the parser
+question from the saved replies, then the full 75 with several seeds on the best free GPU.
+Ask A/P Chen about her EEE project QoS. New hypotheses (for-chat.md).
 
 ## 2026-09-20
 Did: First real measurement of the project. Built the RQ1 harness

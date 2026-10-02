@@ -315,9 +315,11 @@ Consequence for comparisons: one comparison still runs on one GPU model, one GPU
 vLLM version (decisions 2026-10-01; tensor parallelism changes floating-point reduction order,
 so 1 vs 2 cards is not numerically identical), so a run's GPU model and count are recorded in
 its manifest and all arms of one comparison are submitted with the same `--gres`.
-RAM per GPU (measured from node data 2026-10-02): a6000 job 24 GB; regular pro6000 node
-~33 GB per GPU (337,920 MB allocated over 10 GPUs on gpu-pro6000-5). pro6000 nodes tagged
-`highmem` (e.g. gpu-pro6000-4: 396 GB for 4 GPUs) and `midmem` give more with `-C highmem`.
+RAM per GPU (measured 2026-10-02): a6000 job 24 GB; regular pro6000 node ~33 GB per GPU
+(337,920 MB allocated over 10 GPUs on gpu-pro6000-5); a pro6000 job with `-C highmem` gets
+90 GB (job 180200; billed 8 SU/min = 480/h). One localization worker needs ~4.1 GB, so a6000
+jobs run 2 workers and highmem pro6000 jobs can run 8+ (4 peaked at 34.8 GB). Always add
+`-C highmem` on pro6000 when the job runs parallel workers.
 First pro6000 job = Blackwell + RAM test: the 10-instance shakeout with 4 workers on one
 pro6000 with `-C highmem`. It checks that vLLM 0.30 + FlashInfer's JIT kernel work on
 Blackwell (sm_120), records the RAM a highmem pro6000 job is given and the job's peak with 4

@@ -17,6 +17,40 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-02 — Shakeout, second sample on a pro6000: same totals, different instances (Phase 1, measurement setup)
+Config: `ablation/configs/shakeout10_localization_v1.yaml` · Raw + scores:
+`ablation/results/shakeout10_localization_v1/20261002-044344/` (EEE job 180200, one pro6000
+Blackwell, `-C highmem`, vLLM 0.30.0, `--workers 4`). Compare with the a6000 run below.
+
+**Setup.** Identical to the a6000 shakeout except the GPU and 4 workers instead of 2. This was
+the first pro6000 job (Blackwell + RAM test, decisions.md 2026-10-02).
+
+**Numbers** (a6000 -> pro6000, 10 instances each):
+- Gold file in built chains 10 -> 10; in kept chains 8 -> 9; in the selected chain 7 -> 9;
+  Acc@1 (File) 7 -> 7. Same Acc@1 outcome on 8/10 instances; sympy-18189 went wrong -> right,
+  sympy-13647 right -> wrong (lost at stage 4 this time).
+- Debate effect: 7 unchanged-right / 3 unchanged-wrong -> 7 / 2, plus 1 new outcome: on
+  sphinx-8548 all four surviving agents named a gold file (`importer.py`) but the final
+  discriminator returned no plan, so a correct answer was lost after the debate. Across both
+  runs the debate changed the file-level answer on 0 of 20 instance-runs.
+- Winner was chain_1 in 3/10 -> 9/10. Mean vote agreement 0.86 -> 0.92.
+- Agents dropped by JSON parsing: 5 -> 6 instances. Hallucinated start entities 43 -> 54 of 200.
+- Tokens/instance 379k -> 351k (graph walk 76-77% in both). Context-overflow calls 5 -> 6.
+- Wall clock: 387 s -> 211 s per instance with twice the parallelism; whole job 35 -> 16 min.
+- Blackwell works: vLLM 0.30.0 and FlashInfer's JIT kernel ran on sm_120 with no change.
+- RAM: a highmem pro6000 job gets 90 GB; 4 workers peaked at 34.8 GB (4.07 GB per worker).
+
+**Takeaway.** Run-to-run variation at temperature 0.7 is as large as any effect seen so far:
+the totals look stable (Acc@1 7/10 twice) while individual instances flip, and the chain_1
+rate swung from 3/10 to 9/10. Per-instance claims need several seeds, as the design says. Two
+findings repeat in both samples: the debate does not change the answer, and answers are lost
+around it (stage 4, the vote, JSON parsing, the final plan) rather than by it.
+
+**Caveats.** 7B debugging model; one seed per machine; the two runs also differ in GPU and
+vLLM worker count, so they are two samples, not a controlled comparison.
+
+---
+
 ## 2026-10-02 — Shakeout: 10 instances, 7B debugging model, a6000 (Phase 1, measurement setup)
 Config: `ablation/configs/shakeout10_localization_v1.yaml` · Raw + scores:
 `ablation/results/shakeout10_localization_v1/20261002-041812/` (EEE job 180175, one a6000,
