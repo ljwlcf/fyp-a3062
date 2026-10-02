@@ -76,8 +76,16 @@ vs Qwen2.5-72B on 2, pinned, 64k via YaRN; 72B weights on new HDD folder /projec
 parser added to the fork (default off). Jobs queued: 32B lenient (180367, running), 72B released
 (180343), 72B lenient (180368). Fixed on the way: download script fetched no weights; YaRN
 override needs rope_parameters + scaled max_position_embeddings in vLLM 0.30.
-Next: finish the trial, write the comparison into for-chat.md's backbone question; decide the
-parser setting and the order-check fallback with the chosen backbone; then the full 75.
+Later still: 72B released-parser trial done (10/10, Acc@1 9/10, 0 collapses; results.md).
+Lenient parser made opt-in in the fork; truncation measured (32B pre-filter ~25%, 72B 5.6%;
+caps decision pending with a 2,048 candidate); runner --resume; GPU rules (2x pro6000 for
+32B/72B) with pick_gpu.sh rewritten; 24 h queue-wait sampling running on the Mac. Submitted:
+180724 (CPU: all 75 full code maps, baseline_75_v1.yaml) and 180726 (72B on the other 65
+instances, 180343 settings, after 180487 and 180724; cancel if 180368 changes the parser
+decision). Queue: 180368 72B lenient running; 180486/180487 32B on 2 GPUs; then 180726.
+Next: score 180368 (parser decision; cancel 180726 if it changes), score the 32B v2 runs (2-GPU
+time for the job-structure decision), write the backbone comparison into for-chat.md, summarise
+the 24 h GPU-wait sampling (commit samples_final.tsv), then decide backbone, parser and caps.
 Ask A/P Chen about her EEE project QoS. New hypotheses (for-chat.md).
 
 ## 2026-09-20

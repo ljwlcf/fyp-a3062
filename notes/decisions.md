@@ -539,3 +539,20 @@ per user, so only ONE main-experiment job runs at a time; 9 passes run back to b
 waiting in the queue for two cards on one node (first measured genuine wait ~59 min; 24 h
 sampling under way). Total wall time ~= 9 x (2-card pass time + queue wait).
 
+## 2026-10-02 — 72B on the other 65 instances, queued now; conditional on the parser decision
+From a side chat, confirmed by Jingwei. Job 180726 (`backbone_trial_72b_rest65_v1.yaml`): Qwen2.5-72B
+@495f393 on the 65 SWE-Bench-Verified-S instances not in the shakeout, with exactly the settings
+of job 180343 (released JSON parser, released max_tokens caps, 64k via YaRN, 2x pro6000 -C highmem,
+tensor parallel, released chain order); only change: 6 workers instead of 8 (RAM peaked at 173 of
+180 GB with 8; concurrency only). With 180343 it is one full 75-instance, one-seed 72B run.
+Purpose: the split-vote rate and how often the debate changes the answer at scale (does adaptive
+debate have room on this backbone; is a 72B order check worth running), the first real-scale
+test of time and RAM, and seed 1 of the as-released arm if the released parser is kept.
+Queued behind the trial (`--dependency=afterany:180487`) and the 75-map graph build
+(`afterok:180724`, CPU job, `baseline_75_v1.yaml`); `--time=14:00:00` (estimate 8-10 h: the
+10-instance 72B run took ~60 min with 8 workers, 22 of the 65 are sympy, 6 workers); `--resume`
+covers a time-out. CONDITION: `scancel 180726` before it starts if the 72B lenient pass (180368,
+scored first) changes the parser decision.
+Not yet: more 72B order-check seeds (wait for this run's split-vote rate) and the full 3-arm x
+3-seed experiment (wait for the backbone, parser and caps decisions).
+
