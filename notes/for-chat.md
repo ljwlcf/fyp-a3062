@@ -94,6 +94,28 @@ Answered with a pointer.
   real measurement the project has, it needs no GPU, and it is a number the source paper
   never reports. Worth deciding whether the interim report leads with it or holds it back
   for the final. (notes/results.md 2026-09-20)
+- **Report framing / threats to validity: the backbone is much weaker than the paper's.**
+  Side-chat figures, approximate and TO BE CHECKED against the DeepSeek-V3 technical report
+  before they go in the report: SWE-bench Verified ~42% (DeepSeek-V3) vs ~24% (Qwen2.5-72B);
+  GPQA ~59 vs ~49; LiveCodeBench ~38 vs ~31; the paper's V3-0324 is stronger still. Consequence:
+  expect lower absolute localization than the paper's ~80%; compare arms with each other, never
+  with the paper's numbers. Self-hosting DeepSeek-V3 is not feasible: ~700 GB in FP8 needs 8-16
+  pro6000 (ug QoS allows 2; the killable QoS allows 8 but is preempted) and exceeds our 450 GB of
+  storage. Only routes: A/P Chen's faculty QoS, or a third-party API serving the open V3-0324
+  weights as an optional small robustness check. Chat: worth proposing that check?
+- **Methods wording: why self-host (one sentence).** Not cost: at API prices the tokens used so
+  far (41.6M in the runs on the Mac by 2026-10-02 evening; the side chat estimated ~37M) would be
+  roughly $14 at DeepSeek API prices vs ~$125-170 at GPT-4o or Sonnet prices, and the main
+  experiment (~450M tokens) ~$150-200 vs ~$1.5-2k (side-chat price estimates, TO BE CHECKED). The
+  reasons: a pinned, unchanging checkpoint across all arms and seeds (DeepSeek-V3-0324 is no
+  longer served first-party), logprob access for the adaptive trigger, and reproducibility.
+- **Interim report framing (before the "Interim report" item).** Given the 72B results
+  (near-unanimous votes, the debate changing nothing, the debate ~10-12% of tokens), consider
+  leading with the measurement as the main contribution ("where SWE-Debate's answers are won
+  and lost; the debate is mostly redundant at this capability level"), adaptive debate as the
+  engineering consequence. Also proposed: freeze the setup (backbone, parser, caps) by
+  mid-October so the 75-instance x 3-seed baseline is in the interim report; SWE-bench-Live, the
+  second language and the end-to-end check become Semester 2 work. For chat and A/P Chen.
 - **Interim report (due 10 Nov): outline and what results it must show.** Not urgent yet;
   start by mid-October.
 

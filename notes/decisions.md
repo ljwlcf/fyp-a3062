@@ -538,6 +538,15 @@ Practicality note: under the GPU rules every 32B/72B job takes 2 pro6000 and the
 per user, so only ONE main-experiment job runs at a time; 9 passes run back to back, each also
 waiting in the queue for two cards on one node (first measured genuine wait ~59 min; 24 h
 sampling under way). Total wall time ~= 9 x (2-card pass time + queue wait).
+Proposal (side chat, 2026-10-02; build next session, decide after the 24 h sampler summary):
+bundle passes to cut queue handovers. Every job boundary means re-acquiring two pro6000 on one
+node (first measured wait ~59 min). Let `run_localization_job.sh` take a list of seeds
+(e.g. `SEEDS="2 3"`) and, holding the GPUs, restart vLLM with each seed in turn, so several
+passes share one queue wait; e.g. 9 passes as 3 jobs of 3 passes, ~25-30 h per job (under the
+3-day limit). Trade-off: a longer job loses more on failure (mitigated by --resume per pass) and
+may itself queue longer. Seeds 2 and 3 (180739, 180740) stay separate jobs for now.
+Not done (Jingwei, 2026-10-02): filling tonight's idle pro6000 gap with a 72B 10-instance order
+check; 72B order checks wait for 180726's split-vote rate, as planned.
 
 ## 2026-10-02 — 72B on the other 65 instances, queued now; conditional on the parser decision
 From a side chat, confirmed by Jingwei. Job 180726 (`backbone_trial_72b_rest65_v1.yaml`): Qwen2.5-72B

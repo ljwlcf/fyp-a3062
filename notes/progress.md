@@ -34,7 +34,13 @@ Check first next session:
   4. Caps decision (pre-filter 1,000 -> 2,048 candidate) with the 72B truncation numbers.
 Next (build objectives): the equal-token single-agent arm; the adaptive-debate arm (trigger
 pending the order-check outcome); saving vote logprobs (vLLM supports them) as an
-order-independent trigger signal; a SWE-bench-Live loader for plan item 3.
+order-independent trigger signal; a SWE-bench-Live loader for plan item 3; possibly SEEDS
+bundling in the job script (decisions.md, after the sampler summary).
+Final side-chat items: idle-gap order check NOT done (Jingwei: leave the queue); pass bundling
+recorded as a proposal (decisions.md); backbone-strength threat, why-self-host wording and
+interim-report framing added to for-chat.md with the side chat's benchmark and price figures
+marked to be checked. At 12:33 UTC the code-map build was at 27/75 (sympy now, ~1.5-2.5 h left)
+and 180368 had finished 1/10 (django-11880 ok, 1,550 s).
 
 ## 2026-10-01
 Did: Status review; no code or experiments. Noted that decisions.md and the plan were changed
