@@ -69,16 +69,6 @@ Answered with a pointer.
   agents would add diversity the paper claims but the code lacks; adaptive debate would be
   gating what is mostly self-consistency). Related: stage 4 keeps chains by dissimilarity,
   not relevance, and always shows the longest chain first.
-- **Which backbone for the real runs?** Updated 2026-10-01: the EEE cluster fits a 32B model
-  in bf16 (one 96 GB pro6000, or two 48 GB cards), so the MLDA-only trade-off (32B 4-bit vs
-  14B bf16) no longer forces quantization. Remaining trade-off is queue time and budget:
-  32B bf16 on EEE (busy cluster, 180k SU/month) vs smaller/quantized models on MLDA (free,
-  no queue, 2x 24 GB). The paper used DeepSeek-V3 (671B) at full precision, so any choice
-  is a logged deviation; unquantized 32B is the smallest one available. A/P Chen may have a
-  view. Debug runs use 7B and do not depend on this.
-  **Trial under way (2026-10-02, decisions.md):** Qwen2.5-Coder-32B (1 pro6000) vs
-  Qwen2.5-72B (2 pro6000), both bf16 at 64k context, on the 10 shakeout instances. Results
-  will be added here before this question goes to A/P Chen.
 - **Ask A/P Chen about her EEE faculty project.** The EEE cluster lists QoS entries
   `chen_lihui_2026_05_00` and `_01`. As a student (`ug`) Jingwei gets 2 GPUs per model and
   180k SU/month; project members get the project's limits and budget instead. Worth asking
@@ -110,6 +100,12 @@ Answered with a pointer.
 ## Answered
 
 <!-- - YYYY-MM-DD — question → answer, see decisions.md YYYY-MM-DD -->
+- 2026-10-02 — Which backbone? → Qwen2.5-72B-Instruct, bf16, 64k, 2x pro6000. Trial (10 instances):
+  72B with the released parser 10/10 completed, gold chain selected 10/10, Acc@1 9/10, pre-filter
+  truncation 5.6%, hallucinated start entities 24%, 427k tokens and ~2,250 s per instance (8 in
+  parallel); Qwen2.5-Coder-32B (1 GPU) collapsed 8/10 debates with the released parser, Acc@1 7/10
+  with lenient parsing, truncation ~25%, 34-37% hallucinated starts, 670k tokens. Caveat: 1 vs 2
+  GPUs. For A/P Chen: chosen on this evidence; see decisions.md and results.md 2026-10-02.
 - 2026-10-01 — Localization-only scope? → Accepted by A/P Chen (no objection), with the small
   end-to-end check as the exception. See decisions.md 2026-10-01 (direction approved).
 - 2026-10-01 — Is a vLLM server inside an EEE `sbatch` job allowed? → Yes, Jingwei's call:

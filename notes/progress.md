@@ -7,6 +7,35 @@ Did:
 Broke:
 Next:
 
+## 2026-10-02
+Did: Second day of the same Claude Code session (all EEE work driven by Claude, with Jingwei's
+OK). Shakeout x2 (a6000, pro6000); order check (fails weakly: agreement partly order-driven,
+released order helps accuracy); GPU rules (2x pro6000 for 32B/72B) and a 24 h queue-wait sampler;
+backbone trial 32B vs 72B (72B chosen: 10/10, Acc@1 9/10, no collapses); opt-in lenient JSON
+parser in the fork; truncation measured (pre-filter cap; 2,048 candidate); runner --resume and
+SEED; scorer: stage-by-stage recall, debate effect, truncation, parse fates. All in results.md,
+decisions.md, deviations.md.
+Broke: Nothing open. Known risks: 72B RAM peak 173/180 GB at 8 workers (runs now use 6);
+pre-filter truncation and parser setting undecided; the debate rarely changes answers.
+Queue on EEE at hand-off (in order):
+  180368 72B lenient trial pass (running, gpu-pro6000-9)  |  180724 all 75 code maps (CPU, running)
+  -> 180726 72B released, 65 instances (seed 1 with 180343; after 180368 + 180724, 14 h)
+  -> 180739 72B released, 75 instances, SEED=2 (14 h)  -> 180740 same, SEED=3 (14 h)
+  Cancelled: 180486/180487 (32B on 2 GPUs).
+Check first next session:
+  1. Score 180368 (72B lenient) and decide the parser setting; if it changes, cancel 180726,
+     180739, 180740 and resubmit with --lenient-json (decisions.md 2026-10-02).
+  2. 180726's progress, RAM peak and split-vote rate; then queue the deferred 75-instance
+     shuffled-order 72B run (--shuffle-seed 1) after 180740, or skip it if split votes are ~0.
+  3. GPU-wait sampler on the Mac (PID in ablation/results/gpu_wait_v1/sampler.pid; samples.tsv,
+     gitignored; gaps when the Mac sleeps or is off NTUSECURE are logged as skipped). After 24 h
+     (from 2026-10-02 08:35 UTC) write the time-of-day summary and the practicality verdict into
+     decisions.md ("GPU rules"), and commit samples_final.tsv.
+  4. Caps decision (pre-filter 1,000 -> 2,048 candidate) with the 72B truncation numbers.
+Next (build objectives): the equal-token single-agent arm; the adaptive-debate arm (trigger
+pending the order-check outcome); saving vote logprobs (vLLM supports them) as an
+order-independent trigger signal; a SWE-bench-Live loader for plan item 3.
+
 ## 2026-10-01
 Did: Status review; no code or experiments. Noted that decisions.md and the plan were changed
 on 2026-09-22 with no progress entry: GPU access secured (MLDA + EEE cluster), and a proposed

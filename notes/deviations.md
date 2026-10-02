@@ -230,3 +230,11 @@ nothing changes in what the model is asked or how answers are combined. Any comp
 the same setting in every arm; the original-debate baseline is reported with the setting
 stated. Agent loss under the released parser stays a measured property (run with it off).
 
+## 2026-10-02 — Backbone chosen: Qwen2.5-72B-Instruct (paper: DeepSeek-V3-0324)
+The paper's DeepSeek-V3-0324 (671B MoE) is no longer served (deviation 2026-09-19). Main runs use
+Qwen/Qwen2.5-72B-Instruct @495f393 in bf16 on 2 RTX PRO 6000 (tensor parallel), self-hosted with
+vLLM 0.30.0 (EEE cluster), context 65,536 tokens via YaRN factor 2 over its native 32,768 (the
+paper's API allowed 64k). Smaller and from a different family than the paper's model; all agents
+are this one model, as in the paper. Chosen over Qwen2.5-Coder-32B on a 10-instance trial
+(decisions.md 2026-10-02). Threat to validity: single model family (for-chat.md).
+

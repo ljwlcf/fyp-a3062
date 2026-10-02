@@ -556,3 +556,31 @@ scored first) changes the parser decision.
 Not yet: more 72B order-check seeds (wait for this run's split-vote rate) and the full 3-arm x
 3-seed experiment (wait for the backbone, parser and caps decisions).
 
+## 2026-10-02 — Backbone: Qwen2.5-72B; 32B 2-GPU reruns cancelled; 72B seeds queued (end of session)
+Decided by Jingwei (side chat), from the backbone trial (results.md 2026-10-02):
+- Backbone = Qwen/Qwen2.5-72B-Instruct @495f39366efef23836d0cfae4fbe635880d2be31, bf16, 64k via
+  YaRN, 2x pro6000 -C highmem, tensor parallel. With the released parser it completed 10/10 (no
+  debate collapse), selected the gold chain on 10/10, Acc@1 (File) 9/10, truncated 5.6% of
+  pre-filter calls; the 32B collapsed 8/10 under the same parser and reached Acc@1 7/10 only with
+  lenient parsing.
+- The 32B 2-GPU reruns (180486, 180487; `backbone_trial_32b_v2.yaml`) were cancelled before they
+  started: the 72B is the clear choice, so they no longer inform any decision and they would block
+  the pro6000 lane. The backbone comparison therefore uses the 1-card 32B runs (180342, 180367)
+  against the 2-card 72B runs. Caveat: the arms differ in GPU count (1 vs 2 pro6000; tensor
+  parallel only for the 72B), which affects speed and, slightly, floating-point results; this is
+  an exception to GPU rule 1 for this trial only. The 2-GPU 32B speed-up is therefore unmeasured.
+- 72B "as released" arm, config `baseline_72b_released_v1.yaml` (75 instances, settings of 180343):
+  seed 1 = jobs 180343 (10 instances, `backbone_trial_72b_v1`) + 180726 (65 instances,
+  `backbone_trial_72b_rest65_v1`), both vLLM seed 0; seed 2 = job 180739 (SEED=2); seed 3 = job
+  180740 (SEED=3). Chain: 180368 and 180724 -> 180726 -> 180739 -> 180740, each `--time=14:00:00`.
+  180726 re-pointed to `afterany:180368,afterok:180724`. `SEED` is a new job-script variable
+  (vLLM --seed, recorded under `serving` in the manifest); with concurrent requests vLLM is not
+  bit-reproducible, so seeds are independent samples, not replays.
+Conditions:
+- If the 72B lenient pass (180368) changes the parser decision: cancel the queued 72B jobs
+  (180726, 180739, 180740) and resubmit them with `--lenient-json` (and their results dir/config
+  name noting it).
+- Deferred to next session (5-job submission limit): a 75-instance shuffled-order 72B run
+  (`--shuffle-seed 1`, same settings), queued after seed 3 (180740) and cancelled if 180726 shows
+  almost no split votes (then a 72B order check would have nothing to measure).
+
