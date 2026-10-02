@@ -173,6 +173,19 @@ def score_instance(rec, cache, gold_files, gold_entities):
     winner = (v6.get("winning_chain") or {}).get("original_chain_info", {}).get("chain", [])
     s["winning_chain_id"] = v6.get("winning_chain_id")
     s["winner_is_chain_1"] = v6.get("winning_chain_id") == "chain_1"
+    # Position vs content: where the winner was SHOWN, where stage 4 had put it, and whether it
+    # is the longest kept chain (stage 4 puts the longest first only when >6 chains were built).
+    order = rec.get("chain_order") or {"mode": "fixed"}
+    s["chain_order"] = order.get("mode")
+    s["chain_order_seed"] = order.get("seed")
+    m = re.match(r"chain_(\d+)$", str(v6.get("winning_chain_id")))
+    shown = int(m.group(1)) if m else None
+    perm = order.get("permutation")
+    s["winner_shown_position"] = shown
+    s["winner_stage4_position"] = (perm[shown - 1] if perm and shown and shown <= len(perm)
+                                   else shown)
+    s["winner_is_longest"] = bool(winner) and bool(kept) and len(winner) == max(map(len, kept))
+    s["winner_chain"] = winner
     h = hits(winner, gold_files, gold_entities)
     s["selected_has_gold_file"], s["selected_has_gold_entity"] = h["file"], h["entity"]
     s["votes_for_winner"] = vote.get("winning_votes")
@@ -240,7 +253,8 @@ def summarize(rows):
             "errors": Counter(r.get("error", "")[:80] for r in rows if r not in ok)}
     for k in ("built_has_gold_file", "kept_has_gold_file", "selected_has_gold_file",
               "acc1_file", "plan_has_gold_file", "built_has_gold_entity",
-              "kept_has_gold_entity", "selected_has_gold_entity", "winner_is_chain_1"):
+              "kept_has_gold_entity", "selected_has_gold_entity", "winner_is_chain_1",
+              "winner_is_longest"):
         summ[k] = rate(ok, k)
     # recall lost at the diversity filter, and selection precision given kept
     kept_gold = [r for r in ok if r.get("kept_has_gold_file")]
@@ -253,6 +267,9 @@ def summarize(rows):
     summ["mean_tokens_total"] = round(sum(r["tokens_total"] for r in ok) / n)
     summ["mean_seconds"] = round(sum(r["seconds"] for r in ok) / n, 1)
     summ["mean_vote_agreement"] = round(sum(r["vote_agreement"] or 0 for r in ok) / n, 3)
+    # what "winner shown first" would be if position did not matter
+    summ["chance_winner_shown_first"] = round(sum(1 / r["n_chains_kept"] for r in ok
+                                                  if r.get("n_chains_kept")) / n, 3)
     summ["instances_with_dropped_debate_agent"] = sum(
         1 for r in ok if r["debate_round1_valid"] < 5 or r["debate_round2_valid"] < 5)
     summ["instances_with_invalid_votes"] = sum(1 for r in ok if r["invalid_votes"])

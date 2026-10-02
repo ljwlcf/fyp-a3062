@@ -131,6 +131,7 @@ def run_one(iid, keep_fields, pipe):
     instance = {k: full[k] for k in keep_fields}
     pipeline = EntityLocalizationPipeline(max_depth=pipe["max_depth"])
     calls = CallLog(pipeline.client)
+    order = apply_chain_order(pipeline, iid, pipe.get("chain_order") or {"mode": "fixed"})
     t0 = time.time()
     rec = {"instance_id": iid, "pid": os.getpid()}
     try:
@@ -142,11 +143,41 @@ def run_one(iid, keep_fields, pipe):
         rec["error"] = repr(e)
         rec["traceback"] = traceback.format_exc()
     rec["seconds"] = round(time.time() - t0, 1)
+    rec["chain_order"] = order
     rec["tokens"] = calls.summary()
     rec["calls"] = calls.records
     import resource  # peak RSS of this worker process; ru_maxrss is KiB on Linux
     rec["peak_rss_gb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 2**20, 2)
     return rec
+
+
+def apply_chain_order(pipeline, iid, spec):
+    """Control the order in which the kept chains (stage 4) are shown to the voters.
+
+    The released code shows them in stage 4's order (the longest first when more than 6 chains
+    were built), and stage 5 numbers them chain_1, chain_2, ... in that order, so the order is
+    also the label. mode "shuffle" permutes stage 4's output with a seed derived from
+    (seed, instance_id): the same seed gives the same permutation of positions in every arm.
+    Only display order and labels change; no chain is added, dropped or altered. Returns the
+    record of what was done; `permutation[k-1]` is the stage-4 position of the chain shown as
+    chain_k. The pipeline itself is untouched (method wrapped on this instance only)."""
+    info = {"mode": spec.get("mode", "fixed"), "seed": spec.get("seed")}
+    if info["mode"] == "fixed":
+        return info
+    if info["mode"] != "shuffle" or info["seed"] is None:
+        raise ValueError(f"chain_order must be fixed, or shuffle with a seed: {spec}")
+    import random
+    select = pipeline._select_diverse_chains
+
+    def select_then_shuffle(all_chains, *args, **kwargs):
+        kept = select(all_chains, *args, **kwargs)
+        perm = list(range(len(kept)))
+        random.Random(f"{info['seed']}:{iid}").shuffle(perm)
+        info["permutation"] = [p + 1 for p in perm]
+        return [kept[p] for p in perm]
+
+    pipeline._select_diverse_chains = select_then_shuffle
+    return info
 
 
 def instance_ids(cfg):
@@ -166,6 +197,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("config")
     ap.add_argument("--base-url", help="override llm.base_url, e.g. a per-job port on a shared node")
+    ap.add_argument("--shuffle-seed", type=int, default=None,
+                    help="show the kept chains in a seeded random order (overrides pipeline.chain_order)")
     ap.add_argument("--workers", type=int, default=None,
                     help="instances run in parallel (separate processes); default run.workers or 1")
     args = ap.parse_args()
@@ -182,6 +215,8 @@ def main():
     os.makedirs(work, exist_ok=True)
 
     llm, pipe = cfg["llm"], cfg["pipeline"]
+    if args.shuffle_seed is not None:
+        pipe["chain_order"] = {"mode": "shuffle", "seed": args.shuffle_seed}
     if args.base_url:
         llm["base_url"] = args.base_url
     # The fork reads all of these at import or construction time, so set them first.

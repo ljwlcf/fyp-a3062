@@ -1,0 +1,48 @@
+# Order check — is vote agreement a confidence signal or partly a position effect?
+# Precondition for using vote agreement as the adaptive-debate skip trigger (decisions.md
+# 2026-10-02). The kept chains are shown to the voters in stage 4's order (longest first when
+# >6 chains); here the same 10 shakeout instances run with that FIXED order and with SHUFFLED
+# orders (runner --shuffle-seed N; same seed = same permutation in every arm). All runs on one
+# GPU model (pro6000). 7B debugging model: this checks the mechanism, not the real backbone.
+name: order_check_v1
+version: 1
+created: "2026-10-02"
+
+instances:
+  # Hand-picked from the 75-instance subset to cover every repo, every difficulty band, and
+  # multi-file gold patches. 8269 is the smoke-test instance, kept as a cross-machine anchor.
+  - sphinx-doc__sphinx-8269     # <15 min, 1 file  (anchor)
+  - sphinx-doc__sphinx-8056     # 15 min-1 h, 1 file
+  - sphinx-doc__sphinx-8548     # 1-4 h, 2 files
+  - django__django-11880        # <15 min, 1 file
+  - django__django-11999        # 15 min-1 h, 1 file
+  - django__django-12155        # 15 min-1 h, 2 files
+  - django__django-12708        # 1-4 h, 1 file
+  - sympy__sympy-18189          # <15 min, 1 file
+  - sympy__sympy-13647          # 15 min-1 h, 1 file
+  - sympy__sympy-12489          # 1-4 h, 1 file
+
+run:
+  workers: 8                    # highmem pro6000 (90 GB RAM; ~4.1 GB per worker)
+
+paths:
+  # Full graphs (with code). Pre-build them on CPU first:
+  #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
+  graph_index_dir: data/graphs_full
+  results: ablation/results/order_check_v1
+
+llm:
+  base_url: http://127.0.0.1:8765/v1      # overridden per job on EEE with --base-url
+  model: Qwen/Qwen2.5-Coder-7B-Instruct
+  timeout_seconds: 600
+
+pipeline:
+  chain_order:
+    mode: fixed                 # shuffled arms: run_localization.py --shuffle-seed N
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]

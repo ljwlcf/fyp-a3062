@@ -335,3 +335,28 @@ Plan: serve the real backbone with max-model-len >= 65,536 (Qwen2.5 models via Y
 scaling, factor 2 over their native 32k; native for models that have it), log it in
 deviations.md, and keep counting context-overflow errors per run (scorer: `llm_errors`).
 
+## 2026-10-02 — Order-shuffle check is a PRECONDITION for the adaptive-debate trigger
+Jingwei's proposal. Adaptive debate (CLAUDE.md plan item 2) would skip the debate when the vote
+is clear, using vote agreement as the signal. But the kept chains are always shown in stage 4's
+order (longest first when >6 chains built; generation order otherwise), and in the two fixed-
+order shakeout runs the winner was the chain shown first in 12/20 instance-runs (chance 3.3/20)
+and agreement was higher when it was (0.93 vs 0.83). Agreement may therefore partly measure
+position, not confidence; under the fixed order, position and "longest" are confounded.
+Rule: vote agreement may not be used as the skip trigger until this check shows it tracks
+content, not display order.
+Mechanism: `pipeline.chain_order` in the config (`fixed` = as released, the default) or the
+runner's `--shuffle-seed N`, which permutes stage 4's kept chains before stage 5 numbers them
+(display order and chain_N labels change; no chain is added, dropped or altered; the pipeline
+is not modified). The permutation comes from (seed, instance_id), so one seed gives the same
+permutation of positions in every arm; it is recorded per instance (`chain_order` in
+raw.jsonl). The scorer reports, per instance, the winner's shown position, its stage-4 position
+and whether it is the longest kept chain; `ablation/harness/analyze_order.py` compares arms.
+Check (config `order_check_v1.yaml`, the 10 shakeout instances, 7B model, all on pro6000
+highmem, 8 workers): fixed order x2 plus the earlier fixed pro6000 run (job 180200), and
+shuffle seeds 1, 2, 3. Pass if, under shuffle, P(winner shown first) falls to about chance while
+P(winner is longest), selection accuracy and mean agreement stay put. Fail (position bias) if
+shown-first stays well above chance, or agreement is higher when the first-shown chain wins.
+If it fails: every arm of every later comparison uses shuffled order with shared seeds, and the
+trigger is built on agreement under shuffle (or on agreement across several shuffles). The
+check must be repeated with the real backbone before the trigger is fixed.
+
