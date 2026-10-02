@@ -13,7 +13,20 @@ set -eo pipefail
 P=/projects/fypA3062
 REPO=$HOME/FYP-A3062
 CONFIG=${1:-ablation/configs/smoke_localization_v1.yaml}
-MODEL=${2:-Qwen/Qwen2.5-Coder-7B-Instruct}     # must match llm.model in the config
+MODEL=${2:-Qwen/Qwen2.5-Coder-7B-Instruct}     # HF id, or a local weights dir (then set SERVED_NAME)
+# Optional, via `sbatch --export=ALL,VAR=value,...`:
+#   SERVED_NAME  name the server reports; must equal llm.model in the config (default: MODEL)
+#   MAX_LEN      context length (default 32768). 65536 for real runs (decisions 2026-10-02).
+#   ROPE_YARN    YaRN factor for models whose native context is shorter than MAX_LEN, e.g. 2
+#   GPU_UTIL     vLLM --gpu-memory-utilization (default 0.90)
+SERVED_NAME=${SERVED_NAME:-$MODEL}
+MAX_LEN=${MAX_LEN:-32768}
+GPU_UTIL=${GPU_UTIL:-0.90}
+export MODEL SERVED_NAME MAX_LEN ROPE_YARN GPU_UTIL   # the runner's manifest records them
+VLLM_EXTRA=()
+if [ -n "$ROPE_YARN" ]; then
+    VLLM_EXTRA+=(--hf-overrides "{\"rope_scaling\": {\"rope_type\": \"yarn\", \"factor\": $ROPE_YARN, \"original_max_position_embeddings\": 32768}}")
+fi
 shift $(( $# < 2 ? $# : 2 )); EXTRA=("$@")     # anything else goes to the runner, e.g. --workers 2
 PORT=$((20000 + SLURM_JOB_ID % 10000))         # other users' jobs share the node
 URL=http://127.0.0.1:$PORT/v1
@@ -45,10 +58,11 @@ conda activate vllm
 module load CUDA/13.0.0 GCC/13.3.0
 export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
 echo "nvcc $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
+echo "serving $MODEL as $SERVED_NAME, context $MAX_LEN, yarn ${ROPE_YARN:-none}, gpu util $GPU_UTIL"
 LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
-    vllm serve "$MODEL" --host 127.0.0.1 --port "$PORT" --dtype bfloat16 \
-    --tensor-parallel-size "$NGPU" \
-    --max-model-len 32768 --gpu-memory-utilization 0.90 --seed 0 > "$VLLM_LOG" 2>&1 &
+    vllm serve "$MODEL" --served-model-name "$SERVED_NAME" --host 127.0.0.1 --port "$PORT" \
+    --dtype bfloat16 --tensor-parallel-size "$NGPU" --max-model-len "$MAX_LEN" \
+    --gpu-memory-utilization "$GPU_UTIL" --seed 0 "${VLLM_EXTRA[@]}" > "$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
 module unload GCC/13.3.0 CUDA/13.0.0
 mem_peak() {  # whole job's peak RAM from its cgroup (v2, else v1), best effort
@@ -59,13 +73,14 @@ trap 'kill $VLLM_PID 2>/dev/null; wait $VLLM_PID 2>/dev/null; rm -rf "$TMPDIR"; 
 echo "vllm $(python -c 'import vllm; print(vllm.__version__)'), pid $VLLM_PID, log $VLLM_LOG"
 conda deactivate
 
-# 2. Wait for it to answer (up to 15 min), and stop early if it crashed.
-for _ in $(seq 180); do
+# 2. Wait for it to answer (up to 45 min: weights read from the HDD tier are slow), and stop
+#    early if it crashed.
+for _ in $(seq 540); do
     curl -sf "$URL/models" >/dev/null && break
     kill -0 $VLLM_PID 2>/dev/null || { echo "vLLM exited during startup:"; tail -30 "$VLLM_LOG"; exit 1; }
     sleep 5
 done
-curl -sf "$URL/models" >/dev/null || { echo "vLLM not up after 15 min"; tail -30 "$VLLM_LOG"; exit 1; }
+curl -sf "$URL/models" >/dev/null || { echo "vLLM not up after 45 min"; tail -30 "$VLLM_LOG"; exit 1; }
 echo "== server up $(date)"
 
 # 3. Run the pipeline against it.

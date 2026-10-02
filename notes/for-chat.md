@@ -29,6 +29,9 @@ Answered with a pointer.
   no queue, 2x 24 GB). The paper used DeepSeek-V3 (671B) at full precision, so any choice
   is a logged deviation; unquantized 32B is the smallest one available. A/P Chen may have a
   view. Debug runs use 7B and do not depend on this.
+  **Trial under way (2026-10-02, decisions.md):** Qwen2.5-Coder-32B (1 pro6000) vs
+  Qwen2.5-72B (2 pro6000), both bf16 at 64k context, on the 10 shakeout instances. Results
+  will be added here before this question goes to A/P Chen.
 - **Ask A/P Chen about her EEE faculty project.** The EEE cluster lists QoS entries
   `chen_lihui_2026_05_00` and `_01`. As a student (`ug`) Jingwei gets 2 GPUs per model and
   180k SU/month; project members get the project's limits and budget instead. Worth asking

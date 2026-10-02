@@ -349,7 +349,8 @@ runner's `--shuffle-seed N`, which permutes stage 4's kept chains before stage 5
 (display order and chain_N labels change; no chain is added, dropped or altered; the pipeline
 is not modified). The permutation comes from (seed, instance_id), so one seed gives the same
 permutation of positions in every arm; it is recorded per instance (`chain_order` in
-raw.jsonl). The scorer reports, per instance, the winner's shown position, its stage-4 position
+raw.jsonl and `stage_cache/<instance>/chain_order.json`) and per run (the seed in the
+manifest's config). The default stays `fixed`, so the baseline matches the released code. The scorer reports, per instance, the winner's shown position, its stage-4 position
 and whether it is the longest kept chain; `ablation/harness/analyze_order.py` compares arms.
 Check (config `order_check_v1.yaml`, the 10 shakeout instances, 7B model, all on pro6000
 highmem, 8 workers): fixed order x2 plus the earlier fixed pro6000 run (job 180200), and
@@ -359,4 +360,35 @@ shown-first stays well above chance, or agreement is higher when the first-shown
 If it fails: every arm of every later comparison uses shuffled order with shared seeds, and the
 trigger is built on agreement under shuffle (or on agreement across several shuffles). The
 check must be repeated with the real backbone before the trigger is fixed.
+
+## 2026-10-02 — Backbone trial before settling the backbone: 32B on 1 pro6000 vs 72B on 2
+Proposed in a side chat, confirmed by Jingwei (Qwen2.5-72B for the large arm; 72B weights on a
+new HDD folder). Before answering the backbone question in for-chat.md, run the 10 shakeout
+instances (released chain order) with:
+(a) Qwen/Qwen2.5-Coder-32B-Instruct @ 381fc969f78efac66bc87ff7ddeadb7e73c218a7, bf16, 1 pro6000
+    (`backbone_trial_32b_v1.yaml`; ~66 GB weights);
+(b) Qwen/Qwen2.5-72B-Instruct @ 495f39366efef23836d0cfae4fbe635880d2be31, bf16, 2 pro6000 with
+    tensor parallelism on one node (`backbone_trial_72b_v1.yaml`; ~145 GB weights).
+Both Apache/Qwen-licensed and ungated; same family, so the comparison is mostly size (code-
+specialised 32B vs general 72B). Rejected: Llama-3.3-70B (gated: Meta licence and token),
+Qwen3-32B (thinking mode by default, which breaks the pipeline's JSON parsing).
+Both served at 65,536 tokens (native 32,768, YaRN factor 2 via vLLM --hf-overrides): 32k
+overflowed on sympy (decisions 2026-10-02), and the paper's API allowed 64k. GPU memory
+utilisation 0.95. Serving settings are job env vars, documented in each config's `serving:`
+block and recorded in the run manifest.
+Compare: agents dropped by JSON parsing, hallucinated start entities, Acc@1 (File), gold file
+in the selected chain, split-vote rate (adaptive debate needs some disagreement; capability
+saturation predicts a stronger model leaves the debate less to do), seconds and tokens per
+instance. Result goes into for-chat.md's backbone question for A/P Chen.
+Storage: the 150 GB SSD holds envs (14 GB) + 7B and embedding (18 GB) + the 32B (66 GB); the
+72B (145 GB) cannot fit on the SSD at all, so it lives on a new HDD project folder, weights
+only. Cost of that: every server start reads 145 GB from the HDD tier (estimated 10-20 min of
+billed GPU time per job; the job script now waits up to 45 min for the server). Models are
+downloaded by `ablation/eee/download_models.sh` (CPU job, pinned commit, PINNED.txt beside the
+weights) because run jobs are offline.
+Costs: the 72B arm uses the whole 2-pro6000 allowance of the ug QoS and needs both cards on one
+node, so it may queue longer and blocks other pro6000 work while it runs (budget is not a
+constraint, decisions 2026-10-02). KV-cache headroom is tight in both arms (~20-27 GB after
+weights, i.e. roughly 75-85k cached tokens shared by all concurrent requests), so throughput
+will be lower than the 7B's; workers 6 (32B) and 8 (72B).
 

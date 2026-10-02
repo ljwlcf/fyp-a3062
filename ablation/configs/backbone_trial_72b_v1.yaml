@@ -1,0 +1,56 @@
+# Backbone trial (72b) — which backbone for the real runs? (for-chat.md, decisions.md 2026-10-02)
+# The 10 shakeout instances, released chain order, Qwen/Qwen2.5-72B-Instruct in bf16 on 2 pro6000, tensor parallel (145 GB bf16),
+# served at a 65,536-token context (YaRN factor 2 over the native 32k). Compared with the other
+# arm on: agents dropped by JSON parsing, hallucinated start entities, Acc@1 (File), gold file
+# in the selected chain, split-vote rate, seconds and tokens per instance. One seed: a choice
+# between backbones, not a result.
+name: backbone_trial_72b_v1
+version: 1
+created: "2026-10-02"
+
+instances:
+  # Hand-picked from the 75-instance subset to cover every repo, every difficulty band, and
+  # multi-file gold patches. 8269 is the smoke-test instance, kept as a cross-machine anchor.
+  - sphinx-doc__sphinx-8269     # <15 min, 1 file  (anchor)
+  - sphinx-doc__sphinx-8056     # 15 min-1 h, 1 file
+  - sphinx-doc__sphinx-8548     # 1-4 h, 2 files
+  - django__django-11880        # <15 min, 1 file
+  - django__django-11999        # 15 min-1 h, 1 file
+  - django__django-12155        # 15 min-1 h, 2 files
+  - django__django-12708        # 1-4 h, 1 file
+  - sympy__sympy-18189          # <15 min, 1 file
+  - sympy__sympy-13647          # 15 min-1 h, 1 file
+  - sympy__sympy-12489          # 1-4 h, 1 file
+
+run:
+  workers: 8
+
+paths:
+  # Full graphs (with code). Pre-build them on CPU first:
+  #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
+  graph_index_dir: data/graphs_full
+  results: ablation/results/backbone_trial_72b_v1
+
+serving:                        # how run_localization_job.sh must serve it (env vars); the run
+                                # manifest records what was actually used
+  weights: /projects/<HDD folder>/models/Qwen2.5-72B-Instruct
+  commit: 495f39366efef23836d0cfae4fbe635880d2be31   # pinned
+  weights_gb: 145
+  gres: pro6000:2               # with -C highmem
+  max_len: 65536                # SERVED_NAME=Qwen/Qwen2.5-72B-Instruct MAX_LEN=65536 ROPE_YARN=2 GPU_UTIL=0.95
+  rope_yarn: 2                  # native context 32,768
+  gpu_util: 0.95
+
+llm:
+  base_url: http://127.0.0.1:8765/v1      # overridden per job on EEE with --base-url
+  model: Qwen/Qwen2.5-72B-Instruct
+  timeout_seconds: 1200                  # larger model, longer generations
+
+pipeline:
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]

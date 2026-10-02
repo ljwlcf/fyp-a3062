@@ -144,6 +144,10 @@ def run_one(iid, keep_fields, pipe):
         rec["traceback"] = traceback.format_exc()
     rec["seconds"] = round(time.time() - t0, 1)
     rec["chain_order"] = order
+    order_dir = os.path.join(os.environ["ENTITY_PIPELINE_CACHE_DIR"], iid)
+    os.makedirs(order_dir, exist_ok=True)
+    with open(os.path.join(order_dir, "chain_order.json"), "w") as f:
+        json.dump(order, f)
     rec["tokens"] = calls.summary()
     rec["calls"] = calls.records
     import resource  # peak RSS of this worker process; ru_maxrss is KiB on Linux
@@ -239,6 +243,8 @@ def main():
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
         "slurm_gpus": os.environ.get("SLURM_JOB_GPUS") or os.environ.get("SLURM_GPUS_ON_NODE"),
         "gpu_names": _gpu_names(),
+        "serving": {k.lower(): os.environ.get(k) for k in
+                    ("MODEL", "SERVED_NAME", "MAX_LEN", "ROPE_YARN", "GPU_UTIL")},
         "base_url": llm["base_url"], "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
     }
     with open(os.path.join(out, "manifest.json"), "w") as f:
