@@ -1,0 +1,109 @@
+# Qwen2.5-72B on the 65 SWE-Bench-Verified-S instances NOT in the shakeout, with exactly the
+# settings of job 180343 (backbone_trial_72b_v1): released JSON parser, released max_tokens caps,
+# 64k context via YaRN, 2x pro6000 -C highmem, tensor parallel, released (fixed) chain order.
+# With 180343 it makes one full 75-instance, one-seed 72B run (split-vote rate, debate effect at
+# scale, time and RAM at scale). Conditional on the parser decision (decisions.md 2026-10-02).
+# Only difference from 180343: 6 workers instead of 8 (RAM peaked at 173 of 180 GB with 8);
+# concurrency only.
+name: backbone_trial_72b_rest65_v1
+version: 1
+created: "2026-10-02"
+
+instances:
+  - django__django-11790
+  - django__django-11815
+  - django__django-11848
+  - django__django-11885
+  - django__django-11951
+  - django__django-11964
+  - django__django-12039
+  - django__django-12050
+  - django__django-12143
+  - django__django-12193
+  - django__django-12209
+  - django__django-12262
+  - django__django-12273
+  - django__django-12276
+  - django__django-12304
+  - django__django-12308
+  - django__django-12325
+  - django__django-12406
+  - django__django-12713
+  - django__django-12774
+  - django__django-9296
+  - sympy__sympy-13852
+  - sympy__sympy-12481
+  - sympy__sympy-17318
+  - sympy__sympy-16766
+  - sympy__sympy-15976
+  - sympy__sympy-13974
+  - sympy__sympy-13798
+  - sympy__sympy-20916
+  - sympy__sympy-24562
+  - sympy__sympy-23824
+  - sympy__sympy-23950
+  - sympy__sympy-24661
+  - sympy__sympy-16792
+  - sympy__sympy-12096
+  - sympy__sympy-24539
+  - sympy__sympy-13757
+  - sympy__sympy-19495
+  - sympy__sympy-18698
+  - sympy__sympy-19346
+  - sympy__sympy-17139
+  - sympy__sympy-15809
+  - sympy__sympy-22456
+  - sphinx-doc__sphinx-10323
+  - sphinx-doc__sphinx-10435
+  - sphinx-doc__sphinx-10466
+  - sphinx-doc__sphinx-10673
+  - sphinx-doc__sphinx-11510
+  - sphinx-doc__sphinx-7590
+  - sphinx-doc__sphinx-7748
+  - sphinx-doc__sphinx-7757
+  - sphinx-doc__sphinx-7985
+  - sphinx-doc__sphinx-8035
+  - sphinx-doc__sphinx-8265
+  - sphinx-doc__sphinx-8475
+  - sphinx-doc__sphinx-8551
+  - sphinx-doc__sphinx-8638
+  - sphinx-doc__sphinx-8721
+  - sphinx-doc__sphinx-9229
+  - sphinx-doc__sphinx-9230
+  - sphinx-doc__sphinx-9281
+  - sphinx-doc__sphinx-9320
+  - sphinx-doc__sphinx-9367
+  - sphinx-doc__sphinx-9461
+  - sphinx-doc__sphinx-9698
+run:
+  workers: 6
+
+paths:
+  # Full graphs (with code). Pre-build them on CPU first:
+  #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
+  graph_index_dir: data/graphs_full
+  results: ablation/results/backbone_trial_72b_rest65_v1
+
+serving:                        # how run_localization_job.sh must serve it (env vars); the run
+                                # manifest records what was actually used
+  weights: /projects/fypA3062models/Qwen2.5-72B-Instruct   # HDD tier (_hdd)
+  commit: 495f39366efef23836d0cfae4fbe635880d2be31   # pinned
+  weights_gb: 145
+  gres: pro6000:2               # with -C highmem
+  max_len: 65536                # SERVED_NAME=Qwen/Qwen2.5-72B-Instruct MAX_LEN=65536 ROPE_YARN=2 GPU_UTIL=0.95
+  rope_yarn: 2                  # native context 32,768
+  gpu_util: 0.95
+
+llm:
+  base_url: http://127.0.0.1:8765/v1      # overridden per job on EEE with --base-url
+  model: Qwen/Qwen2.5-72B-Instruct
+  timeout_seconds: 1200                  # larger model, longer generations
+
+pipeline:
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]
