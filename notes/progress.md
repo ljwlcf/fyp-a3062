@@ -46,6 +46,10 @@ Later (21:00 SGT, Mac off the NTU network, EEE unreachable): built vote-logprob 
 mocks, not yet run on vLLM; committed, NOT yet synced to EEE (safe: off by default). Scorer: the
 truncation replay now reports `repair_unavailable` when json_repair is missing instead of
 miscounting; score with an environment that has json_repair.
+Also offline: SWE-bench-Live loader (388 verified instances after 2024-09-19, pinned revision,
+shared instance source; draft config live_72b_released_v1) and the equal-token single-agent arm
+(self-consistency, per-instance budget; draft config baseline_72b_selfconsistency_v1). Both
+unit-tested, neither run on GPUs yet; none of it changes the default path the queued jobs use.
 
 ## 2026-10-01
 Did: Status review; no code or experiments. Noted that decisions.md and the plan were changed

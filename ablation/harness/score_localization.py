@@ -245,6 +245,9 @@ def score_instance(rec, cache, gold_files, gold_entities):
     s["llm_calls"] = rec.get("tokens", {}).get("total", {}).get("calls")
     s["llm_errors"] = rec.get("tokens", {}).get("total", {}).get("errors")
     s["truncated_by_stage"], s["truncated_fate"] = truncation(rec)
+    arm = rec.get("arm") or {"name": "original"}
+    s["arm"], s["n_votes_planned"] = arm.get("name"), arm.get("n_votes")
+    s["stage67_tokens"] = tok["vote"] + tok["debate"]   # what equal-token matching compares
     s["calls_by_stage"] = {k: v["calls"] for k, v in rec.get("tokens", {}).get("by_stage", {}).items()}
     s["truncated"] = rec.get("tokens", {}).get("total", {}).get("truncated")
     if rec["status"] != "ok" or cache is None:
@@ -390,6 +393,8 @@ def summarize(rows):
     summ["mean_tokens"] = {k: round(sum(r["tokens"][k] for r in ok) / n)
                            for k in ("graph_walk", "vote", "debate", "other")}
     summ["mean_tokens_total"] = round(sum(r["tokens_total"] for r in ok) / n)
+    summ["arms"] = dict(Counter(r.get("arm") for r in rows))
+    summ["mean_stage67_tokens"] = round(sum(r.get("stage67_tokens", 0) for r in ok) / n)
     summ["mean_seconds"] = round(sum(r["seconds"] for r in ok) / n, 1)
     summ["mean_vote_agreement"] = round(sum(r["vote_agreement"] or 0 for r in ok) / n, 3)
     # what "winner shown first" would be if position did not matter

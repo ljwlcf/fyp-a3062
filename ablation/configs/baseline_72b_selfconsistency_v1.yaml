@@ -1,0 +1,50 @@
+# Equal-token single-agent arm (self-consistency), 72B: same stages 1-5 as the as-released arm;
+# stage 6 = N votes with the released vote prompt (N per instance from the as-released arm's
+# stage 6-7 tokens on that instance); stage 7 = single agent, no debate (one round-1 analysis,
+# round 2 skipped, the released discriminator). DRAFT: fill in budget_reference with the
+# as-released runs before submitting; parser/caps follow the main decisions (same in every arm).
+name: baseline_72b_selfconsistency_v1
+version: 1
+created: "2026-10-02"
+
+instances_file: swe-debate/utils/verified75.txt   # all 75: django 25, sympy 25, sphinx-doc 25
+run:
+  workers: 6
+
+paths:
+  # Full graphs (with code). Pre-build them on CPU first:
+  #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
+  graph_index_dir: data/graphs_full
+  results: ablation/results/baseline_72b_selfconsistency_v1
+
+serving:                        # how run_localization_job.sh must serve it (env vars); the run
+                                # manifest records what was actually used
+  weights: /projects/fypA3062models/Qwen2.5-72B-Instruct   # HDD tier (_hdd)
+  commit: 495f39366efef23836d0cfae4fbe635880d2be31   # pinned
+  weights_gb: 145
+  gres: pro6000:2               # with -C highmem
+  max_len: 65536                # SERVED_NAME=Qwen/Qwen2.5-72B-Instruct MAX_LEN=65536 ROPE_YARN=2 GPU_UTIL=0.95
+  rope_yarn: 2                  # native context 32,768
+  gpu_util: 0.95
+
+llm:
+  base_url: http://127.0.0.1:8765/v1      # overridden per job on EEE with --base-url
+  model: Qwen/Qwen2.5-72B-Instruct
+  timeout_seconds: 1200                  # larger model, longer generations
+
+pipeline:
+  arm:                          # equal-token single-agent arm (decisions.md 2026-10-02)
+    name: self_consistency
+    # Per-instance budget = the as-released arm's stage 6-7 tokens on that instance, averaged over
+    # these reference runs (add the seed 2 / seed 3 runs of baseline_72b_released_v1 when done).
+    budget_reference:
+      - ablation/results/backbone_trial_72b_v1/20261002-103421          # seed 1, 10 instances (180343)
+      # - ablation/results/backbone_trial_72b_rest65_v1/<run>             # seed 1, 65 instances (180726)
+    n_votes_bounds: [5, 30]
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]

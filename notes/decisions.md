@@ -632,3 +632,28 @@ hunks/lines). Draft config `live_72b_released_v1.yaml`. Practical issue before r
 repositories mean 96 clones and graph builds (tens of GB in the 50 GB home); start with a pilot
 slice and decide where repos live. Confirm the cutoff choice (Jingwei / chat) before Live runs.
 
+## 2026-10-02 — Equal-token single-agent arm = self-consistency, budget matched per instance
+Decided by Jingwei from four options (one-shot, self-consistency, self-refinement, long CoT).
+All arms share stages 1-5 (graph walk, chains, stage 4, code); the arm replaces stages 6-7,
+which cost the 72B ~97k tokens per instance (vote 47k + debate 50k).
+Design: N independent votes with the RELEASED vote prompt, the released majority rule, then a
+single-agent plan with no debate: one round-1 analysis (released prompt), round 2 skipped, the
+released discriminator. Only released prompts, so the comparison is "debate interaction vs the
+same compute spent on more independent samples". The released vote is already 5-sample
+self-consistency (identical prompts), so this is "more of the same, no debate". The skipped round
+passes each round-1 answer through with `modification_locations` copied to
+`refined_modification_locations`, the field the discriminator reads (format only; logged here).
+Budget: per instance, the as-released arm's stage 6-7 tokens on that instance (mean over the
+reference runs listed in the config); N = round((budget - plan_cost) / vote_cost) with per-call
+costs from the same records, clamped to [5, 30]; instances without a reference get the median N
+(labelled). For the 72B this gives N = 9-10. Achieved stage 6-7 tokens are recorded per instance
+(`stage67_tokens`) and compared with the budget after the run; matching is approximate because
+each run builds its own chains.
+Implementation: runner `pipeline.arm` (default original); stages swapped on the pipeline object
+only (`apply_arm`), pipeline file unchanged; unit-tested (vote gets N, plan gets 1, released
+round 2 not called). Draft config `baseline_72b_selfconsistency_v1.yaml` (fill budget_reference
+with the as-released seeds first).
+Caveat: with one plan agent, one unparseable reply leaves the discriminator nothing, so this arm
+is more fragile under the released parser than the 5-agent original; the parser setting must be
+the same in every arm. The same single-agent plan step is the "skip" branch of adaptive debate.
+

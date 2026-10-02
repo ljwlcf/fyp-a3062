@@ -19,6 +19,7 @@ import subprocess
 import sys
 import threading
 import time
+from collections import Counter
 import traceback
 from datetime import datetime
 
@@ -156,7 +157,7 @@ def _init_worker():
             sys.path.insert(0, p)
 
 
-def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None):
+def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None, arm=None):
     """Run the pipeline on one instance; return the raw record. Runs in a worker process."""
     _init_worker()
     from entity_localization_pipeline import EntityLocalizationPipeline
@@ -169,6 +170,7 @@ def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None):
     pipeline = EntityLocalizationPipeline(max_depth=pipe["max_depth"])
     calls = CallLog(pipeline.client, vote_logprobs)
     order = apply_chain_order(pipeline, iid, pipe.get("chain_order") or {"mode": "fixed"})
+    arm_info = apply_arm(pipeline, arm)
     t0 = time.time()
     rec = {"instance_id": iid, "pid": os.getpid()}
     try:
@@ -181,6 +183,7 @@ def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None):
         rec["traceback"] = traceback.format_exc()
     rec["seconds"] = round(time.time() - t0, 1)
     rec["chain_order"] = order
+    rec["arm"] = arm_info
     import entity_localization_pipeline as elp  # which lenient-parse step succeeded, per reply
     rec["json_parse"] = dict(getattr(elp, "A3062_PARSE_STATS", {}))
     order_dir = os.path.join(os.environ["ENTITY_PIPELINE_CACHE_DIR"], iid)
@@ -221,6 +224,91 @@ def apply_chain_order(pipeline, iid, spec):
 
     pipeline._select_diverse_chains = select_then_shuffle
     return info
+
+
+STAGE67 = ("vote_worker", "analyze_worker", "analyze_worker_round2", "_conduct_final_discrimination")
+
+
+def sc_budgets(arm_cfg, ids):
+    """Per-instance plan for the self-consistency arm (decisions.md 2026-10-02): the budget is
+    what the reference (original-arm) runs spent on that instance's stages 6-7 (vote, both debate
+    rounds, discriminator; prompt + completion, mean over reference runs). The SC arm spends it
+    on N votes plus one single-agent plan (one round-1 analysis + the discriminator), so
+    N = round((budget - plan_cost) / vote_cost), with vote_cost and plan_cost taken per call from
+    the same reference records, clamped to n_votes_bounds. Instances without a reference get the
+    median N ("fallback"). Achieved tokens are compared with the budget after the run."""
+    lo, hi = arm_cfg.get("n_votes_bounds", [5, 30])
+    per = {}
+    for d in arm_cfg["budget_reference"]:
+        with open(os.path.join(ROOT, d, "raw.jsonl")) as f:
+            for line in f:
+                r = json.loads(line)
+                st = Counter()
+                ncalls = Counter()
+                for c in r.get("calls", []):
+                    if c["stage"] in STAGE67:
+                        st[c["stage"]] += (c.get("prompt_tokens") or 0) + (c.get("completion_tokens") or 0)
+                        ncalls[c["stage"]] += 1
+                if not ncalls["vote_worker"]:
+                    continue
+                per.setdefault(r["instance_id"], []).append({
+                    "budget": sum(st.values()),
+                    "vote_cost": st["vote_worker"] / ncalls["vote_worker"],
+                    "plan_cost": (st["analyze_worker"] / max(1, ncalls["analyze_worker"])
+                                  + st["_conduct_final_discrimination"]
+                                  / max(1, ncalls["_conduct_final_discrimination"]))})
+    plans = {}
+    for iid in ids:
+        refs = per.get(iid)
+        if not refs:
+            continue
+        b = sum(x["budget"] for x in refs) / len(refs)
+        vc = sum(x["vote_cost"] for x in refs) / len(refs)
+        pc = sum(x["plan_cost"] for x in refs) / len(refs)
+        n = max(lo, min(hi, round((b - pc) / vc)))
+        plans[iid] = {"budget": round(b), "vote_cost": round(vc), "plan_cost": round(pc),
+                      "n_votes": n, "reference_runs": len(refs)}
+    median = sorted(p["n_votes"] for p in plans.values())[len(plans) // 2] if plans else lo
+    for iid in ids:
+        plans.setdefault(iid, {"n_votes": median, "budget_source": "fallback (no reference)"})
+    return plans
+
+
+def apply_arm(pipeline, arm):
+    """Swap stages 6-7 for a non-original arm, on this pipeline instance only (the pipeline file
+    is unchanged). "original": as released. "self_consistency" (decisions.md 2026-10-02): N votes
+    with the released vote prompt, majority chain as released, then a single-agent plan with no
+    debate: one round-1 analysis, round 2 skipped, the released discriminator. The discriminator
+    reads `refined_modification_locations` (the round-2 field), so the skipped round passes each
+    round-1 answer through with `modification_locations` copied to that name (format only)."""
+    name = (arm or {}).get("name", "original")
+    if name == "original":
+        return {"name": "original"}
+    if name != "self_consistency":
+        raise ValueError(f"unknown arm {name}")
+    n = int(arm["n_votes"])
+    vote, plan = pipeline._vote_on_chains, pipeline._generate_modification_plan
+
+    def sc_vote(chains, issue, num_agents=5):
+        return vote(chains, issue, num_agents=n)
+
+    def single_agent_plan(winning_chain, issue, num_agents=5, instance_id=None, cache_timestamp=None):
+        return plan(winning_chain, issue, 1, instance_id, cache_timestamp)
+
+    def no_debate(chain_info, issue_description, first_round_analyses, instance_id=None,
+                  cache_timestamp=None):
+        out = []
+        for a in first_round_analyses:
+            an = a.get("analysis")
+            if an:
+                an = dict(an, refined_modification_locations=an.get("modification_locations", []))
+            out.append(dict(a, round="second_round_skipped", analysis=an))
+        return out
+
+    pipeline._vote_on_chains = sc_vote
+    pipeline._generate_modification_plan = single_agent_plan
+    pipeline._conduct_second_round_analysis = no_debate
+    return {"name": name, "n_votes": n}
 
 
 def instance_ids(cfg):
@@ -366,6 +454,19 @@ def main():
 
     raw_path = os.path.join(out, "raw.jsonl")
     keep = cfg["instance_fields"]["keep"]
+    arm_cfg = pipe.get("arm") or {"name": "original"}
+    arm_plans = (sc_budgets(arm_cfg, ids) if arm_cfg.get("name") == "self_consistency" else {})
+    if arm_plans:
+        manifest["arm_plans"] = arm_plans
+        with open(os.path.join(out, "manifest.json"), "w") as f:
+            json.dump(manifest, f, indent=2, default=str)
+        print(f"self-consistency arm: n_votes per instance "
+              f"{sorted(Counter(p['n_votes'] for p in arm_plans.values()).items())}", flush=True)
+
+    def arm_for(iid):
+        if arm_cfg.get("name") == "self_consistency":
+            return {"name": "self_consistency", "n_votes": arm_plans[iid]["n_votes"]}
+        return {"name": arm_cfg.get("name", "original")}
 
     empty_tokens = {"total": {"calls": 0, "errors": 0, "truncated": 0, "prompt_tokens": 0,
                               "completion_tokens": 0}, "by_stage": {}}
@@ -387,7 +488,7 @@ def main():
 
     if workers <= 1:
         for i, iid in enumerate(ids, 1):
-            record(run_one(iid, keep, pipe, vote_lp, cfg.get("dataset_file")), i)
+            record(run_one(iid, keep, pipe, vote_lp, cfg.get("dataset_file"), arm_for(iid)), i)
     else:
         import multiprocessing as mp
         from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -405,8 +506,8 @@ def main():
             broken = []
             with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context("spawn"),
                                      initializer=_init_worker, max_tasks_per_child=1) as ex:
-                futs = {ex.submit(run_one, iid, keep, pipe, vote_lp, cfg.get("dataset_file")): iid
-                        for iid in pending}
+                futs = {ex.submit(run_one, iid, keep, pipe, vote_lp, cfg.get("dataset_file"),
+                                  arm_for(iid)): iid for iid in pending}
                 for fut in as_completed(futs):
                     iid = futs[fut]
                     try:
