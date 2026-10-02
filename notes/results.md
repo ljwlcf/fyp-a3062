@@ -17,6 +17,40 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-02 — Backbone trial, interim: Qwen2.5-72B with the released parser (Phase 1, backbone choice)
+Config: `ablation/configs/backbone_trial_72b_v1.yaml` · Raw + scores:
+`ablation/results/backbone_trial_72b_v1/20261002-103421/` (EEE job 180343; 2 pro6000 Server
+Edition, tensor parallel, highmem, 8 workers, 64k context via YaRN, released JSON parser,
+released max_tokens caps). Queue: submitted 06:47, started 10:26 UTC (~59 min genuine wait for
+two cards, the rest our own QoS limit); server up in 7.7 min (145 GB weights from the HDD tier).
+
+**Numbers** (10 instances):
+- 10/10 completed, 0 debate collapses (the 32B under the same parser: 8/10 collapsed).
+- Gold file built 10/10, kept 10/10, selected chain 10/10; Acc@1 (File) 9/10 (sympy-13647 wrong).
+- Debate effect: 9 unchanged-right, 1 unchanged-wrong, 0 changed. Round-1 agreement 1.0; vote
+  agreement 0.92; split votes 2/10; no invalid votes; agents dropped on 7/10 instances (some
+  replies unparseable, never all five).
+- Hallucinated start entities 48/200 (24%; 32B 34-37%, 7B 22-27%).
+- Truncation: 35/1,751 calls, all in the pre-filter (35/625 = 5.6%; 32B ~25%); 34 of the 35 cut
+  replies already contained a complete JSON object (prose after it), 1 needed repair.
+- 427k tokens per instance (graph walk 330k, vote 47k, debate 50k); 2,254 s per instance with 8
+  in parallel; job RAM peak 173.2 GB of 180 GB (mostly page cache from the 145 GB weights;
+  close to the limit, watch it).
+
+**Takeaway so far.** The 72B is the first backbone that runs the released pipeline as intended:
+clean enough JSON for the released parser, little truncation, and the best localization in the
+trial. Its votes and debate are near-unanimous, which is what capability saturation predicts
+and leaves adaptive debate little disagreement to exploit. The 72B lenient pass (180368) and the
+32B on 2 GPUs (180486/7) are still to come.
+
+Correction (2026-10-02, after a scorer fix for `entity_N` location names): the debate did change
+the file-level answer in three 7B order-check runs (fixed-b 20261002-055750: one wrong->right
+and one wrong->other-wrong; shuffle seed 3 20261002-061510: one wrong->other-wrong). "0 changes"
+holds for the two shakeout runs (20 instance-runs) and every 32B/72B run so far, not for all 7B
+runs.
+
+---
+
 ## 2026-10-02 — Backbone trial, interim: Qwen2.5-Coder-32B with the released parser (Phase 1, backbone choice)
 Config: `ablation/configs/backbone_trial_32b_v1.yaml` · Raw + scores:
 `ablation/results/backbone_trial_32b_v1/20261002-065000/` (EEE job 180342; 1 pro6000 highmem,

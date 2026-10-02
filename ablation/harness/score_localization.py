@@ -41,15 +41,15 @@ STAGE_GROUP = {  # pipeline method that made the call -> cost bucket
     "analyze_worker_round2": "debate",
     "_conduct_final_discrimination": "debate",
 }
-ENTITY_NUM = re.compile(r"Entity\s+(\d+)\s*:?\s*")
+ENTITY_NUM = re.compile(r"[Ee]ntity[\s_#-]*(\d+)\s*:?\s*")  # "Entity 3: ...", "entity_3", "Entity #3"
 PY_PATH = re.compile(r"([\w./-]+\.py)")
 
 
 def resolve_location(text, chain):
     """Map an agent's free-text location onto a winning-chain node id, or None.
-    Agents write it three ways: a full node id ('a/b.py:C.f'), 'Entity N: ...' where N is
-    the entity's 1-based position in the chain as numbered in their prompt, or a bare
-    qualified name ('C.f')."""
+    Agents write it four ways: a full node id ('a/b.py:C.f'), 'Entity N: ...' or 'entity_N'
+    where N is the entity's 1-based position in the chain as numbered in their prompt, or a
+    bare qualified name ('C.f')."""
     text = str(text or "").strip()
     m = PY_PATH.search(text)
     if m:
