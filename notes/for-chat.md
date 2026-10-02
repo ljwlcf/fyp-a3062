@@ -9,6 +9,36 @@ Answered with a pointer.
 
 ## Open
 
+- **Possible development: target the graph walk, stage 4 and starting points, not only the
+  debate?** For chat and A/P Chen; the approved plan (2026-10-01) is about the debate, so nothing
+  here gets built without her agreement. Measured so far (results.md 2026-10-02):
+  * Cost: the code-map walk (stages 1-3) is 76-83% of tokens per instance in every run, incl. the
+    72B (77%); the vote ~7-11%, the debate ~10-12%. Adaptive debate can save at most ~12%.
+  * Where answers are lost: stage 4 (keeps chains least similar to the longest one, never looks
+    at the issue) dropped the gold file on 2/10 and 1/10 instances with the 7B and 1/10 with the
+    32B (released parser), but 0/10 with the 32B (lenient) and 0/10 with the 72B; the vote lost
+    it on a few 7B instances; the 72B selected the gold chain on 10/10. The debate changed the
+    file-level answer in 3 of ~80 7B instance-runs (1 wrong->right, 2 wrong->other wrong; order
+    check) and 0 times with the 32B or 72B.
+  * Made-up starting points: 22-37% of stage-2 start entities are not in the code map and are
+    silently dropped (7B 22-27%, 32B 34-37%, 72B 24%).
+  Candidate modifications, one at a time as the plan requires:
+  1. Issue-aware stage-4 selection: rank kept chains by relevance to the issue as well as
+     diversity (e.g. maximal marginal relevance). Correction to the side-chat note: the
+     pipeline does NOT already embed the issue (its e5 model only embeds chains, in stage 4),
+     so this adds one issue embedding with the already-loaded model. Measured as kept-given-
+     built recall.
+  2. Grounded starting points: map a made-up entity name to the nearest real node instead of
+     dropping it. The name index and a fuzzy retriever already exist in the graph searcher
+     (`global_name_dict`, `fuzzy_retrieve_from_graph_nodes`); stage 3 just checks the exact id.
+  3. A cheaper walk: fewer or shorter LLM calls in neighbour pre-filtering and node selection,
+     where most tokens go.
+  Questions: a second modification if adaptive debate shows little room (split-vote rate near
+  zero, or the debate rarely changing the answer, as with the 72B so far: 2/10 split, 0 changes)?
+  A replacement direction? Or keep the debate focus and present these as future work?
+  Caution: the evidence is 7B runs plus one 10-instance pass each of the 32B and 72B. Re-check
+  with the chosen backbone's 75-instance baseline before deciding; with the 72B, stage 4 lost
+  nothing and almost no answer is lost anywhere, which weakens candidates 1 and 2.
 - **Report framing: one model family throughout (threat to validity).** Every agent and both
   backbone candidates in the trial are Qwen models (Qwen2.5-Coder-7B for debugging,
   Qwen2.5-Coder-32B and Qwen2.5-72B for the real runs; decisions.md 2026-10-02), so findings
