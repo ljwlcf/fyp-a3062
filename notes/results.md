@@ -17,6 +17,47 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-02 — Shakeout: 10 instances, 7B debugging model, a6000 (Phase 1, measurement setup)
+Config: `ablation/configs/shakeout10_localization_v1.yaml` · Raw + scores:
+`ablation/results/shakeout10_localization_v1/20261002-041812/` (EEE job 180175, one a6000,
+vLLM 0.30.0, `--workers 2`). The earlier folder `20261002-040139` is job 180136, which ran
+out of RAM after 4 instances (4 workers, 24 GB) and is kept only as a record of that failure.
+
+**Setup.** 10 hand-picked instances (3 sphinx, 4 django, 3 sympy; every difficulty band; two
+multi-file gold patches), Qwen2.5-Coder-7B-Instruct bf16, one run, pipeline as released.
+Scored with `ablation/harness/score_localization.py`.
+
+**Numbers** (rates over 10 instances):
+- Gold file in ANY chain built (graph's job): 10/10.
+- Still in a KEPT chain after stage 4's dissimilarity filter: 8/10, so 2 lost before any vote
+  (sphinx-8548, sympy-18189).
+- In the chain the vote SELECTED: 7/10, i.e. 7 of the 8 where it was still available.
+- Acc@1 (File), first file of the final plan: 7/10, identical to selection on every instance.
+- Debate effect (round-1 majority file vs final plan file): 7 unchanged-right, 3
+  unchanged-wrong, 0 changed. Mean round-1 agreement 0.97; mean vote agreement 0.86.
+- The one wrong vote with the gold chain still available (django-11999) was also the one
+  split vote (2/5 for the winner); the debate did not change it.
+- Winner was chain_1 (always the longest, always shown first) in 3/10.
+- Agents dropped by unparseable JSON: at least one in 5/10 instances.
+- Start entities not in the graph (hallucinated by stage 2): 43 of 200 attempts (22%).
+- Context overflow: 5 calls failed on the 32k-token limit (4 in sympy-13647, 1 in sympy-18189),
+  all in `_prefilter_neighbors_with_llm`.
+- Tokens per instance: mean 379k (graph walk 290k = 77%, vote 43k = 11%, debate 46k = 12%);
+  range 147k-1,092k (sympy-18189). Mean 387 s per instance with 2 in parallel.
+- Job RAM peak 24.0 GB of 24 GB with 2 workers (includes reclaimable page cache); 4.07 GB per
+  worker process regardless of repository.
+
+**Takeaway.** Pattern only (7B model, n = 10, one seed), but it is the pattern the approved
+plan is about: the gold location is lost at stage 4 or the vote, never by the debate; the debate
+changed nothing on these instances while costing as much as the vote; and the single split vote
+is exactly where adaptive debate would spend its tokens. Most of the cost is the graph walk.
+
+**Caveats.** Debugging model, one seed, temperature 0.7 everywhere; a second sample of the same
+10 instances (pro6000, job 180200) is running. Debate effect is file-level; within-file changes
+are not yet measured.
+
+---
+
 ## 2026-10-01 — Smoke test repeated on the EEE cluster: 3x faster, debate collapsed (Phase 1, setup)
 Config: `ablation/configs/smoke_localization_v1.yaml` · Raw:
 `ablation/results/smoke_localization_v1/20261001-092851/` (EEE job 179270) · Compare with the

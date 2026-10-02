@@ -318,3 +318,12 @@ Blackwell (sm_120), records the RAM a highmem pro6000 job is given and the job's
 workers (the a6000 job with 4 workers was OOM-killed at 24 GB), and gives a speed comparison on
 the same 10 instances as the a6000 run (job 180175, 2 workers).
 
+## 2026-10-02 — Serve at least a 64k context for real runs (PENDING the backbone choice)
+In the shakeout, 5 calls failed because the prompt exceeded vLLM's 32,768-token limit, all in
+`_prefilter_neighbors_with_llm` on sympy, where a node can have hundreds of name-matched
+neighbours. The pipeline catches the error and that branch of the walk is lost. The paper used
+DeepSeek-V3 through its API (64k context), so a 32k cap is our deviation, not the method's.
+Plan: serve the real backbone with max-model-len >= 65,536 (Qwen2.5 models via YaRN rope
+scaling, factor 2 over their native 32k; native for models that have it), log it in
+deviations.md, and keep counting context-overflow errors per run (scorer: `llm_errors`).
+
