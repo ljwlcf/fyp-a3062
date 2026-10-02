@@ -80,7 +80,10 @@ class CallLog:
         rec.update(seconds=time.time() - rec["started"],
                    prompt_tokens=getattr(usage, "prompt_tokens", None),
                    completion_tokens=getattr(usage, "completion_tokens", None),
-                   finish_reason=resp.choices[0].finish_reason if resp.choices else None)
+                   finish_reason=resp.choices[0].finish_reason if resp.choices else None,
+                   # kept so parse failures (the pipeline drops agents whose JSON fails a
+                   # strict json.loads) can be inspected; ~100 KB per instance
+                   response=resp.choices[0].message.content if resp.choices else None)
         with self._lock:
             self.records.append(rec)
         return resp

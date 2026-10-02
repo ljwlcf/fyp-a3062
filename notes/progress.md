@@ -48,13 +48,18 @@ kept -> selected recall, Acc@1 File, chain_1 wins, dropped agents, debate before
 parallel worker processes in the runner, build_full_graphs.py, shakeout10 config. A/P Chen
 approved the adaptive-debate direction (decisions.md, committed from another session);
 CLAUDE.md rewritten to match.
-Broke: Nothing known. Unverified: the runner's parallel mode and build_full_graphs.py
-(graphs job 179267 had built 7/10 when last seen), and job 179270's outcome.
-Next: Read job 179270's log and graphs job 179267; rsync EEE results home and score them.
-Then the 10-instance shakeout (`sbatch --time=02:00:00 ablation/eee/run_localization_job.sh
-ablation/configs/shakeout10_localization_v1.yaml`). Choose the real backbone (for-chat.md).
-Ask A/P Chen about her EEE project QoS. Check why total_chains_generated (20) differs from
-all_chains (12). New hypotheses (for-chat.md).
+Broke: Nothing known. Unverified: the runner's parallel mode (shakeout will test it).
+Later (2026-10-02, same session): EEE job 179270 finished: ok in 158.8 s (3x MLDA), but 4/5
+round-1 debate answers failed the pipeline's strict JSON parse, the vote picked a chain without
+the gold file, and the plan came out empty (results.md). Graph job 179267 built all 10 full
+graphs (sympy-18189 took 21 min). Runner now saves every reply's text; parser decision pending
+(decisions.md). Fixed: results rsync must be one-way (`--ignore-existing`); a two-way sync
+overwrote local score files.
+Next: Run the 10-instance shakeout on EEE (`sbatch --time=02:00:00
+ablation/eee/run_localization_job.sh ablation/configs/shakeout10_localization_v1.yaml`), then
+score it: parse-failure rate per round decides the parser question. Choose the real backbone
+(for-chat.md). Ask A/P Chen about her EEE project QoS. Check total_chains_generated vs
+all_chains. New hypotheses (for-chat.md).
 
 ## 2026-09-20
 Did: First real measurement of the project. Built the RQ1 harness

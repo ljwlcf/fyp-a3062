@@ -21,7 +21,8 @@ there by `~/.bashrc`. Logs: `/projects/fypA3062/logs/`. Cluster rules: NTUEEEClu
 5. Score: `python ablation/harness/score_localization.py ablation/results/<config>/<run id>`
    (writes `scores.jsonl` and `summary.json` next to the raw output; runs anywhere).
 6. Results land in `~/FYP-A3062/ablation/results/<config name>/<run id>/`. Bring them home:
-   `rsync -az --exclude work eee:~/FYP-A3062/ablation/results/ ~/IM4080/FYP-A3062/ablation/results/`
+   `rsync -az --ignore-existing --exclude work eee:~/FYP-A3062/ablation/results/ ~/IM4080/FYP-A3062/ablation/results/`
+   (`--ignore-existing`: results only flow home and never overwrite local files, e.g. scores)
 
 Differences from MLDA (ablation/gpu21/README.md): no tmux (batch jobs survive logout); the
 port is per job; vLLM 0.30.0 instead of 0.9.2 (driver supports CUDA 13); a GPU is billed in SU

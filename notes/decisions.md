@@ -281,3 +281,20 @@ Priority order, per her instruction (make ONE work first):
    localization also resolves more issues.
 Localization-only scope is implicitly accepted (she raised no objection to the question asked in
 the email), with the small end-to-end check as the exception. TODO: update CLAUDE.md to match.
+
+## 2026-10-01 — Agents dropped by the strict JSON parser: measure first, then decide (PENDING)
+The debate's parser (`_parse_modification_analysis`, and the vote's equivalent) strips a
+```json fence and calls strict `json.loads`; any reply with a raw newline or tab inside a
+string is discarded and that agent silently leaves the debate. With the 7B model this dropped
+1/5 agents on MLDA and 4/5 in round 1 (all in round 2) on EEE, collapsing the debate. The
+released code was tuned on DeepSeek-V3; a smaller backbone plus a strict parser loses agents
+for formatting reasons, not reasoning ones.
+Options: (a) keep the parser as released and report agent loss as a measured property of the
+system (it is part of "how the debate behaves in practice", plan item 1); (b) parse leniently
+(`json.loads(strict=False)`, then fall back to extracting the outermost JSON object) as a
+declared deviation that changes nothing but formatting tolerance.
+Decision for now: no change. The runner now stores every reply, the scorer counts valid
+answers per round, and the shakeout and backbone choice will show how often it happens with
+the real model. If the chosen backbone still loses agents often, adopt (b) for ALL arms,
+including the original-debate baseline, and log it in deviations.md. Revisit after the shakeout.
+
