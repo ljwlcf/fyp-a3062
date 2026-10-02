@@ -390,7 +390,8 @@ saturation predicts a stronger model leaves the debate less to do), seconds and 
 instance. Result goes into for-chat.md's backbone question for A/P Chen.
 Storage: the 150 GB SSD holds envs (14 GB) + 7B and embedding (18 GB) + the 32B (66 GB); the
 72B (145 GB) cannot fit on the SSD at all, so it lives on a new HDD project folder, weights
-only. Cost of that: every server start reads 145 GB from the HDD tier (estimated 10-20 min of
+only (`/projects/fypA3062models`, 250 GB, created 2026-10-02). Cost of that: every server
+start reads 145 GB from the HDD tier (estimated 10-20 min of
 billed GPU time per job; the job script now waits up to 45 min for the server). Models are
 downloaded by `ablation/eee/download_models.sh` (CPU job, pinned commit, PINNED.txt beside the
 weights) because run jobs are offline.
