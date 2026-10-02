@@ -1,12 +1,15 @@
 #!/bin/bash
-# Print the best GPU model that is free right now, by the project's priority order
-# (decisions.md 2026-10-02): pro6000 > rtx5090 > 6000ada / l40 > a6000 / a40.
-#   ablation/eee/pick_gpu.sh [GB_NEEDED=24] [N_GPUS=1]
-# GB_NEEDED is the model's total GPU memory need (weights + KV cache); a GPU model qualifies
-# if N_GPUS x its memory covers it and the ug QoS allows N_GPUS of it. Light enough for a
-# login node (one sinfo call). Prints e.g. "pro6000"; free counts go to stderr.
-# Use:  sbatch --gres=gpu:$(ablation/eee/pick_gpu.sh 24):1 ...
-need=${1:-24}; n=${2:-1}
+# Print the best GPU that is free right now, as "<model>:<count>" for --gres=gpu:...,
+# by the project's priority order (decisions.md 2026-10-02):
+#   pro6000 > rtx5090 > 6000ada / l40 > a6000 / a40.
+#   ablation/eee/pick_gpu.sh [GB_NEEDED=24]
+# GB_NEEDED is the model's total GPU memory need (weights + KV cache). For each model, in
+# priority order, the count is the FEWEST cards that cover it (ceil(GB_NEEDED / card GB)); the
+# model qualifies if the ug QoS allows that many. The first qualifying model with that many free
+# cards wins. If none has enough free, it queues on the first qualifying model. One sinfo call,
+# light enough for a login node. Free counts go to stderr.
+# Use:  sbatch --gres=gpu:$(ablation/eee/pick_gpu.sh 80) ...   (job script sets tensor parallel)
+need=${1:-24}
 #            model    GB  ug-limit
 priority="pro6000  96 2
 rtx5090  32 1
@@ -27,11 +30,13 @@ echo "free now: $(echo $free | tr '\n' ' ')" >&2
 
 first=""
 while read -r model gb limit; do
-    [ $((gb * n)) -ge "$need" ] && [ "$n" -le "$limit" ] || continue
-    [ -z "$first" ] && first=$model
+    n=$(( (need + gb - 1) / gb ))              # fewest cards that cover the need
+    [ "$n" -le "$limit" ] || continue           # QoS would refuse it
+    [ -z "$first" ] && first="$model:$n"
     have=$(echo "$free" | awk -v m="$model" '$1 == m {print $2}')
-    if [ "${have:-0}" -ge "$n" ]; then echo "$model"; exit 0; fi
+    if [ "${have:-0}" -ge "$n" ]; then echo "$model:$n"; exit 0; fi
 done <<< "$priority"
 
+if [ -z "$first" ]; then echo "no GPU model can hold ${need} GB within the QoS limits" >&2; exit 1; fi
 echo "no qualifying GPU free; queueing on $first" >&2
 echo "$first"

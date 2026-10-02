@@ -29,8 +29,10 @@ mkdir -p "$TMPDIR"
 module load Miniforge3
 export FLASHINFER_WORKSPACE_BASE=$P/.tmp     # FlashInfer's compiled-kernel cache, on the SSD
 eval "$(conda shell.bash hook)"
-echo "== job $SLURM_JOB_ID on $(hostname), GPU $CUDA_VISIBLE_DEVICES, $(date)"
-nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+# Split the model over every GPU the job was given (pick_gpu.sh chooses the count).
+NGPU=$(echo "$CUDA_VISIBLE_DEVICES" | tr ',' '\n' | grep -c .)
+echo "== job $SLURM_JOB_ID on $(hostname), GPU(s) $CUDA_VISIBLE_DEVICES (tensor parallel $NGPU), $(date)"
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader | sort | uniq -c
 
 # 1. Start the model server in the background.
 # vLLM 0.30 samples with FlashInfer, which JIT-compiles a kernel on first use and needs nvcc
@@ -45,6 +47,7 @@ export CUDA_HOME=${CUDA_HOME:-$EBROOTCUDA}
 echo "nvcc $(command -v nvcc), CUDA_HOME=$CUDA_HOME"
 LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
     vllm serve "$MODEL" --host 127.0.0.1 --port "$PORT" --dtype bfloat16 \
+    --tensor-parallel-size "$NGPU" \
     --max-model-len 32768 --gpu-memory-utilization 0.90 --seed 0 > "$VLLM_LOG" 2>&1 &
 VLLM_PID=$!
 module unload GCC/13.3.0 CUDA/13.0.0

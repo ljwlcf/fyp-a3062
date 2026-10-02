@@ -36,6 +36,15 @@ def git_sha(path):
         return None
 
 
+def _gpu_names():
+    """GPU model(s) this job sees, for the manifest (comparisons must share one GPU model)."""
+    try:
+        return subprocess.run(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
+                              capture_output=True, text=True, check=True).stdout.split("\n")[:-1]
+    except Exception:
+        return None
+
+
 def served_model(base_url):
     """What the endpoint says it is serving, so the manifest records the real checkpoint."""
     try:
@@ -193,6 +202,8 @@ def main():
         "python": sys.version, "repo_sha": git_sha(ROOT), "fork_sha": git_sha(FORK),
         "served_models": served_model(llm["base_url"]),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+        "slurm_gpus": os.environ.get("SLURM_JOB_GPUS") or os.environ.get("SLURM_GPUS_ON_NODE"),
+        "gpu_names": _gpu_names(),
         "base_url": llm["base_url"], "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
     }
     with open(os.path.join(out, "manifest.json"), "w") as f:

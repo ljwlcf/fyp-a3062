@@ -302,13 +302,19 @@ including the original-debate baseline, and log it in deviations.md. Revisit aft
 Jingwei's instruction. For every EEE job, check `sinfo` at submission and use the best GPU that
 is free: pro6000 first; then rtx5090 if the model fits in its 32 GB; then 6000ada / l40; then
 a6000 / a40. The 180k SU/month budget is not to be treated as a constraint. Implemented as
-`ablation/eee/pick_gpu.sh [GB_NEEDED] [N_GPUS]`, which reads sinfo, skips drained nodes,
-respects the ug QoS per-model limits (2 GPUs, 1 rtx5090), and queues on the highest-priority
-qualifying model if none is free. Job scripts keep an a6000 default; the choice is applied at
-submission with `sbatch --gres=gpu:<model>:<n> ...`, which overrides the script.
-Consequence for comparisons: one comparison still runs on one GPU model and one vLLM version
-(decisions 2026-10-01), so a run's GPU model is recorded in its manifest and, for paired arms,
-all arms of one comparison are submitted with the same `--gres`.
+`ablation/eee/pick_gpu.sh [GB_NEEDED]`, which reads sinfo and skips drained nodes. It also
+chooses the GPU COUNT (Jingwei, same day): for each model in priority order, the fewest cards
+that cover GB_NEEDED (ceil(GB_NEEDED / card memory)), allowed only if the ug QoS permits that
+many (2 per model, 1 rtx5090); the first such model with that many cards free wins, else it
+queues on the first qualifying model. It prints `<model>:<count>`, used as
+`sbatch --gres=gpu:$(ablation/eee/pick_gpu.sh <GB>) ...`, which overrides the job script's a6000
+default. `run_localization_job.sh` then sets vLLM's `--tensor-parallel-size` to the number of
+GPUs the job received. E.g. a 32B bf16 model at ~80 GB: one pro6000, or two 48 GB cards if no
+pro6000 is free; it never runs on one 48 GB card (would not fit).
+Consequence for comparisons: one comparison still runs on one GPU model, one GPU count and one
+vLLM version (decisions 2026-10-01; tensor parallelism changes floating-point reduction order,
+so 1 vs 2 cards is not numerically identical), so a run's GPU model and count are recorded in
+its manifest and all arms of one comparison are submitted with the same `--gres`.
 RAM per GPU (measured from node data 2026-10-02): a6000 job 24 GB; regular pro6000 node
 ~33 GB per GPU (337,920 MB allocated over 10 GPUs on gpu-pro6000-5). pro6000 nodes tagged
 `highmem` (e.g. gpu-pro6000-4: 396 GB for 4 GPUs) and `midmem` give more with `-C highmem`.
