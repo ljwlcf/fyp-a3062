@@ -54,12 +54,14 @@ round-1 debate answers failed the pipeline's strict JSON parse, the vote picked 
 the gold file, and the plan came out empty (results.md). Graph job 179267 built all 10 full
 graphs (sympy-18189 took 21 min). Runner now saves every reply's text; parser decision pending
 (decisions.md). Fixed: results rsync must be one-way (`--ignore-existing`); a two-way sync
-overwrote local score files.
+overwrote local score files. Explained the 20-vs-12 chain count: one attempt per stage-2 start
+entity, and attempts whose entity id is not in the graph come back empty: 8/20 (MLDA) and 13/20
+(EEE) start entities were hallucinated. Scorer now counts them. Jingwei now lets Claude submit
+EEE jobs too (memory).
 Next: Run the 10-instance shakeout on EEE (`sbatch --time=02:00:00
 ablation/eee/run_localization_job.sh ablation/configs/shakeout10_localization_v1.yaml`), then
 score it: parse-failure rate per round decides the parser question. Choose the real backbone
-(for-chat.md). Ask A/P Chen about her EEE project QoS. Check total_chains_generated vs
-all_chains. New hypotheses (for-chat.md).
+(for-chat.md). Ask A/P Chen about her EEE project QoS. New hypotheses (for-chat.md).
 
 ## 2026-09-20
 Did: First real measurement of the project. Built the RQ1 harness

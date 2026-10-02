@@ -155,8 +155,14 @@ def score_instance(rec, cache, gold_files, gold_entities):
     kept = [c["chain"] for c in data(cache, "stage_4_diverse_chains").get("selected_chains", [])
             if c.get("chain")]
     s["n_chains_built"], s["n_chains_kept"] = len(built), len(kept)
-    s["n_chains_generated_reported"] = data(cache, "stage_3_localization_chains").get(
-        "total_chains_generated")
+    # One chain attempt per stage-2 start entity; an attempt is empty mostly because the LLM
+    # proposed an entity id that is not in the graph (a hallucinated file or function).
+    attempts = [c for g in data(cache, "stage_3_localization_chains").get(
+        "grouped_localization_chains", []) for c in g.get("localization_chains", [])]
+    s["n_chain_attempts"] = len(attempts)
+    s["n_start_entities_not_in_graph"] = sum(
+        1 for c in attempts if c.get("error") == "Entity not found in graph")
+    s["n_chain_attempts_empty"] = sum(1 for c in attempts if not c.get("chain"))
     for name, chains in (("built", built), ("kept", kept)):
         h = [hits(c, gold_files, gold_entities) for c in chains]
         s[f"{name}_has_gold_file"] = any(x["file"] for x in h)
@@ -245,6 +251,9 @@ def summarize(rows):
         vals = [r[k] for r in ok if r.get(k) is not None]
         summ[f"mean_{k}"] = round(sum(vals) / len(vals), 3) if vals else None
     summ["unresolved_locations"] = sum(r.get("unresolved_locations", 0) for r in ok)
+    att = sum(r.get("n_chain_attempts", 0) for r in ok)
+    summ["start_entities_not_in_graph"] = {
+        "n": sum(r.get("n_start_entities_not_in_graph", 0) for r in ok), "of_attempts": att}
     return summ
 
 
