@@ -51,6 +51,22 @@ Lenient parsing also changes the graph walk (more walk steps parse, so the walk 
 555k walk tokens vs 304k), so the parser setting is not confined to the debate stage.
 These are 1-GPU runs; under the GPU rules the 32B is rerun on 2 pro6000 (`backbone_trial_32b_v2`).
 
+**Truncation at max_tokens** (scorer `truncated_by_stage` / `truncated_fate`; each cut-off
+reply's saved text replayed through the lenient parser):
+
+| run | truncated / calls | `_prefilter_neighbors_with_llm` (cap 1000) | other stages |
+|---|---|---|---|
+| 7B pro6000 shakeout (180200) | 0 / 1,450 | 0 | 0 |
+| 32B released parser (180342) | 95 / 1,104 | 94 / 372 (25%) | 1 / 565 node selection |
+| 32B lenient parser (180367) | 210 / 2,227 | 209 / 803 (26%) | 1 / 1,208 node selection |
+
+Fate of the cut-off replies: under the released parser all are dropped (that walk branch is lost);
+replayed leniently, 180342's would give 24 complete objects (the cut fell after the JSON), 64
+repaired partial answers, 7 failures; in 180367 they gave 43 complete, 134 repaired PARTIAL
+neighbour lists (candidates silently lost), 33 failures. Truncation is a property of the backbone's
+verbosity under caps tuned for DeepSeek-V3, concentrated in one stage; pending decision in
+decisions.md (2026-10-02, max_tokens caps).
+
 ---
 
 ## 2026-10-02 — Order check: vote agreement partly reflects display order; released order helps accuracy (Phase 1, precondition)

@@ -470,3 +470,21 @@ Is the plan practical? Measurement under way:
     our own QoS limit. The summary by time of day, and whether the 32B/72B plan is practical,
     will be written here when the 24 h are up.
 
+## 2026-10-02 — max_tokens caps: keep as released, or raise where truncation is frequent? (PENDING)
+Measured (results.md, backbone trial): the 7B never hits a cap (0 / 1,450 calls); the 32B
+truncates about a quarter of `_prefilter_neighbors_with_llm` replies (cap 1,000 tokens:
+94/372 with the released parser, 209/803 with lenient parsing) and almost nothing elsewhere
+(1 node-selection call in each run). Cut-off replies are incomplete JSON: the released parser
+drops them, so that branch of the graph walk is lost; with `--lenient-json`, `json_repair`
+usually closes them and returns a partial neighbour list (134 of 210 in job 180367), so the walk
+silently loses candidates. Why it matters: truncation depends on the backbone's verbosity, so it
+biases the 32B-vs-72B comparison towards terser models, and the caps were tuned for the paper's
+DeepSeek-V3, so a verbose backbone gets a weaker walk than the released system intended.
+Options: (a) keep the released caps and report truncation per stage as a measured property of
+the backbone (the scorer now does); (b) raise the pre-filter cap, e.g. 1,000 -> 3,000, plus any
+other stage where truncation is frequent with the chosen backbone, as a logged deviation applied
+to every arm (deviations.md entry required).
+Decide together with the parser setting once the backbone is chosen. Not changed for the trial
+runs already queued (72B, 32B v2), so the backbone comparison stays consistent; their truncation
+by stage goes into the trial write-up when they finish.
+

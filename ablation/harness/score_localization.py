@@ -96,6 +96,72 @@ def majority(files):
     return top, n / len(files)
 
 
+def _load_lenient_parser():
+    """The fork's lenient JSON parser (_a3062_loads), loaded from its source so a saved reply can
+    be replayed exactly as a --lenient-json run would parse it. None if the fork lacks it."""
+    path = os.path.join(ROOT, "swe-debate", "localization", "entity_localization_pipeline.py")
+    src = open(path).read()
+    start = src.find("from collections import Counter as _A3062Counter")
+    end_marker = 'raise ValueError("unparseable JSON in reply")'
+    if start == -1 or end_marker not in src:
+        return None
+    ns = {"json": json, "os": os}
+    exec(src[start:src.index(end_marker) + len(end_marker)], ns)
+    return ns
+
+
+LENIENT = _load_lenient_parser()
+
+
+def _strip_fence(text):  # what every parse site in the pipeline does before json.loads
+    text = (text or "").strip()
+    text = text[7:] if text.startswith("```json") else text
+    return text[:-3] if text.endswith("```") else text
+
+
+def truncation(rec):
+    """Calls cut off at max_tokens (finish_reason == "length"), by stage, and what parsing makes
+    of each cut-off reply: `released_ok` = the released strict parse still succeeds (the cut
+    fell after the JSON); otherwise the lenient parser is replayed on the saved text:
+    `first_value` (a complete object survived before the cut), `repaired` (json_repair closed the
+    truncated JSON: a PARTIAL answer), `failed`. Needs saved replies (runs from 2026-10-02 on)."""
+    by_stage, fate = Counter(), Counter()
+    for c in rec.get("calls", []):
+        if c.get("finish_reason") != "length":
+            continue
+        by_stage[c["stage"]] += 1
+        text = c.get("response")
+        if text is None:
+            fate["no_saved_reply"] += 1
+            continue
+        t = _strip_fence(text)
+        try:
+            json.loads(t)
+            fate["released_ok"] += 1
+            continue
+        except Exception:
+            pass
+        if LENIENT is None:
+            fate["released_dropped"] += 1
+            continue
+        stats = LENIENT["A3062_PARSE_STATS"]
+        before = dict(stats)
+        old = os.environ.get("A3062_LENIENT_JSON")
+        os.environ["A3062_LENIENT_JSON"] = "1"
+        try:
+            LENIENT["_a3062_loads"](t)
+        except Exception:
+            pass
+        finally:
+            if old is None:
+                os.environ.pop("A3062_LENIENT_JSON", None)
+            else:
+                os.environ["A3062_LENIENT_JSON"] = old
+        step = next((k for k in stats if stats[k] != before.get(k, 0)), "failed")
+        fate[step] += 1
+    return dict(by_stage), dict(fate)
+
+
 def load_gold():
     files = {}
     with open(MOATLESS) as f:
@@ -144,6 +210,8 @@ def score_instance(rec, cache, gold_files, gold_entities):
     s["tokens_total"] = sum(tok.values())
     s["llm_calls"] = rec.get("tokens", {}).get("total", {}).get("calls")
     s["llm_errors"] = rec.get("tokens", {}).get("total", {}).get("errors")
+    s["truncated_by_stage"], s["truncated_fate"] = truncation(rec)
+    s["calls_by_stage"] = {k: v["calls"] for k, v in rec.get("tokens", {}).get("by_stage", {}).items()}
     s["truncated"] = rec.get("tokens", {}).get("total", {}).get("truncated")
     if rec["status"] != "ok" or cache is None:
         s["error"] = rec.get("error") or "no stage cache"
@@ -297,6 +365,16 @@ def summarize(rows):
         vals = [r[k] for r in ok if r.get(k) is not None]
         summ[f"mean_{k}"] = round(sum(vals) / len(vals), 3) if vals else None
     summ["unresolved_locations"] = sum(r.get("unresolved_locations", 0) for r in ok)
+    # Truncation at max_tokens, over ALL instances (crashed ones included): by stage, with the
+    # stage's call count, and what parsing makes of the cut-off replies.
+    trunc, calls, fate = Counter(), Counter(), Counter()
+    for r in rows:
+        trunc.update(r.get("truncated_by_stage") or {})
+        calls.update(r.get("calls_by_stage") or {})
+        fate.update(r.get("truncated_fate") or {})
+    summ["truncated_by_stage"] = {k: f"{trunc[k]}/{calls[k]}" for k in sorted(trunc)}
+    summ["truncated_total"] = f"{sum(trunc.values())}/{sum(calls.values())}"
+    summ["truncated_fate"] = dict(fate)
     att = sum(r.get("n_chain_attempts", 0) for r in ok)
     summ["start_entities_not_in_graph"] = {
         "n": sum(r.get("n_start_entities_not_in_graph", 0) for r in ok), "of_attempts": att}
