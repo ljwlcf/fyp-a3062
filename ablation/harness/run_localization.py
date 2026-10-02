@@ -126,6 +126,8 @@ def run_one(iid, keep_fields, pipe):
     _init_worker()
     from moatless.benchmark.utils import get_moatless_instance
     from entity_localization_pipeline import EntityLocalizationPipeline
+    import entity_localization_pipeline as elp
+    getattr(elp, "A3062_PARSE_STATS", {}).clear()  # per instance, also when workers == 1
 
     full = get_moatless_instance(instance_id=iid)
     instance = {k: full[k] for k in keep_fields}
@@ -144,6 +146,8 @@ def run_one(iid, keep_fields, pipe):
         rec["traceback"] = traceback.format_exc()
     rec["seconds"] = round(time.time() - t0, 1)
     rec["chain_order"] = order
+    import entity_localization_pipeline as elp  # which lenient-parse step succeeded, per reply
+    rec["json_parse"] = dict(getattr(elp, "A3062_PARSE_STATS", {}))
     order_dir = os.path.join(os.environ["ENTITY_PIPELINE_CACHE_DIR"], iid)
     os.makedirs(order_dir, exist_ok=True)
     with open(os.path.join(order_dir, "chain_order.json"), "w") as f:

@@ -211,8 +211,13 @@ Stage 3 chain building (`_dfs_traversal`) is single LLM calls steering the walk,
 What changed: all seven `json.loads` calls in `entity_localization_pipeline.py` (graph walk,
 vote, both debate rounds, final plan) go through `_a3062_loads`. With `A3062_LENIENT_JSON`
 unset or 0 it is exactly `json.loads`, so default runs reproduce the released code. With 1, a
-failed strict parse is retried with `strict=False` (raw newlines/tabs in strings), then on the
-outermost `{...}`/`[...]` in the reply (prose before or after the JSON). Fork commit after
+failed strict parse falls back in order: `strict=False` (raw newlines/tabs in strings); decode
+of the first `{...}` (prose before, extra text after); `json_repair` from that first `{`
+(comments, trailing commas, invalid escapes like `\s` in code); a later `{` (the first was
+prose); arrays only if no object works. Which step succeeded is counted per instance
+(`json_parse` in raw.jsonl). Replay on the 32B trial's saved replies: votes 20/20 (released
+14/20), round-1 answers 20/20 (released 0/20), all with a `modification_locations` list; two
+repaired answers carry stray extra keys from code inside strings. Fork commit after
 `2f252f9`, in the patch file. Runner switch: `pipeline.lenient_json` or `--lenient-json`,
 recorded in each manifest.
 Why: Qwen2.5-Coder-32B wraps its JSON answers in prose ("Based on the issue... {json}" or a
