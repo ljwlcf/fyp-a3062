@@ -491,4 +491,24 @@ to every arm (deviations.md entry required).
 Decide together with the parser setting once the backbone is chosen. Not changed for the trial
 runs already queued (72B, 32B v2), so the backbone comparison stays consistent; their truncation
 by stage goes into the trial write-up when they finish.
+Update 2026-10-02 (Jingwei leans to (b): raise caps only, no prompt edits, size from ~p99):
+- Correction: a dropped pre-filter reply does not lose the branch. On a parse failure
+  `_prefilter_neighbors_with_llm` falls back to `_fallback_neighbor_prefiltering` (first
+  neighbour per distinct file, in list order, no model). So under the released parser truncation
+  swaps the model's selection for a heuristic one; with lenient parsing a repaired reply gives a
+  partial model selection instead.
+- Check done: truncated pre-filter replies are per-neighbour prose before the JSON. The prompt's
+  first instruction is "Analyze each neighbor entity ID..."; the 32B enumerates neighbours
+  (>= 3 list items before any JSON in 87/94 and 199/209 truncated replies), the JSON starts after
+  a median ~3,700 chars and is usually cut mid-list ("selected_neighbors" present in 88/94 and
+  176/209). The 7B answers with JSON first in 511/511 replies (p99 436 tokens).
+- Sizing: the 32B's untruncated lengths are censored at the cap (p50 ~810, p90 ~950, p99 991-994,
+  i.e. the cap itself), so their p99 cannot size a new cap. Estimated full lengths (measured
+  prose before the JSON + a p99-sized JSON part, at 4.67 chars/token) over all pre-filter replies:
+  p50 ~875, p90 ~1,730, p99 ~1,860-1,880, max ~1,960 tokens (6 and 32 replies were cut before
+  any JSON, so only >= 1,000 is known for them). Candidate: pre-filter cap 1,000 -> 2,048
+  (estimated p99 rounded up), no other stage (1 truncated node-selection call in 1,773). To be
+  validated in the first raised-cap run: if pre-filter truncation stays above ~1%, raise again.
+- Still to do before deciding: compare truncation rates in the 72B runs. The 1,000-cap runs stay
+  as the as-released record.
 

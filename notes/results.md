@@ -60,10 +60,15 @@ reply's saved text replayed through the lenient parser):
 | 32B released parser (180342) | 95 / 1,104 | 94 / 372 (25%) | 1 / 565 node selection |
 | 32B lenient parser (180367) | 210 / 2,227 | 209 / 803 (26%) | 1 / 1,208 node selection |
 
-Fate of the cut-off replies: under the released parser all are dropped (that walk branch is lost);
+Fate of the cut-off replies: under the released parser all are dropped and the pre-filter falls
+back to a heuristic selection (first neighbour per file, no model; corrected 2026-10-02: the
+branch is not lost);
 replayed leniently, 180342's would give 24 complete objects (the cut fell after the JSON), 64
 repaired partial answers, 7 failures; in 180367 they gave 43 complete, 134 repaired PARTIAL
-neighbour lists (candidates silently lost), 33 failures. Truncation is a property of the backbone's
+neighbour lists (candidates silently lost), 33 failures (heuristic fallback). The cut-off replies
+are per-neighbour prose before the JSON (>= 3 list items first in 87/94 and 199/209); estimated
+full reply lengths for the 32B pre-filter: p50 ~875, p99 ~1,870 tokens (decisions.md). Truncation
+is a property of the backbone's
 verbosity under caps tuned for DeepSeek-V3, concentrated in one stage; pending decision in
 decisions.md (2026-10-02, max_tokens caps).
 
