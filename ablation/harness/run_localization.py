@@ -201,6 +201,47 @@ def instance_ids(cfg):
     return ids
 
 
+# Config parts that change results; a resumed run must match the original on all of them.
+# Not included: llm.base_url (per-job port), run.workers (concurrency only).
+def result_relevant(cfg):
+    return {"name": cfg.get("name"), "version": cfg.get("version"),
+            "instances": cfg.get("instances"), "instances_file": cfg.get("instances_file"),
+            "instances_slice": cfg.get("instances_slice"),
+            "model": cfg["llm"]["model"], "timeout_seconds": cfg["llm"].get("timeout_seconds"),
+            "pipeline": cfg["pipeline"], "instance_fields": cfg.get("instance_fields"),
+            "graph_index_dir": cfg["paths"]["graph_index_dir"]}
+
+
+def prepare_resume(run_dir, cfg):
+    """Continue a run in place: return (manifest, ids already recorded). Every instance with a
+    line in raw.jsonl is skipped whatever its status (a crash such as debate_collapsed is an
+    outcome, not a gap); instances in progress when the job died have no line and run again.
+    Refuses if the config differs from the original run in anything that changes results.
+    A torn last line (job killed mid-write) is dropped, keeping raw.jsonl.bak."""
+    with open(os.path.join(run_dir, "manifest.json")) as f:
+        manifest = json.load(f)
+    before, now = result_relevant(manifest["config_body"]), result_relevant(cfg)
+    diff = sorted(k for k in now if json.dumps(before.get(k), sort_keys=True, default=str)
+                  != json.dumps(now.get(k), sort_keys=True, default=str))
+    if diff:
+        raise SystemExit(f"--resume refused: config differs from {run_dir} in {diff}")
+    raw_path, done, good, torn = os.path.join(run_dir, "raw.jsonl"), set(), [], 0
+    if os.path.exists(raw_path):
+        with open(raw_path) as f:
+            for line in f:
+                try:
+                    done.add(json.loads(line)["instance_id"])
+                    good.append(line if line.endswith("\n") else line + "\n")
+                except (ValueError, KeyError):
+                    torn += 1
+        if torn:
+            os.replace(raw_path, raw_path + ".bak")
+            with open(raw_path, "w") as f:
+                f.writelines(good)
+    manifest.setdefault("resumes", []).append({"dropped_torn_lines": torn})
+    return manifest, done
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("config")
@@ -209,6 +250,8 @@ def main():
                     help="show the kept chains in a seeded random order (overrides pipeline.chain_order)")
     ap.add_argument("--lenient-json", action="store_true",
                     help="opt-in lenient JSON parsing in the fork (overrides pipeline.lenient_json)")
+    ap.add_argument("--resume", metavar="RUN_DIR",
+                    help="continue this run in place: skip instances already in its raw.jsonl")
     ap.add_argument("--workers", type=int, default=None,
                     help="instances run in parallel (separate processes); default run.workers or 1")
     args = ap.parse_args()
@@ -219,11 +262,6 @@ def main():
     workers = args.workers or cfg.get("run", {}).get("workers", 1)
     ids = instance_ids(cfg)
 
-    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
-    out = os.path.join(ROOT, cfg["paths"]["results"], run_id)
-    work = os.path.join(out, "work")
-    os.makedirs(work, exist_ok=True)
-
     llm, pipe = cfg["llm"], cfg["pipeline"]
     if args.lenient_json:
         pipe["lenient_json"] = True
@@ -231,6 +269,17 @@ def main():
         pipe["chain_order"] = {"mode": "shuffle", "seed": args.shuffle_seed}
     if args.base_url:
         llm["base_url"] = args.base_url
+
+    if args.resume:
+        out = os.path.abspath(args.resume)
+        old_manifest, done = prepare_resume(out, cfg)
+        run_id = old_manifest["run_id"]
+    else:
+        run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
+        out = os.path.join(ROOT, cfg["paths"]["results"], run_id)
+        old_manifest, done = None, set()
+    work = os.path.join(out, "work")
+    os.makedirs(work, exist_ok=True)
     # The fork reads all of these at import or construction time, so set them first.
     # Worker processes inherit the environment and the working directory.
     os.environ["LLM_BASE_URL"] = llm["base_url"]
@@ -258,9 +307,19 @@ def main():
                     ("MODEL", "SERVED_NAME", "MAX_LEN", "ROPE_YARN", "GPU_UTIL", "PARALLEL")},
         "base_url": llm["base_url"], "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
     }
+    if old_manifest is not None:
+        # keep the original run's manifest; record this continuation in its `resumes` list
+        old_manifest["resumes"][-1].update(
+            {k: manifest[k] for k in ("started", "host", "repo_sha", "fork_sha", "served_models",
+                                      "slurm_job_id", "workers", "base_url", "gpu_names",
+                                      "serving", "lenient_json")},
+            skipped=sorted(done), remaining=[i for i in ids if i not in done])
+        manifest = old_manifest
+        ids = [i for i in ids if i not in done]
     with open(os.path.join(out, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2, default=str)
-    print(f"run {run_id} -> {out}")
+    print(f"run {run_id} -> {out}" + (f" (resumed: {len(done)} done, {len(ids)} to run)"
+                                       if old_manifest is not None else ""))
     print(f"endpoint serves: {manifest['served_models']}")
     print(f"{len(ids)} instances, {workers} at a time", flush=True)
 
@@ -330,6 +389,8 @@ def main():
                       f"instances in a new pool", flush=True)
 
     manifest["finished"] = datetime.now().isoformat()
+    if manifest.get("resumes"):
+        manifest["resumes"][-1]["finished"] = manifest["finished"]
     with open(os.path.join(out, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=2, default=str)
 

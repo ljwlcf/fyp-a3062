@@ -36,3 +36,9 @@ kernel with nvcc on first use (compute nodes have no system CUDA).
 Job scripts start with `#!/bin/bash -l` (login shell): `module` is a shell function set up at
 login, so a job submitted from a non-interactive `ssh eee 'sbatch ...'` otherwise fails at once
 with `module: command not found` (job 180174).
+
+Long runs: if a job hits its time limit or dies, resubmit with `--resume <run_dir>` as an extra
+argument (after config and model); it skips instances already in that run's raw.jsonl and
+appends to the same run. Pass the same flags as the original (e.g. `--lenient-json`,
+`--shuffle-seed N`), or it refuses (decisions.md 2026-10-02, main-experiment job structure).
+

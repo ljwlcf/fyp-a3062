@@ -512,3 +512,30 @@ Update 2026-10-02 (Jingwei leans to (b): raise caps only, no prompt edits, size 
 - Still to do before deciding: compare truncation rates in the 72B runs. The 1,000-cap runs stay
   as the as-released record.
 
+## 2026-10-02 — Main experiment: job structure, time limits, and resuming (run-time figures PENDING)
+From a side chat, confirmed by Jingwei.
+Structure: one Slurm job per arm x seed, each covering all 75 instances, chained with
+`--dependency=afterany` so every pass queues once (e.g. 3 arms x 3 seeds = 9 jobs). Each job
+starts and stops its own vLLM server (as now). All arms of a comparison on the same GPUs (GPU
+rules, decided once per comparison).
+Time limits: `--time` = expected run time + 30-50%. Billing is for elapsed time only, but a longer
+request can queue longer, and running out of time loses the instances in progress (finished
+instances are safe in raw.jsonl).
+Resuming: `run_localization.py --resume <run_dir>` (via the job script's extra args) continues a
+run in place: every instance already in its raw.jsonl is skipped (a crash such as
+debate_collapsed is an outcome, not a gap); instances in progress when the job died run again;
+the config must match the original on everything that changes results (model, pipeline incl.
+chain order and lenient parsing, instances, graph dir), else it refuses; a torn last line is
+dropped (raw.jsonl.bak kept); each continuation is recorded under `resumes` in the run's
+manifest. Tested 2026-10-02 on a synthetic run folder.
+Run-time estimate (from manifests, `ablation/harness/runtime_estimates.py`, now split by parser
+setting and GPU count): Qwen2.5-Coder-32B on ONE pro6000 with lenient parsing, 6 workers: 11.3 min
+per instance per worker-batch, i.e. 1.88 h per 10 instances = ~14.1 h per 75-instance pass (the
+released-parser run, 5.4 h per 75, is not representative: 8/10 debates collapsed). The 2-pro6000
+figure and the 1-card vs 2-card speed-up come from the 32B v2 runs (jobs 180486/180487); the
+expected time and `--time` for each pass are filled in here when they finish.
+Practicality note: under the GPU rules every 32B/72B job takes 2 pro6000 and the ug QoS allows 2
+per user, so only ONE main-experiment job runs at a time; 9 passes run back to back, each also
+waiting in the queue for two cards on one node (first measured genuine wait ~59 min; 24 h
+sampling under way). Total wall time ~= 9 x (2-card pass time + queue wait).
+

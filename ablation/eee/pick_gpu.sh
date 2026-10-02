@@ -30,7 +30,7 @@ est_start_min() {  # minutes until Slurm's estimated start for these sbatch GPU 
 }
 per_inst() {  # expected minutes per instance on GPU model $1 for this served model (past runs)
     python3 ablation/harness/runtime_estimates.py "$model" 2>/dev/null | awk -F'\t' -v g="$1" \
-        '$1 == g { split($5, a, " "); print a[1]; exit }'
+        '$1 == g { split($6, a, " "); print a[1]; exit }'
 }
 
 pro_run=$(per_inst pro6000); pro_run=${pro_run:-1}

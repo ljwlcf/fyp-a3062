@@ -45,9 +45,12 @@ def main(filter_model=""):
             continue
         minutes = (datetime.fromisoformat(m["finished"]) -
                    datetime.fromisoformat(m["started"])).total_seconds() / 60
-        per[(gpu, model)].append((minutes / n, n, m.get("workers")))
-    for (gpu, model), runs in sorted(per.items()):
-        print(f"{gpu}\t{model}\t{len(runs)} runs\t{sum(r[1] for r in runs)} instances\t"
+        # parser setting and GPU count change the run time a lot (a collapsed debate is fast)
+        lenient = "lenient" if m.get("lenient_json") else "released"
+        ngpu = len([g for g in (m.get("gpu_names") or ["?"])])
+        per[(gpu, model, lenient, ngpu)].append((minutes / n, n, m.get("workers")))
+    for (gpu, model, lenient, ngpu), runs in sorted(per.items()):
+        print(f"{gpu}\t{model}\t{lenient} x{ngpu}gpu\t{len(runs)} runs\t{sum(r[1] for r in runs)} instances\t"
               f"{statistics.median(r[0] for r in runs):.2f} min/instance\t"
               f"workers {sorted({r[2] for r in runs})}")
 
