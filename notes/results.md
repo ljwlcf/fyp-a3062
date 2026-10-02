@@ -34,7 +34,7 @@ vLLM 0.30.0 (FlashInfer sampling) vs 0.9.2, forced by the two machines' drivers.
 | kept chains containing gold file | 1 | 3 |
 | vote | 5/5 for chain_1 (has gold) | 4/5 for chain_3 (no gold) |
 | valid debate answers, round 1 / 2 | 4 / 4 | 1 / 0 |
-| final plan | `linkcheck.py`, correct | empty, so Acc@1 File wrong |
+| final plan | `sphinx/builders/linkcheck.py`, correct | `sphinx/linkcheck.py` (does not exist), wrong |
 
 **Takeaway.** The EEE pipeline runs end to end and is ~3x faster per instance. But the same
 instance came out right on one machine and wrong on the other. With temperature 0.7 at every
@@ -43,7 +43,8 @@ machines; it says single runs are meaningless here, which the design already ass
 finding is the debate collapse: 4 of 5 round-1 answers and the only surviving round-2 answer
 failed the pipeline's strict `json.loads` ("Invalid control character", i.e. raw newlines or
 tabs inside JSON strings, typical when an agent writes code into a field), so the debate ran
-on one agent and the final plan was empty.
+on one agent, and the final plan named a file that does not exist (`sphinx/linkcheck.py`).
+(Corrected 2026-10-02: first recorded as an empty plan; that was a scorer bug, since fixed.)
 
 **Caveats.** n = 1 per machine, a 7B debugging model. Raw replies were not saved, so the
 control-character diagnosis is inferred from the error text; the runner now stores every reply.

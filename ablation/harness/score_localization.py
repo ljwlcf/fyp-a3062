@@ -41,7 +41,6 @@ STAGE_GROUP = {  # pipeline method that made the call -> cost bucket
     "analyze_worker_round2": "debate",
     "_conduct_final_discrimination": "debate",
 }
-FILE_IN_CONTEXT = re.compile(r"File:\s*([^\s,]+\.py)")
 ENTITY_NUM = re.compile(r"Entity\s+(\d+)\s*:?\s*")
 PY_PATH = re.compile(r"([\w./-]+\.py)")
 
@@ -199,9 +198,16 @@ def score_instance(rec, cache, gold_files, gold_entities):
 
     plan = (data(cache, "stage_8_edit_agent_prompt").get("modification_plan") or {}).get(
         "final_plan") or {}
+    # The plan writes each step's location in no fixed format ("File: a/b.py, Function: f",
+    # "a/b.py:C.f", or just a name), so take any .py path, else resolve against the chain.
     plan_files = []
     for step in plan.get("modifications") or []:
-        for f in FILE_IN_CONTEXT.findall(str(step.get("context", ""))):
+        ctx = str(step.get("context", ""))
+        found = PY_PATH.findall(ctx)
+        if not found:
+            node = resolve_location(ctx.replace("Function:", "").strip(), winner)
+            found = [node_file(node)] if node else []
+        for f in found:
             if f not in plan_files:
                 plan_files.append(f)
     s["plan_files"] = plan_files
