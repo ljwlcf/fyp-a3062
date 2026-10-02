@@ -593,3 +593,23 @@ Conditions:
   (`--shuffle-seed 1`, same settings), queued after seed 3 (180740) and cancelled if 180726 shows
   almost no split votes (then a 72B order check would have nothing to measure).
 
+## 2026-10-02 — Vote logprobs recorded as a candidate adaptive-debate trigger (instrumentation)
+Why: the order check found vote agreement partly order-driven (decisions.md 2026-10-02), and the
+72B votes are near-unanimous, so agreement may carry little signal; the vote's logprobs give a
+graded confidence that does not depend on counting agreeing voters.
+How: runner `--vote-logprobs K` (or `run.vote_logprobs`; default 0 = off, so the queued 72B runs
+are unaffected). Vote calls (only) request `logprobs=True, top_logprobs=K` from vLLM; requesting
+logprobs does not change what is sampled. The record keeps just the distribution at the token
+holding the chain number in `"voted_chain_id": "chain_N"` (Qwen writes digits as single tokens),
+under `vote_logprobs` in the call record; failures are recorded, never raised. vLLM returns
+logprobs in its default `--logprobs-mode` (to be confirmed and recorded on the first real run).
+Scorer: per instance, the voters' distributions over the kept chains are averaged: `lp_conf`
+(probability of the top chain), `lp_margin`, `lp_entropy`, `lp_mean_p_voted`, and whether the
+logprob top chain is the vote's winner; the summary compares `lp_conf` when the selection was
+right vs wrong. Unit-tested with mocked replies; not yet run against vLLM (needs a GPU run with
+`--vote-logprobs 10`).
+Side observation for the order analysis: the vote prompt's worked example answers
+`"voted_chain_id": "chain_2"` (the format template says `chain_X`). An example answer can prime
+voters towards that label; check chain_2's win rate under shuffled order when the 72B order
+check runs.
+

@@ -42,3 +42,6 @@ argument (after config and model); it skips instances already in that run's raw.
 appends to the same run. Pass the same flags as the original (e.g. `--lenient-json`,
 `--shuffle-seed N`), or it refuses (decisions.md 2026-10-02, main-experiment job structure).
 
+Vote logprobs (candidate adaptive-debate trigger): add `--vote-logprobs 10` after config and model.
+Off by default; it does not change outputs (decisions.md 2026-10-02).
+

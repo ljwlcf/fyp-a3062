@@ -12,6 +12,7 @@ Usage (from the repo root, with the vLLM server already up):
 import argparse
 import inspect
 import json
+import re
 import os
 import platform
 import subprocess
@@ -54,11 +55,41 @@ def served_model(base_url):
         return f"unreachable: {e!r}"
 
 
+VOTED_CHAIN = re.compile(r'"voted_chain_id"\s*:\s*"chain_(\d+)"')
+
+
+def vote_choice_logprobs(resp):
+    """The model's distribution over chain ids at the moment it wrote its vote: the top
+    logprobs of the token holding the chain number in "voted_chain_id": "chain_N" (Qwen writes
+    digits as single tokens). Returns {voted, token, logprob, top: [[token, logprob], ...]}, or
+    {error} -- never raises, so instrumentation cannot break a run."""
+    try:
+        choice = resp.choices[0]
+        text = choice.message.content or ""
+        m = VOTED_CHAIN.search(text)
+        if not m:
+            return {"error": "no voted_chain_id in reply"}
+        tokens = (choice.logprobs.content if choice.logprobs else None) or []
+        pos, offset = m.start(1), 0
+        for tok in tokens:
+            end = offset + len(tok.token)
+            if offset <= pos < end:
+                return {"voted": m.group(1), "token": tok.token, "logprob": tok.logprob,
+                        "top": [[t.token, t.logprob] for t in (tok.top_logprobs or [])]}
+            offset = end
+        return {"error": "digit not located in token stream", "voted": m.group(1)}
+    except Exception as e:  # noqa: BLE001
+        return {"error": repr(e)[:200]}
+
+
 class CallLog:
     """Wraps client.chat.completions.create; one record per call, thread-safe (the five
-    voting and debating agents run in a ThreadPoolExecutor)."""
+    voting and debating agents run in a ThreadPoolExecutor). With vote_logprobs = K > 0, vote
+    calls also request the top-K logprobs per token (this does not change what vLLM samples)
+    and the record keeps only the distribution at the chain-number token."""
 
-    def __init__(self, client):
+    def __init__(self, client, vote_logprobs=0):
+        self.vote_logprobs = int(vote_logprobs or 0)
         self.records = []
         self._lock = threading.Lock()
         self._create = client.chat.completions.create
@@ -78,6 +109,8 @@ class CallLog:
                "started": time.time(), "temperature": kwargs.get("temperature"),
                "max_tokens": kwargs.get("max_tokens"),
                "n_messages": len(kwargs.get("messages") or [])}
+        if self.vote_logprobs and rec["stage"] == "vote_worker":
+            kwargs = dict(kwargs, logprobs=True, top_logprobs=self.vote_logprobs)
         try:
             resp = self._create(*args, **kwargs)
         except Exception as e:
@@ -93,6 +126,8 @@ class CallLog:
                    # kept so parse failures (the pipeline drops agents whose JSON fails a
                    # strict json.loads) can be inspected; ~100 KB per instance
                    response=resp.choices[0].message.content if resp.choices else None)
+        if self.vote_logprobs and rec["stage"] == "vote_worker":
+            rec["vote_logprobs"] = vote_choice_logprobs(resp)
         with self._lock:
             self.records.append(rec)
         return resp
@@ -121,7 +156,7 @@ def _init_worker():
             sys.path.insert(0, p)
 
 
-def run_one(iid, keep_fields, pipe):
+def run_one(iid, keep_fields, pipe, vote_logprobs=0):
     """Run the pipeline on one instance; return the raw record. Runs in a worker process."""
     _init_worker()
     from moatless.benchmark.utils import get_moatless_instance
@@ -132,7 +167,7 @@ def run_one(iid, keep_fields, pipe):
     full = get_moatless_instance(instance_id=iid)
     instance = {k: full[k] for k in keep_fields}
     pipeline = EntityLocalizationPipeline(max_depth=pipe["max_depth"])
-    calls = CallLog(pipeline.client)
+    calls = CallLog(pipeline.client, vote_logprobs)
     order = apply_chain_order(pipeline, iid, pipe.get("chain_order") or {"mode": "fixed"})
     t0 = time.time()
     rec = {"instance_id": iid, "pid": os.getpid()}
@@ -252,6 +287,9 @@ def main():
                     help="opt-in lenient JSON parsing in the fork (overrides pipeline.lenient_json)")
     ap.add_argument("--resume", metavar="RUN_DIR",
                     help="continue this run in place: skip instances already in its raw.jsonl")
+    ap.add_argument("--vote-logprobs", type=int, default=None, metavar="K",
+                    help="record the top-K logprobs at each vote's chain-number token (0/omitted "
+                         "= off; overrides run.vote_logprobs). Does not change outputs.")
     ap.add_argument("--workers", type=int, default=None,
                     help="instances run in parallel (separate processes); default run.workers or 1")
     args = ap.parse_args()
@@ -260,6 +298,8 @@ def main():
     with open(cfg_path) as f:
         cfg = yaml.safe_load(f)
     workers = args.workers or cfg.get("run", {}).get("workers", 1)
+    vote_lp = (args.vote_logprobs if args.vote_logprobs is not None
+               else cfg.get("run", {}).get("vote_logprobs", 0))
     ids = instance_ids(cfg)
 
     llm, pipe = cfg["llm"], cfg["pipeline"]
@@ -295,7 +335,7 @@ def main():
 
     manifest = {
         "run_id": run_id, "config": os.path.relpath(cfg_path, ROOT), "config_body": cfg,
-        "instances": ids, "workers": workers,
+        "instances": ids, "workers": workers, "vote_logprobs": vote_lp,
         "lenient_json": os.environ["A3062_LENIENT_JSON"] == "1",
         "started": datetime.now().isoformat(), "host": platform.node(),
         "python": sys.version, "repo_sha": git_sha(ROOT), "fork_sha": git_sha(FORK),
@@ -346,7 +386,7 @@ def main():
 
     if workers <= 1:
         for i, iid in enumerate(ids, 1):
-            record(run_one(iid, keep, pipe), i)
+            record(run_one(iid, keep, pipe, vote_lp), i)
     else:
         import multiprocessing as mp
         from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -364,7 +404,7 @@ def main():
             broken = []
             with ProcessPoolExecutor(max_workers=workers, mp_context=mp.get_context("spawn"),
                                      initializer=_init_worker, max_tasks_per_child=1) as ex:
-                futs = {ex.submit(run_one, iid, keep, pipe): iid for iid in pending}
+                futs = {ex.submit(run_one, iid, keep, pipe, vote_lp): iid for iid in pending}
                 for fut in as_completed(futs):
                     iid = futs[fut]
                     try:

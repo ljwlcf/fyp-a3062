@@ -21,6 +21,7 @@ Writes scores.jsonl and summary.json into each run directory and prints a summar
 """
 import glob
 import json
+import math
 import os
 import re
 import sys
@@ -150,6 +151,9 @@ def truncation(rec):
         os.environ["A3062_LENIENT_JSON"] = "1"
         try:
             LENIENT["_a3062_loads"](t)
+        except ImportError:  # json_repair not installed here: say so, do not count as failed
+            fate["repair_unavailable"] += 1
+            continue
         except Exception:
             pass
         finally:
@@ -160,6 +164,37 @@ def truncation(rec):
         step = next((k for k in stats if stats[k] != before.get(k, 0)), "failed")
         fate[step] += 1
     return dict(by_stage), dict(fate)
+
+
+def vote_logprob_signal(rec, n_chains):
+    """Order-independent confidence candidates from the votes' logprobs (runner --vote-logprobs):
+    each vote's top logprobs at its chain-number token give P(chain_1..chain_n) (renormalised over
+    the chain ids present); averaged over voters. Returns {} when the run has no logprobs."""
+    dists, p_voted = [], []
+    for c in rec.get("calls", []):
+        v = c.get("vote_logprobs")
+        if c.get("stage") != "vote_worker" or not v or "top" not in v:
+            continue
+        probs = {}
+        for tok, lp in v["top"]:
+            t = str(tok).strip()
+            if t.isdigit() and 1 <= int(t) <= max(n_chains, 1):
+                probs[int(t)] = probs.get(int(t), 0.0) + math.exp(lp)
+        mass = sum(probs.values())
+        if mass <= 0:
+            continue
+        dists.append({k: p / mass for k, p in probs.items()})
+        if str(v.get("voted", "")).isdigit():
+            p_voted.append(dists[-1].get(int(v["voted"]), 0.0))
+    if not dists:
+        return {}
+    mean = {k: sum(d.get(k, 0.0) for d in dists) / len(dists) for k in range(1, n_chains + 1)}
+    ranked = sorted(mean.values(), reverse=True) + [0.0]
+    entropy = -sum(p * math.log(p) for p in mean.values() if p > 0)
+    top = max(mean, key=mean.get)
+    return {"lp_votes": len(dists), "lp_top_chain": f"chain_{top}", "lp_conf": round(ranked[0], 4),
+            "lp_margin": round(ranked[0] - ranked[1], 4), "lp_entropy": round(entropy, 4),
+            "lp_mean_p_voted": round(sum(p_voted) / len(p_voted), 4) if p_voted else None}
 
 
 def load_gold():
@@ -270,6 +305,10 @@ def score_instance(rec, cache, gold_files, gold_entities):
                            if vote.get("total_valid_votes") else None)
     s["vote_mean_confidence"] = vote.get("average_confidence")
     s["vote_distribution"] = vote.get("vote_distribution")
+    lp = vote_logprob_signal(rec, len(kept))
+    s.update(lp)
+    if lp:
+        s["lp_top_is_winner"] = lp["lp_top_chain"] == v6.get("winning_chain_id")
 
     r1 = data(cache, "stage_7_round1_analysis").get("first_round_analyses") or []
     r2 = data(cache, "stage_7_round2_analysis").get("second_round_analyses") or []
@@ -365,6 +404,19 @@ def summarize(rows):
         vals = [r[k] for r in ok if r.get(k) is not None]
         summ[f"mean_{k}"] = round(sum(vals) / len(vals), 3) if vals else None
     summ["unresolved_locations"] = sum(r.get("unresolved_locations", 0) for r in ok)
+    lp_rows = [r for r in rows if r.get("lp_votes")]
+    if lp_rows:
+        summ["vote_logprobs"] = {
+            "instances": len(lp_rows),
+            "mean_lp_conf": round(sum(r["lp_conf"] for r in lp_rows) / len(lp_rows), 3),
+            "mean_lp_margin": round(sum(r["lp_margin"] for r in lp_rows) / len(lp_rows), 3),
+            "lp_top_is_winner": rate(lp_rows, "lp_top_is_winner"),
+            "lp_conf_when_selection_right": round(
+                sum(r["lp_conf"] for r in lp_rows if r.get("selected_has_gold_file"))
+                / max(1, sum(1 for r in lp_rows if r.get("selected_has_gold_file"))), 3),
+            "lp_conf_when_selection_wrong": round(
+                sum(r["lp_conf"] for r in lp_rows if not r.get("selected_has_gold_file"))
+                / max(1, sum(1 for r in lp_rows if not r.get("selected_has_gold_file"))), 3)}
     # Truncation at max_tokens, over ALL instances (crashed ones included): by stage, with the
     # stage's call count, and what parsing makes of the cut-off replies.
     trunc, calls, fate = Counter(), Counter(), Counter()

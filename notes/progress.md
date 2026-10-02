@@ -41,6 +41,11 @@ recorded as a proposal (decisions.md); backbone-strength threat, why-self-host w
 interim-report framing added to for-chat.md with the side chat's benchmark and price figures
 marked to be checked. At 12:33 UTC the code-map build was at 27/75 (sympy now, ~1.5-2.5 h left)
 and 180368 had finished 1/10 (django-11880 ok, 1,550 s).
+Later (21:00 SGT, Mac off the NTU network, EEE unreachable): built vote-logprob capture
+(`--vote-logprobs K`, default off; scorer lp_conf / lp_margin / lp_entropy), unit-tested with
+mocks, not yet run on vLLM; committed, NOT yet synced to EEE (safe: off by default). Scorer: the
+truncation replay now reports `repair_unavailable` when json_repair is missing instead of
+miscounting; score with an environment that has json_repair.
 
 ## 2026-10-01
 Did: Status review; no code or experiments. Noted that decisions.md and the plan were changed
