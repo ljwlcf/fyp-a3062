@@ -401,3 +401,24 @@ constraint, decisions 2026-10-02). KV-cache headroom is tight in both arms (~20-
 weights, i.e. roughly 75-85k cached tokens shared by all concurrent requests), so throughput
 will be lower than the 7B's; workers 6 (32B) and 8 (72B).
 
+## 2026-10-02 — Order check outcome: FAILED (weakly); the fallback needs rethinking (PENDING)
+Result (results.md 2026-10-02, order check): under shuffle the first-shown chain wins 0.24 vs
+0.17 chance, but the longest chain wins less (0.77 -> 0.55), selection and Acc@1 fall
+(0.73 -> 0.59, 0.77 -> 0.52), and agreement stays higher when the first-shown chain wins
+(0.94 vs 0.85). By the pre-registered rule the check fails: vote agreement may NOT be used as
+the adaptive-debate skip trigger as things stand.
+The recorded fallback ("every later arm uses shuffled order, trigger built on agreement under
+shuffle") conflicts with a finding the rule did not anticipate: the released longest-first
+order raises accuracy by 15-25 points with this model, so shuffling every arm would make the
+original-debate baseline worse than the released code. Not applying the fallback yet. Options
+to decide with the real backbone:
+(a) keep the released order for every arm (baseline = released code) and treat agreement as
+    confounded; validate any trigger by checking it predicts correctness under the released
+    order, with order shuffles only as a diagnostic;
+(b) measure the trigger on a separate shuffled vote (costs one extra vote, ~11% of tokens) while
+    the answer still comes from the released-order vote;
+(c) build the trigger on a signal that does not depend on display order (token logprobs of the
+    vote, or agreement across several shuffled votes).
+Repeat the order check with the chosen backbone first; a near-saturated model may make votes
+unanimous regardless of order. Raised in for-chat.md because it shapes the adaptive-debate claim.
+

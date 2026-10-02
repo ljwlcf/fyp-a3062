@@ -9,6 +9,13 @@ Answered with a pointer.
 
 ## Open
 
+- **Order check failed (weakly): how should adaptive debate's trigger be framed?** With the 7B
+  model, vote agreement partly tracks which chain is shown first, so it is not a clean
+  confidence signal; and the released longest-first order itself raises accuracy by 15-25
+  points (results.md and decisions.md 2026-10-02). Three design options are listed in
+  decisions.md; Claude Code will repeat the check with the real backbone first. Chat: is "the
+  vote's agreement is order-sensitive" itself a reportable finding about SWE-Debate, and does
+  option (b) or (c) change what adaptive debate can claim (it adds cost to save cost)?
 - **New hypotheses for the approved plan.** H1-H4 belonged to the retired graph x debate
   factorial (CLAUDE.md). The measurement and adaptive-debate work needs its own, e.g. "on
   instances with a unanimous, confident vote, skipping the debate costs no accuracy". Chat

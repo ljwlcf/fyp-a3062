@@ -17,6 +17,40 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-02 — Order check: vote agreement partly reflects display order; released order helps accuracy (Phase 1, precondition)
+Config: `ablation/configs/order_check_v1.yaml` · Raw + scores: `ablation/results/order_check_v1/`
+(fixed: `20261002-055659` job 180271, `20261002-055750` job 180272, plus the shakeout's
+`shakeout10_localization_v1/20261002-044344` job 180200; shuffled: seed 1 `20261002-060609`
+job 180273, seed 2 `20261002-060810` job 180274, seed 3 `20261002-061510` job 180275) ·
+Analysis: `ablation/results/order_check_v1/order_analysis.json` (`analyze_order.py`).
+
+**Setup.** The 10 shakeout instances, 7B debugging model, all on pro6000 (highmem, 8 workers;
+two hardware variants of the chip, see decisions.md). Three runs with the released chain
+order, three with the kept chains shuffled before the vote (seeds 1-3, same permutation per
+seed for every arm). Pre-registered pass/fail rule in decisions.md 2026-10-02.
+
+**Numbers** (fixed, 30 instance-runs -> shuffled, 29; one shuffled run crashed, see below):
+- Winner shown first: 0.77 -> 0.24 (chance 0.17).
+- Winner is the longest kept chain: 0.77 -> 0.55.
+- Mean vote agreement 0.89 -> 0.87; unanimous votes 0.67 -> 0.55.
+- Agreement when the first-shown chain won vs another won: 0.91 / 0.83 -> 0.94 / 0.85.
+- Gold file in the selected chain 0.73 -> 0.59; Acc@1 (File) 0.77 -> 0.52.
+- One shuffled instance-run crashed when all five round-1 answers failed to parse
+  (`debate_collapsed`, sphinx-8056, seed 1; upstream defect, decisions.md).
+
+**Takeaway.** The check does not pass. Under shuffle the first-shown chain wins only a little
+more than chance, so most of the fixed-order "position" effect was the longest chain winning on
+content; but the longest chain wins less often once it is not shown first, and agreement is
+still higher when the first-shown chain wins. Vote agreement therefore carries some position
+signal and is not yet a clean confidence measure. Separately, the released longest-first order
+is useful: shuffling cost 15-25 points of selection and Acc@1, so the order acts as a prior.
+
+**Caveats.** 7B debugging model; 10 instances; 7 vs 22 instance-runs in the agreement split;
+temperature 0.7 noise is large (shakeout runs flipped 2/10 instances). Must be repeated with
+the real backbone (decisions.md), where saturation may make votes near-unanimous regardless.
+
+---
+
 ## 2026-10-02 — Shakeout, second sample on a pro6000: same totals, different instances (Phase 1, measurement setup)
 Config: `ablation/configs/shakeout10_localization_v1.yaml` · Raw + scores:
 `ablation/results/shakeout10_localization_v1/20261002-044344/` (EEE job 180200, one pro6000
