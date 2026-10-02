@@ -462,7 +462,7 @@ Is the plan practical? Measurement under way:
     First 2x pro6000 data point: job 180343 submitted 06:47:44, started 10:26:41 UTC
     (gpu-pro6000-9) = 3 h 39 min, of which ~2 h 40 min was our own QoS limit (a 1-card job held
     a pro6000 until 09:27) and ~59 min was the genuine wait for two free cards on one node
-    (Tuesday-to-Friday daytime load, 17:27-18:26 SGT).
+    (Friday 2 Oct, 17:27-18:26 SGT).
 (b) Sampling: `ablation/eee/sample_gpu_wait.sh` runs on the Mac (under caffeinate, PID in
     `ablation/results/gpu_wait_v1/sampler.pid`) every 30 min for 24 h from 2026-10-02 08:35 UTC,
     logging per GPU pair the nodes with >= 2 free cards, free cards, and Slurm's estimated start
