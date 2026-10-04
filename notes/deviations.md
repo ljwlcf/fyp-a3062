@@ -225,6 +225,8 @@ fenced block followed by an explanation), so the released parser rejected every 
 answer on the first two trial instances and the instance crashed (upstream round-2 defect).
 That is a formatting convention, not a reasoning failure, and the paper's model evidently did
 not trigger it.
+Adopted 2026-10-04 for every arm of the main experiment (decisions.md); the released-parser
+72B runs are kept as an "as released" reference.
 Expected impact: when enabled, more agents survive to the debate and fewer instances crash;
 nothing changes in what the model is asked or how answers are combined. Any comparison must use
 the same setting in every arm; the original-debate baseline is reported with the setting

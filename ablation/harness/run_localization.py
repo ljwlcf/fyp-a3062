@@ -239,7 +239,12 @@ def sc_budgets(arm_cfg, ids):
     median N ("fallback"). Achieved tokens are compared with the budget after the run."""
     lo, hi = arm_cfg.get("n_votes_bounds", [5, 30])
     per = {}
-    for d in arm_cfg["budget_reference"]:
+    import glob as _glob   # entries may be globs (e.g. ".../baseline_72b_lenient_v1/*"), expanded
+    refs = sorted({os.path.relpath(m, ROOT) for d in arm_cfg["budget_reference"]   # at job start
+                   for m in (_glob.glob(os.path.join(ROOT, d)) or [os.path.join(ROOT, d)])
+                   if os.path.exists(os.path.join(m, "raw.jsonl"))})
+    arm_cfg["budget_reference_resolved"] = refs
+    for d in refs:
         with open(os.path.join(ROOT, d, "raw.jsonl")) as f:
             for line in f:
                 r = json.loads(line)

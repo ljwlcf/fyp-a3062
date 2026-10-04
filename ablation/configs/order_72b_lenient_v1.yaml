@@ -1,0 +1,46 @@
+# Order check at scale, 72B: the original arm (lenient) with the kept chains shown in a seeded
+# random order (chain_order shuffle, seed 1), plus vote logprobs (top 10 at each vote's chain
+# token; does not change outputs). Compared with baseline_72b_lenient_v1 runs (fixed order).
+# Precondition for the adaptive-debate trigger (decisions.md 2026-10-02, order check).
+name: order_72b_lenient_v1
+version: 1
+created: "2026-10-02"
+
+instances_file: swe-debate/utils/verified75.txt   # all 75: django 25, sympy 25, sphinx-doc 25
+run:
+  vote_logprobs: 10
+  workers: 6
+
+paths:
+  # Full graphs (with code). Pre-build them on CPU first:
+  #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
+  graph_index_dir: data/graphs_full
+  results: ablation/results/order_72b_lenient_v1
+
+serving:                        # how run_localization_job.sh must serve it (env vars); the run
+                                # manifest records what was actually used
+  weights: /projects/fypA3062models/Qwen2.5-72B-Instruct   # HDD tier (_hdd)
+  commit: 495f39366efef23836d0cfae4fbe635880d2be31   # pinned
+  weights_gb: 145
+  gres: pro6000:2               # with -C highmem
+  max_len: 65536                # SERVED_NAME=Qwen/Qwen2.5-72B-Instruct MAX_LEN=65536 ROPE_YARN=2 GPU_UTIL=0.95
+  rope_yarn: 2                  # native context 32,768
+  gpu_util: 0.95
+
+llm:
+  base_url: http://127.0.0.1:8765/v1      # overridden per job on EEE with --base-url
+  model: Qwen/Qwen2.5-72B-Instruct
+  timeout_seconds: 1200                  # larger model, longer generations
+
+pipeline:
+  lenient_json: true            # main-experiment parser setting (decisions.md 2026-10-04)
+  chain_order:
+    mode: shuffle
+    seed: 1
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]

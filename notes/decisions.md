@@ -673,3 +673,21 @@ Caveat: with one plan agent, one unparseable reply leaves the discriminator noth
 is more fragile under the released parser than the 5-agent original; the parser setting must be
 the same in every arm. The same single-agent plan step is the "skip" branch of adaptive debate.
 
+## 2026-10-04 — Main experiment: lenient parsing for every arm; released max_tokens caps
+Decided by Jingwei (settles the 2026-10-01/10-02 parser entry and the 2026-10-02 caps entry).
+- Parser: the fork's opt-in lenient JSON parsing (`pipeline.lenient_json: true`) in EVERY arm of
+  the main experiment. Evidence (results.md 2026-10-04): with the 72B the released parser drops
+  agents on ~75% of instances and lost 12/225 answers (~5%) when it rejected the discriminator's
+  reply; these are formatting failures that confound what is measured (the debate's contribution
+  and the adaptive trigger), and the single-agent arm (one plan agent) would be hit hardest. The
+  three released-parser 72B seeds stay as an "as released" reference row. Deviation logged
+  (deviations.md 2026-10-02, now adopted for the main experiment).
+- Caps: keep the released max_tokens caps. The 72B truncates 4.1% of pre-filter replies and <1%
+  elsewhere; truncation is reported per stage as a measured property; no deviation.
+Queued (one continuous pro6000 chain, each job keeping the lane; --time 12 h, measured pass
+7.7-8.1 h): original arm lenient seed 1 -> 75-instance shuffled-order run (lenient, seed 1, plus
+vote logprobs) -> original arm lenient seeds 2, 3. Plus a free CPU job preparing SWE-bench-Live
+(dataset at the pinned revision + full graphs for the 40-instance pilot). Next session: the
+self-consistency arm x 3 seeds (`baseline_72b_sc_lenient_v1.yaml`; budgets from all
+baseline_72b_lenient_v1 runs via a glob resolved at job start), held back by the 5-job limit.
+

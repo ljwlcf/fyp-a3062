@@ -8,8 +8,8 @@
 #       --revision b51a86422e10cfd403beb4773e5a2947953e36ec --created-after 2024-09-19
 # then pre-build the graphs (build_graphs_job.sh with this config). Gold entities exist only for
 # the 75-instance set, so Live is scored at file level. Backbone and serving settings copied from
-# baseline_72b_released_v1 (the as-released arm); parser/caps follow the main decisions.
-name: live_72b_released_v1
+# baseline_72b_lenient_v1 (the original arm with the main-experiment lenient parser, released caps).
+name: live_72b_lenient_v1
 version: 1
 created: "2026-10-02"
 
@@ -23,7 +23,7 @@ paths:
   # Full graphs (with code). Pre-build them on CPU first:
   #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
   graph_index_dir: data/graphs_live
-  results: ablation/results/live_72b_released_v1
+  results: ablation/results/live_72b_lenient_v1
 
 serving:                        # how run_localization_job.sh must serve it (env vars); the run
                                 # manifest records what was actually used
@@ -41,6 +41,7 @@ llm:
   timeout_seconds: 1200                  # larger model, longer generations
 
 pipeline:
+  lenient_json: true            # main-experiment parser setting (decisions.md 2026-10-04)
   context: "context"
   max_initial_entities: 5
   max_depth: 5
