@@ -18,6 +18,14 @@ while EEE was unreachable (2026-10-02 evening): vote logprobs (--vote-logprobs),
 loader (388 verified instances after 2024-09-19), equal-token self-consistency arm (per-instance
 budgets, glob references). Synced to EEE.
 Broke: Nothing. Sampler coverage was poor (Mac sleep); Live cutoff still to confirm.
+Update ~07:15 UTC: 183230 (lenient seed 1) was CANCELLED after ~25 min: lenient parsing let a
+wrongly shaped reply (locations as strings) reach the discriminator, which crashed the instance.
+Fixed in the fork (lenient-only shape normaliser, deviations.md), synced, and seed 1 requeued as
+183310 at the end of the chain so every lenient run uses the same code. 183230's partial output
+on EEE is discarded (not a result). New chain: 183231 shuffle -> 183232 seed 2 -> 183233 seed 3
+-> 183310 seed 1. Live graphs: 183253 aborted on a commit reachable only by sha, 183282 OOM at
+12 GB on azure-sdk-for-python; builder fixed (fetch by sha, per-graph memory cap, skip+record),
+rerun as 183289 with 48 GB.
 Queue on EEE (submitted 2026-10-04 ~06:00 UTC):
   183230 original arm, lenient, SEED=1 -> 183231 shuffled order (seed 1, lenient, vote logprobs)
   -> 183232 original lenient SEED=2 -> 183233 original lenient SEED=3 (2x pro6000, 12 h limits,
