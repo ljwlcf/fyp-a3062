@@ -624,6 +624,11 @@ Scorer: per instance, the voters' distributions over the kept chains are average
 logprob top chain is the vote's winner; the summary compares `lp_conf` when the selection was
 right vs wrong. Unit-tested with mocked replies; not yet run against vLLM (needs a GPU run with
 `--vote-logprobs 10`).
+Verified against vLLM 2026-10-04 (job 183231, order_72b_lenient_v1, first instance
+django-11848): 5/5 votes carry the distribution at the chain-number token and the shuffle
+permutation is recorded. First observation: the 72B is near-certain, e.g. P(voted chain) ~1.0
+(logprob 0.0) with every alternative at ~-17 or below, so logprob confidence may saturate like
+vote agreement does; judge on the full 75-instance run (lp_conf when selection right vs wrong).
 Side observation for the order analysis: the vote prompt's worked example answers
 `"voted_chain_id": "chain_2"` (the format template says `chain_X`). An example answer can prime
 voters towards that label; check chain_2's win rate under shuffled order when the 72B order
