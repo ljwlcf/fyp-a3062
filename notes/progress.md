@@ -7,6 +7,26 @@ Did:
 Broke:
 Next:
 
+## 2026-10-04
+Did: EEE reachable again; everything from 2026-10-02 had finished. Scored the 72B as-released
+baseline, 75 instances x 3 seeds (Acc@1 File 53/54/57 of 75 = 73%; debate net effect ~0 over 225
+instance-runs; 12 answers lost to discriminator JSON failures; ~10% split votes; results.md) and
+the 72B released-vs-lenient parser comparison. GPU-wait sampler summarised (thin coverage; chained
+jobs keep the lane within ~10 s; observed fresh waits 13-59 min; decisions.md). Decided with
+Jingwei: lenient parsing for every arm of the main experiment, released max_tokens caps. Built
+while EEE was unreachable (2026-10-02 evening): vote logprobs (--vote-logprobs), SWE-bench-Live
+loader (388 verified instances after 2024-09-19), equal-token self-consistency arm (per-instance
+budgets, glob references). Synced to EEE.
+Broke: Nothing. Sampler coverage was poor (Mac sleep); Live cutoff still to confirm.
+Queue on EEE (submitted 2026-10-04 ~06:00 UTC):
+  183230 original arm, lenient, SEED=1 -> 183231 shuffled order (seed 1, lenient, vote logprobs)
+  -> 183232 original lenient SEED=2 -> 183233 original lenient SEED=3 (2x pro6000, 12 h limits,
+  ~8 h each) | 183234 Live prep (CPU: dataset + 40-instance pilot graphs).
+Next: score each lenient seed as it lands (compare with the as-released row); after 183231, the
+order analysis at 72B scale (analyze_order.py vs 183230) and the first real vote-logprob signal
+(lp_conf when selection right vs wrong); then queue the self-consistency arm x 3
+(`baseline_72b_sc_lenient_v1.yaml`, after 183233) and the Live pilot run. Confirm the Live cutoff.
+
 ## 2026-10-02
 Did: Second day of the same Claude Code session (all EEE work driven by Claude, with Jingwei's
 OK). Shakeout x2 (a6000, pro6000); order check (fails weakly: agreement partly order-driven,
