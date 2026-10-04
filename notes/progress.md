@@ -21,7 +21,9 @@ Broke: Nothing. Sampler coverage was poor (Mac sleep); Live cutoff still to conf
 Queue on EEE (submitted 2026-10-04 ~06:00 UTC):
   183230 original arm, lenient, SEED=1 -> 183231 shuffled order (seed 1, lenient, vote logprobs)
   -> 183232 original lenient SEED=2 -> 183233 original lenient SEED=3 (2x pro6000, 12 h limits,
-  ~8 h each) | 183234 Live prep (CPU: dataset + 40-instance pilot graphs).
+  ~8 h each) | 183234 Live prep (CPU: dataset + 40-instance pilot graphs) DONE: dataset on EEE
+  matches the Mac's (388, revision b51a8642), 40 pilot graphs (369 MB), clones ~2 GB for the pilot
+  | 183253 graphs for all 388 Live instances (CPU, free; est. 6-8 GB clones, ~3.6 GB graphs).
 Next: score each lenient seed as it lands (compare with the as-released row); after 183231, the
 order analysis at 72B scale (analyze_order.py vs 183230) and the first real vote-logprob signal
 (lp_conf when selection right vs wrong); then queue the self-consistency arm x 3
