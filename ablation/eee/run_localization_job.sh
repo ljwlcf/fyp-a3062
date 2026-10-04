@@ -121,5 +121,17 @@ echo "== server up $(date)"
 # 3. Run the pipeline against it.
 conda activate swed
 cd "$REPO"
+# After a requeue (preemption under the killable QoS, or a node failure) Slurm restarts the job
+# with the same job id: continue that job's run folder instead of starting a fresh run.
+if [ "${SLURM_RESTART_COUNT:-0}" -gt 0 ]; then
+    RESULTS=$(python -c "import yaml,sys; print(yaml.safe_load(open(sys.argv[1]))['paths']['results'])" "$CONFIG")
+    RUN_DIR=$(grep -l "\"slurm_job_id\": \"$SLURM_JOB_ID\"" "$RESULTS"/*/manifest.json 2>/dev/null | head -1 | xargs -r dirname)
+    if [ -n "$RUN_DIR" ]; then
+        echo "== requeued (restart $SLURM_RESTART_COUNT): resuming $RUN_DIR"
+        EXTRA+=(--resume "$RUN_DIR")
+    else
+        echo "== requeued (restart $SLURM_RESTART_COUNT), no earlier run folder for job $SLURM_JOB_ID: fresh run"
+    fi
+fi
 python ablation/harness/run_localization.py "$CONFIG" --base-url "$URL" "${EXTRA[@]}"
 echo "== pipeline finished $(date)"

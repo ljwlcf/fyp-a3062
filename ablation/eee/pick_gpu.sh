@@ -33,16 +33,29 @@ per_inst() {  # expected minutes per instance on GPU model $1 for this served mo
         '$1 == g { split($6, a, " "); print a[1]; exit }'
 }
 
+# Our own running/pending jobs count against the ug per-model limit; a model whose limit they
+# already fill cannot start until they finish, whatever Slurm's estimate says (its --test-only
+# estimates are dominated by our own queue). Such a model is skipped.
+own() { squeue --me -h -o "%b" | grep -o "gpu:$1:[0-9]*" | awk -F: '{n += $3} END {print n + 0}'; }
+limit_of() { case "$1" in rtx5090) echo 1 ;; *) echo 2 ;; esac; }
+blocked() { [ $(( $(own "$1") + 2 )) -gt "$(limit_of "$1")" ]; }
+
 pro_run=$(per_inst pro6000); pro_run=${pro_run:-1}
 slow=$(per_inst a6000); slow=${slow:-$(awk -v p="$pro_run" 'BEGIN{print p*4}')}
-pro_finish=$(( $(est_start_min "$pro") + $(awk -v r="$pro_run" -v n="$n" 'BEGIN{printf "%d", r*n}') ))
-echo "2x pro6000: estimated finish in ${pro_finish} min (start + ${pro_run} min/instance x $n)" >&2
+if blocked pro6000; then
+    pro_finish=999999
+    echo "2x pro6000: blocked, our own jobs hold the ug pro6000 limit ($(own pro6000) GPUs)" >&2
+else
+    pro_finish=$(( $(est_start_min "$pro") + $(awk -v r="$pro_run" -v n="$n" 'BEGIN{printf "%d", r*n}') ))
+    echo "2x pro6000: estimated finish in ${pro_finish} min (start + ${pro_run} min/instance x $n)" >&2
+fi
 best="$pro"; best_finish=$pro_finish
 for g in 6000ada l40 a6000 a40; do
+    if blocked $g; then echo "2x $g: blocked by our own jobs" >&2; continue; fi
     r=$(per_inst $g); r=${r:-$slow}          # no history: assume a6000 speed (conservative)
     f=$(( $(est_start_min "--gres=gpu:$g:2") + $(awk -v r="$r" -v n="$n" 'BEGIN{printf "%d", r*n}') ))
     echo "2x $g: estimated finish in ${f} min (${r} min/instance)" >&2
-    if [ "$f" -le $(( pro_finish - 30 )) ] && [ "$f" -le $(( pro_finish * 3 / 4 )) ] && [ "$f" -lt "$best_finish" ]; then
+    if { [ "$pro_finish" -eq 999999 ] || { [ "$f" -le $(( pro_finish - 30 )) ] && [ "$f" -le $(( pro_finish * 3 / 4 )) ]; }; } && [ "$f" -lt "$best_finish" ]; then
         best="--gres=gpu:$g:2"; best_finish=$f
     fi
 done

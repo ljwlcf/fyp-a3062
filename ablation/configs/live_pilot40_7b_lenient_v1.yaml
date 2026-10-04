@@ -1,0 +1,46 @@
+# SMOKE TEST of the SWE-bench-Live pipeline with the 7B debugging model: the 40-instance pilot
+# (live_pilot40_lenient_v1) with Qwen2.5-Coder-7B-Instruct, lenient parsing, PARALLEL=dp (one
+# replica per GPU). Purpose: catch Live-specific bugs (new repositories, dataset fields, gold
+# scoring) cheaply before the 72B Live run. NOT a result. Ignore the `serving:` block (72B).
+name: live_pilot40_7b_lenient_v1
+version: 1
+created: "2026-10-02"
+
+dataset_file: data/swebench_live/live_verified_after_2024-09-19.json      # instance records
+instances_file: data/swebench_live/live_verified_after_2024-09-19.ids.txt  # 387 unique (the split repeats one)
+instances_exclude:              # cannot be run here (decisions.md 2026-10-04): 386 remain
+  - Azure__azure-sdk-for-python-40487   # code graph > 40 GB RAM to build; workers could not load it
+instances_slice: "0:40"       # pilot: the first 40 of the 388 (check clone size and graph time first)
+run:
+  workers: 8
+
+paths:
+  # Full graphs (with code). Pre-build them on CPU first:
+  #   python ablation/harness/build_full_graphs.py ablation/configs/shakeout10_localization_v1.yaml
+  graph_index_dir: data/graphs_live
+  results: ablation/results/live_pilot40_7b_lenient_v1
+
+serving:                        # how run_localization_job.sh must serve it (env vars); the run
+                                # manifest records what was actually used
+  weights: /projects/fypA3062models/Qwen2.5-72B-Instruct   # HDD tier (_hdd)
+  commit: 495f39366efef23836d0cfae4fbe635880d2be31   # pinned
+  weights_gb: 145
+  gres: pro6000:2               # with -C highmem
+  max_len: 65536                # SERVED_NAME=Qwen/Qwen2.5-72B-Instruct MAX_LEN=65536 ROPE_YARN=2 GPU_UTIL=0.95
+  rope_yarn: 2                  # native context 32,768
+  gpu_util: 0.95
+
+llm:
+  base_url: http://127.0.0.1:8765/v1      # overridden per job on EEE with --base-url
+  model: Qwen/Qwen2.5-Coder-7B-Instruct
+  timeout_seconds: 1200                  # larger model, longer generations
+
+pipeline:
+  lenient_json: true            # main-experiment parser setting (decisions.md 2026-10-04)
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]
