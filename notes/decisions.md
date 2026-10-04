@@ -721,7 +721,10 @@ folder whose manifest has this job id and passes `--resume`; killable jobs are s
 Also fixed: `pick_gpu.sh` now treats a GPU model as unavailable when our own running/pending jobs
 already fill its ug limit (it had picked pro6000 for a 7B while our chain held both pro6000 slots
 for ~30 h, because Slurm's estimates are dominated by our own queue).
-Submitted under killable (2x pro6000 -C highmem): 183678 7B SWE-bench-Live smoke test
-(live_pilot40_7b_lenient_v1, PARALLEL=dp, 2 h; catches Live-specific bugs, not a result) and 183679
-72B Live pilot (live_pilot40_lenient_v1, 40 instances, lenient, 8 h).
+Submitted under killable (2x pro6000 -C highmem): 183679 72B Live pilot (live_pilot40_lenient_v1,
+40 instances, lenient, 8 h). The 7B SWE-bench-Live smoke test (live_pilot40_7b_lenient_v1,
+PARALLEL=dp, 2 h; catches Live-specific bugs, not a result) was first queued under killable
+(183678) and then moved to the free 5th ug slot on 2x l40 (183697; GPU rule 3 fallback, pro6000
+blocked by our own chain; the card does not matter for a code-path smoke test), at Jingwei's
+request to use every free ug slot.
 
