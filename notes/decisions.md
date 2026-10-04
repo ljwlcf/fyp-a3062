@@ -691,3 +691,14 @@ vote logprobs) -> original arm lenient seeds 2, 3. Plus a free CPU job preparing
 self-consistency arm x 3 seeds (`baseline_72b_sc_lenient_v1.yaml`; budgets from all
 baseline_72b_lenient_v1 runs via a glob resolved at job start), held back by the 5-job limit.
 
+## 2026-10-04 — SWE-bench-Live set: 386 runnable instances (1 duplicate, 1 too large)
+The pinned `verified` split lists conan-io__conan-18153 twice (identical records); the loader now
+drops exact duplicates (387 unique after the cutoff and Python filters) and the runner's instance
+list removes repeats. Azure__azure-sdk-for-python-40487 is excluded via the config's
+`instances_exclude`: its code graph needs more than 40 GB of RAM to build (job 183289,
+MemoryError under the per-graph cap), so pipeline workers could not load it either. All other 386
+full graphs are built on EEE (data/graphs_live, 3.9 GB; clones 13 GB in total in data/repos).
+Graph-build robustness added on the way: fetch a base commit by sha when it is not on the cloned
+branches (a LLaMA-Factory commit), build each graph in a memory-capped subprocess, record and
+skip failures (build_failures.json), write graphs atomically; the build job now has 48 GB.
+

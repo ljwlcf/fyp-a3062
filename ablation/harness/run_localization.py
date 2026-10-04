@@ -326,7 +326,8 @@ def instance_ids(cfg):
     if cfg.get("instances_slice"):
         a, b = (int(x) if x else None for x in str(cfg["instances_slice"]).split(":"))
         ids = ids[a:b]
-    return ids
+    drop = set(cfg.get("instances_exclude") or [])   # versioned exclusions, each with a reason
+    return [i for i in dict.fromkeys(ids) if i not in drop]   # repeats removed, order kept
 
 
 # Config parts that change results; a resumed run must match the original on all of them.
@@ -334,6 +335,7 @@ def instance_ids(cfg):
 def result_relevant(cfg):
     return {"name": cfg.get("name"), "version": cfg.get("version"),
             "instances": cfg.get("instances"), "instances_file": cfg.get("instances_file"),
+            "instances_exclude": cfg.get("instances_exclude"),
             "instances_slice": cfg.get("instances_slice"),
             "model": cfg["llm"]["model"], "timeout_seconds": cfg["llm"].get("timeout_seconds"),
             "pipeline": cfg["pipeline"], "instance_fields": cfg.get("instance_fields"),

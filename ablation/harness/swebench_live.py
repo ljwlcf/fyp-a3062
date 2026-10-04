@@ -62,8 +62,12 @@ def main():
     cutoff = datetime.fromisoformat(args.created_after)
     rows = read_split(args.split, args.revision)
     counts = Counter(total=len(rows))
-    kept = []
+    kept, seen = [], set()
     for r in rows:
+        if r["instance_id"] in seen:          # the split itself lists conan-io__conan-18153 twice
+            counts["dropped_duplicate"] += 1
+            continue
+        seen.add(r["instance_id"])
         c = r["created_at"]   # pyarrow may give a datetime or a string
         created = c.replace(tzinfo=None) if isinstance(c, datetime) else \
             datetime.fromisoformat(str(c).replace("Z", ""))
@@ -89,7 +93,8 @@ def main():
     with open(os.path.join(out_dir, f"{name}.ids.txt"), "w") as f:
         f.writelines(r["instance_id"] + "\n" for r in kept)
     meta = {"dataset": DATASET, "revision": args.revision, "split": args.split,
-            "created_after": args.created_after, "filters": ["created_at > created_after",
+            "created_after": args.created_after, "filters": ["duplicate instance_id dropped",
+                                                             "created_at > created_after",
                                                              "gold patch touches a .py file"],
             "counts": dict(counts),
             "repos": dict(Counter(r["repo"] for r in kept).most_common()),
