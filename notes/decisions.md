@@ -707,3 +707,21 @@ Graph-build robustness added on the way: fetch a base commit by sha when it is n
 branches (a LLaMA-Factory commit), build each graph in a memory-capped subprocess, record and
 skip failures (build_failures.json), write graphs atomically; the build job now has 48 GB.
 
+## 2026-10-04 — Extra pro6000 work runs under the killable QoS (second lane, no cost to the first)
+Checked (sacctmgr, sbatch --test-only, live submission): `override-limits-but-killable` has its own
+limits (8 GPUs, no running-job cap, its own 5-job submit limit) separate from `ug` (2 per model, 2
+running, 5 submitted); confirmed by submitting 2 killable jobs while 4 ug jobs were queued (6
+accepted). It runs at priority 0 on idle cards only, and `ug` jobs (including our own) preempt it
+(PreemptMode REQUEUE; cluster JobRequeue=1). So it adds capacity without touching the ug pro6000
+lane, at the cost of running only when pro6000 cards are idle and possibly being requeued.
+Jingwei: use it when it adds work without affecting normal usage; keep pro6000 as the GPU (GPU
+rules). Requeue safety: `run_localization_job.sh` detects SLURM_RESTART_COUNT > 0, finds the run
+folder whose manifest has this job id and passes `--resume`; killable jobs are submitted with
+`--requeue --open-mode=append` so the log survives a requeue.
+Also fixed: `pick_gpu.sh` now treats a GPU model as unavailable when our own running/pending jobs
+already fill its ug limit (it had picked pro6000 for a 7B while our chain held both pro6000 slots
+for ~30 h, because Slurm's estimates are dominated by our own queue).
+Submitted under killable (2x pro6000 -C highmem): 183678 7B SWE-bench-Live smoke test
+(live_pilot40_7b_lenient_v1, PARALLEL=dp, 2 h; catches Live-specific bugs, not a result) and 183679
+72B Live pilot (live_pilot40_lenient_v1, 40 instances, lenient, 8 h).
+
