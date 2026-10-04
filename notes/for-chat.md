@@ -109,6 +109,9 @@ Answered with a pointer.
   experiment (~450M tokens) ~$150-200 vs ~$1.5-2k (side-chat price estimates, TO BE CHECKED). The
   reasons: a pinned, unchanging checkpoint across all arms and seeds (DeepSeek-V3-0324 is no
   longer served first-party), logprob access for the adaptive trigger, and reproducibility.
+  Measured cluster usage (sacct): 29,961 SU, i.e. 62 pro6000 GPU-hours, 2026-10-01 .. 10-04
+  (16.6% of the monthly student quota); the side chat's rough cloud-price equivalent was
+  S$125-210 for ~30k SU (to be checked if quoted).
 - **Interim report framing (before the "Interim report" item).** Given the 72B results
   (near-unanimous votes, the debate changing nothing, the debate ~10-12% of tokens), consider
   leading with the measurement as the main contribution ("where SWE-Debate's answers are won

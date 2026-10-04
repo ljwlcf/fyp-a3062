@@ -32,9 +32,10 @@ Queue on EEE (submitted 2026-10-04 ~06:00 UTC):
   ~8 h each) | 183234 Live prep (CPU: dataset + 40-instance pilot graphs) DONE: dataset on EEE
   matches the Mac's (388, revision b51a8642), 40 pilot graphs (369 MB), clones ~2 GB for the pilot
   | 183253 graphs for all 388 Live instances (CPU, free; est. 6-8 GB clones, ~3.6 GB graphs).
-Killable QoS (second pro6000 lane, decisions.md): 183679 72B Live pilot queued under
-override-limits-but-killable (runs only on idle pro6000; requeue-safe). 7B Live smoke on the 5th
-ug slot, 2x l40: 183697 (killable copy 183678 cancelled).
+Killable QoS (second pro6000 lane, decisions.md): 183679 72B Live pilot and 183710 7B Live smoke,
+both 2x pro6000 under override-limits-but-killable (idle cards only; requeue-safe). 5th ug slot:
+183711 self-consistency seed 1, after 183310 (pro6000-first rule; l40 smoke 183697 cancelled).
+Cancelled 183230 folder moved to ablation/results/_discarded/ on EEE.
 Next: score each lenient seed as it lands (compare with the as-released row); after 183231, the
 order analysis at 72B scale (analyze_order.py vs 183230) and the first real vote-logprob signal
 (lp_conf when selection right vs wrong); then queue the self-consistency arm x 3

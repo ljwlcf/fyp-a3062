@@ -47,10 +47,15 @@ def main(filter_model=""):
                    datetime.fromisoformat(m["started"])).total_seconds() / 60
         # parser setting and GPU count change the run time a lot (a collapsed debate is fast)
         lenient = "lenient" if m.get("lenient_json") else "released"
-        ngpu = len([g for g in (m.get("gpu_names") or ["?"])])
-        per[(gpu, model, lenient, ngpu)].append((minutes / n, n, m.get("workers")))
-    for (gpu, model, lenient, ngpu), runs in sorted(per.items()):
-        print(f"{gpu}\t{model}\t{lenient} x{ngpu}gpu\t{len(runs)} runs\t{sum(r[1] for r in runs)} instances\t"
+        names = m.get("gpu_names") or ["?"]
+        ngpu = len(names)
+        # pro6000 nodes mix the 300 W Max-Q Workstation and the 600 W Server Edition: same outputs,
+        # different speed, so time estimates are kept apart by edition
+        edition = ("max-q" if any("Max-Q" in x for x in names) else
+                   "server" if any("Server" in x for x in names) else "-")
+        per[(gpu, model, lenient, ngpu, edition)].append((minutes / n, n, m.get("workers")))
+    for (gpu, model, lenient, ngpu, edition), runs in sorted(per.items()):
+        print(f"{gpu}\t{model}\t{lenient} x{ngpu}gpu {edition}\t{len(runs)} runs\t{sum(r[1] for r in runs)} instances\t"
               f"{statistics.median(r[0] for r in runs):.2f} min/instance\t"
               f"workers {sorted({r[2] for r in runs})}")
 

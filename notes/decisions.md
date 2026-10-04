@@ -728,3 +728,23 @@ PARALLEL=dp, 2 h; catches Live-specific bugs, not a result) was first queued und
 blocked by our own chain; the card does not matter for a code-path smoke test), at Jingwei's
 request to use every free ug slot.
 
+## 2026-10-04 — GPU rules updated: pro6000 first, killable pro6000 before any other card
+Jingwei ("always use pro6000"). Supersedes rule 3 of "GPU rules" (2026-10-02): small models (7B)
+get 2 pro6000 under ug if our ug pro6000 limit is free, otherwise 2 pro6000 under the killable QoS
+(override-limits-but-killable; separate limits, idle cards only, requeued by regular jobs, our job
+script resumes after a requeue); another card model only on explicit request (ALLOW_FALLBACK=1).
+Rules 1, 2 and 4 unchanged (32B/72B main passes: 2 pro6000 under ug, chained, never preempted).
+`pick_gpu.sh` rewritten accordingly; it counts only our ug jobs against the ug limit. The 7B Live
+smoke test therefore moved from 2x l40 (183697, cancelled) to killable pro6000 (183710), and the
+freed 5th ug slot holds the self-consistency arm seed 1 (183711, `baseline_72b_sc_lenient_v1`,
+2x pro6000, after 183310 so its budget glob sees all three lenient seeds).
+Housekeeping: the cancelled lenient seed-1 run (183230, 1 instance, pre-fix code) was moved on EEE
+from `ablation/results/baseline_72b_lenient_v1/20261004-064319` to
+`ablation/results/_discarded/baseline_72b_lenient_v1/` (with a README), so the self-consistency
+budget glob and any seed pooling cannot pick it up. Discarded runs go under `_discarded/` from now.
+Run-time estimates now split pro6000 editions (Max-Q 300 W vs Server 600 W; same outputs, different
+speed); all 72B runs so far ran on Server Edition (6.1 min per instance with the released parser,
+5.6 lenient, per worker batch).
+Usage: 29,961 SU billed 2026-10-01 .. 10-04 (16.6% of the 180,000 SU monthly quota; 62 pro6000
+GPU-hours, 1 a6000).
+
