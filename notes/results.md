@@ -17,6 +17,53 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-04 — 72B as-released baseline: 75 instances x 3 seeds (Phase 1, main baseline)
+Configs: seed 1 = `backbone_trial_72b_v1.yaml` (10, job 180343) + `backbone_trial_72b_rest65_v1.yaml`
+(65, job 180726), vLLM seed 0; seeds 2/3 = `baseline_72b_released_v1.yaml` with SEED=2/3 (jobs
+180739, 180740). Raw + scores: `backbone_trial_72b_v1/20261002-103421`,
+`backbone_trial_72b_rest65_v1/20261002-185459`, `baseline_72b_released_v1/20261003-013441` and
+`-091827`. Qwen2.5-72B @495f393 bf16, 64k YaRN, 2x pro6000 tensor parallel, released parser,
+released caps, released chain order; 8 workers (180343) / 6 (the rest).
+
+**Numbers** (seed 1 / 2 / 3, out of 75; pooled out of 225):
+- Gold file in a built chain 73 / 73 / 72 (218, 97%); in a kept chain 71 / 69 / 69 (209, 93%);
+  in the selected chain 64 / 58 / 64 (186, 83%); Acc@1 (File) 53 / 54 / 57 (164, 73%); gold file
+  anywhere in the plan 57 / 56 / 61.
+- Per instance over 3 seeds: Acc@1 right 3/3 on 39, 2/3 on 19, 1/3 on 9, 0/3 on 8 instances.
+  By repo (mean Acc@1): sympy 0.81, django 0.73, sphinx-doc 0.64.
+- Debate effect over 225 instance-runs: 2 fixed (wrong -> right), 3 broke (right -> wrong),
+  3 changed to another wrong file; otherwise unchanged. The debate's net effect is ~0.
+- Lost after the vote: selected-chain-has-gold 186 vs Acc@1 164. 12 instance-runs lost the
+  answer to an empty final plan, and in all 12 the released parser rejected the discriminator's
+  reply (not truncation); 7 of them in seed 1.
+- Split votes (agreement < 0.8): 7 / 7 / 8 (~10%); mean vote agreement 0.94-0.95.
+- Winner = chain_1 (shown first) 53 / 50 / 46; winner = longest kept chain 64 / 65 / 60
+  (chance ~1/6).
+- Agents dropped by JSON parsing on 51-59 of 75 instances per seed (rarely all five; 1 debate
+  collapse in each of seeds 1 and 2). Hallucinated start entities 27-29%.
+- Truncation (4 runs): pre-filter 646/15,742 (4.1%), round-1 analyses 9/1,125, round 2 3/957,
+  node selection 1/23,924.
+- Tokens per instance 487k / 503k / 496k: graph walk ~78%, vote ~11%, debate ~11%.
+- Wall time per 75-instance pass on 2 pro6000, 6 workers: 7.7 h (seed 2), 8.1 h (seed 3).
+
+**Takeaway.** With a backbone far weaker than the paper's, the released pipeline localizes the
+right file 73% of the time (paper ~80% with DeepSeek-V3-0324). The graph walk almost always
+reaches the gold file; answers are lost mainly in the vote (23 of 209 kept-with-gold) and after
+it (22 of 186 selected-with-gold), and the debate itself changes the answer in ~4% of
+instance-runs with no net gain. About a third of instances flip between seeds, so paired
+multi-seed comparisons are essential. Votes are near-unanimous (~10% split), which bounds what
+adaptive debate can save to roughly the debate's ~11% of tokens on ~90% of instances.
+
+**72B parser comparison (same 10 instances, 180343 released vs 180368 lenient):** agents dropped
+on 7 vs 0 instances; selected chain 10 vs 8; Acc@1 9 vs 7 (3 instances flipped, within seed
+noise); split votes 2 vs 1; 427k vs 321k tokens. Lenient parse steps: strict 1,216, first object
+256, repaired 33, relaxed 4.
+
+**Caveats.** Seed 1 mixes 8 and 6 workers and two jobs; seeds 2/3 are single jobs. vLLM is not
+bit-reproducible under concurrency, so seeds are independent samples.
+
+---
+
 ## 2026-10-02 — Backbone trial, interim: Qwen2.5-72B with the released parser (Phase 1, backbone choice)
 Config: `ablation/configs/backbone_trial_72b_v1.yaml` · Raw + scores:
 `ablation/results/backbone_trial_72b_v1/20261002-103421/` (EEE job 180343; 2 pro6000 Server

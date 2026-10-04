@@ -1,0 +1,1979 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-02T19:28:14.178933",
+    "data": {
+      "initial_entities": [
+        "hello",
+        "greeting",
+        "TemplateSyntaxError",
+        "hi",
+        "simple_tag"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 1030
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-02T19:32:00.086611",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "hello",
+          "related_entities": [
+            {
+              "entity_id": "django/template/library.py:simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "This function registers simple tags, which are central to the issue of custom template tags raising errors.",
+              "diversity_value": "Different file, core template library functionality"
+            },
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+              "diversity_value": "Different file, core template rendering functionality"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:Node",
+              "entity_type": "class",
+              "relevance_reason": "This class represents a node in the template, which might need modifications to handle keyword arguments correctly.",
+              "diversity_value": "Different file, specific template tag implementation"
+            },
+            {
+              "entity_id": "django/template/smartif.py:parse_bits",
+              "entity_type": "function",
+              "relevance_reason": "This function parses the arguments passed to template tags and could be the source of the TemplateSyntaxError.",
+              "diversity_value": "Different file, argument parsing utility"
+            }
+          ]
+        },
+        {
+          "initial_entity": "greeting",
+          "related_entities": [
+            {
+              "entity_id": "django/template/library.py:SimpleNode",
+              "entity_type": "class",
+              "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+              "diversity_value": "Template library file, different from other selected entities"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:register.simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "This function registers custom template tags, and the issue specifically mentions problems with custom template tags.",
+              "diversity_value": "Default tags file, handles registration of tags, different from SimpleNode"
+            },
+            {
+              "entity_id": "django/template/base.py:Parser.parse",
+              "entity_type": "function",
+              "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+              "diversity_value": "Base template file, different from the library and default tags files"
+            },
+            {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+              "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+            }
+          ]
+        },
+        {
+          "initial_entity": "TemplateSyntaxError",
+          "related_entities": [
+            {
+              "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+              "entity_type": "class",
+              "relevance_reason": "This is the exception class that is raised when there is a syntax error in the template, which is directly related to the issue described.",
+              "diversity_value": "Exception handling in a dedicated file"
+            },
+            {
+              "entity_id": "django/template/base.py:Template",
+              "entity_type": "class",
+              "relevance_reason": "The `Template` class is responsible for compiling and rendering templates, which is where the issue might be originating from when custom tags are used.",
+              "diversity_value": "Core template handling class in a different file"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+              "entity_type": "class",
+              "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+              "diversity_value": "Default tag parsing in a different file"
+            },
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "The `simple_tag` decorator is used to register custom template tags, and the issue specifically mentions problems with custom tags. This function might need to be modified to handle keyword-only arguments correctly.",
+              "diversity_value": "Decorator for custom tags in a different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "hi",
+          "related_entities": [
+            {
+              "entity_id": "django/template/defaulttags.py:simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "The function that registers simple tags, which is where the issue with keyword arguments is occurring.",
+              "diversity_value": "Template tag registration from different file"
+            },
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+              "diversity_value": "Template rendering from different file"
+            },
+            {
+              "entity_id": "django/template/library.py:Library.tag",
+              "entity_type": "function",
+              "relevance_reason": "The function that adds tags to the template library, which might need adjustments to handle keyword arguments correctly.",
+              "diversity_value": "Template library management from different file"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:inclusion_tag",
+              "entity_type": "function",
+              "relevance_reason": "Similar to simple_tag, this function registers inclusion tags and might face similar issues with keyword arguments.",
+              "diversity_value": "Inclusion tag registration from the same file as simple_tag, ensuring related functionality is covered"
+            }
+          ]
+        },
+        {
+          "initial_entity": "simple_tag",
+          "related_entities": [
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "This function registers simple tags and is directly related to the issue of handling keyword arguments with defaults.",
+              "diversity_value": "Core registration function from library module"
+            },
+            {
+              "entity_id": "django/template/base.py:Parser.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a template tag and is used within the `simple_tag` decorator, which is where the error might originate.",
+              "diversity_value": "Template parsing utility from base module"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:parse_bits",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for parsing the arguments and keyword arguments passed to a template tag, which is crucial for fixing the issue.",
+              "diversity_value": "Argument parsing utility from default tags module"
+            },
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "This method is part of the Node class, which is used to render nodes in the template. Understanding how nodes are rendered can help in debugging the issue.",
+              "diversity_value": "Rendering mechanism from base module"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-02T19:42:31.885037",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "hello",
+          "related_entities": [
+            {
+              "entity_id": "django/template/library.py:simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "This function registers simple tags, which are central to the issue of custom template tags raising errors.",
+              "diversity_value": "Different file, core template library functionality"
+            },
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+              "diversity_value": "Different file, core template rendering functionality"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:Node",
+              "entity_type": "class",
+              "relevance_reason": "This class represents a node in the template, which might need modifications to handle keyword arguments correctly.",
+              "diversity_value": "Different file, specific template tag implementation"
+            },
+            {
+              "entity_id": "django/template/smartif.py:parse_bits",
+              "entity_type": "function",
+              "relevance_reason": "This function parses the arguments passed to template tags and could be the source of the TemplateSyntaxError.",
+              "diversity_value": "Different file, argument parsing utility"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/template/library.py:simple_tag",
+                "entity_type": "function",
+                "relevance_reason": "This function registers simple tags, which are central to the issue of custom template tags raising errors.",
+                "diversity_value": "Different file, core template library functionality"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Node.render",
+                "entity_type": "function",
+                "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+                "diversity_value": "Different file, core template rendering functionality"
+              },
+              "chain": [
+                "django/template/base.py:Node.render",
+                "django/template/library.py:InclusionNode.render"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/defaulttags.py:Node",
+                "entity_type": "class",
+                "relevance_reason": "This class represents a node in the template, which might need modifications to handle keyword arguments correctly.",
+                "diversity_value": "Different file, specific template tag implementation"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/smartif.py:parse_bits",
+                "entity_type": "function",
+                "relevance_reason": "This function parses the arguments passed to template tags and could be the source of the TemplateSyntaxError.",
+                "diversity_value": "Different file, argument parsing utility"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "greeting",
+          "related_entities": [
+            {
+              "entity_id": "django/template/library.py:SimpleNode",
+              "entity_type": "class",
+              "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+              "diversity_value": "Template library file, different from other selected entities"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:register.simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "This function registers custom template tags, and the issue specifically mentions problems with custom template tags.",
+              "diversity_value": "Default tags file, handles registration of tags, different from SimpleNode"
+            },
+            {
+              "entity_id": "django/template/base.py:Parser.parse",
+              "entity_type": "function",
+              "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+              "diversity_value": "Base template file, different from the library and default tags files"
+            },
+            {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+              "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/template/library.py:SimpleNode",
+                "entity_type": "class",
+                "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+                "diversity_value": "Template library file, different from other selected entities"
+              },
+              "chain": [
+                "django/template/library.py:SimpleNode",
+                "django/template/library.py:TagHelperNode",
+                "django/template/library.py:TagHelperNode.get_resolved_arguments"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/defaulttags.py:register.simple_tag",
+                "entity_type": "function",
+                "relevance_reason": "This function registers custom template tags, and the issue specifically mentions problems with custom template tags.",
+                "diversity_value": "Default tags file, handles registration of tags, different from SimpleNode"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Parser.parse",
+                "entity_type": "function",
+                "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+                "diversity_value": "Base template file, different from the library and default tags files"
+              },
+              "chain": [
+                "django/template/base.py:Parser.parse"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Token.split_contents",
+                "entity_type": "function",
+                "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+                "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+              },
+              "chain": [
+                "django/template/base.py:Token.split_contents",
+                "django/template/library.py:Library.simple_tag.dec.compile_func",
+                "django/template/library.py:parse_bits",
+                "django/template/exceptions.py:TemplateSyntaxError",
+                "django/template/__init__.py"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "TemplateSyntaxError",
+          "related_entities": [
+            {
+              "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+              "entity_type": "class",
+              "relevance_reason": "This is the exception class that is raised when there is a syntax error in the template, which is directly related to the issue described.",
+              "diversity_value": "Exception handling in a dedicated file"
+            },
+            {
+              "entity_id": "django/template/base.py:Template",
+              "entity_type": "class",
+              "relevance_reason": "The `Template` class is responsible for compiling and rendering templates, which is where the issue might be originating from when custom tags are used.",
+              "diversity_value": "Core template handling class in a different file"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+              "entity_type": "class",
+              "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+              "diversity_value": "Default tag parsing in a different file"
+            },
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "The `simple_tag` decorator is used to register custom template tags, and the issue specifically mentions problems with custom tags. This function might need to be modified to handle keyword-only arguments correctly.",
+              "diversity_value": "Decorator for custom tags in a different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+                "entity_type": "class",
+                "relevance_reason": "This is the exception class that is raised when there is a syntax error in the template, which is directly related to the issue described.",
+                "diversity_value": "Exception handling in a dedicated file"
+              },
+              "chain": [
+                "django/template/exceptions.py:TemplateSyntaxError",
+                "django/template/library.py",
+                "django/template/library.py:parse_bits"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Template",
+                "entity_type": "class",
+                "relevance_reason": "The `Template` class is responsible for compiling and rendering templates, which is where the issue might be originating from when custom tags are used.",
+                "diversity_value": "Core template handling class in a different file"
+              },
+              "chain": [
+                "django/template/base.py:Template",
+                "django/template/library.py",
+                "django/template/library.py:parse_bits",
+                "django/template/exceptions.py:TemplateSyntaxError"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+                "entity_type": "class",
+                "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+                "diversity_value": "Default tag parsing in a different file"
+              },
+              "chain": [
+                "django/template/defaulttags.py:TemplateIfParser",
+                "django/template/defaulttags.py:TemplateIfParser.create_var",
+                "django/template/base.py:Parser.compile_filter",
+                "django/template/base.py:Parser",
+                "django/utils/archive.py:Archive.list"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/library.py:Library.simple_tag",
+                "entity_type": "function",
+                "relevance_reason": "The `simple_tag` decorator is used to register custom template tags, and the issue specifically mentions problems with custom tags. This function might need to be modified to handle keyword-only arguments correctly.",
+                "diversity_value": "Decorator for custom tags in a different file"
+              },
+              "chain": [
+                "django/template/library.py:Library.simple_tag",
+                "django/template/library.py:Library",
+                "django/template/library.py:Library.tag",
+                "django/template/library.py:Library.tag.dec"
+              ],
+              "chain_length": 4
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "hi",
+          "related_entities": [
+            {
+              "entity_id": "django/template/defaulttags.py:simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "The function that registers simple tags, which is where the issue with keyword arguments is occurring.",
+              "diversity_value": "Template tag registration from different file"
+            },
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+              "diversity_value": "Template rendering from different file"
+            },
+            {
+              "entity_id": "django/template/library.py:Library.tag",
+              "entity_type": "function",
+              "relevance_reason": "The function that adds tags to the template library, which might need adjustments to handle keyword arguments correctly.",
+              "diversity_value": "Template library management from different file"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:inclusion_tag",
+              "entity_type": "function",
+              "relevance_reason": "Similar to simple_tag, this function registers inclusion tags and might face similar issues with keyword arguments.",
+              "diversity_value": "Inclusion tag registration from the same file as simple_tag, ensuring related functionality is covered"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/template/defaulttags.py:simple_tag",
+                "entity_type": "function",
+                "relevance_reason": "The function that registers simple tags, which is where the issue with keyword arguments is occurring.",
+                "diversity_value": "Template tag registration from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Node.render",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+                "diversity_value": "Template rendering from different file"
+              },
+              "chain": [
+                "django/template/base.py:Node.render",
+                "django/template/library.py:InclusionNode.render",
+                "django/template/engine.py:Engine.select_template",
+                "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+                "django/template/defaultfilters.py:lower"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/library.py:Library.tag",
+                "entity_type": "function",
+                "relevance_reason": "The function that adds tags to the template library, which might need adjustments to handle keyword arguments correctly.",
+                "diversity_value": "Template library management from different file"
+              },
+              "chain": [
+                "django/template/library.py:Library.tag",
+                "django/template/library.py:Library.simple_tag.dec",
+                "django/template/library.py:Library.simple_tag.dec.compile_func",
+                "django/template/library.py:parse_bits",
+                "django/template/exceptions.py:TemplateSyntaxError"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/defaulttags.py:inclusion_tag",
+                "entity_type": "function",
+                "relevance_reason": "Similar to simple_tag, this function registers inclusion tags and might face similar issues with keyword arguments.",
+                "diversity_value": "Inclusion tag registration from the same file as simple_tag, ensuring related functionality is covered"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "simple_tag",
+          "related_entities": [
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag",
+              "entity_type": "function",
+              "relevance_reason": "This function registers simple tags and is directly related to the issue of handling keyword arguments with defaults.",
+              "diversity_value": "Core registration function from library module"
+            },
+            {
+              "entity_id": "django/template/base.py:Parser.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a template tag and is used within the `simple_tag` decorator, which is where the error might originate.",
+              "diversity_value": "Template parsing utility from base module"
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:parse_bits",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for parsing the arguments and keyword arguments passed to a template tag, which is crucial for fixing the issue.",
+              "diversity_value": "Argument parsing utility from default tags module"
+            },
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "This method is part of the Node class, which is used to render nodes in the template. Understanding how nodes are rendered can help in debugging the issue.",
+              "diversity_value": "Rendering mechanism from base module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/template/library.py:Library.simple_tag",
+                "entity_type": "function",
+                "relevance_reason": "This function registers simple tags and is directly related to the issue of handling keyword arguments with defaults.",
+                "diversity_value": "Core registration function from library module"
+              },
+              "chain": [
+                "django/template/library.py:Library.simple_tag",
+                "django/template/library.py:Library",
+                "django/template/library.py:Library.tag",
+                "django/template/library.py:Library.tag.dec"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Parser.split_contents",
+                "entity_type": "function",
+                "relevance_reason": "This function splits the contents of a template tag and is used within the `simple_tag` decorator, which is where the error might originate.",
+                "diversity_value": "Template parsing utility from base module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/defaulttags.py:parse_bits",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for parsing the arguments and keyword arguments passed to a template tag, which is crucial for fixing the issue.",
+                "diversity_value": "Argument parsing utility from default tags module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/template/base.py:Node.render",
+                "entity_type": "function",
+                "relevance_reason": "This method is part of the Node class, which is used to render nodes in the template. Understanding how nodes are rendered can help in debugging the issue.",
+                "diversity_value": "Rendering mechanism from base module"
+              },
+              "chain": [
+                "django/template/base.py:Node.render",
+                "django/template/library.py:InclusionNode.render",
+                "django/template/engine.py:Engine.select_template",
+                "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+                "django/template/defaultfilters.py:lower"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "django/template/base.py:Node.render",
+            "django/template/library.py:InclusionNode.render"
+          ],
+          "chain_length": 2,
+          "initial_entity": "hello",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Node.render",
+            "entity_type": "function",
+            "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+            "diversity_value": "Different file, core template rendering functionality"
+          }
+        },
+        {
+          "chain": [
+            "django/template/library.py:SimpleNode",
+            "django/template/library.py:TagHelperNode",
+            "django/template/library.py:TagHelperNode.get_resolved_arguments"
+          ],
+          "chain_length": 3,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/library.py:SimpleNode",
+            "entity_type": "class",
+            "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+            "diversity_value": "Template library file, different from other selected entities"
+          }
+        },
+        {
+          "chain": [
+            "django/template/base.py:Parser.parse"
+          ],
+          "chain_length": 1,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Parser.parse",
+            "entity_type": "function",
+            "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+            "diversity_value": "Base template file, different from the library and default tags files"
+          }
+        },
+        {
+          "chain": [
+            "django/template/base.py:Token.split_contents",
+            "django/template/library.py:Library.simple_tag.dec.compile_func",
+            "django/template/library.py:parse_bits",
+            "django/template/exceptions.py:TemplateSyntaxError",
+            "django/template/__init__.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Token.split_contents",
+            "entity_type": "function",
+            "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+            "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+          }
+        },
+        {
+          "chain": [
+            "django/template/exceptions.py:TemplateSyntaxError",
+            "django/template/library.py",
+            "django/template/library.py:parse_bits"
+          ],
+          "chain_length": 3,
+          "initial_entity": "TemplateSyntaxError",
+          "start_entity": {
+            "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+            "entity_type": "class",
+            "relevance_reason": "This is the exception class that is raised when there is a syntax error in the template, which is directly related to the issue described.",
+            "diversity_value": "Exception handling in a dedicated file"
+          }
+        },
+        {
+          "chain": [
+            "django/template/base.py:Template",
+            "django/template/library.py",
+            "django/template/library.py:parse_bits",
+            "django/template/exceptions.py:TemplateSyntaxError"
+          ],
+          "chain_length": 4,
+          "initial_entity": "TemplateSyntaxError",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Template",
+            "entity_type": "class",
+            "relevance_reason": "The `Template` class is responsible for compiling and rendering templates, which is where the issue might be originating from when custom tags are used.",
+            "diversity_value": "Core template handling class in a different file"
+          }
+        },
+        {
+          "chain": [
+            "django/template/defaulttags.py:TemplateIfParser",
+            "django/template/defaulttags.py:TemplateIfParser.create_var",
+            "django/template/base.py:Parser.compile_filter",
+            "django/template/base.py:Parser",
+            "django/utils/archive.py:Archive.list"
+          ],
+          "chain_length": 5,
+          "initial_entity": "TemplateSyntaxError",
+          "start_entity": {
+            "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+            "entity_type": "class",
+            "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+            "diversity_value": "Default tag parsing in a different file"
+          }
+        },
+        {
+          "chain": [
+            "django/template/library.py:Library.simple_tag",
+            "django/template/library.py:Library",
+            "django/template/library.py:Library.tag",
+            "django/template/library.py:Library.tag.dec"
+          ],
+          "chain_length": 4,
+          "initial_entity": "TemplateSyntaxError",
+          "start_entity": {
+            "entity_id": "django/template/library.py:Library.simple_tag",
+            "entity_type": "function",
+            "relevance_reason": "The `simple_tag` decorator is used to register custom template tags, and the issue specifically mentions problems with custom tags. This function might need to be modified to handle keyword-only arguments correctly.",
+            "diversity_value": "Decorator for custom tags in a different file"
+          }
+        },
+        {
+          "chain": [
+            "django/template/base.py:Node.render",
+            "django/template/library.py:InclusionNode.render",
+            "django/template/engine.py:Engine.select_template",
+            "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+            "django/template/defaultfilters.py:lower"
+          ],
+          "chain_length": 5,
+          "initial_entity": "hi",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Node.render",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+            "diversity_value": "Template rendering from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/template/library.py:Library.tag",
+            "django/template/library.py:Library.simple_tag.dec",
+            "django/template/library.py:Library.simple_tag.dec.compile_func",
+            "django/template/library.py:parse_bits",
+            "django/template/exceptions.py:TemplateSyntaxError"
+          ],
+          "chain_length": 5,
+          "initial_entity": "hi",
+          "start_entity": {
+            "entity_id": "django/template/library.py:Library.tag",
+            "entity_type": "function",
+            "relevance_reason": "The function that adds tags to the template library, which might need adjustments to handle keyword arguments correctly.",
+            "diversity_value": "Template library management from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/template/library.py:Library.simple_tag",
+            "django/template/library.py:Library",
+            "django/template/library.py:Library.tag",
+            "django/template/library.py:Library.tag.dec"
+          ],
+          "chain_length": 4,
+          "initial_entity": "simple_tag",
+          "start_entity": {
+            "entity_id": "django/template/library.py:Library.simple_tag",
+            "entity_type": "function",
+            "relevance_reason": "This function registers simple tags and is directly related to the issue of handling keyword arguments with defaults.",
+            "diversity_value": "Core registration function from library module"
+          }
+        },
+        {
+          "chain": [
+            "django/template/base.py:Node.render",
+            "django/template/library.py:InclusionNode.render",
+            "django/template/engine.py:Engine.select_template",
+            "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+            "django/template/defaultfilters.py:lower"
+          ],
+          "chain_length": 5,
+          "initial_entity": "simple_tag",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Node.render",
+            "entity_type": "function",
+            "relevance_reason": "This method is part of the Node class, which is used to render nodes in the template. Understanding how nodes are rendered can help in debugging the issue.",
+            "diversity_value": "Rendering mechanism from base module"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-02T19:42:37.317654",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "django/template/base.py:Token.split_contents",
+            "django/template/library.py:Library.simple_tag.dec.compile_func",
+            "django/template/library.py:parse_bits",
+            "django/template/exceptions.py:TemplateSyntaxError",
+            "django/template/__init__.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Token.split_contents",
+            "entity_type": "function",
+            "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+            "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "django/template/base.py:Parser.parse"
+          ],
+          "chain_length": 1,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Parser.parse",
+            "entity_type": "function",
+            "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+            "diversity_value": "Base template file, different from the library and default tags files"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.9011896252632141,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/template/base.py:Node.render",
+            "django/template/library.py:InclusionNode.render",
+            "django/template/engine.py:Engine.select_template",
+            "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+            "django/template/defaultfilters.py:lower"
+          ],
+          "chain_length": 5,
+          "initial_entity": "hi",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Node.render",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+            "diversity_value": "Template rendering from different file"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.9145552515983582,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/template/base.py:Node.render",
+            "django/template/library.py:InclusionNode.render"
+          ],
+          "chain_length": 2,
+          "initial_entity": "hello",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Node.render",
+            "entity_type": "function",
+            "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+            "diversity_value": "Different file, core template rendering functionality"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.9150728583335876,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/template/defaulttags.py:TemplateIfParser",
+            "django/template/defaulttags.py:TemplateIfParser.create_var",
+            "django/template/base.py:Parser.compile_filter",
+            "django/template/base.py:Parser",
+            "django/utils/archive.py:Archive.list"
+          ],
+          "chain_length": 5,
+          "initial_entity": "TemplateSyntaxError",
+          "start_entity": {
+            "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+            "entity_type": "class",
+            "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+            "diversity_value": "Default tag parsing in a different file"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.9270260334014893,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/template/library.py:SimpleNode",
+            "django/template/library.py:TagHelperNode",
+            "django/template/library.py:TagHelperNode.get_resolved_arguments"
+          ],
+          "chain_length": 3,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/library.py:SimpleNode",
+            "entity_type": "class",
+            "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+            "diversity_value": "Template library file, different from other selected entities"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.9287480115890503,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-02T19:42:37.322948",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Token.split_contents",
+              "django/template/library.py:Library.simple_tag.dec.compile_func",
+              "django/template/library.py:parse_bits",
+              "django/template/exceptions.py:TemplateSyntaxError",
+              "django/template/__init__.py"
+            ],
+            "chain_length": 5,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+              "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "type": "function",
+              "code": "```\n316 | def split_contents(self):\n317 |         split = []\n318 |         bits = smart_split(self.contents)\n319 |         for bit in bits:\n320 |             # Handle translation-marked template pieces\n321 |             if bit.startswith(('_(\"', \"_('\")):\n322 |                 sentinel = bit[2] + ')'\n323 |                 trans_bit = [bit]\n324 |                 while not bit.endswith(sentinel):\n325 |                     bit = next(bits)\n326 |                     trans_bit.append(bit)\n327 |                 bit = ' '.join(trans_bit)\n328 |             split.append(bit)\n329 |         return split\n```",
+              "start_line": 316,
+              "end_line": 329,
+              "code_omitted": false,
+              "original_code_length": 602
+            },
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag.dec.compile_func",
+              "type": "function",
+              "code": "```\n113 | def compile_func(parser, token):\n114 |                 bits = token.split_contents()[1:]\n115 |                 target_var = None\n116 |                 if len(bits) >= 2 and bits[-2] == 'as':\n117 |                     target_var = bits[-1]\n118 |                     bits = bits[:-2]\n119 |                 args, kwargs = parse_bits(\n120 |                     parser, bits, params, varargs, varkw, defaults,\n121 |                     kwonly, kwonly_defaults, takes_context, function_name,\n122 |                 )\n123 |                 return SimpleNode(func, takes_context, args, kwargs, target_var)\n```",
+              "start_line": 113,
+              "end_line": 123,
+              "code_omitted": false,
+              "original_code_length": 610
+            },
+            {
+              "entity_id": "django/template/library.py:parse_bits",
+              "type": "function",
+              "code": "```\n237 | def parse_bits(parser, bits, params, varargs, varkw, defaults,\n238 |                kwonly, kwonly_defaults, takes_context, name):\n239 |     \"\"\"\n240 |     Parse bits for template tag helpers simple_tag and inclusion_tag, in\n241 |     particular by detecting syntax errors and by extracting positional and\n242 |     keyword arguments.\n243 |     \"\"\"\n244 |     if takes_context:\n245 |         if params[0] == 'context':\n246 |             params = params[1:]\n247 |         else:\n248 |             raise TemplateSyntaxError(\n249 |                 \"'%s' is decorated with takes_context=True so it must \"\n250 |                 \"have a first argument of 'context'\" % name)\n251 |     args = []\n252 |     kwargs = {}\n253 |     unhandled_params = list(params)\n254 |     unhandled_kwargs = [\n255 |         kwarg for kwarg in kwonly\n256 |         if not kwonly_defaults or kwarg not in kwonly_defaults\n257 |     ]\n258 |     for bit in bits:\n259 |         # First we try to extract a potential kwarg from the bit\n260 |         kwarg = token_kwargs([bit], parser)\n261 |         if kwarg:\n262 |             # The kwarg was successfully extracted\n263 |             param, value = kwarg.popitem()\n264 |             if param not in params and param not in unhandled_kwargs and varkw is None:\n265 |                 # An unexpected keyword argument was supplied\n266 |                 raise TemplateSyntaxError(\n267 |                     \"'%s' received unexpected keyword argument '%s'\" %\n268 |                     (name, param))\n269 |             elif param in kwargs:\n270 |                 # The keyword argument has already been supplied once\n271 |                 raise TemplateSyntaxError(\n272 |                     \"'%s' received multiple values for keyword argument '%s'\" %\n273 |                     (name, param))\n274 |             else:\n275 |                 # All good, record the keyword argument\n276 |                 kwargs[str(param)] = value\n277 |                 if param in unhandled_params:\n278 |                     # If using the keyword syntax for a positional arg, then\n279 |                     # consume it.\n280 |                     unhandled_params.remove(param)\n281 |                 elif param in unhandled_kwargs:\n282 |                     # Same for keyword-only arguments\n283 |                     unhandled_kwargs.remove(param)\n284 |         else:\n285 |             if kwargs:\n286 |                 raise TemplateSyntaxError(\n287 |                     \"'%s' received some positional argument(s) after some \"\n288 |                     \"keyword argument(s)\" % name)\n289 |             else:\n290 |                 # Record the positional argument\n291 |                 args.append(parser.compile_filter(bit))\n292 |                 try:\n293 |                     # Consume from the list of expected positional arguments\n294 |                     unhandled_params.pop(0)\n295 |                 except IndexError:\n296 |                     if varargs is None:\n297 |                         raise TemplateSyntaxError(\n298 |                             \"'%s' received too many positional arguments\" %\n299 |                             name)\n300 |     if defaults is not None:\n301 |         # Consider the last n params handled, where n is the\n302 |         # number of defaults.\n303 |         unhandled_params = unhandled_params[:-len(defaults)]\n304 |     if unhandled_params or unhandled_kwargs:\n305 |         # Some positional arguments were not supplied\n306 |         raise TemplateSyntaxError(\n307 |             \"'%s' did not receive value(s) for the argument(s): %s\" %\n308 |             (name, \", \".join(\"'%s'\" % p for p in unhandled_params + unhandled_kwargs)))\n309 |     return args, kwargs\n```",
+              "start_line": 237,
+              "end_line": 309,
+              "code_omitted": false,
+              "original_code_length": 3711
+            },
+            {
+              "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+              "type": "class",
+              "code": "```\n38 | class TemplateSyntaxError(Exception):\n39 |     \"\"\"\n40 |     The exception used for syntax errors during parsing or rendering.\n41 |     \"\"\"\n42 |     pass\n```",
+              "start_line": 38,
+              "end_line": 42,
+              "code_omitted": false,
+              "original_code_length": 165
+            },
+            {
+              "entity_id": "django/template/__init__.py",
+              "type": "file",
+              "code": "```\n 1 | \"\"\"\n 2 | Django's support for templates.\n 3 | \n 4 | The django.template namespace contains two independent subsystems:\n 5 | \n 6 | 1. Multiple Template Engines: support for pluggable template backends,\n 7 |    built-in backends and backend-independent APIs\n 8 | 2. Django Template Language: Django's own template engine, including its\n 9 |    built-in loaders, context processors, tags and filters.\n10 | \n11 | Ideally these subsystems would be implemented in distinct packages. However\n12 | keeping them together made the implementation of Multiple Template Engines\n13 | less disruptive .\n14 | \n15 | Here's a breakdown of which modules belong to which subsystem.\n16 | \n17 | Multiple Template Engines:\n18 | \n19 | - django.template.backends.*\n20 | - django.template.loader\n21 | - django.template.response\n22 | \n23 | Django Template Language:\n24 | \n25 | - django.template.base\n26 | - django.template.context\n27 | - django.template.context_processors\n28 | - django.template.loaders.*\n29 | - django.template.debug\n30 | - django.template.defaultfilters\n31 | - django.template.defaulttags\n32 | - django.template.engine\n33 | - django.template.loader_tags\n34 | - django.template.smartif\n35 | \n36 | Shared:\n37 | \n38 | - django.template.utils\n39 | \n40 | \"\"\"\n41 | \n42 | # Multiple Template Engines\n43 | \n44 | from .engine import Engine\n45 | from .utils import EngineHandler\n46 | \n47 | engines = EngineHandler()\n48 | \n49 | __all__ = ('Engine', 'engines')\n50 | \n51 | \n52 | # Django Template Language\n53 | \n54 | # Public exceptions\n55 | from .base import VariableDoesNotExist                                  # NOQA isort:skip\n56 | from .context import Context, ContextPopException, RequestContext       # NOQA isort:skip\n57 | from .exceptions import TemplateDoesNotExist, TemplateSyntaxError       # NOQA isort:skip\n58 | \n59 | # Template parts\n60 | from .base import (                                                     # NOQA isort:skip\n61 |     Node, NodeList, Origin, Template, Variable,\n62 | )\n63 | \n64 | # Library management\n65 | from .library import Library                                            # NOQA isort:skip\n66 | \n67 | \n68 | __all__ += ('Template', 'Context', 'RequestContext')\n69 | \n```",
+              "start_line": 1,
+              "end_line": 69,
+              "code_omitted": false,
+              "original_code_length": 2199
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Parser.parse"
+            ],
+            "chain_length": 1,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Parser.parse",
+              "entity_type": "function",
+              "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+              "diversity_value": "Base template file, different from the library and default tags files"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.9011896252632141,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Parser.parse",
+              "type": "function",
+              "code": "```\n426 | def parse(self, parse_until=None):\n427 |         \"\"\"\n428 |         Iterate through the parser tokens and compiles each one into a node.\n429 | \n430 |         If parse_until is provided, parsing will stop once one of the\n431 |         specified tokens has been reached. This is formatted as a list of\n432 |         tokens, e.g. ['elif', 'else', 'endif']. If no matching token is\n433 |         reached, raise an exception with the unclosed block tag details.\n434 |         \"\"\"\n435 |         if parse_until is None:\n436 |             parse_until = []\n437 |         nodelist = NodeList()\n438 |         while self.tokens:\n439 |             token = self.next_token()\n440 |             # Use the raw values here for TokenType.* for a tiny performance boost.\n441 |             if token.token_type.value == 0:  # TokenType.TEXT\n442 |                 self.extend_nodelist(nodelist, TextNode(token.contents), token)\n443 |             elif token.token_type.value == 1:  # TokenType.VAR\n444 |                 if not token.contents:\n445 |                     raise self.error(token, 'Empty variable tag on line %d' % token.lineno)\n446 |                 try:\n447 |                     filter_expression = self.compile_filter(token.contents)\n448 |                 except TemplateSyntaxError as e:\n449 |                     raise self.error(token, e)\n450 |                 var_node = VariableNode(filter_expression)\n451 |                 self.extend_nodelist(nodelist, var_node, token)\n452 |             elif token.token_type.value == 2:  # TokenType.BLOCK\n453 |                 try:\n454 |                     command = token.contents.split()[0]\n455 |                 except IndexError:\n456 |                     raise self.error(token, 'Empty block tag on line %d' % token.lineno)\n457 |                 if command in parse_until:\n458 |                     # A matching token has been reached. Return control to\n459 |                     # the caller. Put the token back on the token list so the\n460 |                     # caller knows where it terminated.\n461 |                     self.prepend_token(token)\n462 |                     return nodelist\n463 |                 # Add the token to the command stack. This is used for error\n464 |                 # messages if further parsing fails due to an unclosed block\n465 |                 # tag.\n466 |                 self.command_stack.append((command, token))\n467 |                 # Get the tag callback function from the ones registered with\n468 |                 # the parser.\n469 |                 try:\n470 |                     compile_func = self.tags[command]\n471 |                 except KeyError:\n472 |                     self.invalid_block_tag(token, command, parse_until)\n473 |                 # Compile the callback into a node object and add it to\n474 |                 # the node list.\n475 |                 try:\n476 |                     compiled_result = compile_func(self, token)\n477 |                 except Exception as e:\n478 |                     raise self.error(token, e)\n479 |                 self.extend_nodelist(nodelist, compiled_result, token)\n480 |                 # Compile success. Remove the token from the command stack.\n481 |                 self.command_stack.pop()\n482 |         if parse_until:\n483 |             self.unclosed_block_tag(parse_until)\n484 |         return nodelist\n```",
+              "start_line": 426,
+              "end_line": 484,
+              "code_omitted": false,
+              "original_code_length": 3365
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Node.render",
+              "django/template/library.py:InclusionNode.render",
+              "django/template/engine.py:Engine.select_template",
+              "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+              "django/template/defaultfilters.py:lower"
+            ],
+            "chain_length": 5,
+            "initial_entity": "hi",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+              "diversity_value": "Template rendering from different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.9145552515983582,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "type": "function",
+              "code": "```\n891 | def render(self, context):\n892 |         \"\"\"\n893 |         Return the node rendered as a string.\n894 |         \"\"\"\n895 |         pass\n```",
+              "start_line": 891,
+              "end_line": 895,
+              "code_omitted": false,
+              "original_code_length": 147
+            },
+            {
+              "entity_id": "django/template/library.py:InclusionNode.render",
+              "type": "function",
+              "code": "```\n207 | def render(self, context):\n208 |         \"\"\"\n209 |         Render the specified template and context. Cache the template object\n210 |         in render_context to avoid reparsing and loading when used in a for\n211 |         loop.\n212 |         \"\"\"\n213 |         resolved_args, resolved_kwargs = self.get_resolved_arguments(context)\n214 |         _dict = self.func(*resolved_args, **resolved_kwargs)\n215 | \n216 |         t = context.render_context.get(self)\n217 |         if t is None:\n218 |             if isinstance(self.filename, Template):\n219 |                 t = self.filename\n220 |             elif isinstance(getattr(self.filename, 'template', None), Template):\n221 |                 t = self.filename.template\n222 |             elif not isinstance(self.filename, str) and is_iterable(self.filename):\n223 |                 t = context.template.engine.select_template(self.filename)\n224 |             else:\n225 |                 t = context.template.engine.get_template(self.filename)\n226 |             context.render_context[self] = t\n227 |         new_context = context.new(_dict)\n228 |         # Copy across the CSRF token, if present, because inclusion tags are\n229 |         # often used for forms, and we need instructions for using CSRF\n230 |         # protection to be as simple as possible.\n231 |         csrf_token = context.get('csrf_token')\n232 |         if csrf_token is not None:\n233 |             new_context['csrf_token'] = csrf_token\n234 |         return t.render(new_context)\n```",
+              "start_line": 207,
+              "end_line": 234,
+              "code_omitted": false,
+              "original_code_length": 1514
+            },
+            {
+              "entity_id": "django/template/engine.py:Engine.select_template",
+              "type": "function",
+              "code": "```\n165 | def select_template(self, template_name_list):\n166 |         \"\"\"\n167 |         Given a list of template names, return the first that can be loaded.\n168 |         \"\"\"\n169 |         if not template_name_list:\n170 |             raise TemplateDoesNotExist(\"No template names provided\")\n171 |         not_found = []\n172 |         for template_name in template_name_list:\n173 |             try:\n174 |                 return self.get_template(template_name)\n175 |             except TemplateDoesNotExist as exc:\n176 |                 if exc.args[0] not in not_found:\n177 |                     not_found.append(exc.args[0])\n178 |                 continue\n179 |         # If we get here, none of the templates could be loaded\n180 |         raise TemplateDoesNotExist(', '.join(not_found))\n```",
+              "start_line": 165,
+              "end_line": 180,
+              "code_omitted": false,
+              "original_code_length": 793
+            },
+            {
+              "entity_id": "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+              "type": "function",
+              "code": "```\n22 | def render(self, context):\n23 |         opts = context['opts']\n24 |         app_label = opts.app_label.lower()\n25 |         object_name = opts.object_name.lower()\n26 |         # Load template for this render call. (Setting self.filename isn't\n27 |         # thread-safe.)\n28 |         context.render_context[self] = context.template.engine.select_template([\n29 |             'admin/%s/%s/%s' % (app_label, object_name, self.template_name),\n30 |             'admin/%s/%s' % (app_label, self.template_name),\n31 |             'admin/%s' % (self.template_name,),\n32 |         ])\n33 |         return super().render(context)\n```",
+              "start_line": 22,
+              "end_line": 33,
+              "code_omitted": false,
+              "original_code_length": 631
+            },
+            {
+              "entity_id": "django/template/defaultfilters.py:lower",
+              "type": "function",
+              "code": "```\n193 | def lower(value):\n194 |     \"\"\"Convert a string into all lowercase.\"\"\"\n195 |     return value.lower()\n```",
+              "start_line": 193,
+              "end_line": 195,
+              "code_omitted": false,
+              "original_code_length": 115
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Node.render",
+              "django/template/library.py:InclusionNode.render"
+            ],
+            "chain_length": 2,
+            "initial_entity": "hello",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+              "diversity_value": "Different file, core template rendering functionality"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.9150728583335876,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "type": "function",
+              "code": "```\n891 | def render(self, context):\n892 |         \"\"\"\n893 |         Return the node rendered as a string.\n894 |         \"\"\"\n895 |         pass\n```",
+              "start_line": 891,
+              "end_line": 895,
+              "code_omitted": false,
+              "original_code_length": 147
+            },
+            {
+              "entity_id": "django/template/library.py:InclusionNode.render",
+              "type": "function",
+              "code": "```\n207 | def render(self, context):\n208 |         \"\"\"\n209 |         Render the specified template and context. Cache the template object\n210 |         in render_context to avoid reparsing and loading when used in a for\n211 |         loop.\n212 |         \"\"\"\n213 |         resolved_args, resolved_kwargs = self.get_resolved_arguments(context)\n214 |         _dict = self.func(*resolved_args, **resolved_kwargs)\n215 | \n216 |         t = context.render_context.get(self)\n217 |         if t is None:\n218 |             if isinstance(self.filename, Template):\n219 |                 t = self.filename\n220 |             elif isinstance(getattr(self.filename, 'template', None), Template):\n221 |                 t = self.filename.template\n222 |             elif not isinstance(self.filename, str) and is_iterable(self.filename):\n223 |                 t = context.template.engine.select_template(self.filename)\n224 |             else:\n225 |                 t = context.template.engine.get_template(self.filename)\n226 |             context.render_context[self] = t\n227 |         new_context = context.new(_dict)\n228 |         # Copy across the CSRF token, if present, because inclusion tags are\n229 |         # often used for forms, and we need instructions for using CSRF\n230 |         # protection to be as simple as possible.\n231 |         csrf_token = context.get('csrf_token')\n232 |         if csrf_token is not None:\n233 |             new_context['csrf_token'] = csrf_token\n234 |         return t.render(new_context)\n```",
+              "start_line": 207,
+              "end_line": 234,
+              "code_omitted": false,
+              "original_code_length": 1514
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/template/defaulttags.py:TemplateIfParser",
+              "django/template/defaulttags.py:TemplateIfParser.create_var",
+              "django/template/base.py:Parser.compile_filter",
+              "django/template/base.py:Parser",
+              "django/utils/archive.py:Archive.list"
+            ],
+            "chain_length": 5,
+            "initial_entity": "TemplateSyntaxError",
+            "start_entity": {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+              "entity_type": "class",
+              "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+              "diversity_value": "Default tag parsing in a different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9270260334014893,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+              "type": "class",
+              "code": "```\n880 | class TemplateIfParser(IfParser):\n881 |     error_class = TemplateSyntaxError\n882 | \n883 |     def __init__(self, parser, *args, **kwargs):\n884 |         self.template_parser = parser\n885 |         super().__init__(*args, **kwargs)\n886 | \n887 |     def create_var(self, value):\n888 |         return TemplateLiteral(self.template_parser.compile_filter(value), value)\n```",
+              "start_line": 880,
+              "end_line": 888,
+              "code_omitted": false,
+              "original_code_length": 379
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser.create_var",
+              "type": "function",
+              "code": "```\n887 | def create_var(self, value):\n888 |         return TemplateLiteral(self.template_parser.compile_filter(value), value)\n```",
+              "start_line": 887,
+              "end_line": 888,
+              "code_omitted": false,
+              "original_code_length": 130
+            },
+            {
+              "entity_id": "django/template/base.py:Parser.compile_filter",
+              "type": "function",
+              "code": "```\n559 | def compile_filter(self, token):\n560 |         \"\"\"\n561 |         Convenient wrapper for FilterExpression\n562 |         \"\"\"\n563 |         return FilterExpression(token, self)\n```",
+              "start_line": 559,
+              "end_line": 563,
+              "code_omitted": false,
+              "original_code_length": 187
+            },
+            {
+              "entity_id": "django/template/base.py:Parser",
+              "type": "class",
+              "code": "```\n407 | class Parser:\n408 |     def __init__(self, tokens, libraries=None, builtins=None, origin=None):\n409 |         # Reverse the tokens so delete_first_token(), prepend_token(), and\n410 |         # next_token() can operate at the end of the list in constant time.\n411 |         self.tokens = list(reversed(tokens))\n412 |         self.tags = {}\n413 |         self.filters = {}\n414 |         self.command_stack = []\n415 | \n416 |         if libraries is None:\n417 |             libraries = {}\n418 |         if builtins is None:\n419 |             builtins = []\n420 | \n421 |         self.libraries = libraries\n422 |         for builtin in builtins:\n423 |             self.add_library(builtin)\n424 |         self.origin = origin\n425 | \n426 |     def parse(self, parse_until=None):\n427 |         \"\"\"\n428 |         Iterate through the parser tokens and compiles each one into a node.\n429 | \n430 |         If parse_until is provided, parsing will stop once one of the\n431 |         specified tokens has been reached. This is formatted as a list of\n432 |         tokens, e.g. ['elif', 'else', 'endif']. If no matching token is\n433 |         reached, raise an exception with the unclosed block tag details.\n434 |         \"\"\"\n435 |         if parse_until is None:\n436 |             parse_until = []\n437 |         nodelist = NodeList()\n438 |         while self.tokens:\n439 |             token = self.next_token()\n440 |             # Use the raw values here for TokenType.* for a tiny performance boost.\n441 |             if token.token_type.value == 0:  # TokenType.TEXT\n442 |                 self.extend_nodelist(nodelist, TextNode(token.contents), token)\n443 |             elif token.token_type.value == 1:  # TokenType.VAR\n444 |                 if not token.contents:\n445 |                     raise self.error(token, 'Empty variable tag on line %d' % token.lineno)\n446 |                 try:\n447 |                     filter_expression = self.compile_filter(token.contents)\n448 |                 except TemplateSyntaxError as e:\n449 |                     raise self.error(token, e)\n450 |                 var_node = VariableNode(filter_expression)\n451 |                 self.extend_nodelist(nodelist, var_node, token)\n452 |             elif token.token_type.value == 2:  # TokenType.BLOCK\n453 |                 try:\n454 |                     command = token.contents.split()[0]\n455 |                 except IndexError:\n456 |                     raise self.error(token, 'Empty block tag on line %d' % token.lineno)\n457 |                 if command in parse_until:\n458 |                     # A matching token has been reached. Return control to\n459 |                     # the caller. Put the token back on the token list so the\n460 |                     # caller knows where it terminated.\n461 |                     self.prepend_token(token)\n462 |                     return nodelist\n463 |                 # Add the token to the command stack. This is used for error\n464 |                 # messages if further parsing fails due to an unclosed block\n465 |                 # tag.\n466 |                 self.command_stack.append((command, token))\n467 |                 # Get the tag callback function from the ones registered with\n468 |                 # the parser.\n469 |                 try:\n470 |                     compile_func = self.tags[command]\n471 |                 except KeyError:\n472 |                     self.invalid_block_tag(token, command, parse_until)\n473 |                 # Compile the callback into a node object and add it to\n474 |                 # the node list.\n475 |                 try:\n476 |                     compiled_result = compile_func(self, token)\n477 |                 except Exception as e:\n478 |                     raise self.error(token, e)\n479 |                 self.extend_nodelist(nodelist, compiled_result, token)\n480 |                 # Compile success. Remove the token from the command stack.\n481 |                 self.command_stack.pop()\n482 |         if parse_until:\n483 |             self.unclosed_block_tag(parse_until)\n484 |         return nodelist\n485 | \n486 |     def skip_past(self, endtag):\n487 |         while self.tokens:\n488 |             token = self.next_token()\n489 |             if token.token_type == TokenType.BLOCK and token.contents == endtag:\n490 |                 return\n491 |         self.unclosed_block_tag([endtag])\n492 | \n493 |     def extend_nodelist(self, nodelist, node, token):\n494 |         # Check that non-text nodes don't appear before an extends tag.\n495 |         if node.must_be_first and nodelist.contains_nontext:\n496 |             raise self.error(\n497 |                 token, '%r must be the first tag in the template.' % node,\n498 |             )\n499 |         if isinstance(nodelist, NodeList) and not isinstance(node, TextNode):\n500 |             nodelist.contains_nontext = True\n501 |         # Set origin and token here since we can't modify the node __init__()\n502 |         # method.\n503 |         node.token = token\n504 |         node.origin = self.origin\n505 |         nodelist.append(node)\n506 | \n507 |     def error(self, token, e):\n508 |         \"\"\"\n509 |         Return an exception annotated with the originating token. Since the\n510 |         parser can be called recursively, check if a token is already set. This\n511 |         ensures the innermost token is highlighted if an exception occurs,\n512 |         e.g. a compile error within the body of an if statement.\n513 |         \"\"\"\n514 |         if not isinstance(e, Exception):\n515 |             e = TemplateSyntaxError(e)\n516 |         if not hasattr(e, 'token'):\n517 |             e.token = token\n518 |         return e\n519 | \n520 |     def invalid_block_tag(self, token, command, parse_until=None):\n521 |         if parse_until:\n522 |             raise self.error(\n523 |                 token,\n524 |                 \"Invalid block tag on line %d: '%s', expected %s. Did you \"\n525 |                 \"forget to register or load this tag?\" % (\n526 |                     token.lineno,\n527 |                     command,\n528 |                     get_text_list([\"'%s'\" % p for p in parse_until], 'or'),\n529 |                 ),\n530 |             )\n531 |         raise self.error(\n532 |             token,\n533 |             \"Invalid block tag on line %d: '%s'. Did you forget to register \"\n534 |             \"or load this tag?\" % (token.lineno, command)\n535 |         )\n536 | \n537 |     def unclosed_block_tag(self, parse_until):\n538 |         command, token = self.command_stack.pop()\n539 |         msg = \"Unclosed tag on line %d: '%s'. Looking for one of: %s.\" % (\n540 |             token.lineno,\n541 |             command,\n542 |             ', '.join(parse_until),\n543 |         )\n544 |         raise self.error(token, msg)\n545 | \n546 |     def next_token(self):\n547 |         return self.tokens.pop()\n548 | \n549 |     def prepend_token(self, token):\n550 |         self.tokens.append(token)\n551 | \n552 |     def delete_first_token(self):\n553 |         del self.tokens[-1]\n554 | \n555 |     def add_library(self, lib):\n556 |         self.tags.update(lib.tags)\n557 |         self.filters.update(lib.filters)\n558 | \n559 |     def compile_filter(self, token):\n560 |         \"\"\"\n561 |         Convenient wrapper for FilterExpression\n562 |         \"\"\"\n563 |         return FilterExpression(token, self)\n564 | \n565 |     def find_filter(self, filter_name):\n566 |         if filter_name in self.filters:\n567 |             return self.filters[filter_name]\n568 |         else:\n569 |             raise TemplateSyntaxError(\"Invalid filter: '%s'\" % filter_name)\n```",
+              "start_line": 407,
+              "end_line": 569,
+              "code_omitted": false,
+              "original_code_length": 7605
+            },
+            {
+              "entity_id": "django/utils/archive.py:Archive.list",
+              "type": "function",
+              "code": "```\n89 | def list(self):\n90 |         self._archive.list()\n```",
+              "start_line": 89,
+              "end_line": 90,
+              "code_omitted": false,
+              "original_code_length": 62
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/template/library.py:SimpleNode",
+              "django/template/library.py:TagHelperNode",
+              "django/template/library.py:TagHelperNode.get_resolved_arguments"
+            ],
+            "chain_length": 3,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/library.py:SimpleNode",
+              "entity_type": "class",
+              "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+              "diversity_value": "Template library file, different from other selected entities"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.9287480115890503,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/library.py:SimpleNode",
+              "type": "class",
+              "code": "```\n184 | class SimpleNode(TagHelperNode):\n185 | \n186 |     def __init__(self, func, takes_context, args, kwargs, target_var):\n187 |         super().__init__(func, takes_context, args, kwargs)\n188 |         self.target_var = target_var\n189 | \n190 |     def render(self, context):\n191 |         resolved_args, resolved_kwargs = self.get_resolved_arguments(context)\n192 |         output = self.func(*resolved_args, **resolved_kwargs)\n193 |         if self.target_var is not None:\n194 |             context[self.target_var] = output\n195 |             return ''\n196 |         if context.autoescape:\n197 |             output = conditional_escape(output)\n198 |         return output\n```",
+              "start_line": 184,
+              "end_line": 198,
+              "code_omitted": false,
+              "original_code_length": 680
+            },
+            {
+              "entity_id": "django/template/library.py:TagHelperNode",
+              "type": "class",
+              "code": "```\n164 | class TagHelperNode(Node):\n165 |     \"\"\"\n166 |     Base class for tag helper nodes such as SimpleNode and InclusionNode.\n167 |     Manages the positional and keyword arguments to be passed to the decorated\n168 |     function.\n169 |     \"\"\"\n170 |     def __init__(self, func, takes_context, args, kwargs):\n171 |         self.func = func\n172 |         self.takes_context = takes_context\n173 |         self.args = args\n174 |         self.kwargs = kwargs\n175 | \n176 |     def get_resolved_arguments(self, context):\n177 |         resolved_args = [var.resolve(context) for var in self.args]\n178 |         if self.takes_context:\n179 |             resolved_args = [context] + resolved_args\n180 |         resolved_kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()}\n181 |         return resolved_args, resolved_kwargs\n```",
+              "start_line": 164,
+              "end_line": 181,
+              "code_omitted": false,
+              "original_code_length": 835
+            },
+            {
+              "entity_id": "django/template/library.py:TagHelperNode.get_resolved_arguments",
+              "type": "function",
+              "code": "```\n176 | def get_resolved_arguments(self, context):\n177 |         resolved_args = [var.resolve(context) for var in self.args]\n178 |         if self.takes_context:\n179 |             resolved_args = [context] + resolved_args\n180 |         resolved_kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()}\n181 |         return resolved_args, resolved_kwargs\n```",
+              "start_line": 176,
+              "end_line": 181,
+              "code_omitted": false,
+              "original_code_length": 367
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-02T19:43:31.628505",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_1",
+        "winning_chain": {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Token.split_contents",
+              "django/template/library.py:Library.simple_tag.dec.compile_func",
+              "django/template/library.py:parse_bits",
+              "django/template/exceptions.py:TemplateSyntaxError",
+              "django/template/__init__.py"
+            ],
+            "chain_length": 5,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+              "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "type": "function",
+              "code": "```\n316 | def split_contents(self):\n317 |         split = []\n318 |         bits = smart_split(self.contents)\n319 |         for bit in bits:\n320 |             # Handle translation-marked template pieces\n321 |             if bit.startswith(('_(\"', \"_('\")):\n322 |                 sentinel = bit[2] + ')'\n323 |                 trans_bit = [bit]\n324 |                 while not bit.endswith(sentinel):\n325 |                     bit = next(bits)\n326 |                     trans_bit.append(bit)\n327 |                 bit = ' '.join(trans_bit)\n328 |             split.append(bit)\n329 |         return split\n```",
+              "start_line": 316,
+              "end_line": 329,
+              "code_omitted": false,
+              "original_code_length": 602
+            },
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag.dec.compile_func",
+              "type": "function",
+              "code": "```\n113 | def compile_func(parser, token):\n114 |                 bits = token.split_contents()[1:]\n115 |                 target_var = None\n116 |                 if len(bits) >= 2 and bits[-2] == 'as':\n117 |                     target_var = bits[-1]\n118 |                     bits = bits[:-2]\n119 |                 args, kwargs = parse_bits(\n120 |                     parser, bits, params, varargs, varkw, defaults,\n121 |                     kwonly, kwonly_defaults, takes_context, function_name,\n122 |                 )\n123 |                 return SimpleNode(func, takes_context, args, kwargs, target_var)\n```",
+              "start_line": 113,
+              "end_line": 123,
+              "code_omitted": false,
+              "original_code_length": 610
+            },
+            {
+              "entity_id": "django/template/library.py:parse_bits",
+              "type": "function",
+              "code": "```\n237 | def parse_bits(parser, bits, params, varargs, varkw, defaults,\n238 |                kwonly, kwonly_defaults, takes_context, name):\n239 |     \"\"\"\n240 |     Parse bits for template tag helpers simple_tag and inclusion_tag, in\n241 |     particular by detecting syntax errors and by extracting positional and\n242 |     keyword arguments.\n243 |     \"\"\"\n244 |     if takes_context:\n245 |         if params[0] == 'context':\n246 |             params = params[1:]\n247 |         else:\n248 |             raise TemplateSyntaxError(\n249 |                 \"'%s' is decorated with takes_context=True so it must \"\n250 |                 \"have a first argument of 'context'\" % name)\n251 |     args = []\n252 |     kwargs = {}\n253 |     unhandled_params = list(params)\n254 |     unhandled_kwargs = [\n255 |         kwarg for kwarg in kwonly\n256 |         if not kwonly_defaults or kwarg not in kwonly_defaults\n257 |     ]\n258 |     for bit in bits:\n259 |         # First we try to extract a potential kwarg from the bit\n260 |         kwarg = token_kwargs([bit], parser)\n261 |         if kwarg:\n262 |             # The kwarg was successfully extracted\n263 |             param, value = kwarg.popitem()\n264 |             if param not in params and param not in unhandled_kwargs and varkw is None:\n265 |                 # An unexpected keyword argument was supplied\n266 |                 raise TemplateSyntaxError(\n267 |                     \"'%s' received unexpected keyword argument '%s'\" %\n268 |                     (name, param))\n269 |             elif param in kwargs:\n270 |                 # The keyword argument has already been supplied once\n271 |                 raise TemplateSyntaxError(\n272 |                     \"'%s' received multiple values for keyword argument '%s'\" %\n273 |                     (name, param))\n274 |             else:\n275 |                 # All good, record the keyword argument\n276 |                 kwargs[str(param)] = value\n277 |                 if param in unhandled_params:\n278 |                     # If using the keyword syntax for a positional arg, then\n279 |                     # consume it.\n280 |                     unhandled_params.remove(param)\n281 |                 elif param in unhandled_kwargs:\n282 |                     # Same for keyword-only arguments\n283 |                     unhandled_kwargs.remove(param)\n284 |         else:\n285 |             if kwargs:\n286 |                 raise TemplateSyntaxError(\n287 |                     \"'%s' received some positional argument(s) after some \"\n288 |                     \"keyword argument(s)\" % name)\n289 |             else:\n290 |                 # Record the positional argument\n291 |                 args.append(parser.compile_filter(bit))\n292 |                 try:\n293 |                     # Consume from the list of expected positional arguments\n294 |                     unhandled_params.pop(0)\n295 |                 except IndexError:\n296 |                     if varargs is None:\n297 |                         raise TemplateSyntaxError(\n298 |                             \"'%s' received too many positional arguments\" %\n299 |                             name)\n300 |     if defaults is not None:\n301 |         # Consider the last n params handled, where n is the\n302 |         # number of defaults.\n303 |         unhandled_params = unhandled_params[:-len(defaults)]\n304 |     if unhandled_params or unhandled_kwargs:\n305 |         # Some positional arguments were not supplied\n306 |         raise TemplateSyntaxError(\n307 |             \"'%s' did not receive value(s) for the argument(s): %s\" %\n308 |             (name, \", \".join(\"'%s'\" % p for p in unhandled_params + unhandled_kwargs)))\n309 |     return args, kwargs\n```",
+              "start_line": 237,
+              "end_line": 309,
+              "code_omitted": false,
+              "original_code_length": 3711
+            },
+            {
+              "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+              "type": "class",
+              "code": "```\n38 | class TemplateSyntaxError(Exception):\n39 |     \"\"\"\n40 |     The exception used for syntax errors during parsing or rendering.\n41 |     \"\"\"\n42 |     pass\n```",
+              "start_line": 38,
+              "end_line": 42,
+              "code_omitted": false,
+              "original_code_length": 165
+            },
+            {
+              "entity_id": "django/template/__init__.py",
+              "type": "file",
+              "code": "```\n 1 | \"\"\"\n 2 | Django's support for templates.\n 3 | \n 4 | The django.template namespace contains two independent subsystems:\n 5 | \n 6 | 1. Multiple Template Engines: support for pluggable template backends,\n 7 |    built-in backends and backend-independent APIs\n 8 | 2. Django Template Language: Django's own template engine, including its\n 9 |    built-in loaders, context processors, tags and filters.\n10 | \n11 | Ideally these subsystems would be implemented in distinct packages. However\n12 | keeping them together made the implementation of Multiple Template Engines\n13 | less disruptive .\n14 | \n15 | Here's a breakdown of which modules belong to which subsystem.\n16 | \n17 | Multiple Template Engines:\n18 | \n19 | - django.template.backends.*\n20 | - django.template.loader\n21 | - django.template.response\n22 | \n23 | Django Template Language:\n24 | \n25 | - django.template.base\n26 | - django.template.context\n27 | - django.template.context_processors\n28 | - django.template.loaders.*\n29 | - django.template.debug\n30 | - django.template.defaultfilters\n31 | - django.template.defaulttags\n32 | - django.template.engine\n33 | - django.template.loader_tags\n34 | - django.template.smartif\n35 | \n36 | Shared:\n37 | \n38 | - django.template.utils\n39 | \n40 | \"\"\"\n41 | \n42 | # Multiple Template Engines\n43 | \n44 | from .engine import Engine\n45 | from .utils import EngineHandler\n46 | \n47 | engines = EngineHandler()\n48 | \n49 | __all__ = ('Engine', 'engines')\n50 | \n51 | \n52 | # Django Template Language\n53 | \n54 | # Public exceptions\n55 | from .base import VariableDoesNotExist                                  # NOQA isort:skip\n56 | from .context import Context, ContextPopException, RequestContext       # NOQA isort:skip\n57 | from .exceptions import TemplateDoesNotExist, TemplateSyntaxError       # NOQA isort:skip\n58 | \n59 | # Template parts\n60 | from .base import (                                                     # NOQA isort:skip\n61 |     Node, NodeList, Origin, Template, Variable,\n62 | )\n63 | \n64 | # Library management\n65 | from .library import Library                                            # NOQA isort:skip\n66 | \n67 | \n68 | __all__ += ('Template', 'Context', 'RequestContext')\n69 | \n```",
+              "start_line": 1,
+              "end_line": 69,
+              "code_omitted": false,
+              "original_code_length": 2199
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        "winning_votes": 3,
+        "total_valid_votes": 5,
+        "average_confidence": 90.0,
+        "vote_distribution": {
+          "chain_2": 2,
+          "chain_1": 3
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `compile_func` method in `django/template/library.py`, which is responsible for compiling the tag and handling the arguments. The issue described involves incorrect handling of keyword arguments with defaults and multiple keyword arguments, which are processed in this method. Modifying this method to correctly handle these cases would directly address the problem.",
+            "modification_strategy": "Update the `compile_func` method to correctly handle keyword arguments with defaults and ensure that multiple values for the same keyword argument raise the correct error message.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with splitting the contents of a token and initial parsing of arguments. While it is part of the overall process, the specific issue with keyword arguments and their validation is not addressed here.",
+              "chain_2": "This chain contains the `compile_func` method which is the primary location where arguments are parsed and validated. It is the most likely place to fix the issue with keyword arguments and their defaults.",
+              "chain_3": "This chain deals with the rendering of inclusion tags and template selection. The issue is more about argument parsing and validation, which happens earlier in the process.",
+              "chain_4": "Similar to Chain 3, this chain also deals with the rendering of inclusion tags and does not directly address the argument parsing issue.",
+              "chain_5": "This chain deals with the parsing of if statements and filter expressions. The issue with custom template tags and their arguments is not directly related to this chain.",
+              "chain_6": "This chain deals with the `SimpleNode` and `TagHelperNode` classes, which are used to manage the arguments passed to the tag functions. While it is involved in the process, the actual parsing and validation of arguments happen in `compile_func`."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `split_contents` method in `django/template/base.py`, which is responsible for splitting the contents of a template tag into individual components. The issue described involves incorrect handling of keyword arguments with defaults, and this method is the first step in processing the arguments. By ensuring that keyword arguments with defaults are correctly identified and handled here, we can prevent the TemplateSyntaxError from being raised incorrectly.",
+            "modification_strategy": "Modify the `split_contents` method to correctly identify and handle keyword arguments with defaults. Ensure that the method distinguishes between positional and keyword arguments and handles defaults appropriately.",
+            "chain_analysis": {
+              "chain_1": "This chain is the best modification target because it processes the initial splitting of template tag arguments, which is crucial for correctly identifying and handling keyword arguments with defaults.",
+              "chain_2": "This chain is related to the parsing of template tags but does not directly handle the argument splitting. Changes here might help but are less direct than modifying `split_contents`.",
+              "chain_3": "This chain deals with the rendering of inclusion tags and template selection, which is not directly related to the argument handling issue.",
+              "chain_4": "Similar to Chain 3, this chain is about the rendering of inclusion tags and does not directly address the argument handling problem.",
+              "chain_5": "This chain is involved in parsing and compiling filter expressions, which is not directly related to the issue of handling keyword arguments with defaults in custom template tags.",
+              "chain_6": "This chain contains the `SimpleNode` and `TagHelperNode` classes, which are used to manage the arguments passed to the template tag functions. While important, the root cause of the issue likely lies in how the arguments are initially processed in `split_contents`."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `split_contents` method and the `compile_func` method in `library.py`, which are directly involved in parsing and handling the arguments for custom template tags. The issue described involves incorrect handling of keyword arguments with defaults and multiple assignments, which suggests that the problem lies in how these arguments are parsed and validated. Modifying this chain would allow us to correct the argument handling logic and ensure that keyword arguments with defaults are processed correctly.",
+            "modification_strategy": "Update the `split_contents` method to correctly identify and handle keyword arguments with defaults. Modify the `compile_func` method to validate keyword arguments more accurately and provide correct error messages for multiple assignments.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the core logic for parsing and compiling template tags, making it the most likely place to address the issue of incorrect keyword argument handling and error messages.",
+              "chain_2": "While this chain deals with parsing tokens, it is more focused on the general structure of the template and does not specifically handle the argument parsing for custom tags. Modifying this chain would not directly address the issue.",
+              "chain_3": "This chain is related to the rendering of inclusion tags and does not directly handle the argument parsing or validation. Changes here would not resolve the issue with keyword arguments.",
+              "chain_4": "Similar to Chain 3, this chain is also related to the rendering of inclusion tags and does not deal with the argument parsing or validation. It is not the best target for fixing the issue.",
+              "chain_5": "This chain is related to the parsing of if statements and does not directly involve the argument handling for custom tags. Modifying this chain would not address the reported issue.",
+              "chain_6": "This chain contains the `SimpleNode` and `TagHelperNode` classes, which are involved in the execution of custom tags. While it is part of the process, the actual parsing and validation of arguments happen earlier in the chain, making it less likely to be the primary modification target."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `compile_func` method in `django/template/library.py`, which is responsible for compiling the custom template tags. The issue described involves the handling of keyword arguments with defaults, and this chain includes the logic that splits the token contents and processes the arguments. Modifying this chain to correctly handle keyword arguments with defaults would directly address the problem.",
+            "modification_strategy": "Update the `compile_func` method to correctly handle keyword arguments with defaults and ensure that multiple values for the same keyword argument are detected and reported appropriately.",
+            "chain_analysis": {
+              "chain_1": "This chain handles the initial splitting of token contents, which is a prerequisite for the argument processing. While important, it does not directly handle the argument validation logic where the issue lies.",
+              "chain_2": "This chain contains the `compile_func` method, which is directly responsible for compiling the custom template tags and processing their arguments. It is the most likely place where the issue manifests and can be fixed.",
+              "chain_3": "This chain deals with the rendering of inclusion tags and template selection. The issue described is more about argument processing during compilation, so changes here would not directly address the problem.",
+              "chain_4": "Similar to Chain 3, this chain also deals with the rendering of inclusion tags and is not the primary location where the argument processing issue occurs.",
+              "chain_5": "This chain is related to the parsing of if statements and filter expressions, which are not directly involved in the handling of keyword arguments in custom template tags.",
+              "chain_6": "This chain includes the `SimpleNode` and `TagHelperNode` classes, which are used to store and resolve arguments. While they are part of the execution path, the issue seems to originate in the argument parsing and validation logic, which is handled earlier in the process."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 includes the `split_contents` method in `django/template/base.py` and the `compile_func` method in `django/template/library.py`. These methods are responsible for splitting and compiling the contents of the template tag, which is where the issue with keyword-only arguments with defaults is likely to manifest. Modifying these methods to correctly handle keyword arguments with defaults would directly address the problem.",
+            "modification_strategy": "Update the `split_contents` method to correctly identify and handle keyword arguments with defaults. Modify the `compile_func` method to ensure that keyword arguments with defaults are recognized and processed correctly.",
+            "chain_analysis": {
+              "chain_1": "This chain is the most likely to contain the root cause of the issue. The `split_contents` method needs to correctly identify keyword arguments with defaults, and the `compile_func` method needs to handle them appropriately.",
+              "chain_2": "While this chain is involved in parsing template tokens, it does not directly handle the specific issue with keyword arguments and their defaults. It is more focused on general token parsing and error handling.",
+              "chain_3": "This chain deals with rendering inclusion tags and selecting templates, which are not directly related to the issue of keyword arguments with defaults. Modifying this chain would not address the core problem.",
+              "chain_4": "Similar to Chain 3, this chain also deals with rendering inclusion tags and is not directly related to the issue of keyword arguments with defaults.",
+              "chain_5": "This chain is involved in parsing and compiling filter expressions, which is not directly related to the issue of keyword arguments with defaults in custom template tags.",
+              "chain_6": "This chain deals with the `SimpleNode` and `TagHelperNode` classes, which are used to manage the arguments passed to the decorated function. While it is part of the overall process, the issue seems to originate earlier in the parsing and compilation stages."
+            },
+            "agent_id": 5
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `compile_func` method in `django/template/library.py`, which is responsible for compiling the tag and handling the arguments. The issue described involves incorrect handling of keyword arguments with defaults and multiple keyword arguments, which are processed in this method. Modifying this method to correctly handle these cases would directly address the problem.",
+            "modification_strategy": "Update the `compile_func` method to correctly handle keyword arguments with defaults and ensure that multiple values for the same keyword argument raise the correct error message.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with splitting the contents of a token and initial parsing of arguments. While it is part of the overall process, the specific issue with keyword arguments and their validation is not addressed here.",
+              "chain_2": "This chain contains the `compile_func` method which is the primary location where arguments are parsed and validated. It is the most likely place to fix the issue with keyword arguments and their defaults.",
+              "chain_3": "This chain deals with the rendering of inclusion tags and template selection. The issue is more about argument parsing and validation, which happens earlier in the process.",
+              "chain_4": "Similar to Chain 3, this chain also deals with the rendering of inclusion tags and does not directly address the argument parsing issue.",
+              "chain_5": "This chain deals with the parsing of if statements and filter expressions. The issue with custom template tags and their arguments is not directly related to this chain.",
+              "chain_6": "This chain deals with the `SimpleNode` and `TagHelperNode` classes, which are used to manage the arguments passed to the tag functions. While it is involved in the process, the actual parsing and validation of arguments happen in `compile_func`."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `split_contents` method in `django/template/base.py`, which is responsible for splitting the contents of a template tag into individual components. The issue described involves incorrect handling of keyword arguments with defaults, and this method is the first step in processing the arguments. By ensuring that keyword arguments with defaults are correctly identified and handled here, we can prevent the TemplateSyntaxError from being raised incorrectly.",
+            "modification_strategy": "Modify the `split_contents` method to correctly identify and handle keyword arguments with defaults. Ensure that the method distinguishes between positional and keyword arguments and handles defaults appropriately.",
+            "chain_analysis": {
+              "chain_1": "This chain is the best modification target because it processes the initial splitting of template tag arguments, which is crucial for correctly identifying and handling keyword arguments with defaults.",
+              "chain_2": "This chain is related to the parsing of template tags but does not directly handle the argument splitting. Changes here might help but are less direct than modifying `split_contents`.",
+              "chain_3": "This chain deals with the rendering of inclusion tags and template selection, which is not directly related to the argument handling issue.",
+              "chain_4": "Similar to Chain 3, this chain is about the rendering of inclusion tags and does not directly address the argument handling problem.",
+              "chain_5": "This chain is involved in parsing and compiling filter expressions, which is not directly related to the issue of handling keyword arguments with defaults in custom template tags.",
+              "chain_6": "This chain contains the `SimpleNode` and `TagHelperNode` classes, which are used to manage the arguments passed to the template tag functions. While important, the root cause of the issue likely lies in how the arguments are initially processed in `split_contents`."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `split_contents` method and the `compile_func` method in `library.py`, which are directly involved in parsing and handling the arguments for custom template tags. The issue described involves incorrect handling of keyword arguments with defaults and multiple assignments, which suggests that the problem lies in how these arguments are parsed and validated. Modifying this chain would allow us to correct the argument handling logic and ensure that keyword arguments with defaults are processed correctly.",
+            "modification_strategy": "Update the `split_contents` method to correctly identify and handle keyword arguments with defaults. Modify the `compile_func` method to validate keyword arguments more accurately and provide correct error messages for multiple assignments.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the core logic for parsing and compiling template tags, making it the most likely place to address the issue of incorrect keyword argument handling and error messages.",
+              "chain_2": "While this chain deals with parsing tokens, it is more focused on the general structure of the template and does not specifically handle the argument parsing for custom tags. Modifying this chain would not directly address the issue.",
+              "chain_3": "This chain is related to the rendering of inclusion tags and does not directly handle the argument parsing or validation. Changes here would not resolve the issue with keyword arguments.",
+              "chain_4": "Similar to Chain 3, this chain is also related to the rendering of inclusion tags and does not deal with the argument parsing or validation. It is not the best target for fixing the issue.",
+              "chain_5": "This chain is related to the parsing of if statements and does not directly involve the argument handling for custom tags. Modifying this chain would not address the reported issue.",
+              "chain_6": "This chain contains the `SimpleNode` and `TagHelperNode` classes, which are involved in the execution of custom tags. While it is part of the process, the actual parsing and validation of arguments happen earlier in the chain, making it less likely to be the primary modification target."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `compile_func` method in `django/template/library.py`, which is responsible for compiling the custom template tags. The issue described involves the handling of keyword arguments with defaults, and this chain includes the logic that splits the token contents and processes the arguments. Modifying this chain to correctly handle keyword arguments with defaults would directly address the problem.",
+            "modification_strategy": "Update the `compile_func` method to correctly handle keyword arguments with defaults and ensure that multiple values for the same keyword argument are detected and reported appropriately.",
+            "chain_analysis": {
+              "chain_1": "This chain handles the initial splitting of token contents, which is a prerequisite for the argument processing. While important, it does not directly handle the argument validation logic where the issue lies.",
+              "chain_2": "This chain contains the `compile_func` method, which is directly responsible for compiling the custom template tags and processing their arguments. It is the most likely place where the issue manifests and can be fixed.",
+              "chain_3": "This chain deals with the rendering of inclusion tags and template selection. The issue described is more about argument processing during compilation, so changes here would not directly address the problem.",
+              "chain_4": "Similar to Chain 3, this chain also deals with the rendering of inclusion tags and is not the primary location where the argument processing issue occurs.",
+              "chain_5": "This chain is related to the parsing of if statements and filter expressions, which are not directly involved in the handling of keyword arguments in custom template tags.",
+              "chain_6": "This chain includes the `SimpleNode` and `TagHelperNode` classes, which are used to store and resolve arguments. While they are part of the execution path, the issue seems to originate in the argument parsing and validation logic, which is handled earlier in the process."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 includes the `split_contents` method in `django/template/base.py` and the `compile_func` method in `django/template/library.py`. These methods are responsible for splitting and compiling the contents of the template tag, which is where the issue with keyword-only arguments with defaults is likely to manifest. Modifying these methods to correctly handle keyword arguments with defaults would directly address the problem.",
+            "modification_strategy": "Update the `split_contents` method to correctly identify and handle keyword arguments with defaults. Modify the `compile_func` method to ensure that keyword arguments with defaults are recognized and processed correctly.",
+            "chain_analysis": {
+              "chain_1": "This chain is the most likely to contain the root cause of the issue. The `split_contents` method needs to correctly identify keyword arguments with defaults, and the `compile_func` method needs to handle them appropriately.",
+              "chain_2": "While this chain is involved in parsing template tokens, it does not directly handle the specific issue with keyword arguments and their defaults. It is more focused on general token parsing and error handling.",
+              "chain_3": "This chain deals with rendering inclusion tags and selecting templates, which are not directly related to the issue of keyword arguments with defaults. Modifying this chain would not address the core problem.",
+              "chain_4": "Similar to Chain 3, this chain also deals with rendering inclusion tags and is not directly related to the issue of keyword arguments with defaults.",
+              "chain_5": "This chain is involved in parsing and compiling filter expressions, which is not directly related to the issue of keyword arguments with defaults in custom template tags.",
+              "chain_6": "This chain deals with the `SimpleNode` and `TagHelperNode` classes, which are used to manage the arguments passed to the decorated function. While it is part of the overall process, the issue seems to originate earlier in the parsing and compilation stages."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Token.split_contents",
+              "django/template/library.py:Library.simple_tag.dec.compile_func",
+              "django/template/library.py:parse_bits",
+              "django/template/exceptions.py:TemplateSyntaxError",
+              "django/template/__init__.py"
+            ],
+            "chain_length": 5,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "entity_type": "function",
+              "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+              "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Token.split_contents",
+              "type": "function",
+              "code": "```\n316 | def split_contents(self):\n317 |         split = []\n318 |         bits = smart_split(self.contents)\n319 |         for bit in bits:\n320 |             # Handle translation-marked template pieces\n321 |             if bit.startswith(('_(\"', \"_('\")):\n322 |                 sentinel = bit[2] + ')'\n323 |                 trans_bit = [bit]\n324 |                 while not bit.endswith(sentinel):\n325 |                     bit = next(bits)\n326 |                     trans_bit.append(bit)\n327 |                 bit = ' '.join(trans_bit)\n328 |             split.append(bit)\n329 |         return split\n```",
+              "start_line": 316,
+              "end_line": 329,
+              "code_omitted": false,
+              "original_code_length": 602
+            },
+            {
+              "entity_id": "django/template/library.py:Library.simple_tag.dec.compile_func",
+              "type": "function",
+              "code": "```\n113 | def compile_func(parser, token):\n114 |                 bits = token.split_contents()[1:]\n115 |                 target_var = None\n116 |                 if len(bits) >= 2 and bits[-2] == 'as':\n117 |                     target_var = bits[-1]\n118 |                     bits = bits[:-2]\n119 |                 args, kwargs = parse_bits(\n120 |                     parser, bits, params, varargs, varkw, defaults,\n121 |                     kwonly, kwonly_defaults, takes_context, function_name,\n122 |                 )\n123 |                 return SimpleNode(func, takes_context, args, kwargs, target_var)\n```",
+              "start_line": 113,
+              "end_line": 123,
+              "code_omitted": false,
+              "original_code_length": 610
+            },
+            {
+              "entity_id": "django/template/library.py:parse_bits",
+              "type": "function",
+              "code": "```\n237 | def parse_bits(parser, bits, params, varargs, varkw, defaults,\n238 |                kwonly, kwonly_defaults, takes_context, name):\n239 |     \"\"\"\n240 |     Parse bits for template tag helpers simple_tag and inclusion_tag, in\n241 |     particular by detecting syntax errors and by extracting positional and\n242 |     keyword arguments.\n243 |     \"\"\"\n244 |     if takes_context:\n245 |         if params[0] == 'context':\n246 |             params = params[1:]\n247 |         else:\n248 |             raise TemplateSyntaxError(\n249 |                 \"'%s' is decorated with takes_context=True so it must \"\n250 |                 \"have a first argument of 'context'\" % name)\n251 |     args = []\n252 |     kwargs = {}\n253 |     unhandled_params = list(params)\n254 |     unhandled_kwargs = [\n255 |         kwarg for kwarg in kwonly\n256 |         if not kwonly_defaults or kwarg not in kwonly_defaults\n257 |     ]\n258 |     for bit in bits:\n259 |         # First we try to extract a potential kwarg from the bit\n260 |         kwarg = token_kwargs([bit], parser)\n261 |         if kwarg:\n262 |             # The kwarg was successfully extracted\n263 |             param, value = kwarg.popitem()\n264 |             if param not in params and param not in unhandled_kwargs and varkw is None:\n265 |                 # An unexpected keyword argument was supplied\n266 |                 raise TemplateSyntaxError(\n267 |                     \"'%s' received unexpected keyword argument '%s'\" %\n268 |                     (name, param))\n269 |             elif param in kwargs:\n270 |                 # The keyword argument has already been supplied once\n271 |                 raise TemplateSyntaxError(\n272 |                     \"'%s' received multiple values for keyword argument '%s'\" %\n273 |                     (name, param))\n274 |             else:\n275 |                 # All good, record the keyword argument\n276 |                 kwargs[str(param)] = value\n277 |                 if param in unhandled_params:\n278 |                     # If using the keyword syntax for a positional arg, then\n279 |                     # consume it.\n280 |                     unhandled_params.remove(param)\n281 |                 elif param in unhandled_kwargs:\n282 |                     # Same for keyword-only arguments\n283 |                     unhandled_kwargs.remove(param)\n284 |         else:\n285 |             if kwargs:\n286 |                 raise TemplateSyntaxError(\n287 |                     \"'%s' received some positional argument(s) after some \"\n288 |                     \"keyword argument(s)\" % name)\n289 |             else:\n290 |                 # Record the positional argument\n291 |                 args.append(parser.compile_filter(bit))\n292 |                 try:\n293 |                     # Consume from the list of expected positional arguments\n294 |                     unhandled_params.pop(0)\n295 |                 except IndexError:\n296 |                     if varargs is None:\n297 |                         raise TemplateSyntaxError(\n298 |                             \"'%s' received too many positional arguments\" %\n299 |                             name)\n300 |     if defaults is not None:\n301 |         # Consider the last n params handled, where n is the\n302 |         # number of defaults.\n303 |         unhandled_params = unhandled_params[:-len(defaults)]\n304 |     if unhandled_params or unhandled_kwargs:\n305 |         # Some positional arguments were not supplied\n306 |         raise TemplateSyntaxError(\n307 |             \"'%s' did not receive value(s) for the argument(s): %s\" %\n308 |             (name, \", \".join(\"'%s'\" % p for p in unhandled_params + unhandled_kwargs)))\n309 |     return args, kwargs\n```",
+              "start_line": 237,
+              "end_line": 309,
+              "code_omitted": false,
+              "original_code_length": 3711
+            },
+            {
+              "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+              "type": "class",
+              "code": "```\n38 | class TemplateSyntaxError(Exception):\n39 |     \"\"\"\n40 |     The exception used for syntax errors during parsing or rendering.\n41 |     \"\"\"\n42 |     pass\n```",
+              "start_line": 38,
+              "end_line": 42,
+              "code_omitted": false,
+              "original_code_length": 165
+            },
+            {
+              "entity_id": "django/template/__init__.py",
+              "type": "file",
+              "code": "```\n 1 | \"\"\"\n 2 | Django's support for templates.\n 3 | \n 4 | The django.template namespace contains two independent subsystems:\n 5 | \n 6 | 1. Multiple Template Engines: support for pluggable template backends,\n 7 |    built-in backends and backend-independent APIs\n 8 | 2. Django Template Language: Django's own template engine, including its\n 9 |    built-in loaders, context processors, tags and filters.\n10 | \n11 | Ideally these subsystems would be implemented in distinct packages. However\n12 | keeping them together made the implementation of Multiple Template Engines\n13 | less disruptive .\n14 | \n15 | Here's a breakdown of which modules belong to which subsystem.\n16 | \n17 | Multiple Template Engines:\n18 | \n19 | - django.template.backends.*\n20 | - django.template.loader\n21 | - django.template.response\n22 | \n23 | Django Template Language:\n24 | \n25 | - django.template.base\n26 | - django.template.context\n27 | - django.template.context_processors\n28 | - django.template.loaders.*\n29 | - django.template.debug\n30 | - django.template.defaultfilters\n31 | - django.template.defaulttags\n32 | - django.template.engine\n33 | - django.template.loader_tags\n34 | - django.template.smartif\n35 | \n36 | Shared:\n37 | \n38 | - django.template.utils\n39 | \n40 | \"\"\"\n41 | \n42 | # Multiple Template Engines\n43 | \n44 | from .engine import Engine\n45 | from .utils import EngineHandler\n46 | \n47 | engines = EngineHandler()\n48 | \n49 | __all__ = ('Engine', 'engines')\n50 | \n51 | \n52 | # Django Template Language\n53 | \n54 | # Public exceptions\n55 | from .base import VariableDoesNotExist                                  # NOQA isort:skip\n56 | from .context import Context, ContextPopException, RequestContext       # NOQA isort:skip\n57 | from .exceptions import TemplateDoesNotExist, TemplateSyntaxError       # NOQA isort:skip\n58 | \n59 | # Template parts\n60 | from .base import (                                                     # NOQA isort:skip\n61 |     Node, NodeList, Origin, Template, Variable,\n62 | )\n63 | \n64 | # Library management\n65 | from .library import Library                                            # NOQA isort:skip\n66 | \n67 | \n68 | __all__ += ('Template', 'Context', 'RequestContext')\n69 | \n```",
+              "start_line": 1,
+              "end_line": 69,
+              "code_omitted": false,
+              "original_code_length": 2199
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Parser.parse"
+            ],
+            "chain_length": 1,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Parser.parse",
+              "entity_type": "function",
+              "relevance_reason": "This function parses the template tags and their arguments, which is crucial for understanding and fixing the parsing of keyword arguments.",
+              "diversity_value": "Base template file, different from the library and default tags files"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.9011896252632141,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Parser.parse",
+              "type": "function",
+              "code": "```\n426 | def parse(self, parse_until=None):\n427 |         \"\"\"\n428 |         Iterate through the parser tokens and compiles each one into a node.\n429 | \n430 |         If parse_until is provided, parsing will stop once one of the\n431 |         specified tokens has been reached. This is formatted as a list of\n432 |         tokens, e.g. ['elif', 'else', 'endif']. If no matching token is\n433 |         reached, raise an exception with the unclosed block tag details.\n434 |         \"\"\"\n435 |         if parse_until is None:\n436 |             parse_until = []\n437 |         nodelist = NodeList()\n438 |         while self.tokens:\n439 |             token = self.next_token()\n440 |             # Use the raw values here for TokenType.* for a tiny performance boost.\n441 |             if token.token_type.value == 0:  # TokenType.TEXT\n442 |                 self.extend_nodelist(nodelist, TextNode(token.contents), token)\n443 |             elif token.token_type.value == 1:  # TokenType.VAR\n444 |                 if not token.contents:\n445 |                     raise self.error(token, 'Empty variable tag on line %d' % token.lineno)\n446 |                 try:\n447 |                     filter_expression = self.compile_filter(token.contents)\n448 |                 except TemplateSyntaxError as e:\n449 |                     raise self.error(token, e)\n450 |                 var_node = VariableNode(filter_expression)\n451 |                 self.extend_nodelist(nodelist, var_node, token)\n452 |             elif token.token_type.value == 2:  # TokenType.BLOCK\n453 |                 try:\n454 |                     command = token.contents.split()[0]\n455 |                 except IndexError:\n456 |                     raise self.error(token, 'Empty block tag on line %d' % token.lineno)\n457 |                 if command in parse_until:\n458 |                     # A matching token has been reached. Return control to\n459 |                     # the caller. Put the token back on the token list so the\n460 |                     # caller knows where it terminated.\n461 |                     self.prepend_token(token)\n462 |                     return nodelist\n463 |                 # Add the token to the command stack. This is used for error\n464 |                 # messages if further parsing fails due to an unclosed block\n465 |                 # tag.\n466 |                 self.command_stack.append((command, token))\n467 |                 # Get the tag callback function from the ones registered with\n468 |                 # the parser.\n469 |                 try:\n470 |                     compile_func = self.tags[command]\n471 |                 except KeyError:\n472 |                     self.invalid_block_tag(token, command, parse_until)\n473 |                 # Compile the callback into a node object and add it to\n474 |                 # the node list.\n475 |                 try:\n476 |                     compiled_result = compile_func(self, token)\n477 |                 except Exception as e:\n478 |                     raise self.error(token, e)\n479 |                 self.extend_nodelist(nodelist, compiled_result, token)\n480 |                 # Compile success. Remove the token from the command stack.\n481 |                 self.command_stack.pop()\n482 |         if parse_until:\n483 |             self.unclosed_block_tag(parse_until)\n484 |         return nodelist\n```",
+              "start_line": 426,
+              "end_line": 484,
+              "code_omitted": false,
+              "original_code_length": 3365
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Node.render",
+              "django/template/library.py:InclusionNode.render",
+              "django/template/engine.py:Engine.select_template",
+              "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+              "django/template/defaultfilters.py:lower"
+            ],
+            "chain_length": 5,
+            "initial_entity": "hi",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering nodes in the template, which includes handling custom tags and their arguments.",
+              "diversity_value": "Template rendering from different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.9145552515983582,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "type": "function",
+              "code": "```\n891 | def render(self, context):\n892 |         \"\"\"\n893 |         Return the node rendered as a string.\n894 |         \"\"\"\n895 |         pass\n```",
+              "start_line": 891,
+              "end_line": 895,
+              "code_omitted": false,
+              "original_code_length": 147
+            },
+            {
+              "entity_id": "django/template/library.py:InclusionNode.render",
+              "type": "function",
+              "code": "```\n207 | def render(self, context):\n208 |         \"\"\"\n209 |         Render the specified template and context. Cache the template object\n210 |         in render_context to avoid reparsing and loading when used in a for\n211 |         loop.\n212 |         \"\"\"\n213 |         resolved_args, resolved_kwargs = self.get_resolved_arguments(context)\n214 |         _dict = self.func(*resolved_args, **resolved_kwargs)\n215 | \n216 |         t = context.render_context.get(self)\n217 |         if t is None:\n218 |             if isinstance(self.filename, Template):\n219 |                 t = self.filename\n220 |             elif isinstance(getattr(self.filename, 'template', None), Template):\n221 |                 t = self.filename.template\n222 |             elif not isinstance(self.filename, str) and is_iterable(self.filename):\n223 |                 t = context.template.engine.select_template(self.filename)\n224 |             else:\n225 |                 t = context.template.engine.get_template(self.filename)\n226 |             context.render_context[self] = t\n227 |         new_context = context.new(_dict)\n228 |         # Copy across the CSRF token, if present, because inclusion tags are\n229 |         # often used for forms, and we need instructions for using CSRF\n230 |         # protection to be as simple as possible.\n231 |         csrf_token = context.get('csrf_token')\n232 |         if csrf_token is not None:\n233 |             new_context['csrf_token'] = csrf_token\n234 |         return t.render(new_context)\n```",
+              "start_line": 207,
+              "end_line": 234,
+              "code_omitted": false,
+              "original_code_length": 1514
+            },
+            {
+              "entity_id": "django/template/engine.py:Engine.select_template",
+              "type": "function",
+              "code": "```\n165 | def select_template(self, template_name_list):\n166 |         \"\"\"\n167 |         Given a list of template names, return the first that can be loaded.\n168 |         \"\"\"\n169 |         if not template_name_list:\n170 |             raise TemplateDoesNotExist(\"No template names provided\")\n171 |         not_found = []\n172 |         for template_name in template_name_list:\n173 |             try:\n174 |                 return self.get_template(template_name)\n175 |             except TemplateDoesNotExist as exc:\n176 |                 if exc.args[0] not in not_found:\n177 |                     not_found.append(exc.args[0])\n178 |                 continue\n179 |         # If we get here, none of the templates could be loaded\n180 |         raise TemplateDoesNotExist(', '.join(not_found))\n```",
+              "start_line": 165,
+              "end_line": 180,
+              "code_omitted": false,
+              "original_code_length": 793
+            },
+            {
+              "entity_id": "django/contrib/admin/templatetags/base.py:InclusionAdminNode.render",
+              "type": "function",
+              "code": "```\n22 | def render(self, context):\n23 |         opts = context['opts']\n24 |         app_label = opts.app_label.lower()\n25 |         object_name = opts.object_name.lower()\n26 |         # Load template for this render call. (Setting self.filename isn't\n27 |         # thread-safe.)\n28 |         context.render_context[self] = context.template.engine.select_template([\n29 |             'admin/%s/%s/%s' % (app_label, object_name, self.template_name),\n30 |             'admin/%s/%s' % (app_label, self.template_name),\n31 |             'admin/%s' % (self.template_name,),\n32 |         ])\n33 |         return super().render(context)\n```",
+              "start_line": 22,
+              "end_line": 33,
+              "code_omitted": false,
+              "original_code_length": 631
+            },
+            {
+              "entity_id": "django/template/defaultfilters.py:lower",
+              "type": "function",
+              "code": "```\n193 | def lower(value):\n194 |     \"\"\"Convert a string into all lowercase.\"\"\"\n195 |     return value.lower()\n```",
+              "start_line": 193,
+              "end_line": 195,
+              "code_omitted": false,
+              "original_code_length": 115
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/template/base.py:Node.render",
+              "django/template/library.py:InclusionNode.render"
+            ],
+            "chain_length": 2,
+            "initial_entity": "hello",
+            "start_entity": {
+              "entity_id": "django/template/base.py:Node.render",
+              "entity_type": "function",
+              "relevance_reason": "The render method of Node is crucial for how template nodes are processed and could be involved in handling arguments.",
+              "diversity_value": "Different file, core template rendering functionality"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.9150728583335876,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/base.py:Node.render",
+              "type": "function",
+              "code": "```\n891 | def render(self, context):\n892 |         \"\"\"\n893 |         Return the node rendered as a string.\n894 |         \"\"\"\n895 |         pass\n```",
+              "start_line": 891,
+              "end_line": 895,
+              "code_omitted": false,
+              "original_code_length": 147
+            },
+            {
+              "entity_id": "django/template/library.py:InclusionNode.render",
+              "type": "function",
+              "code": "```\n207 | def render(self, context):\n208 |         \"\"\"\n209 |         Render the specified template and context. Cache the template object\n210 |         in render_context to avoid reparsing and loading when used in a for\n211 |         loop.\n212 |         \"\"\"\n213 |         resolved_args, resolved_kwargs = self.get_resolved_arguments(context)\n214 |         _dict = self.func(*resolved_args, **resolved_kwargs)\n215 | \n216 |         t = context.render_context.get(self)\n217 |         if t is None:\n218 |             if isinstance(self.filename, Template):\n219 |                 t = self.filename\n220 |             elif isinstance(getattr(self.filename, 'template', None), Template):\n221 |                 t = self.filename.template\n222 |             elif not isinstance(self.filename, str) and is_iterable(self.filename):\n223 |                 t = context.template.engine.select_template(self.filename)\n224 |             else:\n225 |                 t = context.template.engine.get_template(self.filename)\n226 |             context.render_context[self] = t\n227 |         new_context = context.new(_dict)\n228 |         # Copy across the CSRF token, if present, because inclusion tags are\n229 |         # often used for forms, and we need instructions for using CSRF\n230 |         # protection to be as simple as possible.\n231 |         csrf_token = context.get('csrf_token')\n232 |         if csrf_token is not None:\n233 |             new_context['csrf_token'] = csrf_token\n234 |         return t.render(new_context)\n```",
+              "start_line": 207,
+              "end_line": 234,
+              "code_omitted": false,
+              "original_code_length": 1514
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/template/defaulttags.py:TemplateIfParser",
+              "django/template/defaulttags.py:TemplateIfParser.create_var",
+              "django/template/base.py:Parser.compile_filter",
+              "django/template/base.py:Parser",
+              "django/utils/archive.py:Archive.list"
+            ],
+            "chain_length": 5,
+            "initial_entity": "TemplateSyntaxError",
+            "start_entity": {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+              "entity_type": "class",
+              "relevance_reason": "This class is part of the default tags implementation and uses `TemplateSyntaxError`, indicating it might be involved in the parsing and error handling of custom tags.",
+              "diversity_value": "Default tag parsing in a different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9270260334014893,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser",
+              "type": "class",
+              "code": "```\n880 | class TemplateIfParser(IfParser):\n881 |     error_class = TemplateSyntaxError\n882 | \n883 |     def __init__(self, parser, *args, **kwargs):\n884 |         self.template_parser = parser\n885 |         super().__init__(*args, **kwargs)\n886 | \n887 |     def create_var(self, value):\n888 |         return TemplateLiteral(self.template_parser.compile_filter(value), value)\n```",
+              "start_line": 880,
+              "end_line": 888,
+              "code_omitted": false,
+              "original_code_length": 379
+            },
+            {
+              "entity_id": "django/template/defaulttags.py:TemplateIfParser.create_var",
+              "type": "function",
+              "code": "```\n887 | def create_var(self, value):\n888 |         return TemplateLiteral(self.template_parser.compile_filter(value), value)\n```",
+              "start_line": 887,
+              "end_line": 888,
+              "code_omitted": false,
+              "original_code_length": 130
+            },
+            {
+              "entity_id": "django/template/base.py:Parser.compile_filter",
+              "type": "function",
+              "code": "```\n559 | def compile_filter(self, token):\n560 |         \"\"\"\n561 |         Convenient wrapper for FilterExpression\n562 |         \"\"\"\n563 |         return FilterExpression(token, self)\n```",
+              "start_line": 559,
+              "end_line": 563,
+              "code_omitted": false,
+              "original_code_length": 187
+            },
+            {
+              "entity_id": "django/template/base.py:Parser",
+              "type": "class",
+              "code": "```\n407 | class Parser:\n408 |     def __init__(self, tokens, libraries=None, builtins=None, origin=None):\n409 |         # Reverse the tokens so delete_first_token(), prepend_token(), and\n410 |         # next_token() can operate at the end of the list in constant time.\n411 |         self.tokens = list(reversed(tokens))\n412 |         self.tags = {}\n413 |         self.filters = {}\n414 |         self.command_stack = []\n415 | \n416 |         if libraries is None:\n417 |             libraries = {}\n418 |         if builtins is None:\n419 |             builtins = []\n420 | \n421 |         self.libraries = libraries\n422 |         for builtin in builtins:\n423 |             self.add_library(builtin)\n424 |         self.origin = origin\n425 | \n426 |     def parse(self, parse_until=None):\n427 |         \"\"\"\n428 |         Iterate through the parser tokens and compiles each one into a node.\n429 | \n430 |         If parse_until is provided, parsing will stop once one of the\n431 |         specified tokens has been reached. This is formatted as a list of\n432 |         tokens, e.g. ['elif', 'else', 'endif']. If no matching token is\n433 |         reached, raise an exception with the unclosed block tag details.\n434 |         \"\"\"\n435 |         if parse_until is None:\n436 |             parse_until = []\n437 |         nodelist = NodeList()\n438 |         while self.tokens:\n439 |             token = self.next_token()\n440 |             # Use the raw values here for TokenType.* for a tiny performance boost.\n441 |             if token.token_type.value == 0:  # TokenType.TEXT\n442 |                 self.extend_nodelist(nodelist, TextNode(token.contents), token)\n443 |             elif token.token_type.value == 1:  # TokenType.VAR\n444 |                 if not token.contents:\n445 |                     raise self.error(token, 'Empty variable tag on line %d' % token.lineno)\n446 |                 try:\n447 |                     filter_expression = self.compile_filter(token.contents)\n448 |                 except TemplateSyntaxError as e:\n449 |                     raise self.error(token, e)\n450 |                 var_node = VariableNode(filter_expression)\n451 |                 self.extend_nodelist(nodelist, var_node, token)\n452 |             elif token.token_type.value == 2:  # TokenType.BLOCK\n453 |                 try:\n454 |                     command = token.contents.split()[0]\n455 |                 except IndexError:\n456 |                     raise self.error(token, 'Empty block tag on line %d' % token.lineno)\n457 |                 if command in parse_until:\n458 |                     # A matching token has been reached. Return control to\n459 |                     # the caller. Put the token back on the token list so the\n460 |                     # caller knows where it terminated.\n461 |                     self.prepend_token(token)\n462 |                     return nodelist\n463 |                 # Add the token to the command stack. This is used for error\n464 |                 # messages if further parsing fails due to an unclosed block\n465 |                 # tag.\n466 |                 self.command_stack.append((command, token))\n467 |                 # Get the tag callback function from the ones registered with\n468 |                 # the parser.\n469 |                 try:\n470 |                     compile_func = self.tags[command]\n471 |                 except KeyError:\n472 |                     self.invalid_block_tag(token, command, parse_until)\n473 |                 # Compile the callback into a node object and add it to\n474 |                 # the node list.\n475 |                 try:\n476 |                     compiled_result = compile_func(self, token)\n477 |                 except Exception as e:\n478 |                     raise self.error(token, e)\n479 |                 self.extend_nodelist(nodelist, compiled_result, token)\n480 |                 # Compile success. Remove the token from the command stack.\n481 |                 self.command_stack.pop()\n482 |         if parse_until:\n483 |             self.unclosed_block_tag(parse_until)\n484 |         return nodelist\n485 | \n486 |     def skip_past(self, endtag):\n487 |         while self.tokens:\n488 |             token = self.next_token()\n489 |             if token.token_type == TokenType.BLOCK and token.contents == endtag:\n490 |                 return\n491 |         self.unclosed_block_tag([endtag])\n492 | \n493 |     def extend_nodelist(self, nodelist, node, token):\n494 |         # Check that non-text nodes don't appear before an extends tag.\n495 |         if node.must_be_first and nodelist.contains_nontext:\n496 |             raise self.error(\n497 |                 token, '%r must be the first tag in the template.' % node,\n498 |             )\n499 |         if isinstance(nodelist, NodeList) and not isinstance(node, TextNode):\n500 |             nodelist.contains_nontext = True\n501 |         # Set origin and token here since we can't modify the node __init__()\n502 |         # method.\n503 |         node.token = token\n504 |         node.origin = self.origin\n505 |         nodelist.append(node)\n506 | \n507 |     def error(self, token, e):\n508 |         \"\"\"\n509 |         Return an exception annotated with the originating token. Since the\n510 |         parser can be called recursively, check if a token is already set. This\n511 |         ensures the innermost token is highlighted if an exception occurs,\n512 |         e.g. a compile error within the body of an if statement.\n513 |         \"\"\"\n514 |         if not isinstance(e, Exception):\n515 |             e = TemplateSyntaxError(e)\n516 |         if not hasattr(e, 'token'):\n517 |             e.token = token\n518 |         return e\n519 | \n520 |     def invalid_block_tag(self, token, command, parse_until=None):\n521 |         if parse_until:\n522 |             raise self.error(\n523 |                 token,\n524 |                 \"Invalid block tag on line %d: '%s', expected %s. Did you \"\n525 |                 \"forget to register or load this tag?\" % (\n526 |                     token.lineno,\n527 |                     command,\n528 |                     get_text_list([\"'%s'\" % p for p in parse_until], 'or'),\n529 |                 ),\n530 |             )\n531 |         raise self.error(\n532 |             token,\n533 |             \"Invalid block tag on line %d: '%s'. Did you forget to register \"\n534 |             \"or load this tag?\" % (token.lineno, command)\n535 |         )\n536 | \n537 |     def unclosed_block_tag(self, parse_until):\n538 |         command, token = self.command_stack.pop()\n539 |         msg = \"Unclosed tag on line %d: '%s'. Looking for one of: %s.\" % (\n540 |             token.lineno,\n541 |             command,\n542 |             ', '.join(parse_until),\n543 |         )\n544 |         raise self.error(token, msg)\n545 | \n546 |     def next_token(self):\n547 |         return self.tokens.pop()\n548 | \n549 |     def prepend_token(self, token):\n550 |         self.tokens.append(token)\n551 | \n552 |     def delete_first_token(self):\n553 |         del self.tokens[-1]\n554 | \n555 |     def add_library(self, lib):\n556 |         self.tags.update(lib.tags)\n557 |         self.filters.update(lib.filters)\n558 | \n559 |     def compile_filter(self, token):\n560 |         \"\"\"\n561 |         Convenient wrapper for FilterExpression\n562 |         \"\"\"\n563 |         return FilterExpression(token, self)\n564 | \n565 |     def find_filter(self, filter_name):\n566 |         if filter_name in self.filters:\n567 |             return self.filters[filter_name]\n568 |         else:\n569 |             raise TemplateSyntaxError(\"Invalid filter: '%s'\" % filter_name)\n```",
+              "start_line": 407,
+              "end_line": 569,
+              "code_omitted": false,
+              "original_code_length": 7605
+            },
+            {
+              "entity_id": "django/utils/archive.py:Archive.list",
+              "type": "function",
+              "code": "```\n89 | def list(self):\n90 |         self._archive.list()\n```",
+              "start_line": 89,
+              "end_line": 90,
+              "code_omitted": false,
+              "original_code_length": 62
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/template/library.py:SimpleNode",
+              "django/template/library.py:TagHelperNode",
+              "django/template/library.py:TagHelperNode.get_resolved_arguments"
+            ],
+            "chain_length": 3,
+            "initial_entity": "greeting",
+            "start_entity": {
+              "entity_id": "django/template/library.py:SimpleNode",
+              "entity_type": "class",
+              "relevance_reason": "This class is responsible for handling simple tags, which is directly related to the issue of keyword-only arguments with defaults.",
+              "diversity_value": "Template library file, different from other selected entities"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.9287480115890503,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/template/library.py:SimpleNode",
+              "type": "class",
+              "code": "```\n184 | class SimpleNode(TagHelperNode):\n185 | \n186 |     def __init__(self, func, takes_context, args, kwargs, target_var):\n187 |         super().__init__(func, takes_context, args, kwargs)\n188 |         self.target_var = target_var\n189 | \n190 |     def render(self, context):\n191 |         resolved_args, resolved_kwargs = self.get_resolved_arguments(context)\n192 |         output = self.func(*resolved_args, **resolved_kwargs)\n193 |         if self.target_var is not None:\n194 |             context[self.target_var] = output\n195 |             return ''\n196 |         if context.autoescape:\n197 |             output = conditional_escape(output)\n198 |         return output\n```",
+              "start_line": 184,
+              "end_line": 198,
+              "code_omitted": false,
+              "original_code_length": 680
+            },
+            {
+              "entity_id": "django/template/library.py:TagHelperNode",
+              "type": "class",
+              "code": "```\n164 | class TagHelperNode(Node):\n165 |     \"\"\"\n166 |     Base class for tag helper nodes such as SimpleNode and InclusionNode.\n167 |     Manages the positional and keyword arguments to be passed to the decorated\n168 |     function.\n169 |     \"\"\"\n170 |     def __init__(self, func, takes_context, args, kwargs):\n171 |         self.func = func\n172 |         self.takes_context = takes_context\n173 |         self.args = args\n174 |         self.kwargs = kwargs\n175 | \n176 |     def get_resolved_arguments(self, context):\n177 |         resolved_args = [var.resolve(context) for var in self.args]\n178 |         if self.takes_context:\n179 |             resolved_args = [context] + resolved_args\n180 |         resolved_kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()}\n181 |         return resolved_args, resolved_kwargs\n```",
+              "start_line": 164,
+              "end_line": 181,
+              "code_omitted": false,
+              "original_code_length": 835
+            },
+            {
+              "entity_id": "django/template/library.py:TagHelperNode.get_resolved_arguments",
+              "type": "function",
+              "code": "```\n176 | def get_resolved_arguments(self, context):\n177 |         resolved_args = [var.resolve(context) for var in self.args]\n178 |         if self.takes_context:\n179 |             resolved_args = [context] + resolved_args\n180 |         resolved_kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()}\n181 |         return resolved_args, resolved_kwargs\n```",
+              "start_line": 176,
+              "end_line": 181,
+              "code_omitted": false,
+              "original_code_length": 367
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_1",
+        "original_chain_info": {
+          "chain": [
+            "django/template/base.py:Token.split_contents",
+            "django/template/library.py:Library.simple_tag.dec.compile_func",
+            "django/template/library.py:parse_bits",
+            "django/template/exceptions.py:TemplateSyntaxError",
+            "django/template/__init__.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "greeting",
+          "start_entity": {
+            "entity_id": "django/template/base.py:Token.split_contents",
+            "entity_type": "function",
+            "relevance_reason": "This function splits the contents of a token into tag name and arguments, which is where the issue might originate from.",
+            "diversity_value": "Base template file, provides low-level token handling, different from Parser.parse"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/template/base.py:Token.split_contents",
+            "type": "function",
+            "code": "```\n316 | def split_contents(self):\n317 |         split = []\n318 |         bits = smart_split(self.contents)\n319 |         for bit in bits:\n320 |             # Handle translation-marked template pieces\n321 |             if bit.startswith(('_(\"', \"_('\")):\n322 |                 sentinel = bit[2] + ')'\n323 |                 trans_bit = [bit]\n324 |                 while not bit.endswith(sentinel):\n325 |                     bit = next(bits)\n326 |                     trans_bit.append(bit)\n327 |                 bit = ' '.join(trans_bit)\n328 |             split.append(bit)\n329 |         return split\n```",
+            "start_line": 316,
+            "end_line": 329,
+            "code_omitted": false,
+            "original_code_length": 602
+          },
+          {
+            "entity_id": "django/template/library.py:Library.simple_tag.dec.compile_func",
+            "type": "function",
+            "code": "```\n113 | def compile_func(parser, token):\n114 |                 bits = token.split_contents()[1:]\n115 |                 target_var = None\n116 |                 if len(bits) >= 2 and bits[-2] == 'as':\n117 |                     target_var = bits[-1]\n118 |                     bits = bits[:-2]\n119 |                 args, kwargs = parse_bits(\n120 |                     parser, bits, params, varargs, varkw, defaults,\n121 |                     kwonly, kwonly_defaults, takes_context, function_name,\n122 |                 )\n123 |                 return SimpleNode(func, takes_context, args, kwargs, target_var)\n```",
+            "start_line": 113,
+            "end_line": 123,
+            "code_omitted": false,
+            "original_code_length": 610
+          },
+          {
+            "entity_id": "django/template/library.py:parse_bits",
+            "type": "function",
+            "code": "```\n237 | def parse_bits(parser, bits, params, varargs, varkw, defaults,\n238 |                kwonly, kwonly_defaults, takes_context, name):\n239 |     \"\"\"\n240 |     Parse bits for template tag helpers simple_tag and inclusion_tag, in\n241 |     particular by detecting syntax errors and by extracting positional and\n242 |     keyword arguments.\n243 |     \"\"\"\n244 |     if takes_context:\n245 |         if params[0] == 'context':\n246 |             params = params[1:]\n247 |         else:\n248 |             raise TemplateSyntaxError(\n249 |                 \"'%s' is decorated with takes_context=True so it must \"\n250 |                 \"have a first argument of 'context'\" % name)\n251 |     args = []\n252 |     kwargs = {}\n253 |     unhandled_params = list(params)\n254 |     unhandled_kwargs = [\n255 |         kwarg for kwarg in kwonly\n256 |         if not kwonly_defaults or kwarg not in kwonly_defaults\n257 |     ]\n258 |     for bit in bits:\n259 |         # First we try to extract a potential kwarg from the bit\n260 |         kwarg = token_kwargs([bit], parser)\n261 |         if kwarg:\n262 |             # The kwarg was successfully extracted\n263 |             param, value = kwarg.popitem()\n264 |             if param not in params and param not in unhandled_kwargs and varkw is None:\n265 |                 # An unexpected keyword argument was supplied\n266 |                 raise TemplateSyntaxError(\n267 |                     \"'%s' received unexpected keyword argument '%s'\" %\n268 |                     (name, param))\n269 |             elif param in kwargs:\n270 |                 # The keyword argument has already been supplied once\n271 |                 raise TemplateSyntaxError(\n272 |                     \"'%s' received multiple values for keyword argument '%s'\" %\n273 |                     (name, param))\n274 |             else:\n275 |                 # All good, record the keyword argument\n276 |                 kwargs[str(param)] = value\n277 |                 if param in unhandled_params:\n278 |                     # If using the keyword syntax for a positional arg, then\n279 |                     # consume it.\n280 |                     unhandled_params.remove(param)\n281 |                 elif param in unhandled_kwargs:\n282 |                     # Same for keyword-only arguments\n283 |                     unhandled_kwargs.remove(param)\n284 |         else:\n285 |             if kwargs:\n286 |                 raise TemplateSyntaxError(\n287 |                     \"'%s' received some positional argument(s) after some \"\n288 |                     \"keyword argument(s)\" % name)\n289 |             else:\n290 |                 # Record the positional argument\n291 |                 args.append(parser.compile_filter(bit))\n292 |                 try:\n293 |                     # Consume from the list of expected positional arguments\n294 |                     unhandled_params.pop(0)\n295 |                 except IndexError:\n296 |                     if varargs is None:\n297 |                         raise TemplateSyntaxError(\n298 |                             \"'%s' received too many positional arguments\" %\n299 |                             name)\n300 |     if defaults is not None:\n301 |         # Consider the last n params handled, where n is the\n302 |         # number of defaults.\n303 |         unhandled_params = unhandled_params[:-len(defaults)]\n304 |     if unhandled_params or unhandled_kwargs:\n305 |         # Some positional arguments were not supplied\n306 |         raise TemplateSyntaxError(\n307 |             \"'%s' did not receive value(s) for the argument(s): %s\" %\n308 |             (name, \", \".join(\"'%s'\" % p for p in unhandled_params + unhandled_kwargs)))\n309 |     return args, kwargs\n```",
+            "start_line": 237,
+            "end_line": 309,
+            "code_omitted": false,
+            "original_code_length": 3711
+          },
+          {
+            "entity_id": "django/template/exceptions.py:TemplateSyntaxError",
+            "type": "class",
+            "code": "```\n38 | class TemplateSyntaxError(Exception):\n39 |     \"\"\"\n40 |     The exception used for syntax errors during parsing or rendering.\n41 |     \"\"\"\n42 |     pass\n```",
+            "start_line": 38,
+            "end_line": 42,
+            "code_omitted": false,
+            "original_code_length": 165
+          },
+          {
+            "entity_id": "django/template/__init__.py",
+            "type": "file",
+            "code": "```\n 1 | \"\"\"\n 2 | Django's support for templates.\n 3 | \n 4 | The django.template namespace contains two independent subsystems:\n 5 | \n 6 | 1. Multiple Template Engines: support for pluggable template backends,\n 7 |    built-in backends and backend-independent APIs\n 8 | 2. Django Template Language: Django's own template engine, including its\n 9 |    built-in loaders, context processors, tags and filters.\n10 | \n11 | Ideally these subsystems would be implemented in distinct packages. However\n12 | keeping them together made the implementation of Multiple Template Engines\n13 | less disruptive .\n14 | \n15 | Here's a breakdown of which modules belong to which subsystem.\n16 | \n17 | Multiple Template Engines:\n18 | \n19 | - django.template.backends.*\n20 | - django.template.loader\n21 | - django.template.response\n22 | \n23 | Django Template Language:\n24 | \n25 | - django.template.base\n26 | - django.template.context\n27 | - django.template.context_processors\n28 | - django.template.loaders.*\n29 | - django.template.debug\n30 | - django.template.defaultfilters\n31 | - django.template.defaulttags\n32 | - django.template.engine\n33 | - django.template.loader_tags\n34 | - django.template.smartif\n35 | \n36 | Shared:\n37 | \n38 | - django.template.utils\n39 | \n40 | \"\"\"\n41 | \n42 | # Multiple Template Engines\n43 | \n44 | from .engine import Engine\n45 | from .utils import EngineHandler\n46 | \n47 | engines = EngineHandler()\n48 | \n49 | __all__ = ('Engine', 'engines')\n50 | \n51 | \n52 | # Django Template Language\n53 | \n54 | # Public exceptions\n55 | from .base import VariableDoesNotExist                                  # NOQA isort:skip\n56 | from .context import Context, ContextPopException, RequestContext       # NOQA isort:skip\n57 | from .exceptions import TemplateDoesNotExist, TemplateSyntaxError       # NOQA isort:skip\n58 | \n59 | # Template parts\n60 | from .base import (                                                     # NOQA isort:skip\n61 |     Node, NodeList, Origin, Template, Variable,\n62 | )\n63 | \n64 | # Library management\n65 | from .library import Library                                            # NOQA isort:skip\n66 | \n67 | \n68 | __all__ += ('Template', 'Context', 'RequestContext')\n69 | \n```",
+            "start_line": 1,
+            "end_line": 69,
+            "code_omitted": false,
+            "original_code_length": 2199
+          }
+        ],
+        "chain_length": 5,
+        "selection_rank": 1,
+        "is_longest": true
+      },
+      "winning_chain_id": "chain_1"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-02T19:46:45.126448",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 3,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting ',' delimiter: line 18 column 734 (char 4165)"
+        },
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting ',' delimiter: line 10 column 799 (char 1379)"
+        },
+        {
+          "agent_id": 2,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting ',' delimiter: line 18 column 478 (char 3432)"
+        },
+        {
+          "agent_id": 4,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting ',' delimiter: line 18 column 1083 (char 3526)"
+        },
+        {
+          "agent_id": 5,
+          "round": "first_round",
+          "analysis": null,
+          "error": "Expecting ',' delimiter: line 10 column 1301 (char 1947)"
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_1):**\n\n**Entity 1: django/template/base.py:Token.split_contents**\nType: function\nLines: 316-329\nCode:\n```\n```\n316 | def split_contents(self):\n317 |         split = []\n318 |         bits = smart_split(self.contents)\n319 |         for bit in bits:\n320 |             # Handle translation-marked template pieces\n321 |             if bit.startswith(('_(\"', \"_('\")):\n322 |                 sentinel = bit[2] + ')'\n323 |                 trans_bit = [bit]\n324 |                 while not bit.endswith(sentinel):\n325 |                     bit = next(bits)\n326 |                     trans_bit.append(bit)\n327 |                 bit = ' '.join(trans_bit)\n328 |             split.append(bit)\n329 |         return split\n```\n```\n\n**Entity 2: django/template/library.py:Library.simple_tag.dec.compile_func**\nType: function\nLines: 113-123\nCode:\n```\n```\n113 | def compile_func(parser, token):\n114 |                 bits = token.split_contents()[1:]\n115 |                 target_var = None\n116 |                 if len(bits) >= 2 and bits[-2] == 'as':\n117 |                     target_var = bits[-1]\n118 |                     bits = bits[:-2]\n119 |                 args, kwargs = parse_bits(\n120 |                     parser, bits, params, varargs, varkw, defaults,\n121 |                     kwonly, kwonly_defaults, takes_context, function_name,\n122 |                 )\n123 |                 return SimpleNode(func, takes_context, args, kwargs, target_var)\n```\n```\n\n**Entity 3: django/template/library.py:parse_bits**\nType: function\nLines: 237-309\nCode:\n```\n```\n237 | def parse_bits(parser, bits, params, varargs, varkw, defaults,\n238 |                kwonly, kwonly_defaults, takes_context, name):\n239 |     \"\"\"\n240 |     Parse bits for template tag helpers simple_tag and inclusion_tag, in\n241 |     particular by detecting syntax errors and by extracting positional and\n242 |     keyword arguments.\n243 |     \"\"\"\n244 |     if takes_context:\n245 |         if params[0] == 'context':\n246 |             params = params[1:]\n247 |         else:\n248 |             raise TemplateSyntaxError(\n249 |                 \"'%s' is decorated with takes_context=True so it must \"\n250 |                 \"have a first argument of 'context'\" % name)\n251 |     args = []\n252 |     kwargs = {}\n253 |     unhandled_params = list(params)\n254 |     unhandled_kwargs = [\n255 |         kwarg for kwarg in kwonly\n256 |         if not kwonly_defaults or kwarg not in kwonly_defaults\n257 |     ]\n258 |     for bit in bits:\n259 |         # First we try to extract a potential kwarg from the bit\n260 |         kwarg = token_kwargs([bit], parser)\n261 |         if kwarg:\n262 |             # The kwarg was successfully extracted\n263 |             param, value = kwarg.popitem()\n264 |             if param not in params and param not in unhandled_kwargs and varkw is None:\n265 |                 # An unexpected keyword argument was supplied\n266 |                 raise TemplateSyntaxError(\n267 |                     \"'%s' received unexpected keyword argument '%s'\" %\n268 |                     (name, param))\n269 |             elif param in kwargs:\n270 |                 # The keyword argument has already been supplied once\n271 |                 raise TemplateSyntaxError(\n272 |                     \"'%s' received multiple values for keyword argument '%s'\" %\n273 |                     (name, param))\n274 |             else:\n275 |                 # All good, record the keyword argument\n276 |                 kwargs[str(param)] = value\n277 |                 if param in unhandled_params:\n278 |                     # If using the keyword syntax for a positional arg, then\n279 |                     # consume it.\n280 |                     unhandled_params.remove(param)\n281 |                 elif param in unhandled_kwargs:\n282 |                     # Same for keyword-only arguments\n283 |                     unhandled_kwargs.remove(param)\n284 |         else:\n285 |             if kwargs:\n286 |                 raise TemplateSyntaxError(\n287 |                     \"'%s' received some positional argument(s) after some \"\n288 |                     \"keyword argument(s)\" % name)\n289 |             else:\n290 |                 # Record the positional argument\n291 |                 args.append(parser.compile_filter(bit))\n292 |                 try:\n293 |                     # Consume from the list of expected positional arguments\n294 |                     unhandled_params.pop(0)\n295 |                 except IndexError:\n296 |                     if varargs is None:\n297 |                         raise TemplateSyntaxError(\n298 |                             \"'%s' received too many positional arguments\" %\n299 |                             name)\n300 |     if defaults is not None:\n301 |         # Consider the last n params handled, where n is the\n302 |         # number of defaults.\n303 |         unhandled_params = unhandled_params[:-len(defaults)]\n304 |     if unhandled_params or unhandled_kwargs:\n305 |         # Some positional arguments were not supplied\n306 |         raise TemplateSyntaxError(\n307 |             \"'%s' did not receive value(s) for the argument(s): %s\" %\n308 |             (name, \", \".join(\"'%s'\" % p for p in unhandled_params + unhandled_kwargs)))\n309 |     return args, kwargs\n```\n```\n\n**Entity 4: django/template/exceptions.py:TemplateSyntaxError**\nType: class\nLines: 38-42\nCode:\n```\n```\n38 | class TemplateSyntaxError(Exception):\n39 |     \"\"\"\n40 |     The exception used for syntax errors during parsing or rendering.\n41 |     \"\"\"\n42 |     pass\n```\n```\n\n**Entity 5: django/template/__init__.py**\nType: file\nLines: 1-69\nCode:\n```\n```\n 1 | \"\"\"\n 2 | Django's support for templates.\n 3 | \n 4 | The django.template namespace contains two independent subsystems:\n 5 | \n 6 | 1. Multiple Template Engines: support for pluggable template backends,\n 7 |    built-in backends and backend-independent APIs\n 8 | 2. Django Template Language: Django's own template engine, including its\n 9 |    built-in loaders, context processors, tags and filters.\n10 | \n11 | Ideally these subsystems would be implemented in distinct packages. However\n12 | keeping them together made the implementation of Multiple Template Engines\n13 | less disruptive .\n14 | \n15 | Here's a breakdown of which modules belong to which subsystem.\n16 | \n17 | Multiple Template Engines:\n18 | \n19 | - django.template.backends.*\n20 | - django.template.loader\n21 | - django.template.response\n22 | \n23 | Django Template Language:\n24 | \n25 | - django.template.base\n26 | - django.template.context\n27 | - django.template.context_processors\n28 | - django.template.loaders.*\n29 | - django.template.debug\n30 | - django.template.defaultfilters\n31 | - django.template.defaulttags\n32 | - django.template.engine\n33 | - django.template.loader_tags\n34 | - django.template.smartif\n35 | \n36 | Shared:\n37 | \n38 | - django.template.utils\n39 | \n40 | \"\"\"\n41 | \n42 | # Multiple Template Engines\n43 | \n44 | from .engine import Engine\n45 | from .utils import EngineHandler\n46 | \n47 | engines = EngineHandler()\n48 | \n49 | __all__ = ('Engine', 'engines')\n50 | \n51 | \n52 | # Django Template Language\n53 | \n54 | # Public exceptions\n55 | from .base import VariableDoesNotExist                                  # NOQA isort:skip\n56 | from .context import Context, ContextPopException, RequestContext       # NOQA isort:skip\n57 | from .exceptions import TemplateDoesNotExist, TemplateSyntaxError       # NOQA isort:skip\n58 | \n59 | # Template parts\n60 | from .base import (                                                     # NOQA isort:skip\n61 |     Node, NodeList, Origin, Template, Variable,\n62 | )\n63 | \n64 | # Library management\n65 | from .library import Library                                            # NOQA isort:skip\n66 | \n67 | \n68 | __all__ += ('Template', 'Context', 'RequestContext')\n69 | \n```\n```\n\n",
+      "num_agents": 5
+    }
+  }
+}

@@ -473,6 +473,20 @@ Is the plan practical? Measurement under way:
     job uses its full time limit (up to 3 days here), so it is an upper bound, and it includes
     our own QoS limit. The summary by time of day, and whether the 32B/72B plan is practical,
     will be written here when the 24 h are up.
+Summary (2026-10-04): the sampler logged only 10 slots, all Friday 2 Oct 16:35-20:35 SGT; 7 more
+were skipped (Mac off the NTU network, 21:23-23:55 and Sat 14:16) and the Mac slept overnight
+(caffeinate -i does not prevent lid-close sleep, so those slots left no record at all). In the 10
+slots, pro6000 nodes with >= 2 free cards ranged 0-3 and free cards 0-10. The `sbatch --test-only`
+estimates (58-66 h for 2x pro6000, flat even when 10 cards were free) are not usable: they were
+computed for our own user while our own 72B chain was queued, so they mostly measured our own
+backlog. Observed waits for two pro6000 on one node: 180343 59 min (Fri 17:27-18:26 SGT), 180368
+31 min (Fri 19:34-20:04), 180726 13 min after its dependencies (Sat 02:35-02:48); chained jobs
+180739 and 180740 started 10 s and 7 s after their predecessor ended (the lane is kept).
+Verdict: the 32B/72B-on-2-pro6000 rule is practical so far (fresh acquisitions under an hour,
+chained passes ~0), and chaining passes back to back is the main lever, which supports the
+"chain passes" structure; bundling seeds into one job (SEEDS) is not needed while chained jobs
+keep the lane. Evidence is thin (one Friday evening and one Saturday night); re-measure from real
+job submit/start times as more jobs run. Final samples: ablation/results/gpu_wait_v1/samples_final.tsv.
 
 ## 2026-10-02 — max_tokens caps: keep as released, or raise where truncation is frequent? (PENDING)
 Measured (results.md, backbone trial): the 7B never hits a cap (0 / 1,450 calls); the 32B
@@ -534,6 +548,8 @@ per instance per worker-batch, i.e. 1.88 h per 10 instances = ~14.1 h per 75-ins
 released-parser run, 5.4 h per 75, is not representative: 8/10 debates collapsed). The 2-pro6000
 figure and the 1-card vs 2-card speed-up come from the 32B v2 runs (jobs 180486/180487); the
 expected time and `--time` for each pass are filled in here when they finish.
+Measured 2026-10-04: a 75-instance 72B pass on 2 pro6000 with 6 workers takes 7.7-8.1 h, so
+`--time=12:00:00` gives +50%; chained jobs started within ~10 s of their predecessor.
 Practicality note: under the GPU rules every 32B/72B job takes 2 pro6000 and the ug QoS allows 2
 per user, so only ONE main-experiment job runs at a time; 9 passes run back to back, each also
 waiting in the queue for two cards on one node (first measured genuine wait ~59 min; 24 h
