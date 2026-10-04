@@ -65,11 +65,18 @@ def main(cfg_path):
             print(f"[{i}/{len(ids)}] {iid}: FAILED (repo/commit unavailable), skipped", flush=True)
             continue
         t0 = time.time()
-        G = build_graph(path, global_import=True)   # exactly repo_ops' call
-        with open(dest, "wb") as f:
-            pickle.dump(G, f)
-        print(f"[{i}/{len(ids)}] {iid}: {G.number_of_nodes()} nodes, "
-              f"{G.number_of_edges()} edges, {time.time() - t0:.0f} s", flush=True)
+        # Build in a child process under a memory cap (GRAPH_MEM_GB, default 40): a repository too
+        # large for the job (job 183282 was OOM-killed on Azure/azure-sdk-for-python at 12 GB)
+        # then fails alone and is recorded, instead of the kernel killing the whole job.
+        res = subprocess.run([sys.executable, __file__, "--one", path, dest],
+                             capture_output=True, text=True,
+                             preexec_fn=_mem_cap(float(os.environ.get("GRAPH_MEM_GB", "40"))))
+        if res.returncode != 0 or not os.path.exists(dest):
+            tail = (res.stderr or "").strip().splitlines()[-1:] or [f"exit {res.returncode}"]
+            failures[iid] = f"{inst['repo']} @ {inst['base_commit']}: graph build failed: {tail[0][:200]}"
+            print(f"[{i}/{len(ids)}] {iid}: FAILED (graph build: {tail[0][:80]}), skipped", flush=True)
+            continue
+        print(f"[{i}/{len(ids)}] {iid}: {res.stdout.strip()}, {time.time() - t0:.0f} s", flush=True)
     if failures:
         path = os.path.join(out_dir, "build_failures.json")
         old_f = json.load(open(path)) if os.path.exists(path) else {}
@@ -79,7 +86,26 @@ def main(cfg_path):
         print(f"{len(failures)} instance(s) could not be built; listed in {path}", flush=True)
 
 
+def _mem_cap(gb):
+    def apply():
+        import resource
+        limit = int(gb * 2**30)
+        resource.setrlimit(resource.RLIMIT_AS, (limit, limit))
+    return apply
+
+
+def build_one(path, dest):
+    G = build_graph(path, global_import=True)   # exactly repo_ops' call
+    with open(dest + ".tmp", "wb") as f:
+        pickle.dump(G, f)
+    os.replace(dest + ".tmp", dest)              # never leave a half-written graph behind
+    print(f"{G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) == 4 and sys.argv[1] == "--one":
+        build_one(sys.argv[2], sys.argv[3])
+    elif len(sys.argv) == 2:
+        main(sys.argv[1])
+    else:
         sys.exit(__doc__)
-    main(sys.argv[1])
