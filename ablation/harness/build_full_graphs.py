@@ -39,6 +39,7 @@ def main(cfg_path):
     meta = load_records(cfg)
 
     ids = instance_ids(cfg)
+    failures = {}
     for i, iid in enumerate(ids, 1):
         dest = os.path.join(out_dir, f"{iid}.pkl")
         if os.path.exists(dest):
@@ -46,16 +47,36 @@ def main(cfg_path):
             continue
         inst = meta[iid]
         path = repo_dir(repos_root, inst["repo"])
-        if not os.path.exists(os.path.join(path, ".git")):
-            subprocess.run(["git", "clone", "-q", f"https://github.com/{inst['repo']}.git", path],
-                           check=True)
-        checkout(path, inst["base_commit"])
+        try:
+            if not os.path.exists(os.path.join(path, ".git")):
+                subprocess.run(["git", "clone", "-q", f"https://github.com/{inst['repo']}.git", path],
+                               check=True)
+            try:
+                checkout(path, inst["base_commit"])
+            except subprocess.CalledProcessError:
+                # Base commit not reachable from the cloned branches (e.g. only on a PR ref, or
+                # history rewritten): GitHub serves a commit by sha, so fetch it and retry.
+                subprocess.run(["git", "-C", path, "fetch", "-q", "origin", inst["base_commit"]],
+                               check=True)
+                checkout(path, inst["base_commit"])
+        except subprocess.CalledProcessError as e:
+            # One unbuildable instance must not abort the rest; it is recorded and skipped.
+            failures[iid] = f"{inst['repo']} @ {inst['base_commit']}: {e}"
+            print(f"[{i}/{len(ids)}] {iid}: FAILED (repo/commit unavailable), skipped", flush=True)
+            continue
         t0 = time.time()
         G = build_graph(path, global_import=True)   # exactly repo_ops' call
         with open(dest, "wb") as f:
             pickle.dump(G, f)
         print(f"[{i}/{len(ids)}] {iid}: {G.number_of_nodes()} nodes, "
               f"{G.number_of_edges()} edges, {time.time() - t0:.0f} s", flush=True)
+    if failures:
+        path = os.path.join(out_dir, "build_failures.json")
+        old_f = json.load(open(path)) if os.path.exists(path) else {}
+        old_f.update(failures)
+        with open(path, "w") as f:
+            json.dump(old_f, f, indent=2)
+        print(f"{len(failures)} instance(s) could not be built; listed in {path}", flush=True)
 
 
 if __name__ == "__main__":
