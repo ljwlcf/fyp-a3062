@@ -764,3 +764,16 @@ order in every arm (baseline = released code) and report the shuffled run alongs
 Killable lane in practice: the 7B Live smoke test ran on idle pro6000 (25 min); the 72B Live pilot
 (183679) has been preempted and requeued 3 times and resumed each time (15/40 done so far).
 
+
+## 2026-10-05 — Always keep both lanes full (ug and killable)
+Jingwei: "always utilise both ug and killable lanes". Standing rule, extending 2026-10-04: the
+normal ug lane stays full (5 submitted, chained 2x pro6000 main-experiment passes) AND the
+killable lane stays full (override-limits-but-killable: its own 5-submit / 8-GPU limits, idle
+pro6000 only, preempted jobs requeue and resume through the job script). Whenever a slot frees in
+either lane, the next useful requeue-safe job goes there. Main-arm passes stay on ug (they must
+not be preempted mid-comparison); the killable lane takes Live, repairs and extra seeds.
+First use: the rest of the 72B SWE-bench-Live seed, split into three parts so it fills three
+killable slots: `live_72b_lenient_{a,b,c}_v1` (id-file lines 40:155, 155:270, 270:387; 115+115+116,
+with the 40-instance pilot = all 386), same backbone, serving and parser as the pilot, plus vote
+logprobs (no output change), jobs 184607-184609, 16 h limit each. If chat moves the Live cutoff
+later, the later set is a subset of this one (filter by created_at); no rerun needed.
