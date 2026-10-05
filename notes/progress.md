@@ -17,9 +17,12 @@ django-12155 in seed 2); added `--resume --retry-errors`. Queued the seed-2 repa
 killable) and self-consistency seeds 2-3 (184568, 184569; ug, chained after 183711).
 Broke: Nothing. The killable watcher missed a job that finished before its first look (fixed by
 checking manually); the 72B Live pilot is being preempted repeatedly but resumes correctly.
-Queue: 183233 lenient seed 3 (running, 53+/75) -> 183310 seed 1 -> 183711 SC seed 1 -> 184568 SC
-seed 2 -> 184569 SC seed 3 (ug, pro6000) | killable pro6000: 183679 72B Live pilot (15/40, requeue-
-resuming), 184567 seed-2 repair.
+Queue: 183233 lenient seed 3 (running, 53+/75) -> 184572 seed 1 -> 184573 SC seed 1 -> 184574 SC
+seed 2 -> 184575 SC seed 3 (ug, pro6000; the four not-yet-started jobs 183310/183711/184568/184569
+were requeued with --vote-logprobs 10, which does not change outputs, so the trigger can be
+evaluated on the original arm) | killable pro6000: 183679 72B Live pilot (15/40, requeue-
+resuming), 184567 seed-2 repair. Lenient seeds 2 and 3 have no vote logprobs; seed 1, the shuffled
+run and all self-consistency seeds will.
 Next: when seeds 3 and 1 land, pool the lenient original arm (3 seeds) and compare with the
 as-released row; build and evaluate the adaptive trigger on lp_conf (needs vote logprobs on the
 original-arm runs too: the lenient seeds ran without them, so either reuse the shuffled run or add
