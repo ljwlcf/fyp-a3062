@@ -777,3 +777,15 @@ killable slots: `live_72b_lenient_{a,b,c}_v1` (id-file lines 40:155, 155:270, 27
 with the 40-instance pilot = all 386), same backbone, serving and parser as the pilot, plus vote
 logprobs (no output change), jobs 184607-184609, 16 h limit each. If chat moves the Live cutoff
 later, the later set is a subset of this one (filter by created_at); no rerun needed.
+
+## 2026-10-05 — Adaptive-debate trigger evaluated by offline replay first
+Both branches of adaptive debate exist inside every original-arm run on the same winning chain,
+so the trigger is evaluated by replay (`ablation/harness/replay_trigger.py`) before any adaptive
+arm is run on the GPU: full branch = the run's final plan; skip branch = the single-agent plan step
+(2026-10-02), replayed as one round-1 agent's top file (the five round-1 agents have identical
+prompts, so expected value over them), cost = vote + one round-1 call + the discriminator
+(conservative). Thresholds are chosen on other runs (held out) when several exist; paired bootstrap
+over instances. Validity check pending: the self-consistency runs run the real skip step, so the
+discriminator's pass-through of a lone round-1 file is measured there (`--sc`). A real adaptive arm
+on the GPU follows once the triggered branch is settled (for-chat.md). First outcome: results.md
+2026-10-05 (skip-always is no worse; errors are selection failures the plan debate cannot reach).

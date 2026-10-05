@@ -19,6 +19,11 @@ Broke: Nothing. The killable watcher missed a job that finished before its first
 checking manually); the 72B Live pilot is being preempted repeatedly but resumes correctly.
 Both-lanes rule (decisions.md 2026-10-05, memory updated): killable lane filled with the rest of
 the 72B Live seed in three parts, live_72b_lenient_{a,b,c}_v1 (184607-184609; pilot + parts = 386).
+Trigger replay (no GPU): `replay_trigger.py`; at 72B lenient, always skipping the debate matches
+it at ~half the stage 6-7 tokens and no lp_conf/agreement threshold beats that; ~85% of errors are
+vote selection failures the plan debate cannot reach (results.md; for-chat item on debating the
+chain choice). MLDA gpu21 now usable 24/7 (memory). Live pilot: beets-5437 hit the pre-fix
+stage-8 shape crash; rerun it with --resume --retry-errors when the pilot ends.
 Queue: 183233 lenient seed 3 (running, 53+/75) -> 184572 seed 1 -> 184573 SC seed 1 -> 184574 SC
 seed 2 -> 184575 SC seed 3 (ug, pro6000; the four not-yet-started jobs 183310/183711/184568/184569
 were requeued with --vote-logprobs 10, which does not change outputs, so the trigger can be

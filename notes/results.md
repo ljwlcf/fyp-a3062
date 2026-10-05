@@ -17,6 +17,45 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-05 — Adaptive-debate trigger, offline replay: skipping the debate loses nothing at 72B (lenient); errors are in chain selection (Phase 1 -> plan item 2)
+Tool: `ablation/harness/replay_trigger.py` (no GPU; replays both branches from original-arm runs).
+Raw: `trigger_replay.json` in each run folder: `baseline_72b_lenient_v1/20261004-143435` (fixed
+order, seed 2), `order_72b_lenient_v1/20261004-071233` (shuffled), `baseline_72b_released_v1/
+20261003-013441` and `/20261003-091827` (released parser).
+Setup: Qwen2.5-72B-Instruct @495f393, 2x pro6000, verified75. Skip branch = one round-1 agent's
+top file on the vote's winning chain (expected value over the five exchangeable agents; an
+unparsed reply counts as wrong); cost = vote + one round-1 call + the discriminator (overstates the
+real skip step). Full branch = the run's own final plan.
+Numbers (Acc@1 File; mean stage 6-7 tokens):
+| run | original (full debate) | always skip | per-instance oracle |
+|---|---|---|---|
+| lenient fixed, seed 2 | 0.760, 100k | 0.773, 54k | 0.779 |
+| lenient shuffled | 0.720, 103k | 0.720, 54k | 0.736 |
+| released parser, run 013441 | 0.720, 114k | 0.661, 66k | 0.744 |
+| released parser, run 091827 | 0.760, 112k | 0.680, 65k | 0.803 |
+* Lenient: the debate changes the outcome on 1-2 instances per run in each direction; no threshold
+  on lp_conf, vote agreement or self-reported confidence beats "always skip" (best no-loss
+  threshold = skip everything; held-out across the two lenient runs picks the same). Paired
+  bootstrap, always-skip minus original, shuffled run: 0.000 [-0.029, +0.037].
+* Released parser: 13-15% of round-1 replies do not parse (4.2-4.4 valid of 5), which sinks a lone
+  agent; given a parsed reply the single agent scores 0.747 / 0.811, i.e. at or above the debate.
+  The debate's edge there is redundancy against parse failures, not reasoning.
+* Where the errors are (lenient): of 21 / 18 wrong instances, 18 / 15 are selection failures (the
+  vote's chain does not contain the gold file; 11 / 6 of these had the gold file in another kept
+  chain) and only 3 / 3 are within-chain. The released debate works only inside the chosen chain,
+  so it can fix at most ~3 of 75. lp_conf < 0.9 (shuffled run) flags 9 of 19 selection failures,
+  6 of them recoverable from another kept chain.
+* Cost: stages 6-7 are 25% of per-instance tokens at 72B (total ~410k); always-skip saves ~47% of
+  them, i.e. ~12% of the total.
+Takeaway: as specified (skip vs the released plan debate), adaptive debate can only save tokens:
+same accuracy at ~half the stage 6-7 cost. Any accuracy gain must come from the triggered branch
+revisiting the CHAIN CHOICE on uncertain votes (question in for-chat.md).
+Caveats: 1-2 runs, n=75, intervals +-3-4 points; the skip branch is replayed, not run (the
+discriminator on a lone analysis may change its file; to be checked with the self-consistency runs,
+`--sc`); lp_conf only on the shuffled run so far (seed 1 and the self-consistency seeds will add it).
+
+---
+
 ## 2026-10-05 — 72B order check at scale (lenient): primacy bias in the vote, agreement not inflated; vote logprobs carry signal (Phase 1, precondition)
 Configs: fixed order = `baseline_72b_lenient_v1.yaml` seed 2 (job 183232, raw
 `baseline_72b_lenient_v1/20261004-143435`); shuffled = `order_72b_lenient_v1.yaml` (shuffle seed 1,

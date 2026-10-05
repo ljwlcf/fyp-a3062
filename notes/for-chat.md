@@ -9,6 +9,23 @@ Answered with a pointer.
 
 ## Open
 
+- **Adaptive debate: should the triggered branch debate the CHAIN CHOICE, not the plan?**
+  (Direction for chat and A/P Chen; raised 2026-10-05, results.md "trigger, offline replay".)
+  Replay on the 72B runs: with lenient parsing, skipping the debate entirely (one agent writes the
+  plan on the vote's chain) is as accurate as the full debate (0.773 vs 0.760; 0.720 vs 0.720) at
+  about half the stage 6-7 tokens, and no trigger threshold does better than "always skip". The
+  reason: ~85% of the remaining errors are the VOTE picking a chain without the buggy file (18/21,
+  15/18), and the released debate only argues about edits inside the chosen chain, so it can fix
+  at most ~3 of 75. In 6-11 of those selection failures the right file was in another kept chain,
+  and the low-confidence vote signal (lp_conf < 0.9) catches about half of them.
+  Options: (a) keep the plan as stated: adaptive debate = same accuracy, ~47% fewer stage 6-7
+  tokens (~12% of total), an efficiency result; (b) make the triggered branch a debate over the
+  top-2/3 chains (agents argue which chain holds the fault, then the released plan step), which
+  is still "adaptive debate" and is where accuracy can move (ceiling here: the 6-11 recoverable
+  instances); (c) both, with (a) as the guaranteed result and (b) as the improvement. Recommendation
+  from the code side: (c). It stays within the approved direction but changes what the debate is
+  about, so it may need A/P Chen's OK. Framing note: under the released parser the debate does
+  beat a single agent, but only as redundancy against unparsable replies (13-15% of round-1 replies).
 - **Possible development: target the graph walk, stage 4 and starting points, not only the
   debate?** For chat and A/P Chen; the approved plan (2026-10-01) is about the debate, so nothing
   here gets built without her agreement. Measured so far (results.md 2026-10-02):
