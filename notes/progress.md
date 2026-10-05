@@ -26,8 +26,10 @@ chain choice). MLDA gpu21 now usable 24/7 (memory). Live pilot: beets-5437 hit t
 stage-8 shape crash; rerun it with --resume --retry-errors when the pilot ends.
 Lenient seed 3 done (0.813; replay agrees: skip 0.805). Seed 4 (184812, vote logprobs) queued on
 ug after 184575 to keep the lane full and give lp_conf a second fixed-order run for held-out
-thresholds. Seed-2 repair (184567) running: it rewrites seed 2 raw.jsonl on EEE, so re-fetch that
-file explicitly (not --ignore-existing) and rescore afterwards.
+thresholds. Seed-2 repair (184567) done: django-12155 ok, seed 2 raw.jsonl replaced by the EEE copy
+(only that line differed), rescored; Acc@1 unchanged 0.760; replay updated (results.md).
+Killable slot refilled: second shuffle seed `order_72b_lenient_shuf2_v1` (184861; chain_order seed 2,
+vote logprobs) to check the primacy gradient on another permutation.
 Queue: 183233 lenient seed 3 (DONE) (running, 53+/75) -> 184572 seed 1 -> 184573 SC seed 1 -> 184574 SC
 seed 2 -> 184575 SC seed 3 (ug, pro6000; the four not-yet-started jobs 183310/183711/184568/184569
 were requeued with --vote-logprobs 10, which does not change outputs, so the trigger can be

@@ -29,10 +29,10 @@ real skip step). Full branch = the run's own final plan.
 Numbers (Acc@1 File; mean stage 6-7 tokens):
 | run | original (full debate) | always skip | per-instance oracle |
 |---|---|---|---|
-| lenient fixed, seed 2 | 0.760, 100k | 0.773, 54k | 0.779 |
+| lenient fixed, seed 2 (repaired: django-12155 rerun ok) | 0.760, 100k | 0.760, 53k | 0.765 |
 | lenient shuffled | 0.720, 103k | 0.720, 54k | 0.736 |
 | lenient fixed, seed 3 (183233) | 0.813, 101k | 0.805, 55k | 0.840 |
-| pooled lenient fixed, seeds 2+3 | 0.787, 101k | 0.789, 54k | 0.809 |
+| pooled lenient fixed, seeds 2+3 | 0.787, 101k | 0.783, 54k | 0.803 |
 | released parser, run 013441 | 0.720, 114k | 0.661, 66k | 0.744 |
 | released parser, run 091827 | 0.760, 112k | 0.680, 65k | 0.803 |
 * Lenient: the debate changes the outcome on 1-2 instances per run in each direction; no threshold
@@ -42,7 +42,11 @@ Numbers (Acc@1 File; mean stage 6-7 tokens):
 * Seed 3 added (2026-10-05, raw `baseline_72b_lenient_v1/20261004-215633`, job 183233; 75/75 ok):
   Acc@1 0.813 (61/75), selected 0.827, kept 0.933, built 0.973, selection given kept 0.886;
   debate effect 59 unchanged right, 12 unchanged wrong, 2 fixed, 1 broke, 1 plan failed after right.
-  Pooled seeds 2+3, always-skip minus original: +0.003 [-0.027, +0.031] (paired bootstrap).
+  Seed 2 repaired the same day (184567: django-12155 rerun ok; seed 2 Acc@1 unchanged 0.760, 75/75
+  ok; its replay row above is the repaired one). Pooled seeds 2+3, best in-sample trigger: skip when
+  vote agreement >= 0.8 (4 or 5 of 5): skips 89%, Acc@1 0.795 vs 0.787, -42% stage 6-7 tokens;
+  paired bootstrap adaptive minus original +0.008 [-0.009, +0.031]. Held out (threshold from the
+  other seed): seed 2 0.760 = original at -43% tokens; seed 3 0.805 vs 0.813 (one instance) at -46%.
 * Released parser: 13-15% of round-1 replies do not parse (4.2-4.4 valid of 5), which sinks a lone
   agent; given a parsed reply the single agent scores 0.747 / 0.811, i.e. at or above the debate.
   The debate's edge there is redundancy against parse failures, not reasoning.
