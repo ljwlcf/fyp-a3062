@@ -748,3 +748,19 @@ speed); all 72B runs so far ran on Server Edition (6.1 min per instance with the
 Usage: 29,961 SU billed 2026-10-01 .. 10-04 (16.6% of the 180,000 SU monthly quota; 62 pro6000
 GPU-hours, 1 a6000).
 
+## 2026-10-05 — Order check repeated at 72B: agreement passes, the vote's winner choice has a primacy bias
+Outcome against the pre-registered rule (2026-10-02): (i) under shuffle the first-shown chain still
+wins more than chance (0.29 vs 0.17; a monotonic gradient over positions 1..6), so display order
+does bias WHICH chain wins; (ii) vote agreement is the same under both orders (0.95 / 0.96) and is
+not higher when the first-shown chain wins, so agreement is not a position artefact at 72B.
+Consequences: (1) agreement may be used as a trigger signal as far as order is concerned, but it
+is saturated (~88% unanimous), so on its own it would skip the debate almost always; (2) vote
+logprobs (lp_conf) are less saturated and separate right from wrong selections somewhat, so the
+adaptive-debate trigger is to be built and evaluated on lp_conf (with agreement as a comparison),
+on the lenient seeds once all three are in; (3) the primacy bias is itself a finding about the
+released vote and a threat to validity for chain-order-sensitive comparisons: keep the released
+order in every arm (baseline = released code) and report the shuffled run alongside. The earlier
+"shuffle every arm" fallback is dropped (shuffling also cost a few accuracy points at 7B and 72B).
+Killable lane in practice: the 7B Live smoke test ran on idle pro6000 (25 min); the 72B Live pilot
+(183679) has been preempted and requeued 3 times and resumed each time (15/40 done so far).
+

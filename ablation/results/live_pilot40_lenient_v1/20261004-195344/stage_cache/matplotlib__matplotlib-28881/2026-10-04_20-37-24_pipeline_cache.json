@@ -1,0 +1,171 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-04T20:37:26.782409",
+    "data": {
+      "initial_entities": [
+        "axline",
+        "np.isclose",
+        "slope",
+        "atol",
+        "axhline"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 1739
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-04T20:39:43.229491",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "axline",
+          "related_entities": [
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:Axes.axline",
+              "entity_type": "function",
+              "relevance_reason": "This function directly handles the creation of axline, where the issue with small slopes is encountered.",
+              "diversity_value": "Core functionality in the axes module"
+            },
+            {
+              "entity_id": "lib/matplotlib/pyplot.py:axline",
+              "entity_type": "function",
+              "relevance_reason": "This is the pyplot interface for axline, which might need to be adjusted to reflect changes in the core function.",
+              "diversity_value": "Interface function in the pyplot module"
+            },
+            {
+              "entity_id": "galleries/examples/pyplots/axline.py",
+              "entity_type": "file",
+              "relevance_reason": "This example file demonstrates the usage of axline and can be used to test the fix.",
+              "diversity_value": "Example file for testing and validation"
+            },
+            {
+              "entity_id": "lib/matplotlib/lines.py:AxLine",
+              "entity_type": "class",
+              "relevance_reason": "The AxLine class is responsible for the actual rendering of the line, and understanding its implementation is crucial for fixing the issue.",
+              "diversity_value": "Rendering class in the lines module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "np.isclose",
+          "related_entities": [
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:axline",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for drawing the line with the specified slope, and the issue is related to its behavior with very small slopes.",
+              "diversity_value": "Core functionality from the main axes module"
+            },
+            {
+              "entity_id": "lib/matplotlib/cbook/__init__.py:isclose",
+              "entity_type": "function",
+              "relevance_reason": "This function is likely used within `axline` to determine if a slope is close to zero. Adjusting the tolerance here could resolve the issue.",
+              "diversity_value": "Utility function from a different utility module"
+            },
+            {
+              "entity_id": "lib/matplotlib/backend_bases.py:FigureCanvasBase",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all figure canvases, which might contain methods or properties that influence how lines are rendered.",
+              "diversity_value": "Backend layer from a different file"
+            },
+            {
+              "entity_id": "lib/matplotlib/transforms.py:Transform",
+              "entity_type": "class",
+              "relevance_reason": "The `Transform` class is used for coordinate transformations in Matplotlib, and it might be involved in how slopes are interpreted or transformed.",
+              "diversity_value": "Transformation layer from a different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "slope",
+          "related_entities": [
+            {
+              "entity_id": "lib/matplotlib/lines.py:AxLine.get_slope",
+              "entity_type": "function",
+              "relevance_reason": "Directly interacts with the slope property of the axline, which is central to the bug.",
+              "diversity_value": "From the core lines module, deals with line properties"
+            },
+            {
+              "entity_id": "lib/matplotlib/lines.py:AxLine.set_slope",
+              "entity_type": "function",
+              "relevance_reason": "Allows setting the slope of the axline, which might contain the logic causing the bug.",
+              "diversity_value": "From the core lines module, deals with line properties"
+            },
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:Axes.axline",
+              "entity_type": "function",
+              "relevance_reason": "The method called to draw the axline, likely where the np.isclose check is applied.",
+              "diversity_value": "From the axes module, handles drawing operations"
+            },
+            {
+              "entity_id": "lib/matplotlib/backend_bases.py:FigureCanvasBase.draw",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for rendering the plot, which could be affected by the slope issue.",
+              "diversity_value": "From the backend module, handles rendering and display"
+            }
+          ]
+        },
+        {
+          "initial_entity": "atol",
+          "related_entities": [
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:Axes.axline",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for drawing lines with specified slopes, which is where the bug occurs.",
+              "diversity_value": "Core functionality in the axes module"
+            },
+            {
+              "entity_id": "lib/matplotlib/lines.py:Line2D",
+              "entity_type": "class",
+              "relevance_reason": "The `axline` method likely uses `Line2D` to create the line object, and this class might contain the logic for setting the slope.",
+              "diversity_value": "Different file, handles line creation and properties"
+            },
+            {
+              "entity_id": "lib/matplotlib/transforms.py:Transform",
+              "entity_type": "class",
+              "relevance_reason": "Transforms are used to handle the coordinate transformations in plotting, and the issue might be related to how small slopes are handled in these transformations.",
+              "diversity_value": "Different file, manages coordinate transformations"
+            },
+            {
+              "entity_id": "lib/matplotlib/backend_bases.py:FigureCanvasBase",
+              "entity_type": "class",
+              "relevance_reason": "The canvas is responsible for rendering the plot, and understanding its interaction with the `axline` method could be crucial for debugging.",
+              "diversity_value": "Different file, manages rendering and display"
+            }
+          ]
+        },
+        {
+          "initial_entity": "axhline",
+          "related_entities": [
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:Axes.axline",
+              "entity_type": "function",
+              "relevance_reason": "The function responsible for drawing lines with arbitrary slopes, which is directly related to the bug.",
+              "diversity_value": "Core functionality from main axes module"
+            },
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:Axes.axhline",
+              "entity_type": "function",
+              "relevance_reason": "Provides insight into how horizontal lines are drawn, which might help understand the comparison and potential fix.",
+              "diversity_value": "Different functionality within the same axes module"
+            },
+            {
+              "entity_id": "lib/matplotlib/pyplot.py:axhline",
+              "entity_type": "function",
+              "relevance_reason": "Interface function for drawing horizontal lines, useful for understanding user interaction.",
+              "diversity_value": "User interface layer from different file"
+            },
+            {
+              "entity_id": "lib/matplotlib/axes/_axes.py:Axes.hlines",
+              "entity_type": "function",
+              "relevance_reason": "Function for drawing multiple horizontal lines, which might share similar logic with `axline` and could provide context.",
+              "diversity_value": "Additional functionality from the same axes module"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  }
+}

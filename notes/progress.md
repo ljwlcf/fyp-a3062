@@ -7,6 +7,24 @@ Did:
 Broke:
 Next:
 
+## 2026-10-05
+Did: Scored the 72B order check at scale (lenient fixed seed 2 vs shuffled): primacy bias in which
+chain wins (positions 1..6 win 22/18/15/9/5/6 vs ~13 chance), vote agreement not order-dependent
+but saturated; first real vote logprobs: lp_conf below 0.9 on a third of instances and 80% vs 64%
+selection accuracy above/below it (results.md, decisions.md). 7B SWE-bench-Live smoke test: works
+end to end (40/40). Fixed a second lenient-mode shape crash (final plan with string entries,
+django-12155 in seed 2); added `--resume --retry-errors`. Queued the seed-2 repair (184567,
+killable) and self-consistency seeds 2-3 (184568, 184569; ug, chained after 183711).
+Broke: Nothing. The killable watcher missed a job that finished before its first look (fixed by
+checking manually); the 72B Live pilot is being preempted repeatedly but resumes correctly.
+Queue: 183233 lenient seed 3 (running, 53+/75) -> 183310 seed 1 -> 183711 SC seed 1 -> 184568 SC
+seed 2 -> 184569 SC seed 3 (ug, pro6000) | killable pro6000: 183679 72B Live pilot (15/40, requeue-
+resuming), 184567 seed-2 repair.
+Next: when seeds 3 and 1 land, pool the lenient original arm (3 seeds) and compare with the
+as-released row; build and evaluate the adaptive trigger on lp_conf (needs vote logprobs on the
+original-arm runs too: the lenient seeds ran without them, so either reuse the shuffled run or add
+--vote-logprobs to future arms); score the self-consistency arm as it lands; finish the Live pilot.
+
 ## 2026-10-04
 Did: EEE reachable again; everything from 2026-10-02 had finished. Scored the 72B as-released
 baseline, 75 instances x 3 seeds (Acc@1 File 53/54/57 of 75 = 73%; debate net effect ~0 over 225

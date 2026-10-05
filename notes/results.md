@@ -17,6 +17,44 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-05 — 72B order check at scale (lenient): primacy bias in the vote, agreement not inflated; vote logprobs carry signal (Phase 1, precondition)
+Configs: fixed order = `baseline_72b_lenient_v1.yaml` seed 2 (job 183232, raw
+`baseline_72b_lenient_v1/20261004-143435`); shuffled = `order_72b_lenient_v1.yaml` (shuffle seed 1,
+vote logprobs top 10; job 183231, raw `order_72b_lenient_v1/20261004-071233`). Qwen2.5-72B, lenient
+parsing, released caps, 2x pro6000 (Server Edition), 75 instances each. Analysis:
+`analyze_order.py` (order_analysis.json next to the runs).
+
+**Order** (fixed 74 scored / shuffled 75; one fixed instance crashed, see below):
+- Winner shown first: 0.46 -> 0.29 (chance 0.17). Under shuffle, wins by shown position 1..6:
+  22, 18, 15, 9, 5, 6 against ~13 expected each by chance: a monotonic PRIMACY bias, independent of
+  content (the prompt's `chain_2` example fits the same gradient; no separate effect visible).
+- Winner is the longest kept chain: 0.53 -> 0.59 (content preference survives shuffling).
+- Mean vote agreement 0.95 -> 0.96; unanimous 0.87 -> 0.88. Agreement when the first-shown chain
+  won vs another won: fixed 0.97 / 0.94, shuffled 0.93 / 0.97, i.e. no inflation by position.
+- Gold in the selected chain 0.78 -> 0.75; Acc@1 (File) 0.77 -> 0.72 (a few instances; within
+  seed noise).
+
+**Vote logprobs** (shuffled run, first real data): mean lp_conf 0.88 (median 0.96, p10 0.59, min
+0.35); the logprob top chain is the vote's winner on 71/75; 25/75 instances have lp_conf < 0.9
+(vs 6/75 split votes). Selection right when lp_conf >= 0.9: 40/50 (80%); when < 0.9: 16/25 (64%).
+By vote agreement: >= 0.8: 53/69 (77%); split: 3/6. Mean lp_conf 0.91 when the selection was right,
+0.80 when wrong.
+
+**Also:** lenient seed 2 had one crash (django-12155, a repaired final plan with string entries;
+fixed, re-run queued as 184567). 7B SWE-bench-Live smoke test (job 183710, 40 pilot instances, 7B,
+killable pro6000): pipeline works end to end, 40/40 completed, gold scoring correct; 7B numbers
+(not results): gold in built chains 85%, kept 65%, selected 52.5%, Acc@1 47.5%, split votes 27.5%,
+hallucinated starts 31% (verified-set 7B: ~100% / 80-90% / ~70% Acc@1).
+
+**Takeaway.** At 72B scale vote agreement does not depend on display order (the 7B concern does
+not carry over), but it is saturated (~88% unanimous), so it identifies few uncertain instances.
+The vote itself has a clear primacy bias in which chain wins. Vote logprobs are far less saturated
+(a third of instances below 0.9) and do separate right from wrong selections somewhat (80% vs 64%),
+which makes them the more promising adaptive-debate trigger. One seed per order condition so far;
+needs the other lenient seeds and ideally a second shuffle seed.
+
+---
+
 ## 2026-10-04 — 72B as-released baseline: 75 instances x 3 seeds (Phase 1, main baseline)
 Configs: seed 1 = `backbone_trial_72b_v1.yaml` (10, job 180343) + `backbone_trial_72b_rest65_v1.yaml`
 (65, job 180726), vLLM seed 0; seeds 2/3 = `baseline_72b_released_v1.yaml` with SEED=2/3 (jobs
