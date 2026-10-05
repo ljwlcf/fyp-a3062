@@ -24,7 +24,11 @@ it at ~half the stage 6-7 tokens and no lp_conf/agreement threshold beats that; 
 vote selection failures the plan debate cannot reach (results.md; for-chat item on debating the
 chain choice). MLDA gpu21 now usable 24/7 (memory). Live pilot: beets-5437 hit the pre-fix
 stage-8 shape crash; rerun it with --resume --retry-errors when the pilot ends.
-Queue: 183233 lenient seed 3 (running, 53+/75) -> 184572 seed 1 -> 184573 SC seed 1 -> 184574 SC
+Lenient seed 3 done (0.813; replay agrees: skip 0.805). Seed 4 (184812, vote logprobs) queued on
+ug after 184575 to keep the lane full and give lp_conf a second fixed-order run for held-out
+thresholds. Seed-2 repair (184567) running: it rewrites seed 2 raw.jsonl on EEE, so re-fetch that
+file explicitly (not --ignore-existing) and rescore afterwards.
+Queue: 183233 lenient seed 3 (DONE) (running, 53+/75) -> 184572 seed 1 -> 184573 SC seed 1 -> 184574 SC
 seed 2 -> 184575 SC seed 3 (ug, pro6000; the four not-yet-started jobs 183310/183711/184568/184569
 were requeued with --vote-logprobs 10, which does not change outputs, so the trigger can be
 evaluated on the original arm) | killable pro6000: 183679 72B Live pilot (15/40, requeue-

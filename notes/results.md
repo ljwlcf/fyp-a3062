@@ -31,12 +31,18 @@ Numbers (Acc@1 File; mean stage 6-7 tokens):
 |---|---|---|---|
 | lenient fixed, seed 2 | 0.760, 100k | 0.773, 54k | 0.779 |
 | lenient shuffled | 0.720, 103k | 0.720, 54k | 0.736 |
+| lenient fixed, seed 3 (183233) | 0.813, 101k | 0.805, 55k | 0.840 |
+| pooled lenient fixed, seeds 2+3 | 0.787, 101k | 0.789, 54k | 0.809 |
 | released parser, run 013441 | 0.720, 114k | 0.661, 66k | 0.744 |
 | released parser, run 091827 | 0.760, 112k | 0.680, 65k | 0.803 |
 * Lenient: the debate changes the outcome on 1-2 instances per run in each direction; no threshold
   on lp_conf, vote agreement or self-reported confidence beats "always skip" (best no-loss
   threshold = skip everything; held-out across the two lenient runs picks the same). Paired
   bootstrap, always-skip minus original, shuffled run: 0.000 [-0.029, +0.037].
+* Seed 3 added (2026-10-05, raw `baseline_72b_lenient_v1/20261004-215633`, job 183233; 75/75 ok):
+  Acc@1 0.813 (61/75), selected 0.827, kept 0.933, built 0.973, selection given kept 0.886;
+  debate effect 59 unchanged right, 12 unchanged wrong, 2 fixed, 1 broke, 1 plan failed after right.
+  Pooled seeds 2+3, always-skip minus original: +0.003 [-0.027, +0.031] (paired bootstrap).
 * Released parser: 13-15% of round-1 replies do not parse (4.2-4.4 valid of 5), which sinks a lone
   agent; given a parsed reply the single agent scores 0.747 / 0.811, i.e. at or above the debate.
   The debate's edge there is redundancy against parse failures, not reasoning.
