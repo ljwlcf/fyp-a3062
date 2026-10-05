@@ -343,12 +343,13 @@ def result_relevant(cfg):
             "dataset_file": cfg.get("dataset_file")}
 
 
-def prepare_resume(run_dir, cfg):
+def prepare_resume(run_dir, cfg, retry_errors=False):
     """Continue a run in place: return (manifest, ids already recorded). Every instance with a
     line in raw.jsonl is skipped whatever its status (a crash such as debate_collapsed is an
     outcome, not a gap); instances in progress when the job died have no line and run again.
     Refuses if the config differs from the original run in anything that changes results.
-    A torn last line (job killed mid-write) is dropped, keeping raw.jsonl.bak."""
+    A torn last line (job killed mid-write) is dropped, keeping raw.jsonl.bak. With retry_errors,
+    instances recorded as errors are run again (their old lines are removed, kept in the .bak)."""
     with open(os.path.join(run_dir, "manifest.json")) as f:
         manifest = json.load(f)
     before, now = result_relevant(manifest["config_body"]), result_relevant(cfg)
@@ -356,20 +357,25 @@ def prepare_resume(run_dir, cfg):
                   != json.dumps(now.get(k), sort_keys=True, default=str))
     if diff:
         raise SystemExit(f"--resume refused: config differs from {run_dir} in {diff}")
-    raw_path, done, good, torn = os.path.join(run_dir, "raw.jsonl"), set(), [], 0
+    raw_path, done, good, torn, retried = os.path.join(run_dir, "raw.jsonl"), set(), [], 0, []
     if os.path.exists(raw_path):
         with open(raw_path) as f:
             for line in f:
                 try:
-                    done.add(json.loads(line)["instance_id"])
+                    rec = json.loads(line)
+                    if retry_errors and rec.get("status") == "error":
+                        retried.append(rec["instance_id"])
+                        continue
+                    done.add(rec["instance_id"])
                     good.append(line if line.endswith("\n") else line + "\n")
                 except (ValueError, KeyError):
                     torn += 1
-        if torn:
+        if torn or retried:
             os.replace(raw_path, raw_path + ".bak")
             with open(raw_path, "w") as f:
                 f.writelines(good)
-    manifest.setdefault("resumes", []).append({"dropped_torn_lines": torn})
+    manifest.setdefault("resumes", []).append({"dropped_torn_lines": torn,
+                                               "retried_errors": retried})
     return manifest, done
 
 
@@ -383,6 +389,8 @@ def main():
                     help="opt-in lenient JSON parsing in the fork (overrides pipeline.lenient_json)")
     ap.add_argument("--resume", metavar="RUN_DIR",
                     help="continue this run in place: skip instances already in its raw.jsonl")
+    ap.add_argument("--retry-errors", action="store_true",
+                    help="with --resume: run again the instances recorded as errors")
     ap.add_argument("--vote-logprobs", type=int, default=None, metavar="K",
                     help="record the top-K logprobs at each vote's chain-number token (0/omitted "
                          "= off; overrides run.vote_logprobs). Does not change outputs.")
@@ -408,7 +416,7 @@ def main():
 
     if args.resume:
         out = os.path.abspath(args.resume)
-        old_manifest, done = prepare_resume(out, cfg)
+        old_manifest, done = prepare_resume(out, cfg, retry_errors=args.retry_errors)
         run_id = old_manifest["run_id"]
     else:
         run_id = datetime.now().strftime("%Y%m%d-%H%M%S")

@@ -230,6 +230,12 @@ wrong shape; in job 183230 an agent listed locations as plain strings and the di
 crashed calling .get() on a str. `_parse_modification_analysis` now normalises the analysis in
 lenient mode (must be an object; location lists become lists of dicts, a string becoming
 {"entity_id": string}, unusable entries dropped). Released mode is unchanged.
+Same for the final plan (added 2026-10-05): in job 183232 a repaired plan listed a modification
+as a string and stage 8 crashed; `_parse_final_plan` now requires an object in lenient mode and
+turns a string modification into {"instruction": s, "context": s}. Both normalisers change only
+replies that would otherwise crash an instance, so on every non-crashing instance the patched and
+unpatched code behave identically; runs that straddle a patch are therefore consistent, and the
+crashed instances are re-run with `--resume --retry-errors`.
 Adopted 2026-10-04 for every arm of the main experiment (decisions.md); the released-parser
 72B runs are kept as an "as released" reference.
 Expected impact: when enabled, more agents survive to the debate and fewer instances crash;
