@@ -7,6 +7,21 @@ Did:
 Broke:
 Next:
 
+## 2026-10-06
+Did: Fetched and scored lenient seed 1 (0.773, vote logprobs) and self-consistency seed 1 (0.707);
+replay over 3 lenient seeds (skip-on-unanimous -0.4 points at -39% stage 6-7 tokens; debate's few
+fixes name files outside the chosen chain; correction to 2026-10-05 in results.md). Built
+`--reuse-chains` (stages 1-4 from a reference run): unit-tested on 75 cached instances and end to end
+on MLDA gpu21 with the 7B (smoke_reuse_chains_v1, stages 1-5 identical). Live pilot finished 39/40;
+repair of beets-5437 queued (186745, killable). Lanes refilled: ug lenient seeds 5-6 (186752,
+186753, vote logprobs) after seed 4; killable has Live parts a-c, second shuffle, pilot repair.
+Broke: Nothing. The EEE watcher missed three completions while the Mac was off (checked manually).
+Queue: ug 184574 SC seed 2 (running) -> 184575 SC seed 3 -> 184812 seed 4 -> 186752 seed 5 ->
+186753 seed 6 | killable 184607-9 Live a-c, 184861 shuffle 2, 186745 pilot repair.
+Next: Jingwei to confirm --reuse-chains for SC seed 3 onward (for-chat); score SC seed 2; once the
+pilot repair lands, score the Live pilot; replay with lp_conf held out once seeds 4-6 land; adaptive
+arm (real run) after the chain-debate question is settled.
+
 ## 2026-10-05
 Did: Scored the 72B order check at scale (lenient fixed seed 2 vs shuffled): primacy bias in which
 chain wins (positions 1..6 win 22/18/15/9/5/6 vs ~13 chance), vote agreement not order-dependent

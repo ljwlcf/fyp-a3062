@@ -9,6 +9,13 @@ Answered with a pointer.
 
 ## Open
 
+- **Run future arms on the original seeds' chains (`--reuse-chains`)?** (Jingwei; decisions.md
+  2026-10-06.) Each arm then votes/debates on exactly the chains original seed k built, so
+  differences are the arm's alone, and each arm run costs ~1/4 of a full run. Self-consistency
+  seeds 1-2 used their own chains and would stay as the independent-chain record; seed 3 (184575,
+  still queued) could be switched. Recommendation from the code side: yes, for SC seed 3 onward and
+  for the adaptive arm. A technical-design choice, but it changes how the arm comparison is
+  reported, so confirming here.
 - **Adaptive debate: should the triggered branch debate the CHAIN CHOICE, not the plan?**
   (Direction for chat and A/P Chen; raised 2026-10-05, results.md "trigger, offline replay".)
   Replay on the 72B runs: with lenient parsing, skipping the debate entirely (one agent writes the
@@ -18,6 +25,11 @@ Answered with a pointer.
   15/18), and the released debate only argues about edits inside the chosen chain, so it can fix
   at most ~3 of 75. In 6-11 of those selection failures the right file was in another kept chain,
   and the low-confidence vote signal (lp_conf < 0.9) catches about half of them.
+  UPDATE 2026-10-06 (seed 1, results.md): the debate's plan can name files outside the chosen
+  chain, and that is how it fixes its few instances (django-11999 twice, sphinx-8035, sympy-15809),
+  mostly on split votes. Pooled over 3 seeds: always-skip -1.6 points, skip-on-unanimous -0.4
+  points at -39% stage 6-7 tokens. So option (a) is a sound efficiency result; (b) remains the
+  route to an accuracy gain.
   Options: (a) keep the plan as stated: adaptive debate = same accuracy, ~47% fewer stage 6-7
   tokens (~12% of total), an efficiency result; (b) make the triggered branch a debate over the
   top-2/3 chains (agents argue which chain holds the fault, then the released plan step), which
