@@ -25,6 +25,12 @@ beetbox__beets-5437, 40/40 ok). Qwen2.5-72B @495f393, 2x pro6000, lenient, relea
   0.740 at 96k vs the original arm's 0.782 (seeds 1-3) at ~102k. Both SC seeds walked the graph
   themselves (own chains); from seed 3 on the SC arm reuses the original seed's chains
   (decisions.md 2026-10-06). The discriminator keeps the lone round-1 file in 97% of instances.
+* Self-consistency seed 3, own chains (job 184575, raw `baseline_72b_sc_lenient_v1/20261006-011332`):
+  Acc@1 0.773, selected 0.800, kept 0.893, stage 6-7 98-100k. Own-chains SC, 3 seeds: 0.707 / 0.773 /
+  0.773, mean 0.751 vs original 0.782 at 97k vs 102k stage 6-7 tokens; per-instance means over the 3
+  seeds, SC minus original -3.1 points [-8.0, +1.3] (paired bootstrap; 8 instances better, 11 worse).
+  The equal-token single agent is not significantly worse; part of the gap may be its weaker chains
+  (kept 0.87-0.89 vs 0.92-0.93), which the reuse-chains SC seeds (186863, 187444) remove.
 * Live pilot (first 40 of the 386; verified split, created after 2024-09-19): Acc@1 0.575 (23/40),
   selected 0.650, kept 0.750, built 0.825; vote agreement 0.96; tokens 640k per instance (stage 6-7
   126k), ~1.6x the Verified subset. Debate effect: 23 unchanged right, 13 unchanged wrong, 3 broke,

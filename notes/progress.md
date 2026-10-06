@@ -22,7 +22,9 @@ Later: Jingwei confirmed --reuse-chains; SC seed 3 own-chains run left to finish
 reuse-chains SC seed 3 queued after it (186863; seed 4 re-pointed behind it). Runner synced to EEE.
 SC seed 2: 0.773 (SC seeds 1-2: 0.740 vs original 0.782). Live pilot repaired and scored: 0.575,
 debate 3 broke / 0 fixed (results.md). Live seed 2 started on killable with its first 40 (186864).
-Next: score SC seed 3 (both versions); replay with lp_conf held out once seeds 4-6 land; adaptive
+SC seed 3 own chains done (0.773; own-chains SC mean 0.751 vs 0.782, -3.1 [-8.0, +1.3]); reuse-chains
+SC seed 3 running (186863); reuse-chains SC seed 1 queued after it (187444), seed 4 re-pointed behind.
+Next: score the reuse-chains SC seeds (then queue reuse-chains SC seed 2 when a ug slot frees); replay with lp_conf held out once seeds 4-6 land; adaptive
 arm (real run) after the chain-debate question is settled.
 
 ## 2026-10-05
