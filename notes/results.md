@@ -17,6 +17,22 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-06 — Equal-token single agent on the SAME chains as the debate (reuse-chains SC seed 3)
+Raw: `baseline_72b_sc_lenient_v1/20261006-061753` (job 186863, `--reuse-chains
+baseline_72b_lenient_v1/20261004-215633` = original seed 3), Qwen2.5-72B @495f393, 2x pro6000,
+lenient, vote logprobs. 75/75 ok, 1 h 07 min wall (vs ~5 h for an own-chains run).
+* Chains identical to original seed 3 on all 75 instances (kept recall and kept count match).
+* Acc@1 0.840 (63/75) vs the debate's 0.813 (61/75) on the same chains; selected 0.840 vs 0.827.
+  Discordant: single agent right / debate wrong 3, debate right / single agent wrong 1; exact
+  McNemar p = 0.63. Stage 6-7 tokens 100k vs 101k (achieved / budget = 0.99).
+* Read with the own-chains SC result (-3.1 points [-8.0, +1.3]): once the chains are held fixed the
+  gap disappears, so most of it was the SC runs' weaker chains (kept 0.87-0.89 vs 0.93), not the arm.
+Takeaway: spending the debate's tokens on more independent votes plus one plan agent is at least as
+accurate as the debate here. One seed; reuse-chains SC seeds 1 and 2 (187444, 187682) follow.
+Caveats: n=75, one seed, the reference seed is the best-scoring original seed (0.813).
+
+---
+
 ## 2026-10-06 — Self-consistency seed 2; first 72B SWE-bench-Live numbers (pilot, 40 instances)
 Raw: `baseline_72b_sc_lenient_v1/20261005-201603` (SC seed 2, job 184574);
 `live_pilot40_lenient_v1/20261004-195344` (Live pilot, job 183679 + repair 186745 for
