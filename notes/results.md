@@ -17,6 +17,37 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-06 — Lenient seed 1 and self-consistency seed 1 (72B); trigger replay over 3 seeds; correction
+Raw: `baseline_72b_lenient_v1/20261005-082019` (seed 1, job 184572, vote logprobs),
+`baseline_72b_sc_lenient_v1/20261005-153006` (self-consistency seed 1, job 184573),
+`baseline_72b_lenient_v1/trigger_replay_pooled_s123.json`. Qwen2.5-72B @495f393, 2x pro6000, lenient.
+* Seed 1: Acc@1 0.773 (58/75), selected 0.720, kept 0.920; debate effect 56 unchanged right,
+  16 unchanged wrong, 2 fixed, 1 changed to another wrong file. Lenient original arm, 3 seeds:
+  0.760 / 0.813 / 0.773, mean 0.782 (as-released: 0.707 / 0.720 / 0.760).
+* Self-consistency seed 1 (equal tokens: N votes + one single-agent plan): Acc@1 0.707, stage 6-7
+  tokens 94k vs ~102k for the original; kept 0.867 (its own graph walk built weaker chains, so
+  part of the gap is not the arm; see decisions.md 2026-10-06). The lone round-1 file survives the
+  discriminator in 97% of instances, so the replay's skip proxy is sound.
+* Replay, seed 1: always-skip 0.733 vs debate 0.773 (the debate helps on ~3 instances).
+  Pooled seeds 1-3 (225 rows): debate 0.782, always-skip 0.766 (-1.6 [-4.4, +0.8]); skip only on a
+  unanimous vote (84% skipped): 0.779, -0.4 [-2.0, +1.3] points at -39% stage 6-7 tokens. lp_conf
+  (seed 1 only) does not beat agreement: >= 0.95 skips 51%, -1.1 [-2.1, -0.3]. Held-out agreement
+  thresholds: seeds 2 and 3 never skip when trained on the others' strict no-loss rule; seed 1 at
+  0.8 skips 92% and loses 2.7 points.
+* CORRECTION to 2026-10-05 ("the debate can fix at most ~3 of 75"): the final plan names files
+  freely, not only files in the chosen chain. The debate's real fixes are selection failures
+  repaired by naming a file outside the chain: django-11999 (seeds 1 and 3), sphinx-8035,
+  sympy-15809; in each, all round-1 agents named the wrong file and the plan named the gold one.
+  Most come with split or low-confidence votes (agreement 0.6, lp_conf 0.43), i.e. where adaptive
+  debate keeps the debate; django-11999 in seed 1 had a unanimous vote (lp_conf 0.94).
+Takeaway: adaptive debate skipping on unanimous votes keeps accuracy within half a point at ~40%
+fewer stage 6-7 tokens (~10% of all tokens); the debate's value is small, real, and concentrated on
+split votes. Whether a chain-level debate adds more is the open for-chat question.
+Caveats: n=75 per seed; replayed skip branch; lp_conf on one fixed-order seed so far (seeds 4-6
+will add it); self-consistency seeds 2-3 pending.
+
+---
+
 ## 2026-10-05 — Adaptive-debate trigger, offline replay: skipping the debate loses nothing at 72B (lenient); errors are in chain selection (Phase 1 -> plan item 2)
 Tool: `ablation/harness/replay_trigger.py` (no GPU; replays both branches from original-arm runs).
 Raw: `trigger_replay.json` in each run folder: `baseline_72b_lenient_v1/20261004-143435` (fixed

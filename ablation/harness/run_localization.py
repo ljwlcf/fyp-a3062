@@ -169,6 +169,7 @@ def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None, arm=None):
     instance = {k: full[k] for k in keep_fields}
     pipeline = EntityLocalizationPipeline(max_depth=pipe["max_depth"])
     calls = CallLog(pipeline.client, vote_logprobs)
+    reused = apply_reused_chains(pipeline, iid, pipe.get("reuse_chains_from"))
     order = apply_chain_order(pipeline, iid, pipe.get("chain_order") or {"mode": "fixed"})
     arm_info = apply_arm(pipeline, arm)
     t0 = time.time()
@@ -184,6 +185,8 @@ def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None, arm=None):
     rec["seconds"] = round(time.time() - t0, 1)
     rec["chain_order"] = order
     rec["arm"] = arm_info
+    if reused:
+        rec["reused_chains"] = reused
     import entity_localization_pipeline as elp  # which lenient-parse step succeeded, per reply
     rec["json_parse"] = dict(getattr(elp, "A3062_PARSE_STATS", {}))
     order_dir = os.path.join(os.environ["ENTITY_PIPELINE_CACHE_DIR"], iid)
@@ -195,6 +198,58 @@ def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None, arm=None):
     import resource  # peak RSS of this worker process; ru_maxrss is KiB on Linux
     rec["peak_rss_gb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 2**20, 2)
     return rec
+
+
+def apply_reused_chains(pipeline, iid, ref_dir):
+    """Take stages 1-4 (start entities, related entities, chains, stage-4 selection) from a
+    reference run's stage cache instead of calling the LLM again (decisions.md 2026-10-06).
+    Every arm then votes and debates on exactly the chains the reference seed built, so a
+    per-instance comparison between arms is not blurred by run-to-run variation in the graph
+    walk, and the walk (~75% of tokens) is not paid again. Stage 5 (code lookup, no LLM) runs
+    live on the cached selection, so chain_order still applies on top. Methods are replaced on
+    this pipeline instance only. Returns None when no reference is set."""
+    if not ref_dir:
+        return None
+    import glob as _glob
+    paths = sorted(_glob.glob(os.path.join(ROOT, ref_dir, "stage_cache", iid, "*_pipeline_cache.json")))
+    if not paths:
+        raise RuntimeError(f"reuse_chains_from: no stage cache for {iid} in {ref_dir}")
+    with open(paths[-1]) as f:
+        cache = json.load(f)
+    stage = lambda name: (cache.get(name) or {}).get("data")
+    s1, s2, s3, s4 = (stage(n) for n in ("stage_1_initial_entities", "stage_2_related_entities",
+                                          "stage_3_localization_chains", "stage_4_diverse_chains"))
+    if s1 is None or (s1.get("initial_entities") and None in (s2, s3, s4)):
+        raise RuntimeError(f"reuse_chains_from: {iid} did not reach stage 4 in {ref_dir}")
+    key = lambda related: json.dumps(related, sort_keys=True)
+    related_q, chains_q = {}, {}
+    for g in (s2 or {}).get("entity_groups", []):
+        related_q.setdefault(g["initial_entity"], []).append(g["related_entities"])
+    for g in (s3 or {}).get("grouped_localization_chains", []):
+        chains_q.setdefault(key(g["related_entities"]), []).append(g["localization_chains"])
+    lock = threading.Lock()   # stage 3 runs its groups in threads
+
+    def initial(*args, **kwargs):
+        return list(s1["initial_entities"])
+
+    def related(initial_entity, *args, **kwargs):
+        return related_q[initial_entity].pop(0)
+
+    def chains(related_entities, *args, **kwargs):
+        with lock:
+            return chains_q[key(related_entities)].pop(0)
+
+    def select(all_chains, *args, **kwargs):
+        if len(all_chains) != len(s3.get("all_chains", [])):
+            raise RuntimeError(f"reuse_chains_from: {iid} rebuilt {len(all_chains)} chains, "
+                               f"reference has {len(s3.get('all_chains', []))}")
+        return list(s4["selected_chains"])
+
+    pipeline._extract_initial_entities = initial
+    pipeline._extract_related_entities_for_initial_entity = related
+    pipeline._generate_localization_chains = chains
+    pipeline._select_diverse_chains = select
+    return {"from": ref_dir, "cache": os.path.basename(paths[-1])}
 
 
 def apply_chain_order(pipeline, iid, spec):
@@ -394,6 +449,9 @@ def main():
     ap.add_argument("--vote-logprobs", type=int, default=None, metavar="K",
                     help="record the top-K logprobs at each vote's chain-number token (0/omitted "
                          "= off; overrides run.vote_logprobs). Does not change outputs.")
+    ap.add_argument("--reuse-chains", metavar="REF_RUN_DIR", default=None,
+                    help="take stages 1-4 from this original-arm run's stage cache (sets "
+                         "pipeline.reuse_chains_from; recorded in the manifest)")
     ap.add_argument("--workers", type=int, default=None,
                     help="instances run in parallel (separate processes); default run.workers or 1")
     args = ap.parse_args()
@@ -411,6 +469,11 @@ def main():
         pipe["lenient_json"] = True
     if args.shuffle_seed is not None:
         pipe["chain_order"] = {"mode": "shuffle", "seed": args.shuffle_seed}
+    if args.reuse_chains:
+        ref = os.path.relpath(os.path.abspath(args.reuse_chains), ROOT)
+        if not os.path.isdir(os.path.join(ROOT, ref, "stage_cache")):
+            sys.exit(f"--reuse-chains: no stage_cache in {ref}")
+        pipe["reuse_chains_from"] = ref
     if args.base_url:
         llm["base_url"] = args.base_url
 

@@ -250,6 +250,9 @@ def score_instance(rec, cache, gold_files, gold_entities):
     s["stage67_tokens"] = tok["vote"] + tok["debate"]   # what equal-token matching compares
     s["calls_by_stage"] = {k: v["calls"] for k, v in rec.get("tokens", {}).get("by_stage", {}).items()}
     s["truncated"] = rec.get("tokens", {}).get("total", {}).get("truncated")
+    # Stages 1-4 taken from a reference run (run_localization --reuse-chains): the graph walk
+    # was not re-run, so its tokens here are ~0; its cost is the reference run's.
+    s["chains_reused_from"] = (rec.get("reused_chains") or {}).get("from")
     if rec["status"] != "ok" or cache is None:
         s["error"] = rec.get("error") or "no stage cache"
         # Upstream defect: when EVERY round-1 answer fails to parse, round 2 builds

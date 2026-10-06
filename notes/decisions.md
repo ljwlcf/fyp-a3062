@@ -789,3 +789,20 @@ over instances. Validity check pending: the self-consistency runs run the real s
 discriminator's pass-through of a lone round-1 file is measured there (`--sc`). A real adaptive arm
 on the GPU follows once the triggered branch is settled (for-chat.md). First outcome: results.md
 2026-10-05 (skip-always is no worse; errors are selection failures the plan debate cannot reach).
+
+## 2026-10-06 — Arms can reuse a reference run's chains (stages 1-4): proposed protocol for arm comparisons
+Observed: each run re-walks the graph, so arms differ in their chains as well as in the arm
+itself (self-consistency seed 1 kept the gold file in 0.867 of instances vs 0.92-0.93 for the
+original seeds), which blurs the per-instance paired comparison the design relies on.
+Built: `run_localization.py --reuse-chains REF_RUN_DIR` (sets `pipeline.reuse_chains_from`,
+recorded in the manifest and in each record as `reused_chains`, compared on resume). Stages 1-4
+(start entities, related entities, chains, stage-4 selection) come from the reference run's stage
+cache; stage 5 (code lookup, no LLM) runs live, so chain_order still applies. Tested: replaying
+stages 1-4 reproduces stage 3 and 4 exactly on all 75 seed-1 instances with no LLM call, and the
+shuffle still permutes on top; one instance end to end on MLDA gpu21 (7B, smoke_reuse_chains_v1):
+stages 1-5 identical to the reference, 16 calls (vote 5, round 1 5, round 2 5, discriminator 1).
+Proposed use (Jingwei to confirm): every non-original arm (self-consistency, adaptive) runs once per
+original seed k with `--reuse-chains <original seed k>`, so arm vs original is a comparison on
+identical chains, and each arm run costs ~25% of the tokens / GPU time of a full run. Costs are
+reported as the reference's stages 1-5 plus the arm's own stages 6-8. Self-consistency seed 1 and
+the running seed 2 used independent chains; they stay as the independent-chain record.

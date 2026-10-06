@@ -1,0 +1,32 @@
+# Mechanics test for run_localization --reuse-chains (decisions.md 2026-10-06), NOT a result.
+# One instance, the 7B debugging model on MLDA gpu21, stages 1-4 taken from the 72B lenient
+# seed-1 run (baseline_72b_lenient_v1/20261005-082019). Checks: no graph-walk LLM calls, the
+# stage 3/4 cache equals the reference's, stage 5 (live) equals the reference's stage 5, and
+# stages 6-8 run on those chains. Run with:
+#   python ablation/harness/run_localization.py ablation/configs/smoke_reuse_chains_v1.yaml \
+#       --reuse-chains ablation/results/baseline_72b_lenient_v1/20261005-082019
+name: smoke_reuse_chains_v1
+version: 1
+created: "2026-10-06"
+
+instances:
+  - sphinx-doc__sphinx-8269
+
+paths:
+  graph_index_dir: data/graphs_full
+  results: ablation/results/smoke_reuse_chains_v1
+
+llm:
+  base_url: http://127.0.0.1:8765/v1
+  model: Qwen/Qwen2.5-Coder-7B-Instruct   # debugging model (one RTX 3090)
+  timeout_seconds: 600
+
+pipeline:
+  lenient_json: true
+  context: "context"
+  max_initial_entities: 5
+  max_depth: 5
+  chain_embed_model: intfloat/multilingual-e5-large-instruct
+
+instance_fields:
+  keep: [instance_id, repo, base_commit, problem_statement]
