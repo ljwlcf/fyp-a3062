@@ -344,6 +344,8 @@ def apply_arm(pipeline, arm):
     name = (arm or {}).get("name", "original")
     if name == "original":
         return {"name": "original"}
+    if name == "adaptive":
+        return _apply_adaptive(pipeline, arm)
     if name != "self_consistency":
         raise ValueError(f"unknown arm {name}")
     n = int(arm["n_votes"])
@@ -355,20 +357,59 @@ def apply_arm(pipeline, arm):
     def single_agent_plan(winning_chain, issue, num_agents=5, instance_id=None, cache_timestamp=None):
         return plan(winning_chain, issue, 1, instance_id, cache_timestamp)
 
-    def no_debate(chain_info, issue_description, first_round_analyses, instance_id=None,
-                  cache_timestamp=None):
-        out = []
-        for a in first_round_analyses:
-            an = a.get("analysis")
-            if an:
-                an = dict(an, refined_modification_locations=an.get("modification_locations", []))
-            out.append(dict(a, round="second_round_skipped", analysis=an))
-        return out
-
     pipeline._vote_on_chains = sc_vote
     pipeline._generate_modification_plan = single_agent_plan
-    pipeline._conduct_second_round_analysis = no_debate
+    pipeline._conduct_second_round_analysis = _skip_round2
     return {"name": name, "n_votes": n}
+
+
+def _skip_round2(chain_info, issue_description, first_round_analyses, instance_id=None,
+                 cache_timestamp=None):
+    """Round 2 skipped: pass each round-1 answer through, with `modification_locations` copied to
+    `refined_modification_locations`, the field the discriminator reads (format only)."""
+    out = []
+    for a in first_round_analyses:
+        an = a.get("analysis")
+        if an:
+            an = dict(an, refined_modification_locations=an.get("modification_locations", []))
+        out.append(dict(a, round="second_round_skipped", analysis=an))
+    return out
+
+
+def _apply_adaptive(pipeline, arm):
+    """Adaptive debate (CLAUDE.md plan item 2; decisions.md 2026-10-06): the released 5-agent vote,
+    then, if the vote is clear by the trigger, the single-agent plan step of the self-consistency
+    arm (one round-1 analysis, round 2 skipped, the released discriminator); otherwise the released
+    debate unchanged (5 round-1 analyses, round 2, discriminator). Trigger: signal vote_agreement
+    (winning votes / valid votes); skip when it is >= threshold. The returned dict is filled in
+    during the run with the observed agreement and whether the debate was skipped."""
+    trig = arm["trigger"]
+    if trig.get("signal") != "vote_agreement":
+        raise ValueError(f"adaptive trigger signal must be vote_agreement: {trig}")
+    tau = float(trig["threshold"])
+    info = {"name": "adaptive", "trigger": {"signal": "vote_agreement", "threshold": tau},
+            "agreement": None, "skipped": None}
+    vote, plan = pipeline._vote_on_chains, pipeline._generate_modification_plan
+    round2 = pipeline._conduct_second_round_analysis
+
+    def vote_then_decide(*args, **kwargs):
+        res = vote(*args, **kwargs)
+        n = (res or {}).get("total_valid_votes") or 0
+        info["agreement"] = round(res["winning_votes"] / n, 4) if n else None
+        info["skipped"] = info["agreement"] is not None and info["agreement"] >= tau
+        return res
+
+    def adaptive_plan(winning_chain, issue, num_agents=5, instance_id=None, cache_timestamp=None):
+        return plan(winning_chain, issue, 1 if info["skipped"] else num_agents, instance_id,
+                    cache_timestamp)
+
+    def adaptive_round2(*args, **kwargs):
+        return (_skip_round2 if info["skipped"] else round2)(*args, **kwargs)
+
+    pipeline._vote_on_chains = vote_then_decide
+    pipeline._generate_modification_plan = adaptive_plan
+    pipeline._conduct_second_round_analysis = adaptive_round2
+    return info
 
 
 def instance_ids(cfg):
@@ -544,6 +585,8 @@ def main():
     def arm_for(iid):
         if arm_cfg.get("name") == "self_consistency":
             return {"name": "self_consistency", "n_votes": arm_plans[iid]["n_votes"]}
+        if arm_cfg.get("name") == "adaptive":
+            return {"name": "adaptive", "trigger": dict(arm_cfg["trigger"])}
         return {"name": arm_cfg.get("name", "original")}
 
     empty_tokens = {"total": {"calls": 0, "errors": 0, "truncated": 0, "prompt_tokens": 0,

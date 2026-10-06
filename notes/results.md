@@ -29,6 +29,17 @@ lenient, vote logprobs. 75/75 ok, 1 h 07 min wall (vs ~5 h for an own-chains run
   gap disappears, so most of it was the SC runs' weaker chains (kept 0.87-0.89 vs 0.93), not the arm.
 Takeaway: spending the debate's tokens on more independent votes plus one plan agent is at least as
 accurate as the debate here. One seed; reuse-chains SC seeds 1 and 2 (187444, 187682) follow.
+* Seed 1 added (job 187444, raw `baseline_72b_sc_lenient_v1/20261006-095241`, reuse of original seed 1;
+  chains identical, 75/75 ok): SC 0.707 vs debate 0.773, discordant 0 : 5 for the debate; tokens
+  101k vs 104k. In 4 of the 5 both arms chose the same chain and the lone plan agent named a wrong
+  file (twice a path not in the repository: `models.py`, `babel/messages/catalog.py`) where the
+  debate's five round-1 agents and discriminator were right; the 5th is django-11999 (the debate's
+  out-of-chain fix). Pooled seeds 1+3: 3 : 6, exact McNemar p = 0.51. No significant difference;
+  the single-plan-agent step has visibly higher variance.
+* Replay of a cheaper skip branch (keep the five round-1 agents, drop round 2; answer = round-1
+  majority), 3 lenient seeds: all rows 0.773 at 70k vs full debate 0.782 at 102k vs single plan
+  agent 0.766 at 55k; on unanimous votes 0.783 / 0.778 / 0.774. Within about one instance of each
+  other; logged as an alternative skip branch (decisions.md 2026-10-06, adaptive arm).
 Caveats: n=75, one seed, the reference seed is the best-scoring original seed (0.813).
 
 ---

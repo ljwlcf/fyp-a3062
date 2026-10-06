@@ -247,6 +247,7 @@ def score_instance(rec, cache, gold_files, gold_entities):
     s["truncated_by_stage"], s["truncated_fate"] = truncation(rec)
     arm = rec.get("arm") or {"name": "original"}
     s["arm"], s["n_votes_planned"] = arm.get("name"), arm.get("n_votes")
+    s["debate_skipped"] = arm.get("skipped")   # adaptive arm: the trigger skipped the debate
     s["stage67_tokens"] = tok["vote"] + tok["debate"]   # what equal-token matching compares
     s["calls_by_stage"] = {k: v["calls"] for k, v in rec.get("tokens", {}).get("by_stage", {}).items()}
     s["truncated"] = rec.get("tokens", {}).get("total", {}).get("truncated")

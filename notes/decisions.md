@@ -811,3 +811,20 @@ already started (34/75) by then, so it was left to finish as a third own-chains 
 reuse-chains SC seed 3 was queued directly after it: job 186863, `--reuse-chains
 baseline_72b_lenient_v1/20261004-215633` (original seed 3), vote logprobs; lenient seed 4 now
 waits on it. Every later non-original arm runs with --reuse-chains against the matching original seed.
+
+## 2026-10-06 — Adaptive arm implemented (plan item 2): skip the debate on a unanimous vote
+Arm `adaptive` in run_localization.py (`pipeline.arm: {name: adaptive, trigger: {signal:
+vote_agreement, threshold: 1.0}}`, config `baseline_72b_adaptive_lenient_v1.yaml`): the released
+5-agent vote; if every valid vote picked the same chain, the self-consistency arm's single-agent plan
+step (one round-1 analysis, round 2 skipped, released discriminator); otherwise the released debate
+unchanged. Each record's `arm` stores the observed agreement and `skipped`; the scorer reports
+`debate_skipped`. Threshold 1.0 is the plain reading of "clear vote" (unanimous); it is also what the
+replay supports (pooled seeds 1-3: -0.4 points, -39% stage 6-7 tokens). lp_conf is not used as the
+trigger: on seed 1 it did not beat agreement and it needs the vote logprobs inside the arm. Runs
+use --reuse-chains against the matching original seed (paired, ~1 h each). Unit-tested with a fake
+pipeline (unanimous -> plan with 1 agent, round 2 skipped; split -> 5 agents and the released round
+2; SC arm unchanged after factoring out the shared round-2 skip). Alternative skip branch kept in
+reserve: five round-1 agents without round 2 (replay: same accuracy within one instance, ~70k
+tokens instead of ~55k); not built unless the single-agent skip loses accuracy in the real runs.
+This is the efficiency form of adaptive debate (option (a) in for-chat.md); the chain-level debate
+(option (b)) still waits on chat / A/P Chen.

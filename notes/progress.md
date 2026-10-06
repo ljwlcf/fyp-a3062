@@ -26,7 +26,12 @@ SC seed 3 own chains done (0.773; own-chains SC mean 0.751 vs 0.782, -3.1 [-8.0,
 SC seed 3 running (186863); reuse-chains SC seed 1 queued after it (187444), seed 4 re-pointed behind.
 Reuse-chains SC seed 3 done (1 h 07; 0.840 vs the debate's 0.813 on identical chains, 3:1 discordant,
 p=0.63); reuse-chains SC seed 2 queued (187682) after seed 1 (187444); seed 4 re-pointed behind it.
-Next: score reuse-chains SC seeds 1-2 and pool the paired comparison; replay with lp_conf held out once seeds 4-6 land; adaptive
+Reuse-chains SC seed 1 done: 0.707 vs debate 0.773 on identical chains (0:5; pooled with seed 3 3:6,
+p=0.51; the lone plan agent is the weak step). Adaptive arm built (unanimous vote -> skip the debate),
+unit-tested and run end to end on gpu21 (smoke_adaptive_v1: skipped, 7 calls); 72B adaptive paired
+with seed 3 queued (188238) after SC-r2 (187682); seed 4 re-pointed behind it. Live seed 2 preempted
+at 15/40, requeued.
+Next: score SC-r2 and adaptive-r3; queue adaptive seeds 1-2 (reuse) as ug slots free; replay with lp_conf held out once seeds 4-6 land; adaptive
 arm (real run) after the chain-debate question is settled.
 
 ## 2026-10-05
