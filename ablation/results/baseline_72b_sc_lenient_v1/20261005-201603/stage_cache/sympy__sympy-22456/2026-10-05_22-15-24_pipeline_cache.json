@@ -1,0 +1,2183 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-05T22:15:26.732784",
+    "data": {
+      "initial_entities": [
+        "String",
+        "func",
+        "args",
+        "kwargs",
+        "Basic"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 302
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-05T22:18:25.294526",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "String",
+          "related_entities": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class is directly mentioned in the problem statement and requires changes to support argument invariance.",
+              "diversity_value": "Primary class from the core module where the issue lies"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "entity_type": "class",
+              "relevance_reason": "The `Basic` class is the superclass of `String` and defines the behavior for argument invariance, which needs to be consistent.",
+              "diversity_value": "Superclass from a different core module"
+            },
+            {
+              "entity_id": "sympy/core/evalf.py:evalf",
+              "entity_type": "function",
+              "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+              "diversity_value": "Function from a different evaluation module"
+            },
+            {
+              "entity_id": "sympy/testing/runtests.py:test_string_invariance",
+              "entity_type": "function",
+              "relevance_reason": "This test function will need to be updated or created to ensure that the new invariance property of `String` is correctly implemented and verified.",
+              "diversity_value": "Testing function from a different testing module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "func",
+          "related_entities": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "function",
+              "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+              "diversity_value": "Core functionality from a fundamental class"
+            },
+            {
+              "entity_id": "sympy/core/function.py:Application.func",
+              "entity_type": "function",
+              "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+              "diversity_value": "Different file, related to function application"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class itself, which needs to be modified to support argument invariance as described in the problem statement.",
+              "diversity_value": "Target class in the codegen module"
+            },
+            {
+              "entity_id": "sympy/parsing/latex/_parse_latex_antlr.py:convert_func",
+              "entity_type": "function",
+              "relevance_reason": "This function demonstrates how functions and their arguments are parsed and converted, which could provide insights into implementing similar behavior for the `String` class.",
+              "diversity_value": "Parsing and conversion logic from a different module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "args",
+          "related_entities": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.args",
+              "entity_type": "function",
+              "relevance_reason": "The `Basic` class is the base class for all SymPy objects, and its `args` method is crucial for understanding how arguments are handled in SymPy objects.",
+              "diversity_value": "Base class functionality from core module"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+              "diversity_value": "Target class from codegen module"
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "entity_type": "function",
+              "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+              "diversity_value": "Parsing functionality from parsing module"
+            },
+            {
+              "entity_id": "sympy/core/containers.py:Dict.args",
+              "entity_type": "function",
+              "relevance_reason": "This method shows how another SymPy object handles its arguments, which might be useful for understanding the expected behavior of argument handling in SymPy objects.",
+              "diversity_value": "Different object's argument handling from core module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "kwargs",
+          "related_entities": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is the primary target for implementing argument invariance.",
+              "diversity_value": "Core class from the code generation module"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:Token.kwargs",
+              "entity_type": "function",
+              "relevance_reason": "The `kwargs` method is used to retrieve keyword arguments, which is relevant to the issue of argument invariance.",
+              "diversity_value": "Supporting method in the same file as the target class"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "entity_type": "class",
+              "relevance_reason": "The `Basic` class is the superclass of `String` and defines the invariance properties that need to be consistent.",
+              "diversity_value": "Base class from a different core module"
+            },
+            {
+              "entity_id": "sympy/core/expr.py:Expr.func",
+              "entity_type": "function",
+              "relevance_reason": "The `func` attribute is crucial for the invariance check `expr.func(*expr.args) == expr`.",
+              "diversity_value": "Functionality from a different expression handling module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "Basic",
+          "related_entities": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "entity_type": "class",
+              "relevance_reason": "The `Basic` class is the superclass for all SymPy objects, including `String`. The issue involves modifying how arguments are handled in `Basic` subclasses.",
+              "diversity_value": "Core class definition from the main SymPy module"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "property",
+              "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+              "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic.args",
+              "entity_type": "property",
+              "relevance_reason": "The `args` property is used to store and retrieve the arguments of a `Basic` object, which is crucial for implementing the required invariance.",
+              "diversity_value": "Property of the core class, ensuring detailed handling of argument attributes"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement and is where the specific invariance issue needs to be addressed.",
+              "diversity_value": "Class from a different file, specifically related to the issue"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-05T22:38:00.368246",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "String",
+          "related_entities": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class is directly mentioned in the problem statement and requires changes to support argument invariance.",
+              "diversity_value": "Primary class from the core module where the issue lies"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "entity_type": "class",
+              "relevance_reason": "The `Basic` class is the superclass of `String` and defines the behavior for argument invariance, which needs to be consistent.",
+              "diversity_value": "Superclass from a different core module"
+            },
+            {
+              "entity_id": "sympy/core/evalf.py:evalf",
+              "entity_type": "function",
+              "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+              "diversity_value": "Function from a different evaluation module"
+            },
+            {
+              "entity_id": "sympy/testing/runtests.py:test_string_invariance",
+              "entity_type": "function",
+              "relevance_reason": "This test function will need to be updated or created to ensure that the new invariance property of `String` is correctly implemented and verified.",
+              "diversity_value": "Testing function from a different testing module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "entity_type": "class",
+                "relevance_reason": "The `String` class is directly mentioned in the problem statement and requires changes to support argument invariance.",
+                "diversity_value": "Primary class from the core module where the issue lies"
+              },
+              "chain": [
+                "sympy/codegen/ast.py:String",
+                "sympy/codegen/ast.py:String._construct_text"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic",
+                "entity_type": "class",
+                "relevance_reason": "The `Basic` class is the superclass of `String` and defines the behavior for argument invariance, which needs to be consistent.",
+                "diversity_value": "Superclass from a different core module"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py:Token",
+                "sympy/codegen/ast.py:String"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/evalf.py:evalf",
+                "entity_type": "function",
+                "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+                "diversity_value": "Function from a different evaluation module"
+              },
+              "chain": [
+                "sympy/core/evalf.py:evalf"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/testing/runtests.py:test_string_invariance",
+                "entity_type": "function",
+                "relevance_reason": "This test function will need to be updated or created to ensure that the new invariance property of `String` is correctly implemented and verified.",
+                "diversity_value": "Testing function from a different testing module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "func",
+          "related_entities": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "function",
+              "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+              "diversity_value": "Core functionality from a fundamental class"
+            },
+            {
+              "entity_id": "sympy/core/function.py:Application.func",
+              "entity_type": "function",
+              "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+              "diversity_value": "Different file, related to function application"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class itself, which needs to be modified to support argument invariance as described in the problem statement.",
+              "diversity_value": "Target class in the codegen module"
+            },
+            {
+              "entity_id": "sympy/parsing/latex/_parse_latex_antlr.py:convert_func",
+              "entity_type": "function",
+              "relevance_reason": "This function demonstrates how functions and their arguments are parsed and converted, which could provide insights into implementing similar behavior for the `String` class.",
+              "diversity_value": "Parsing and conversion logic from a different module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic.func",
+                "entity_type": "function",
+                "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+                "diversity_value": "Core functionality from a fundamental class"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic.func",
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py:Token",
+                "sympy/codegen/ast.py:String"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/function.py:Application.func",
+                "entity_type": "function",
+                "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+                "diversity_value": "Different file, related to function application"
+              },
+              "chain": [
+                "sympy/core/function.py:Application.func"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "entity_type": "class",
+                "relevance_reason": "The `String` class itself, which needs to be modified to support argument invariance as described in the problem statement.",
+                "diversity_value": "Target class in the codegen module"
+              },
+              "chain": [
+                "sympy/codegen/ast.py:String",
+                "sympy/codegen/ast.py:String._construct_text"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/parsing/latex/_parse_latex_antlr.py:convert_func",
+                "entity_type": "function",
+                "relevance_reason": "This function demonstrates how functions and their arguments are parsed and converted, which could provide insights into implementing similar behavior for the `String` class.",
+                "diversity_value": "Parsing and conversion logic from a different module"
+              },
+              "chain": [
+                "sympy/parsing/latex/_parse_latex_antlr.py:convert_func",
+                "sympy/core/basic.py:Basic.args",
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "args",
+          "related_entities": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.args",
+              "entity_type": "function",
+              "relevance_reason": "The `Basic` class is the base class for all SymPy objects, and its `args` method is crucial for understanding how arguments are handled in SymPy objects.",
+              "diversity_value": "Base class functionality from core module"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+              "diversity_value": "Target class from codegen module"
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "entity_type": "function",
+              "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+              "diversity_value": "Parsing functionality from parsing module"
+            },
+            {
+              "entity_id": "sympy/core/containers.py:Dict.args",
+              "entity_type": "function",
+              "relevance_reason": "This method shows how another SymPy object handles its arguments, which might be useful for understanding the expected behavior of argument handling in SymPy objects.",
+              "diversity_value": "Different object's argument handling from core module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic.args",
+                "entity_type": "function",
+                "relevance_reason": "The `Basic` class is the base class for all SymPy objects, and its `args` method is crucial for understanding how arguments are handled in SymPy objects.",
+                "diversity_value": "Base class functionality from core module"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic.args",
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "entity_type": "class",
+                "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+                "diversity_value": "Target class from codegen module"
+              },
+              "chain": [
+                "sympy/codegen/ast.py:String"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+                "entity_type": "function",
+                "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+                "diversity_value": "Parsing functionality from parsing module"
+              },
+              "chain": [
+                "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+                "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+                "sympy/parsing/mathematica.py:MathematicaParser.parse",
+                "sympy/parsing/mathematica.py:MathematicaParser._apply_rules"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/containers.py:Dict.args",
+                "entity_type": "function",
+                "relevance_reason": "This method shows how another SymPy object handles its arguments, which might be useful for understanding the expected behavior of argument handling in SymPy objects.",
+                "diversity_value": "Different object's argument handling from core module"
+              },
+              "chain": [
+                "sympy/core/containers.py:Dict.args",
+                "sympy/core/containers.py:Dict",
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "kwargs",
+          "related_entities": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is the primary target for implementing argument invariance.",
+              "diversity_value": "Core class from the code generation module"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:Token.kwargs",
+              "entity_type": "function",
+              "relevance_reason": "The `kwargs` method is used to retrieve keyword arguments, which is relevant to the issue of argument invariance.",
+              "diversity_value": "Supporting method in the same file as the target class"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "entity_type": "class",
+              "relevance_reason": "The `Basic` class is the superclass of `String` and defines the invariance properties that need to be consistent.",
+              "diversity_value": "Base class from a different core module"
+            },
+            {
+              "entity_id": "sympy/core/expr.py:Expr.func",
+              "entity_type": "function",
+              "relevance_reason": "The `func` attribute is crucial for the invariance check `expr.func(*expr.args) == expr`.",
+              "diversity_value": "Functionality from a different expression handling module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "entity_type": "class",
+                "relevance_reason": "The `String` class in `codegen.ast` is the primary target for implementing argument invariance.",
+                "diversity_value": "Core class from the code generation module"
+              },
+              "chain": [
+                "sympy/codegen/ast.py:String",
+                "sympy/codegen/ast.py:String._construct_text"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/codegen/ast.py:Token.kwargs",
+                "entity_type": "function",
+                "relevance_reason": "The `kwargs` method is used to retrieve keyword arguments, which is relevant to the issue of argument invariance.",
+                "diversity_value": "Supporting method in the same file as the target class"
+              },
+              "chain": [
+                "sympy/codegen/ast.py:Token.kwargs",
+                "sympy/codegen/ast.py:Token",
+                "sympy/codegen/ast.py:String",
+                "sympy/codegen/ast.py:String._construct_text"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic",
+                "entity_type": "class",
+                "relevance_reason": "The `Basic` class is the superclass of `String` and defines the invariance properties that need to be consistent.",
+                "diversity_value": "Base class from a different core module"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/expr.py:Expr.func",
+                "entity_type": "function",
+                "relevance_reason": "The `func` attribute is crucial for the invariance check `expr.func(*expr.args) == expr`.",
+                "diversity_value": "Functionality from a different expression handling module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "Basic",
+          "related_entities": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "entity_type": "class",
+              "relevance_reason": "The `Basic` class is the superclass for all SymPy objects, including `String`. The issue involves modifying how arguments are handled in `Basic` subclasses.",
+              "diversity_value": "Core class definition from the main SymPy module"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "property",
+              "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+              "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic.args",
+              "entity_type": "property",
+              "relevance_reason": "The `args` property is used to store and retrieve the arguments of a `Basic` object, which is crucial for implementing the required invariance.",
+              "diversity_value": "Property of the core class, ensuring detailed handling of argument attributes"
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement and is where the specific invariance issue needs to be addressed.",
+              "diversity_value": "Class from a different file, specifically related to the issue"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic",
+                "entity_type": "class",
+                "relevance_reason": "The `Basic` class is the superclass for all SymPy objects, including `String`. The issue involves modifying how arguments are handled in `Basic` subclasses.",
+                "diversity_value": "Core class definition from the main SymPy module"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic.func",
+                "entity_type": "property",
+                "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+                "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic.func"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/basic.py:Basic.args",
+                "entity_type": "property",
+                "relevance_reason": "The `args` property is used to store and retrieve the arguments of a `Basic` object, which is crucial for implementing the required invariance.",
+                "diversity_value": "Property of the core class, ensuring detailed handling of argument attributes"
+              },
+              "chain": [
+                "sympy/core/basic.py:Basic.args",
+                "sympy/core/basic.py:Basic",
+                "sympy/codegen/ast.py:CodegenAST",
+                "sympy/codegen/ast.py:Token",
+                "sympy/codegen/ast.py:String"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "entity_type": "class",
+                "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement and is where the specific invariance issue needs to be addressed.",
+                "diversity_value": "Class from a different file, specifically related to the issue"
+              },
+              "chain": [
+                "sympy/codegen/ast.py:String"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "sympy/codegen/ast.py:String",
+            "sympy/codegen/ast.py:String._construct_text"
+          ],
+          "chain_length": 2,
+          "initial_entity": "String",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class is directly mentioned in the problem statement and requires changes to support argument invariance.",
+            "diversity_value": "Primary class from the core module where the issue lies"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py:Token",
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 4,
+          "initial_entity": "String",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic",
+            "entity_type": "class",
+            "relevance_reason": "The `Basic` class is the superclass of `String` and defines the behavior for argument invariance, which needs to be consistent.",
+            "diversity_value": "Superclass from a different core module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/evalf.py:evalf"
+          ],
+          "chain_length": 1,
+          "initial_entity": "String",
+          "start_entity": {
+            "entity_id": "sympy/core/evalf.py:evalf",
+            "entity_type": "function",
+            "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+            "diversity_value": "Function from a different evaluation module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic.func",
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py:Token",
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 5,
+          "initial_entity": "func",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic.func",
+            "entity_type": "function",
+            "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+            "diversity_value": "Core functionality from a fundamental class"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/function.py:Application.func"
+          ],
+          "chain_length": 1,
+          "initial_entity": "func",
+          "start_entity": {
+            "entity_id": "sympy/core/function.py:Application.func",
+            "entity_type": "function",
+            "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+            "diversity_value": "Different file, related to function application"
+          }
+        },
+        {
+          "chain": [
+            "sympy/codegen/ast.py:String",
+            "sympy/codegen/ast.py:String._construct_text"
+          ],
+          "chain_length": 2,
+          "initial_entity": "func",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class itself, which needs to be modified to support argument invariance as described in the problem statement.",
+            "diversity_value": "Target class in the codegen module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/parsing/latex/_parse_latex_antlr.py:convert_func",
+            "sympy/core/basic.py:Basic.args",
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "func",
+          "start_entity": {
+            "entity_id": "sympy/parsing/latex/_parse_latex_antlr.py:convert_func",
+            "entity_type": "function",
+            "relevance_reason": "This function demonstrates how functions and their arguments are parsed and converted, which could provide insights into implementing similar behavior for the `String` class.",
+            "diversity_value": "Parsing and conversion logic from a different module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic.args",
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py"
+          ],
+          "chain_length": 4,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic.args",
+            "entity_type": "function",
+            "relevance_reason": "The `Basic` class is the base class for all SymPy objects, and its `args` method is crucial for understanding how arguments are handled in SymPy objects.",
+            "diversity_value": "Base class functionality from core module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 1,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+            "diversity_value": "Target class from codegen module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+            "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+            "sympy/parsing/mathematica.py:MathematicaParser.parse",
+            "sympy/parsing/mathematica.py:MathematicaParser._apply_rules"
+          ],
+          "chain_length": 4,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+            "entity_type": "function",
+            "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+            "diversity_value": "Parsing functionality from parsing module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/containers.py:Dict.args",
+            "sympy/core/containers.py:Dict",
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/core/containers.py:Dict.args",
+            "entity_type": "function",
+            "relevance_reason": "This method shows how another SymPy object handles its arguments, which might be useful for understanding the expected behavior of argument handling in SymPy objects.",
+            "diversity_value": "Different object's argument handling from core module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/codegen/ast.py:String",
+            "sympy/codegen/ast.py:String._construct_text"
+          ],
+          "chain_length": 2,
+          "initial_entity": "kwargs",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class in `codegen.ast` is the primary target for implementing argument invariance.",
+            "diversity_value": "Core class from the code generation module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/codegen/ast.py:Token.kwargs",
+            "sympy/codegen/ast.py:Token",
+            "sympy/codegen/ast.py:String",
+            "sympy/codegen/ast.py:String._construct_text"
+          ],
+          "chain_length": 4,
+          "initial_entity": "kwargs",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:Token.kwargs",
+            "entity_type": "function",
+            "relevance_reason": "The `kwargs` method is used to retrieve keyword arguments, which is relevant to the issue of argument invariance.",
+            "diversity_value": "Supporting method in the same file as the target class"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py"
+          ],
+          "chain_length": 3,
+          "initial_entity": "kwargs",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic",
+            "entity_type": "class",
+            "relevance_reason": "The `Basic` class is the superclass of `String` and defines the invariance properties that need to be consistent.",
+            "diversity_value": "Base class from a different core module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py"
+          ],
+          "chain_length": 3,
+          "initial_entity": "Basic",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic",
+            "entity_type": "class",
+            "relevance_reason": "The `Basic` class is the superclass for all SymPy objects, including `String`. The issue involves modifying how arguments are handled in `Basic` subclasses.",
+            "diversity_value": "Core class definition from the main SymPy module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic.func"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Basic",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic.func",
+            "entity_type": "property",
+            "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+            "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+          }
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic.args",
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py:Token",
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 5,
+          "initial_entity": "Basic",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic.args",
+            "entity_type": "property",
+            "relevance_reason": "The `args` property is used to store and retrieve the arguments of a `Basic` object, which is crucial for implementing the required invariance.",
+            "diversity_value": "Property of the core class, ensuring detailed handling of argument attributes"
+          }
+        },
+        {
+          "chain": [
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Basic",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement and is where the specific invariance issue needs to be addressed.",
+            "diversity_value": "Class from a different file, specifically related to the issue"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-05T22:38:05.768366",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic.func",
+            "sympy/core/basic.py:Basic",
+            "sympy/codegen/ast.py:CodegenAST",
+            "sympy/codegen/ast.py:Token",
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 5,
+          "initial_entity": "func",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic.func",
+            "entity_type": "function",
+            "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+            "diversity_value": "Core functionality from a fundamental class"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+            "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+            "sympy/parsing/mathematica.py:MathematicaParser.parse",
+            "sympy/parsing/mathematica.py:MathematicaParser._apply_rules"
+          ],
+          "chain_length": 4,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+            "entity_type": "function",
+            "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+            "diversity_value": "Parsing functionality from parsing module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8845863342285156,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/core/evalf.py:evalf"
+          ],
+          "chain_length": 1,
+          "initial_entity": "String",
+          "start_entity": {
+            "entity_id": "sympy/core/evalf.py:evalf",
+            "entity_type": "function",
+            "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+            "diversity_value": "Function from a different evaluation module"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.8899304866790771,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/core/function.py:Application.func"
+          ],
+          "chain_length": 1,
+          "initial_entity": "func",
+          "start_entity": {
+            "entity_id": "sympy/core/function.py:Application.func",
+            "entity_type": "function",
+            "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+            "diversity_value": "Different file, related to function application"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8991813063621521,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 1,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+            "diversity_value": "Target class from codegen module"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.9032764434814453,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/core/basic.py:Basic.func"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Basic",
+          "start_entity": {
+            "entity_id": "sympy/core/basic.py:Basic.func",
+            "entity_type": "property",
+            "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+            "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.907653272151947,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-05T22:38:05.775027",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/basic.py:Basic.func",
+              "sympy/core/basic.py:Basic",
+              "sympy/codegen/ast.py:CodegenAST",
+              "sympy/codegen/ast.py:Token",
+              "sympy/codegen/ast.py:String"
+            ],
+            "chain_length": 5,
+            "initial_entity": "func",
+            "start_entity": {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "function",
+              "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+              "diversity_value": "Core functionality from a fundamental class"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "type": "function",
+              "code": "```\n694 | def func(self):\n695 |         \"\"\"\n696 |         The top-level function in an expression.\n697 | \n698 |         The following should hold for all objects::\n699 | \n700 |             >> x == x.func(*x.args)\n701 | \n702 |         Examples\n703 |         ========\n704 | \n705 |         >>> from sympy.abc import x\n706 |         >>> a = 2*x\n707 |         >>> a.func\n708 |         <class 'sympy.core.mul.Mul'>\n709 |         >>> a.args\n710 |         (2, x)\n711 |         >>> a.func(*a.args)\n712 |         2*x\n713 |         >>> a == a.func(*a.args)\n714 |         True\n715 | \n716 |         \"\"\"\n717 |         return self.__class__\n```",
+              "start_line": 694,
+              "end_line": 717,
+              "code_omitted": false,
+              "original_code_length": 629
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "type": "class",
+              "code": "# Code too long (74389 chars) - omitted for brevity",
+              "start_line": 34,
+              "end_line": 1896,
+              "code_omitted": true,
+              "original_code_length": 74389
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:CodegenAST",
+              "type": "class",
+              "code": "```\n163 | class CodegenAST(Basic):\n164 |     pass\n```",
+              "start_line": 163,
+              "end_line": 164,
+              "code_omitted": false,
+              "original_code_length": 53
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:Token",
+              "type": "class",
+              "code": "```\n167 | class Token(CodegenAST):\n168 |     \"\"\" Base class for the AST types.\n169 | \n170 |     Explanation\n171 |     ===========\n172 | \n173 |     Defining fields are set in ``__slots__``. Attributes (defined in __slots__)\n174 |     are only allowed to contain instances of Basic (unless atomic, see\n175 |     ``String``). The arguments to ``__new__()`` correspond to the attributes in\n176 |     the order defined in ``__slots__`. The ``defaults`` class attribute is a\n177 |     dictionary mapping attribute names to their default values.\n178 | \n179 |     Subclasses should not need to override the ``__new__()`` method. They may\n180 |     define a class or static method named ``_construct_<attr>`` for each\n181 |     attribute to process the value passed to ``__new__()``. Attributes listed\n182 |     in the class attribute ``not_in_args`` are not passed to :class:`~.Basic`.\n183 |     \"\"\"\n184 | \n185 |     __slots__ = ()\n186 |     defaults = {}  # type: tDict[str, Any]\n187 |     not_in_args = []  # type: List[str]\n188 |     indented_args = ['body']\n189 | \n190 |     @property\n191 |     def is_Atom(self):\n192 |         return len(self.__slots__) == 0\n193 | \n194 |     @classmethod\n195 |     def _get_constructor(cls, attr):\n196 |         \"\"\" Get the constructor function for an attribute by name. \"\"\"\n197 |         return getattr(cls, '_construct_%s' % attr, lambda x: x)\n198 | \n199 |     @classmethod\n200 |     def _construct(cls, attr, arg):\n201 |         \"\"\" Construct an attribute value from argument passed to ``__new__()``. \"\"\"\n202 |         # arg may be ``NoneToken()``, so comparation is done using == instead of ``is`` operator\n203 |         if arg == None:\n204 |             return cls.defaults.get(attr, none)\n205 |         else:\n206 |             if isinstance(arg, Dummy):  # SymPy's replace uses Dummy instances\n207 |                 return arg\n208 |             else:\n209 |                 return cls._get_constructor(attr)(arg)\n210 | \n211 |     def __new__(cls, *args, **kwargs):\n212 |         # Pass through existing instances when given as sole argument\n213 |         if len(args) == 1 and not kwargs and isinstance(args[0], cls):\n214 |             return args[0]\n215 | \n216 |         if len(args) > len(cls.__slots__):\n217 |             raise ValueError(\"Too many arguments (%d), expected at most %d\" % (len(args), len(cls.__slots__)))\n218 | \n219 |         attrvals = []\n220 | \n221 |         # Process positional arguments\n222 |         for attrname, argval in zip(cls.__slots__, args):\n223 |             if attrname in kwargs:\n224 |                 raise TypeError('Got multiple values for attribute %r' % attrname)\n225 | \n226 |             attrvals.append(cls._construct(attrname, argval))\n227 | \n228 |         # Process keyword arguments\n229 |         for attrname in cls.__slots__[len(args):]:\n230 |             if attrname in kwargs:\n231 |                 argval = kwargs.pop(attrname)\n232 | \n233 |             elif attrname in cls.defaults:\n234 |                 argval = cls.defaults[attrname]\n235 | \n236 |             else:\n237 |                 raise TypeError('No value for %r given and attribute has no default' % attrname)\n238 | \n239 |             attrvals.append(cls._construct(attrname, argval))\n240 | \n241 |         if kwargs:\n242 |             raise ValueError(\"Unknown keyword arguments: %s\" % ' '.join(kwargs))\n243 | \n244 |         # Parent constructor\n245 |         basic_args = [\n246 |             val for attr, val in zip(cls.__slots__, attrvals)\n247 |             if attr not in cls.not_in_args\n248 |         ]\n249 |         obj = CodegenAST.__new__(cls, *basic_args)\n250 | \n251 |         # Set attributes\n252 |         for attr, arg in zip(cls.__slots__, attrvals):\n253 |             setattr(obj, attr, arg)\n254 | \n255 |         return obj\n256 | \n257 |     def __eq__(self, other):\n258 |         if not isinstance(other, self.__class__):\n259 |             return False\n260 |         for attr in self.__slots__:\n261 |             if getattr(self, attr) != getattr(other, attr):\n262 |                 return False\n263 |         return True\n264 | \n265 |     def _hashable_content(self):\n266 |         return tuple([getattr(self, attr) for attr in self.__slots__])\n267 | \n268 |     def __hash__(self):\n269 |         return super().__hash__()\n270 | \n271 |     def _joiner(self, k, indent_level):\n272 |         return (',\\n' + ' '*indent_level) if k in self.indented_args else ', '\n273 | \n274 |     def _indented(self, printer, k, v, *args, **kwargs):\n275 |         il = printer._context['indent_level']\n276 |         def _print(arg):\n277 |             if isinstance(arg, Token):\n278 |                 return printer._print(arg, *args, joiner=self._joiner(k, il), **kwargs)\n279 |             else:\n280 |                 return printer._print(arg, *args, **kwargs)\n281 | \n282 |         if isinstance(v, Tuple):\n283 |             joined = self._joiner(k, il).join([_print(arg) for arg in v.args])\n284 |             if k in self.indented_args:\n285 |                 return '(\\n' + ' '*il + joined + ',\\n' + ' '*(il - 4) + ')'\n286 |             else:\n287 |                 return ('({0},)' if len(v.args) == 1 else '({0})').format(joined)\n288 |         else:\n289 |             return _print(v)\n290 | \n291 |     def _sympyrepr(self, printer, *args, joiner=', ', **kwargs):\n292 |         from sympy.printing.printer import printer_context\n293 |         exclude = kwargs.get('exclude', ())\n294 |         values = [getattr(self, k) for k in self.__slots__]\n295 |         indent_level = printer._context.get('indent_level', 0)\n296 | \n297 |         arg_reprs = []\n298 | \n299 |         for i, (attr, value) in enumerate(zip(self.__slots__, values)):\n300 |             if attr in exclude:\n301 |                 continue\n302 | \n303 |             # Skip attributes which have the default value\n304 |             if attr in self.defaults and value == self.defaults[attr]:\n305 |                 continue\n306 | \n307 |             ilvl = indent_level + 4 if attr in self.indented_args else 0\n308 |             with printer_context(printer, indent_level=ilvl):\n309 |                 indented = self._indented(printer, attr, value, *args, **kwargs)\n310 |             arg_reprs.append(('{1}' if i == 0 else '{0}={1}').format(attr, indented.lstrip()))\n311 | \n312 |         return \"{}({})\".format(self.__class__.__name__, joiner.join(arg_reprs))\n313 | \n314 |     _sympystr = _sympyrepr\n315 | \n316 |     def __repr__(self):  # sympy.core.Basic.__repr__ uses sstr\n317 |         from sympy.printing import srepr\n318 |         return srepr(self)\n319 | \n320 |     def kwargs(self, exclude=(), apply=None):\n321 |         \"\"\" Get instance's attributes as dict of keyword arguments.\n322 | \n323 |         Parameters\n324 |         ==========\n325 | \n326 |         exclude : collection of str\n327 |             Collection of keywords to exclude.\n328 | \n329 |         apply : callable, optional\n330 |             Function to apply to all values.\n331 |         \"\"\"\n332 |         kwargs = {k: getattr(self, k) for k in self.__slots__ if k not in exclude}\n333 |         if apply is not None:\n334 |             return {k: apply(v) for k, v in kwargs.items()}\n335 |         else:\n336 |             return kwargs\n```",
+              "start_line": 167,
+              "end_line": 336,
+              "code_omitted": false,
+              "original_code_length": 7215
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "type": "class",
+              "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+              "start_line": 872,
+              "end_line": 908,
+              "code_omitted": false,
+              "original_code_length": 956
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+              "sympy/parsing/mathematica.py:MathematicaParser.parse",
+              "sympy/parsing/mathematica.py:MathematicaParser._apply_rules"
+            ],
+            "chain_length": 4,
+            "initial_entity": "args",
+            "start_entity": {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "entity_type": "function",
+              "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+              "diversity_value": "Parsing functionality from parsing module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8845863342285156,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "type": "function",
+              "code": "```\n353 | def _get_args(cls, m):\n354 |         '''Get arguments of a Mathematica function'''\n355 | \n356 |         s = m.string                # whole string\n357 |         anc = m.end() + 1           # pointing the first letter of arguments\n358 |         square, curly = [], []      # stack for brakets\n359 |         args = []\n360 | \n361 |         # current cursor\n362 |         cur = anc\n363 |         for i, c in enumerate(s[anc:], anc):\n364 |             # extract one argument\n365 |             if c == ',' and (not square) and (not curly):\n366 |                 args.append(s[cur:i])       # add an argument\n367 |                 cur = i + 1                 # move cursor\n368 | \n369 |             # handle list or matrix (for future usage)\n370 |             if c == '{':\n371 |                 curly.append(c)\n372 |             elif c == '}':\n373 |                 curly.pop()\n374 | \n375 |             # seek corresponding ']' with skipping irrevant ones\n376 |             if c == '[':\n377 |                 square.append(c)\n378 |             elif c == ']':\n379 |                 if square:\n380 |                     square.pop()\n381 |                 else:   # empty stack\n382 |                     args.append(s[cur:i])\n383 |                     break\n384 | \n385 |         # the next position to ']' bracket (the function end)\n386 |         func_end = i + 1\n387 | \n388 |         return args, func_end\n```",
+              "start_line": 353,
+              "end_line": 388,
+              "code_omitted": false,
+              "original_code_length": 1409
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+              "type": "function",
+              "code": "```\n247 | def _convert_function(self, s):\n248 |         '''Parse Mathematica function to SymPy one'''\n249 | \n250 |         # compiled regex object\n251 |         pat = self.FM_PATTERN\n252 | \n253 |         scanned = ''                # converted string\n254 |         cur = 0                     # position cursor\n255 |         while True:\n256 |             m = pat.search(s)\n257 | \n258 |             if m is None:\n259 |                 # append the rest of string\n260 |                 scanned += s\n261 |                 break\n262 | \n263 |             # get Mathematica function name\n264 |             fm = m.group()\n265 | \n266 |             # get arguments, and the end position of fm function\n267 |             args, end = self._get_args(m)\n268 | \n269 |             # the start position of fm function\n270 |             bgn = m.start()\n271 | \n272 |             # convert Mathematica function to SymPy one\n273 |             s = self._convert_one_function(s, fm, args, bgn, end)\n274 | \n275 |             # update cursor\n276 |             cur = bgn\n277 | \n278 |             # append converted part\n279 |             scanned += s[:cur]\n280 | \n281 |             # shrink s\n282 |             s = s[cur:]\n283 | \n284 |         return scanned\n```",
+              "start_line": 247,
+              "end_line": 284,
+              "code_omitted": false,
+              "original_code_length": 1237
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser.parse",
+              "type": "function",
+              "code": "```\n412 | def parse(self, s):\n413 |         # input check\n414 |         self._check_input(s)\n415 | \n416 |         # uncover '*' hiding behind a whitespace\n417 |         s = self._apply_rules(s, 'whitespace')\n418 | \n419 |         # remove whitespace(s)\n420 |         s = self._replace(s, ' ')\n421 | \n422 |         # add omitted '*' character\n423 |         s = self._apply_rules(s, 'add*_1')\n424 |         s = self._apply_rules(s, 'add*_2')\n425 | \n426 |         # translate function\n427 |         s = self._convert_function(s)\n428 | \n429 |         # '^' to '**'\n430 |         s = self._replace(s, '^')\n431 | \n432 |         # 'Pi' to 'pi'\n433 |         s = self._apply_rules(s, 'Pi')\n434 | \n435 |         # '{', '}' to '[', ']', respectively\n436 | #        s = cls._replace(s, '{')   # currently list is not taken into account\n437 | #        s = cls._replace(s, '}')\n438 | \n439 |         return s\n```",
+              "start_line": 412,
+              "end_line": 439,
+              "code_omitted": false,
+              "original_code_length": 897
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._apply_rules",
+              "type": "function",
+              "code": "```\n397 | def _apply_rules(cls, s, bef):\n398 |         pat, aft = cls.RULES[bef]\n399 |         return pat.sub(aft, s)\n```",
+              "start_line": 397,
+              "end_line": 399,
+              "code_omitted": false,
+              "original_code_length": 121
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/evalf.py:evalf"
+            ],
+            "chain_length": 1,
+            "initial_entity": "String",
+            "start_entity": {
+              "entity_id": "sympy/core/evalf.py:evalf",
+              "entity_type": "function",
+              "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+              "diversity_value": "Function from a different evaluation module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8899304866790771,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/evalf.py:evalf",
+              "type": "function",
+              "code": "```\n1458 | def evalf(x: 'Expr', prec: int, options: OPT_DICT) -> TMP_RES:\n1459 |     \"\"\"\n1460 |     Evaluate the ``Expr`` instance, ``x``\n1461 |     to a binary precision of ``prec``. This\n1462 |     function is supposed to be used internally.\n1463 | \n1464 |     Parameters\n1465 |     ==========\n1466 | \n1467 |     x : Expr\n1468 |         The formula to evaluate to a float.\n1469 |     prec : int\n1470 |         The binary precision that the output should have.\n1471 |     options : dict\n1472 |         A dictionary with the same entries as\n1473 |         ``EvalfMixin.evalf`` and in addition,\n1474 |         ``maxprec`` which is the maximum working precision.\n1475 | \n1476 |     Returns\n1477 |     =======\n1478 | \n1479 |     An optional tuple, ``(re, im, re_acc, im_acc)``\n1480 |     which are the real, imaginary, real accuracy\n1481 |     and imaginary accuracy respectively. ``re`` is\n1482 |     an mpf value tuple and so is ``im``. ``re_acc``\n1483 |     and ``im_acc`` are ints.\n1484 | \n1485 |     NB: all these return values can be ``None``.\n1486 |     If all values are ``None``, then that represents 0.\n1487 |     Note that 0 is also represented as ``fzero = (0, 0, 0, 0)``.\n1488 |     \"\"\"\n1489 |     from sympy.functions.elementary.complexes import re as re_, im as im_\n1490 |     try:\n1491 |         rf = evalf_table[x.func]\n1492 |         r = rf(x, prec, options)\n1493 |     except KeyError:\n1494 |         # Fall back to ordinary evalf if possible\n1495 |         if 'subs' in options:\n1496 |             x = x.subs(evalf_subs(prec, options['subs']))\n1497 |         xe = x._eval_evalf(prec)\n1498 |         if xe is None:\n1499 |             raise NotImplementedError\n1500 |         as_real_imag = getattr(xe, \"as_real_imag\", None)\n1501 |         if as_real_imag is None:\n1502 |             raise NotImplementedError # e.g. FiniteSet(-1.0, 1.0).evalf()\n1503 |         re, im = as_real_imag()\n1504 |         if re.has(re_) or im.has(im_):\n1505 |             raise NotImplementedError\n1506 |         if re == 0:\n1507 |             re = None\n1508 |             reprec = None\n1509 |         elif re.is_number:\n1510 |             re = re._to_mpmath(prec, allow_ints=False)._mpf_\n1511 |             reprec = prec\n1512 |         else:\n1513 |             raise NotImplementedError\n1514 |         if im == 0:\n1515 |             im = None\n1516 |             imprec = None\n1517 |         elif im.is_number:\n1518 |             im = im._to_mpmath(prec, allow_ints=False)._mpf_\n1519 |             imprec = prec\n1520 |         else:\n1521 |             raise NotImplementedError\n1522 |         r = re, im, reprec, imprec\n1523 | \n1524 |     if options.get(\"verbose\"):\n1525 |         print(\"### input\", x)\n1526 |         print(\"### output\", to_str(r[0] or fzero, 50) if isinstance(r, tuple) else r)\n1527 |         print(\"### raw\", r) # r[0], r[2]\n1528 |         print()\n1529 |     chop = options.get('chop', False)\n1530 |     if chop:\n1531 |         if chop is True:\n1532 |             chop_prec = prec\n1533 |         else:\n1534 |             # convert (approximately) from given tolerance;\n1535 |             # the formula here will will make 1e-i rounds to 0 for\n1536 |             # i in the range +/-27 while 2e-i will not be chopped\n1537 |             chop_prec = int(round(-3.321*math.log10(chop) + 2.5))\n1538 |             if chop_prec == 3:\n1539 |                 chop_prec -= 1\n1540 |         r = chop_parts(r, chop_prec)\n1541 |     if options.get(\"strict\"):\n1542 |         check_target(x, r, prec)\n1543 |     return r\n```",
+              "start_line": 1458,
+              "end_line": 1543,
+              "code_omitted": false,
+              "original_code_length": 3521
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/function.py:Application.func"
+            ],
+            "chain_length": 1,
+            "initial_entity": "func",
+            "start_entity": {
+              "entity_id": "sympy/core/function.py:Application.func",
+              "entity_type": "function",
+              "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+              "diversity_value": "Different file, related to function application"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8991813063621521,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/function.py:Application.func",
+              "type": "function",
+              "code": "```\n351 | def func(self):\n352 |         return self.__class__\n```",
+              "start_line": 351,
+              "end_line": 352,
+              "code_omitted": false,
+              "original_code_length": 65
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "sympy/codegen/ast.py:String"
+            ],
+            "chain_length": 1,
+            "initial_entity": "args",
+            "start_entity": {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+              "diversity_value": "Target class from codegen module"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9032764434814453,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "type": "class",
+              "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+              "start_line": 872,
+              "end_line": 908,
+              "code_omitted": false,
+              "original_code_length": 956
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/basic.py:Basic.func"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Basic",
+            "start_entity": {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "property",
+              "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+              "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.907653272151947,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "type": "function",
+              "code": "```\n694 | def func(self):\n695 |         \"\"\"\n696 |         The top-level function in an expression.\n697 | \n698 |         The following should hold for all objects::\n699 | \n700 |             >> x == x.func(*x.args)\n701 | \n702 |         Examples\n703 |         ========\n704 | \n705 |         >>> from sympy.abc import x\n706 |         >>> a = 2*x\n707 |         >>> a.func\n708 |         <class 'sympy.core.mul.Mul'>\n709 |         >>> a.args\n710 |         (2, x)\n711 |         >>> a.func(*a.args)\n712 |         2*x\n713 |         >>> a == a.func(*a.args)\n714 |         True\n715 | \n716 |         \"\"\"\n717 |         return self.__class__\n```",
+              "start_line": 694,
+              "end_line": 717,
+              "code_omitted": false,
+              "original_code_length": 629
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-05T22:40:59.544788",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_5",
+        "winning_chain": {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "sympy/codegen/ast.py:String"
+            ],
+            "chain_length": 1,
+            "initial_entity": "args",
+            "start_entity": {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+              "diversity_value": "Target class from codegen module"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9032764434814453,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "type": "class",
+              "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+              "start_line": 872,
+              "end_line": 908,
+              "code_omitted": false,
+              "original_code_length": 956
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        "winning_votes": 10,
+        "total_valid_votes": 10,
+        "average_confidence": 90.4,
+        "vote_distribution": {
+          "chain_5": 10
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`. This chain is the most likely location where the problematic behavior is defined, and modifying it would directly address the issue.",
+            "modification_strategy": "Modify the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This might involve changing how the `args` are handled in the `__new__` method or adding a custom `func` method to the `String` class.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is the base class for `String`. While it sets the expectation for argument invariance, the specific issue with `String` needs to be addressed in the `String` class itself.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy expressions. It does not directly relate to the argument invariance issue of the `String` class.",
+              "chain_3": "This chain contains the `evalf` function, which is used for numerical evaluation of expressions. It is not directly related to the argument invariance issue of the `String` class.",
+              "chain_4": "This chain defines the `func` method in the `Application` class, which is another subclass of `Basic`. It is not directly related to the `String` class and its argument invariance issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the issue is described. Modifying this class to support the correct argument invariance would directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. While it sets the expectation for argument invariance, the specific issue with `String` needs to be addressed in the `String` class itself."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the `String` class definition in `sympy/codegen/ast.py`, which is the specific class where the issue of argument invariance needs to be addressed. The current implementation of `String` does not support the invariance `expr.func(*expr.args) == expr`, and modifying this class to ensure it adheres to the expected behavior would directly resolve the issue.",
+            "modification_strategy": "Modify the `__new__` method in the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This involves ensuring that the `args` passed to the `Basic` constructor are correctly handled and that the `String` object can be reconstructed from its arguments.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is used to get the top-level function of an expression. While it is related to the issue, the problem lies in how `String` handles its arguments, not in the `func` method itself.",
+              "chain_2": "This chain is related to parsing Mathematica expressions into SymPy objects. It does not directly involve the `String` class or its argument handling, so it is less likely to be the root cause of the issue.",
+              "chain_3": "This chain is part of the evaluation process for SymPy expressions. It does not directly relate to the argument invariance issue in the `String` class.",
+              "chain_4": "This chain defines the `func` method in the `Application` class, which is similar to the `Basic` class. It is not specific to the `String` class and does not address the issue of argument invariance.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the issue of argument invariance needs to be fixed. Modifying this class will directly address the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. It is not the specific location where the issue needs to be resolved."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 92,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue described is specifically about the `String` class not supporting argument invariance like `expr.func(*expr.args) == expr`. This chain is the most direct location where the behavior of the `String` class can be modified to align with the expected invariance property. Modifying the `__new__` method or adding a custom `func` method in this class would directly address the problem.",
+            "modification_strategy": "Modify the `String` class to ensure that `expr.func(*expr.args) == expr` holds true by either overriding the `func` method or adjusting the `__new__` method to handle arguments correctly.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `Basic` class and its `func` method. While it sets the expectation for the invariance property, it does not contain the specific implementation for the `String` class. Modifying this chain would not directly solve the issue.",
+              "chain_2": "This chain deals with parsing Mathematica expressions into SymPy objects. It is not directly related to the invariance property of the `String` class and modifying it would not address the core issue.",
+              "chain_3": "This chain includes the `CodegenAST` class, which is a base class for `String`. While it provides some common behavior, the specific issue with `String` needs to be addressed in the `String` class itself.",
+              "chain_4": "This chain defines the `func` method in the `Application` class. It is similar to the `Basic` class in setting expectations but does not contain the specific implementation for `String`. Modifying this chain would not directly solve the issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the invariance property needs to be enforced. Modifying this class would directly address the issue.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `Basic` class and its `func` method. It is not the specific implementation for `String` and thus not the best target for modification."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 focuses specifically on the `String` class in `sympy/codegen/ast.py`, which is the primary area where the issue of argument invariance needs to be addressed. The current implementation of `String` does not support the invariance `expr.func(*expr.args) == expr`, and this chain provides a clear entry point for making the necessary modifications to ensure that `String` behaves consistently with other `Basic` subclasses.",
+            "modification_strategy": "Modify the `__new__` method of the `String` class to ensure that it correctly reconstructs the object using `*args` instead of `**kwargs`.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `func` method of the `Basic` class, which is important for understanding the expected behavior of `func`. However, the issue lies in the `String` class itself, not in the `Basic` class.",
+              "chain_2": "This chain deals with parsing Mathematica expressions and converting them to SymPy expressions. While it is related to the overall functionality of SymPy, it does not directly address the issue of argument invariance in the `String` class.",
+              "chain_3": "This chain introduces the `CodegenAST` class, which is a base class for `String`. While it provides context, the specific issue with `String` needs to be addressed in the `String` class itself.",
+              "chain_4": "This chain contains the `func` method of the `Application` class, which is another subclass of `Basic`. It is useful for understanding the expected behavior but does not directly relate to the `String` class.",
+              "chain_5": "This chain is the most relevant as it directly involves the `String` class where the issue of argument invariance needs to be fixed. Modifying this chain would have the most direct impact on resolving the problem.",
+              "chain_6": "This chain is identical to Chain 1 and contains the `func` method of the `Basic` class. While it provides context, the issue lies in the `String` class itself."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the `String` class definition within the `codegen.ast` module. The issue described is specifically about the `String` class not supporting argument invariance in the form `expr.func(*expr.args) == expr`. This chain is the most direct location where the behavior of the `String` class can be modified to ensure it adheres to the required invariance property.",
+            "modification_strategy": "Modify the `__new__` method of the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This involves ensuring that the `args` passed to the constructor are correctly handled and that the `func` method returns the correct class.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `Basic` class and its `func` method, which is foundational but does not directly address the specific issue with the `String` class. Changes here could have wide-ranging impacts and might not solve the specific problem.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy. While it interacts with SymPy objects, it does not directly control the invariance properties of the `String` class.",
+              "chain_3": "This chain defines the `CodegenAST` class, which is a base class for `String`. It provides some structure but does not directly handle the specific invariance issue.",
+              "chain_4": "This chain is similar to Chain 1 and defines the `func` method for the `Application` class. It is foundational but not specific to the `String` class.",
+              "chain_5": "This chain contains the `String` class definition and is the most direct location where the invariance issue can be addressed. Modifying the `__new__` method and ensuring the `func` method behaves correctly will directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method for the `Basic` class. While it is relevant, it is not the specific location where the `String` class behavior needs to be modified."
+            },
+            "agent_id": 5
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`. Modifying the `String` class to ensure it adheres to the invariance principle would directly address the problem. This chain is the most likely to contain the root cause of the issue.",
+            "modification_strategy": "Update the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This might involve adjusting how the `__new__` method processes arguments or ensuring that the `args` property correctly reflects the state of the `String` object.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is inherited by `String`. While it sets the expectation for invariance, the actual implementation for `String` is in `sympy/codegen/ast.py`.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy. It does not directly deal with the invariance issue of the `String` class.",
+              "chain_3": "This chain is part of the `evalf` function in `sympy/core/evalf.py`, which deals with numerical evaluation. It is not directly related to the invariance issue of the `String` class.",
+              "chain_4": "This chain is similar to Chain 1, defining the `func` method in the `Application` class. It sets expectations but does not directly implement the behavior for `String`.",
+              "chain_5": "This chain contains the `String` class definition and is the most likely place to implement the necessary changes to ensure argument invariance.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. It is important for setting expectations but not for the specific implementation of `String`."
+            },
+            "agent_id": 6
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 92,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`, which is the specific class mentioned in the issue description. The problem is that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`, but instead uses `expr.func(**expr.kwargs()) == expr`. Modifying the `String` class to support the correct invariance would directly resolve the issue.",
+            "modification_strategy": "Modify the `String` class to ensure that `expr.func(*expr.args) == expr` holds true by adjusting the `__new__` method or adding a custom `func` method if necessary.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `Basic` class and its `func` method, which is the base class for `String`. While it defines the expected behavior, the actual issue lies in the `String` class itself.",
+              "chain_2": "This chain deals with parsing Mathematica expressions and converting them to SymPy expressions. It is not directly related to the invariance issue of the `String` class.",
+              "chain_3": "This chain is part of the evaluation process for expressions, which is not directly related to the invariance issue of the `String` class.",
+              "chain_4": "This chain contains the `Application` class and its `func` method, which is another subclass of `Basic`. It is not directly related to the `String` class or its invariance issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the invariance issue needs to be addressed. Modifying this class will directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and contains the `Basic` class and its `func` method. While it defines the expected behavior, the actual issue lies in the `String` class itself."
+            },
+            "agent_id": 7
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the `String` class definition within `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance correctly, and this chain is the most direct place where the class is defined and where the necessary changes can be made to ensure `expr.func(*expr.args) == expr` holds true. Modifying the `String` class to handle its arguments correctly would directly address the problem.",
+            "modification_strategy": "Adjust the `__new__` method of the `String` class to ensure it supports argument invariance correctly. Specifically, ensure that the `String` class can reconstruct itself using `*args` and not `**kwargs`.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is a parent class of `String`. While it sets the expectation for argument invariance, the actual implementation for `String` is not found here. Modifying this chain would not directly solve the issue.",
+              "chain_2": "This chain deals with parsing Mathematica expressions and converting them to SymPy expressions. It is not directly related to the `String` class or its argument invariance issue.",
+              "chain_3": "This chain involves the `evalf` function, which is used for numerical evaluation. It is not directly related to the argument invariance issue of the `String` class.",
+              "chain_4": "This chain defines the `func` method in the `Application` class, which is another subclass of `Basic`. It is not directly related to the `String` class or its argument invariance issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the root cause of the issue. Modifying this chain to support argument invariance correctly would directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. It is not the place where the `String` class's specific behavior needs to be fixed."
+            },
+            "agent_id": 8
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`, but instead uses `expr.func(**expr.kwargs()) == expr`. Modifying the `String` class to ensure it supports the correct invariance would directly address the problem. The `String` class is a subclass of `Token`, which is a subclass of `Basic`, and the invariance issue is specific to this class.",
+            "modification_strategy": "Update the `__new__` method or the `func` method in the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This might involve ensuring that the `args` are correctly handled and that the `func` method returns the appropriate class instance.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `Basic` class and its `func` method, which is a parent class of `String`. While it sets the expectation for the invariance property, the specific issue is with the `String` class, so modifications here would not directly resolve the problem.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy expressions. It does not directly involve the `String` class or its invariance properties, so it is unlikely to be the root cause of the issue.",
+              "chain_3": "This chain involves the evaluation of expressions, which is not directly related to the invariance property of the `String` class. Modifying this chain would not address the specific issue described.",
+              "chain_4": "This chain contains the `Application` class and its `func` method, which is another subclass of `Basic`. It is not directly related to the `String` class and its invariance properties, so it is not the best target for modification.",
+              "chain_5": "This chain contains the `String` class definition and is the most likely place where the invariance issue manifests. Modifying this class to support the correct invariance would directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and contains the `Basic` class and its `func` method. As with Chain 1, it sets the expectation for the invariance property but does not directly address the issue with the `String` class."
+            },
+            "agent_id": 9
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue described is specifically about the `String` class not supporting argument invariance like `expr.func(*expr.args) == expr`. This chain is the most direct location where the problem can be addressed by ensuring that the `String` class correctly handles its arguments.",
+            "modification_strategy": "Modify the `__new__` method in the `String` class to ensure it supports the required argument invariance. Specifically, the `__new__` method should be adjusted to handle the `*args` form and ensure that the `String` object can be reconstructed correctly from its arguments.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is the base class for `String`. While it sets the expectation for argument invariance, the actual implementation for `String` needs to be fixed in its own class definition.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy. It does not directly involve the `String` class or its argument handling, so it is less relevant to the issue.",
+              "chain_3": "This chain is part of the parsing and conversion logic, similar to Chain 2. It does not directly relate to the `String` class or its argument invariance issue.",
+              "chain_4": "This chain is another definition of the `func` method, this time in the `Application` class. It is not directly related to the `String` class and its argument handling.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the issue needs to be addressed. Modifying this class to support the required argument invariance will directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. While it sets the expectation for argument invariance, the actual implementation for `String` needs to be fixed in its own class definition."
+            },
+            "agent_id": 10
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`. This chain is the most likely location where the problematic behavior is defined, and modifying it would directly address the issue.",
+            "modification_strategy": "Modify the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This might involve changing how the `args` are handled in the `__new__` method or adding a custom `func` method to the `String` class.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is the base class for `String`. While it sets the expectation for argument invariance, the specific issue with `String` needs to be addressed in the `String` class itself.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy expressions. It does not directly relate to the argument invariance issue of the `String` class.",
+              "chain_3": "This chain contains the `evalf` function, which is used for numerical evaluation of expressions. It is not directly related to the argument invariance issue of the `String` class.",
+              "chain_4": "This chain defines the `func` method in the `Application` class, which is another subclass of `Basic`. It is not directly related to the `String` class and its argument invariance issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the issue is described. Modifying this class to support the correct argument invariance would directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. While it sets the expectation for argument invariance, the specific issue with `String` needs to be addressed in the `String` class itself."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the `String` class definition in `sympy/codegen/ast.py`, which is the specific class where the issue of argument invariance needs to be addressed. The current implementation of `String` does not support the invariance `expr.func(*expr.args) == expr`, and modifying this class to ensure it adheres to the expected behavior would directly resolve the issue.",
+            "modification_strategy": "Modify the `__new__` method in the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This involves ensuring that the `args` passed to the `Basic` constructor are correctly handled and that the `String` object can be reconstructed from its arguments.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is used to get the top-level function of an expression. While it is related to the issue, the problem lies in how `String` handles its arguments, not in the `func` method itself.",
+              "chain_2": "This chain is related to parsing Mathematica expressions into SymPy objects. It does not directly involve the `String` class or its argument handling, so it is less likely to be the root cause of the issue.",
+              "chain_3": "This chain is part of the evaluation process for SymPy expressions. It does not directly relate to the argument invariance issue in the `String` class.",
+              "chain_4": "This chain defines the `func` method in the `Application` class, which is similar to the `Basic` class. It is not specific to the `String` class and does not address the issue of argument invariance.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the issue of argument invariance needs to be fixed. Modifying this class will directly address the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. It is not the specific location where the issue needs to be resolved."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 92,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue described is specifically about the `String` class not supporting argument invariance like `expr.func(*expr.args) == expr`. This chain is the most direct location where the behavior of the `String` class can be modified to align with the expected invariance property. Modifying the `__new__` method or adding a custom `func` method in this class would directly address the problem.",
+            "modification_strategy": "Modify the `String` class to ensure that `expr.func(*expr.args) == expr` holds true by either overriding the `func` method or adjusting the `__new__` method to handle arguments correctly.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `Basic` class and its `func` method. While it sets the expectation for the invariance property, it does not contain the specific implementation for the `String` class. Modifying this chain would not directly solve the issue.",
+              "chain_2": "This chain deals with parsing Mathematica expressions into SymPy objects. It is not directly related to the invariance property of the `String` class and modifying it would not address the core issue.",
+              "chain_3": "This chain includes the `CodegenAST` class, which is a base class for `String`. While it provides some common behavior, the specific issue with `String` needs to be addressed in the `String` class itself.",
+              "chain_4": "This chain defines the `func` method in the `Application` class. It is similar to the `Basic` class in setting expectations but does not contain the specific implementation for `String`. Modifying this chain would not directly solve the issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the invariance property needs to be enforced. Modifying this class would directly address the issue.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `Basic` class and its `func` method. It is not the specific implementation for `String` and thus not the best target for modification."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 focuses specifically on the `String` class in `sympy/codegen/ast.py`, which is the primary area where the issue of argument invariance needs to be addressed. The current implementation of `String` does not support the invariance `expr.func(*expr.args) == expr`, and this chain provides a clear entry point for making the necessary modifications to ensure that `String` behaves consistently with other `Basic` subclasses.",
+            "modification_strategy": "Modify the `__new__` method of the `String` class to ensure that it correctly reconstructs the object using `*args` instead of `**kwargs`.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `func` method of the `Basic` class, which is important for understanding the expected behavior of `func`. However, the issue lies in the `String` class itself, not in the `Basic` class.",
+              "chain_2": "This chain deals with parsing Mathematica expressions and converting them to SymPy expressions. While it is related to the overall functionality of SymPy, it does not directly address the issue of argument invariance in the `String` class.",
+              "chain_3": "This chain introduces the `CodegenAST` class, which is a base class for `String`. While it provides context, the specific issue with `String` needs to be addressed in the `String` class itself.",
+              "chain_4": "This chain contains the `func` method of the `Application` class, which is another subclass of `Basic`. It is useful for understanding the expected behavior but does not directly relate to the `String` class.",
+              "chain_5": "This chain is the most relevant as it directly involves the `String` class where the issue of argument invariance needs to be fixed. Modifying this chain would have the most direct impact on resolving the problem.",
+              "chain_6": "This chain is identical to Chain 1 and contains the `func` method of the `Basic` class. While it provides context, the issue lies in the `String` class itself."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the `String` class definition within the `codegen.ast` module. The issue described is specifically about the `String` class not supporting argument invariance in the form `expr.func(*expr.args) == expr`. This chain is the most direct location where the behavior of the `String` class can be modified to ensure it adheres to the required invariance property.",
+            "modification_strategy": "Modify the `__new__` method of the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This involves ensuring that the `args` passed to the constructor are correctly handled and that the `func` method returns the correct class.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `Basic` class and its `func` method, which is foundational but does not directly address the specific issue with the `String` class. Changes here could have wide-ranging impacts and might not solve the specific problem.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy. While it interacts with SymPy objects, it does not directly control the invariance properties of the `String` class.",
+              "chain_3": "This chain defines the `CodegenAST` class, which is a base class for `String`. It provides some structure but does not directly handle the specific invariance issue.",
+              "chain_4": "This chain is similar to Chain 1 and defines the `func` method for the `Application` class. It is foundational but not specific to the `String` class.",
+              "chain_5": "This chain contains the `String` class definition and is the most direct location where the invariance issue can be addressed. Modifying the `__new__` method and ensuring the `func` method behaves correctly will directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method for the `Basic` class. While it is relevant, it is not the specific location where the `String` class behavior needs to be modified."
+            },
+            "agent_id": 5
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`. Modifying the `String` class to ensure it adheres to the invariance principle would directly address the problem. This chain is the most likely to contain the root cause of the issue.",
+            "modification_strategy": "Update the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This might involve adjusting how the `__new__` method processes arguments or ensuring that the `args` property correctly reflects the state of the `String` object.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is inherited by `String`. While it sets the expectation for invariance, the actual implementation for `String` is in `sympy/codegen/ast.py`.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy. It does not directly deal with the invariance issue of the `String` class.",
+              "chain_3": "This chain is part of the `evalf` function in `sympy/core/evalf.py`, which deals with numerical evaluation. It is not directly related to the invariance issue of the `String` class.",
+              "chain_4": "This chain is similar to Chain 1, defining the `func` method in the `Application` class. It sets expectations but does not directly implement the behavior for `String`.",
+              "chain_5": "This chain contains the `String` class definition and is the most likely place to implement the necessary changes to ensure argument invariance.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. It is important for setting expectations but not for the specific implementation of `String`."
+            },
+            "agent_id": 6
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 92,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`, which is the specific class mentioned in the issue description. The problem is that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`, but instead uses `expr.func(**expr.kwargs()) == expr`. Modifying the `String` class to support the correct invariance would directly resolve the issue.",
+            "modification_strategy": "Modify the `String` class to ensure that `expr.func(*expr.args) == expr` holds true by adjusting the `__new__` method or adding a custom `func` method if necessary.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `Basic` class and its `func` method, which is the base class for `String`. While it defines the expected behavior, the actual issue lies in the `String` class itself.",
+              "chain_2": "This chain deals with parsing Mathematica expressions and converting them to SymPy expressions. It is not directly related to the invariance issue of the `String` class.",
+              "chain_3": "This chain is part of the evaluation process for expressions, which is not directly related to the invariance issue of the `String` class.",
+              "chain_4": "This chain contains the `Application` class and its `func` method, which is another subclass of `Basic`. It is not directly related to the `String` class or its invariance issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the invariance issue needs to be addressed. Modifying this class will directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and contains the `Basic` class and its `func` method. While it defines the expected behavior, the actual issue lies in the `String` class itself."
+            },
+            "agent_id": 7
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the `String` class definition within `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance correctly, and this chain is the most direct place where the class is defined and where the necessary changes can be made to ensure `expr.func(*expr.args) == expr` holds true. Modifying the `String` class to handle its arguments correctly would directly address the problem.",
+            "modification_strategy": "Adjust the `__new__` method of the `String` class to ensure it supports argument invariance correctly. Specifically, ensure that the `String` class can reconstruct itself using `*args` and not `**kwargs`.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is a parent class of `String`. While it sets the expectation for argument invariance, the actual implementation for `String` is not found here. Modifying this chain would not directly solve the issue.",
+              "chain_2": "This chain deals with parsing Mathematica expressions and converting them to SymPy expressions. It is not directly related to the `String` class or its argument invariance issue.",
+              "chain_3": "This chain involves the `evalf` function, which is used for numerical evaluation. It is not directly related to the argument invariance issue of the `String` class.",
+              "chain_4": "This chain defines the `func` method in the `Application` class, which is another subclass of `Basic`. It is not directly related to the `String` class or its argument invariance issue.",
+              "chain_5": "This chain contains the `String` class definition, which is the root cause of the issue. Modifying this chain to support argument invariance correctly would directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. It is not the place where the `String` class's specific behavior needs to be fixed."
+            },
+            "agent_id": 8
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue specifically mentions that the `String` class does not support argument invariance like `expr.func(*expr.args) == expr`, but instead uses `expr.func(**expr.kwargs()) == expr`. Modifying the `String` class to ensure it supports the correct invariance would directly address the problem. The `String` class is a subclass of `Token`, which is a subclass of `Basic`, and the invariance issue is specific to this class.",
+            "modification_strategy": "Update the `__new__` method or the `func` method in the `String` class to ensure that `expr.func(*expr.args) == expr` holds true. This might involve ensuring that the `args` are correctly handled and that the `func` method returns the appropriate class instance.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `Basic` class and its `func` method, which is a parent class of `String`. While it sets the expectation for the invariance property, the specific issue is with the `String` class, so modifications here would not directly resolve the problem.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy expressions. It does not directly involve the `String` class or its invariance properties, so it is unlikely to be the root cause of the issue.",
+              "chain_3": "This chain involves the evaluation of expressions, which is not directly related to the invariance property of the `String` class. Modifying this chain would not address the specific issue described.",
+              "chain_4": "This chain contains the `Application` class and its `func` method, which is another subclass of `Basic`. It is not directly related to the `String` class and its invariance properties, so it is not the best target for modification.",
+              "chain_5": "This chain contains the `String` class definition and is the most likely place where the invariance issue manifests. Modifying this class to support the correct invariance would directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and contains the `Basic` class and its `func` method. As with Chain 1, it sets the expectation for the invariance property but does not directly address the issue with the `String` class."
+            },
+            "agent_id": 9
+          },
+          {
+            "voted_chain_id": "chain_5",
+            "confidence": 90,
+            "reasoning": "Chain 5 contains the definition of the `String` class in `sympy/codegen/ast.py`. The issue described is specifically about the `String` class not supporting argument invariance like `expr.func(*expr.args) == expr`. This chain is the most direct location where the problem can be addressed by ensuring that the `String` class correctly handles its arguments.",
+            "modification_strategy": "Modify the `__new__` method in the `String` class to ensure it supports the required argument invariance. Specifically, the `__new__` method should be adjusted to handle the `*args` form and ensure that the `String` object can be reconstructed correctly from its arguments.",
+            "chain_analysis": {
+              "chain_1": "This chain defines the `func` method in the `Basic` class, which is the base class for `String`. While it sets the expectation for argument invariance, the actual implementation for `String` needs to be fixed in its own class definition.",
+              "chain_2": "This chain is related to parsing Mathematica expressions and converting them to SymPy. It does not directly involve the `String` class or its argument handling, so it is less relevant to the issue.",
+              "chain_3": "This chain is part of the parsing and conversion logic, similar to Chain 2. It does not directly relate to the `String` class or its argument invariance issue.",
+              "chain_4": "This chain is another definition of the `func` method, this time in the `Application` class. It is not directly related to the `String` class and its argument handling.",
+              "chain_5": "This chain contains the `String` class definition, which is the exact location where the issue needs to be addressed. Modifying this class to support the required argument invariance will directly resolve the problem.",
+              "chain_6": "This chain is identical to Chain 1 and defines the `func` method in the `Basic` class. While it sets the expectation for argument invariance, the actual implementation for `String` needs to be fixed in its own class definition."
+            },
+            "agent_id": 10
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/basic.py:Basic.func",
+              "sympy/core/basic.py:Basic",
+              "sympy/codegen/ast.py:CodegenAST",
+              "sympy/codegen/ast.py:Token",
+              "sympy/codegen/ast.py:String"
+            ],
+            "chain_length": 5,
+            "initial_entity": "func",
+            "start_entity": {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "function",
+              "relevance_reason": "The `func` method is part of the `Basic` class, which is the superclass of `String`. This method is crucial for understanding how argument invariance is handled.",
+              "diversity_value": "Core functionality from a fundamental class"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "type": "function",
+              "code": "```\n694 | def func(self):\n695 |         \"\"\"\n696 |         The top-level function in an expression.\n697 | \n698 |         The following should hold for all objects::\n699 | \n700 |             >> x == x.func(*x.args)\n701 | \n702 |         Examples\n703 |         ========\n704 | \n705 |         >>> from sympy.abc import x\n706 |         >>> a = 2*x\n707 |         >>> a.func\n708 |         <class 'sympy.core.mul.Mul'>\n709 |         >>> a.args\n710 |         (2, x)\n711 |         >>> a.func(*a.args)\n712 |         2*x\n713 |         >>> a == a.func(*a.args)\n714 |         True\n715 | \n716 |         \"\"\"\n717 |         return self.__class__\n```",
+              "start_line": 694,
+              "end_line": 717,
+              "code_omitted": false,
+              "original_code_length": 629
+            },
+            {
+              "entity_id": "sympy/core/basic.py:Basic",
+              "type": "class",
+              "code": "# Code too long (74389 chars) - omitted for brevity",
+              "start_line": 34,
+              "end_line": 1896,
+              "code_omitted": true,
+              "original_code_length": 74389
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:CodegenAST",
+              "type": "class",
+              "code": "```\n163 | class CodegenAST(Basic):\n164 |     pass\n```",
+              "start_line": 163,
+              "end_line": 164,
+              "code_omitted": false,
+              "original_code_length": 53
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:Token",
+              "type": "class",
+              "code": "```\n167 | class Token(CodegenAST):\n168 |     \"\"\" Base class for the AST types.\n169 | \n170 |     Explanation\n171 |     ===========\n172 | \n173 |     Defining fields are set in ``__slots__``. Attributes (defined in __slots__)\n174 |     are only allowed to contain instances of Basic (unless atomic, see\n175 |     ``String``). The arguments to ``__new__()`` correspond to the attributes in\n176 |     the order defined in ``__slots__`. The ``defaults`` class attribute is a\n177 |     dictionary mapping attribute names to their default values.\n178 | \n179 |     Subclasses should not need to override the ``__new__()`` method. They may\n180 |     define a class or static method named ``_construct_<attr>`` for each\n181 |     attribute to process the value passed to ``__new__()``. Attributes listed\n182 |     in the class attribute ``not_in_args`` are not passed to :class:`~.Basic`.\n183 |     \"\"\"\n184 | \n185 |     __slots__ = ()\n186 |     defaults = {}  # type: tDict[str, Any]\n187 |     not_in_args = []  # type: List[str]\n188 |     indented_args = ['body']\n189 | \n190 |     @property\n191 |     def is_Atom(self):\n192 |         return len(self.__slots__) == 0\n193 | \n194 |     @classmethod\n195 |     def _get_constructor(cls, attr):\n196 |         \"\"\" Get the constructor function for an attribute by name. \"\"\"\n197 |         return getattr(cls, '_construct_%s' % attr, lambda x: x)\n198 | \n199 |     @classmethod\n200 |     def _construct(cls, attr, arg):\n201 |         \"\"\" Construct an attribute value from argument passed to ``__new__()``. \"\"\"\n202 |         # arg may be ``NoneToken()``, so comparation is done using == instead of ``is`` operator\n203 |         if arg == None:\n204 |             return cls.defaults.get(attr, none)\n205 |         else:\n206 |             if isinstance(arg, Dummy):  # SymPy's replace uses Dummy instances\n207 |                 return arg\n208 |             else:\n209 |                 return cls._get_constructor(attr)(arg)\n210 | \n211 |     def __new__(cls, *args, **kwargs):\n212 |         # Pass through existing instances when given as sole argument\n213 |         if len(args) == 1 and not kwargs and isinstance(args[0], cls):\n214 |             return args[0]\n215 | \n216 |         if len(args) > len(cls.__slots__):\n217 |             raise ValueError(\"Too many arguments (%d), expected at most %d\" % (len(args), len(cls.__slots__)))\n218 | \n219 |         attrvals = []\n220 | \n221 |         # Process positional arguments\n222 |         for attrname, argval in zip(cls.__slots__, args):\n223 |             if attrname in kwargs:\n224 |                 raise TypeError('Got multiple values for attribute %r' % attrname)\n225 | \n226 |             attrvals.append(cls._construct(attrname, argval))\n227 | \n228 |         # Process keyword arguments\n229 |         for attrname in cls.__slots__[len(args):]:\n230 |             if attrname in kwargs:\n231 |                 argval = kwargs.pop(attrname)\n232 | \n233 |             elif attrname in cls.defaults:\n234 |                 argval = cls.defaults[attrname]\n235 | \n236 |             else:\n237 |                 raise TypeError('No value for %r given and attribute has no default' % attrname)\n238 | \n239 |             attrvals.append(cls._construct(attrname, argval))\n240 | \n241 |         if kwargs:\n242 |             raise ValueError(\"Unknown keyword arguments: %s\" % ' '.join(kwargs))\n243 | \n244 |         # Parent constructor\n245 |         basic_args = [\n246 |             val for attr, val in zip(cls.__slots__, attrvals)\n247 |             if attr not in cls.not_in_args\n248 |         ]\n249 |         obj = CodegenAST.__new__(cls, *basic_args)\n250 | \n251 |         # Set attributes\n252 |         for attr, arg in zip(cls.__slots__, attrvals):\n253 |             setattr(obj, attr, arg)\n254 | \n255 |         return obj\n256 | \n257 |     def __eq__(self, other):\n258 |         if not isinstance(other, self.__class__):\n259 |             return False\n260 |         for attr in self.__slots__:\n261 |             if getattr(self, attr) != getattr(other, attr):\n262 |                 return False\n263 |         return True\n264 | \n265 |     def _hashable_content(self):\n266 |         return tuple([getattr(self, attr) for attr in self.__slots__])\n267 | \n268 |     def __hash__(self):\n269 |         return super().__hash__()\n270 | \n271 |     def _joiner(self, k, indent_level):\n272 |         return (',\\n' + ' '*indent_level) if k in self.indented_args else ', '\n273 | \n274 |     def _indented(self, printer, k, v, *args, **kwargs):\n275 |         il = printer._context['indent_level']\n276 |         def _print(arg):\n277 |             if isinstance(arg, Token):\n278 |                 return printer._print(arg, *args, joiner=self._joiner(k, il), **kwargs)\n279 |             else:\n280 |                 return printer._print(arg, *args, **kwargs)\n281 | \n282 |         if isinstance(v, Tuple):\n283 |             joined = self._joiner(k, il).join([_print(arg) for arg in v.args])\n284 |             if k in self.indented_args:\n285 |                 return '(\\n' + ' '*il + joined + ',\\n' + ' '*(il - 4) + ')'\n286 |             else:\n287 |                 return ('({0},)' if len(v.args) == 1 else '({0})').format(joined)\n288 |         else:\n289 |             return _print(v)\n290 | \n291 |     def _sympyrepr(self, printer, *args, joiner=', ', **kwargs):\n292 |         from sympy.printing.printer import printer_context\n293 |         exclude = kwargs.get('exclude', ())\n294 |         values = [getattr(self, k) for k in self.__slots__]\n295 |         indent_level = printer._context.get('indent_level', 0)\n296 | \n297 |         arg_reprs = []\n298 | \n299 |         for i, (attr, value) in enumerate(zip(self.__slots__, values)):\n300 |             if attr in exclude:\n301 |                 continue\n302 | \n303 |             # Skip attributes which have the default value\n304 |             if attr in self.defaults and value == self.defaults[attr]:\n305 |                 continue\n306 | \n307 |             ilvl = indent_level + 4 if attr in self.indented_args else 0\n308 |             with printer_context(printer, indent_level=ilvl):\n309 |                 indented = self._indented(printer, attr, value, *args, **kwargs)\n310 |             arg_reprs.append(('{1}' if i == 0 else '{0}={1}').format(attr, indented.lstrip()))\n311 | \n312 |         return \"{}({})\".format(self.__class__.__name__, joiner.join(arg_reprs))\n313 | \n314 |     _sympystr = _sympyrepr\n315 | \n316 |     def __repr__(self):  # sympy.core.Basic.__repr__ uses sstr\n317 |         from sympy.printing import srepr\n318 |         return srepr(self)\n319 | \n320 |     def kwargs(self, exclude=(), apply=None):\n321 |         \"\"\" Get instance's attributes as dict of keyword arguments.\n322 | \n323 |         Parameters\n324 |         ==========\n325 | \n326 |         exclude : collection of str\n327 |             Collection of keywords to exclude.\n328 | \n329 |         apply : callable, optional\n330 |             Function to apply to all values.\n331 |         \"\"\"\n332 |         kwargs = {k: getattr(self, k) for k in self.__slots__ if k not in exclude}\n333 |         if apply is not None:\n334 |             return {k: apply(v) for k, v in kwargs.items()}\n335 |         else:\n336 |             return kwargs\n```",
+              "start_line": 167,
+              "end_line": 336,
+              "code_omitted": false,
+              "original_code_length": 7215
+            },
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "type": "class",
+              "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+              "start_line": 872,
+              "end_line": 908,
+              "code_omitted": false,
+              "original_code_length": 956
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+              "sympy/parsing/mathematica.py:MathematicaParser.parse",
+              "sympy/parsing/mathematica.py:MathematicaParser._apply_rules"
+            ],
+            "chain_length": 4,
+            "initial_entity": "args",
+            "start_entity": {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "entity_type": "function",
+              "relevance_reason": "This function demonstrates how arguments are parsed in another context within SymPy, which could provide insights into implementing similar functionality for the `String` class.",
+              "diversity_value": "Parsing functionality from parsing module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8845863342285156,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._get_args",
+              "type": "function",
+              "code": "```\n353 | def _get_args(cls, m):\n354 |         '''Get arguments of a Mathematica function'''\n355 | \n356 |         s = m.string                # whole string\n357 |         anc = m.end() + 1           # pointing the first letter of arguments\n358 |         square, curly = [], []      # stack for brakets\n359 |         args = []\n360 | \n361 |         # current cursor\n362 |         cur = anc\n363 |         for i, c in enumerate(s[anc:], anc):\n364 |             # extract one argument\n365 |             if c == ',' and (not square) and (not curly):\n366 |                 args.append(s[cur:i])       # add an argument\n367 |                 cur = i + 1                 # move cursor\n368 | \n369 |             # handle list or matrix (for future usage)\n370 |             if c == '{':\n371 |                 curly.append(c)\n372 |             elif c == '}':\n373 |                 curly.pop()\n374 | \n375 |             # seek corresponding ']' with skipping irrevant ones\n376 |             if c == '[':\n377 |                 square.append(c)\n378 |             elif c == ']':\n379 |                 if square:\n380 |                     square.pop()\n381 |                 else:   # empty stack\n382 |                     args.append(s[cur:i])\n383 |                     break\n384 | \n385 |         # the next position to ']' bracket (the function end)\n386 |         func_end = i + 1\n387 | \n388 |         return args, func_end\n```",
+              "start_line": 353,
+              "end_line": 388,
+              "code_omitted": false,
+              "original_code_length": 1409
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._convert_function",
+              "type": "function",
+              "code": "```\n247 | def _convert_function(self, s):\n248 |         '''Parse Mathematica function to SymPy one'''\n249 | \n250 |         # compiled regex object\n251 |         pat = self.FM_PATTERN\n252 | \n253 |         scanned = ''                # converted string\n254 |         cur = 0                     # position cursor\n255 |         while True:\n256 |             m = pat.search(s)\n257 | \n258 |             if m is None:\n259 |                 # append the rest of string\n260 |                 scanned += s\n261 |                 break\n262 | \n263 |             # get Mathematica function name\n264 |             fm = m.group()\n265 | \n266 |             # get arguments, and the end position of fm function\n267 |             args, end = self._get_args(m)\n268 | \n269 |             # the start position of fm function\n270 |             bgn = m.start()\n271 | \n272 |             # convert Mathematica function to SymPy one\n273 |             s = self._convert_one_function(s, fm, args, bgn, end)\n274 | \n275 |             # update cursor\n276 |             cur = bgn\n277 | \n278 |             # append converted part\n279 |             scanned += s[:cur]\n280 | \n281 |             # shrink s\n282 |             s = s[cur:]\n283 | \n284 |         return scanned\n```",
+              "start_line": 247,
+              "end_line": 284,
+              "code_omitted": false,
+              "original_code_length": 1237
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser.parse",
+              "type": "function",
+              "code": "```\n412 | def parse(self, s):\n413 |         # input check\n414 |         self._check_input(s)\n415 | \n416 |         # uncover '*' hiding behind a whitespace\n417 |         s = self._apply_rules(s, 'whitespace')\n418 | \n419 |         # remove whitespace(s)\n420 |         s = self._replace(s, ' ')\n421 | \n422 |         # add omitted '*' character\n423 |         s = self._apply_rules(s, 'add*_1')\n424 |         s = self._apply_rules(s, 'add*_2')\n425 | \n426 |         # translate function\n427 |         s = self._convert_function(s)\n428 | \n429 |         # '^' to '**'\n430 |         s = self._replace(s, '^')\n431 | \n432 |         # 'Pi' to 'pi'\n433 |         s = self._apply_rules(s, 'Pi')\n434 | \n435 |         # '{', '}' to '[', ']', respectively\n436 | #        s = cls._replace(s, '{')   # currently list is not taken into account\n437 | #        s = cls._replace(s, '}')\n438 | \n439 |         return s\n```",
+              "start_line": 412,
+              "end_line": 439,
+              "code_omitted": false,
+              "original_code_length": 897
+            },
+            {
+              "entity_id": "sympy/parsing/mathematica.py:MathematicaParser._apply_rules",
+              "type": "function",
+              "code": "```\n397 | def _apply_rules(cls, s, bef):\n398 |         pat, aft = cls.RULES[bef]\n399 |         return pat.sub(aft, s)\n```",
+              "start_line": 397,
+              "end_line": 399,
+              "code_omitted": false,
+              "original_code_length": 121
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/evalf.py:evalf"
+            ],
+            "chain_length": 1,
+            "initial_entity": "String",
+            "start_entity": {
+              "entity_id": "sympy/core/evalf.py:evalf",
+              "entity_type": "function",
+              "relevance_reason": "The `evalf` function might be used in evaluating expressions involving `String` objects, and ensuring its compatibility is crucial.",
+              "diversity_value": "Function from a different evaluation module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8899304866790771,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/evalf.py:evalf",
+              "type": "function",
+              "code": "```\n1458 | def evalf(x: 'Expr', prec: int, options: OPT_DICT) -> TMP_RES:\n1459 |     \"\"\"\n1460 |     Evaluate the ``Expr`` instance, ``x``\n1461 |     to a binary precision of ``prec``. This\n1462 |     function is supposed to be used internally.\n1463 | \n1464 |     Parameters\n1465 |     ==========\n1466 | \n1467 |     x : Expr\n1468 |         The formula to evaluate to a float.\n1469 |     prec : int\n1470 |         The binary precision that the output should have.\n1471 |     options : dict\n1472 |         A dictionary with the same entries as\n1473 |         ``EvalfMixin.evalf`` and in addition,\n1474 |         ``maxprec`` which is the maximum working precision.\n1475 | \n1476 |     Returns\n1477 |     =======\n1478 | \n1479 |     An optional tuple, ``(re, im, re_acc, im_acc)``\n1480 |     which are the real, imaginary, real accuracy\n1481 |     and imaginary accuracy respectively. ``re`` is\n1482 |     an mpf value tuple and so is ``im``. ``re_acc``\n1483 |     and ``im_acc`` are ints.\n1484 | \n1485 |     NB: all these return values can be ``None``.\n1486 |     If all values are ``None``, then that represents 0.\n1487 |     Note that 0 is also represented as ``fzero = (0, 0, 0, 0)``.\n1488 |     \"\"\"\n1489 |     from sympy.functions.elementary.complexes import re as re_, im as im_\n1490 |     try:\n1491 |         rf = evalf_table[x.func]\n1492 |         r = rf(x, prec, options)\n1493 |     except KeyError:\n1494 |         # Fall back to ordinary evalf if possible\n1495 |         if 'subs' in options:\n1496 |             x = x.subs(evalf_subs(prec, options['subs']))\n1497 |         xe = x._eval_evalf(prec)\n1498 |         if xe is None:\n1499 |             raise NotImplementedError\n1500 |         as_real_imag = getattr(xe, \"as_real_imag\", None)\n1501 |         if as_real_imag is None:\n1502 |             raise NotImplementedError # e.g. FiniteSet(-1.0, 1.0).evalf()\n1503 |         re, im = as_real_imag()\n1504 |         if re.has(re_) or im.has(im_):\n1505 |             raise NotImplementedError\n1506 |         if re == 0:\n1507 |             re = None\n1508 |             reprec = None\n1509 |         elif re.is_number:\n1510 |             re = re._to_mpmath(prec, allow_ints=False)._mpf_\n1511 |             reprec = prec\n1512 |         else:\n1513 |             raise NotImplementedError\n1514 |         if im == 0:\n1515 |             im = None\n1516 |             imprec = None\n1517 |         elif im.is_number:\n1518 |             im = im._to_mpmath(prec, allow_ints=False)._mpf_\n1519 |             imprec = prec\n1520 |         else:\n1521 |             raise NotImplementedError\n1522 |         r = re, im, reprec, imprec\n1523 | \n1524 |     if options.get(\"verbose\"):\n1525 |         print(\"### input\", x)\n1526 |         print(\"### output\", to_str(r[0] or fzero, 50) if isinstance(r, tuple) else r)\n1527 |         print(\"### raw\", r) # r[0], r[2]\n1528 |         print()\n1529 |     chop = options.get('chop', False)\n1530 |     if chop:\n1531 |         if chop is True:\n1532 |             chop_prec = prec\n1533 |         else:\n1534 |             # convert (approximately) from given tolerance;\n1535 |             # the formula here will will make 1e-i rounds to 0 for\n1536 |             # i in the range +/-27 while 2e-i will not be chopped\n1537 |             chop_prec = int(round(-3.321*math.log10(chop) + 2.5))\n1538 |             if chop_prec == 3:\n1539 |                 chop_prec -= 1\n1540 |         r = chop_parts(r, chop_prec)\n1541 |     if options.get(\"strict\"):\n1542 |         check_target(x, r, prec)\n1543 |     return r\n```",
+              "start_line": 1458,
+              "end_line": 1543,
+              "code_omitted": false,
+              "original_code_length": 3521
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/function.py:Application.func"
+            ],
+            "chain_length": 1,
+            "initial_entity": "func",
+            "start_entity": {
+              "entity_id": "sympy/core/function.py:Application.func",
+              "entity_type": "function",
+              "relevance_reason": "This method is specific to the `Application` class, which might be used similarly to the `String` class in terms of handling functions and their arguments.",
+              "diversity_value": "Different file, related to function application"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8991813063621521,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/function.py:Application.func",
+              "type": "function",
+              "code": "```\n351 | def func(self):\n352 |         return self.__class__\n```",
+              "start_line": 351,
+              "end_line": 352,
+              "code_omitted": false,
+              "original_code_length": 65
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "sympy/codegen/ast.py:String"
+            ],
+            "chain_length": 1,
+            "initial_entity": "args",
+            "start_entity": {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "entity_type": "class",
+              "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+              "diversity_value": "Target class from codegen module"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9032764434814453,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/codegen/ast.py:String",
+              "type": "class",
+              "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+              "start_line": 872,
+              "end_line": 908,
+              "code_omitted": false,
+              "original_code_length": 956
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "sympy/core/basic.py:Basic.func"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Basic",
+            "start_entity": {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "entity_type": "property",
+              "relevance_reason": "The `func` property is used to access the function of a `Basic` object, which is central to the issue of argument invariance.",
+              "diversity_value": "Property of the core class, ensuring detailed handling of function attributes"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.907653272151947,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/core/basic.py:Basic.func",
+              "type": "function",
+              "code": "```\n694 | def func(self):\n695 |         \"\"\"\n696 |         The top-level function in an expression.\n697 | \n698 |         The following should hold for all objects::\n699 | \n700 |             >> x == x.func(*x.args)\n701 | \n702 |         Examples\n703 |         ========\n704 | \n705 |         >>> from sympy.abc import x\n706 |         >>> a = 2*x\n707 |         >>> a.func\n708 |         <class 'sympy.core.mul.Mul'>\n709 |         >>> a.args\n710 |         (2, x)\n711 |         >>> a.func(*a.args)\n712 |         2*x\n713 |         >>> a == a.func(*a.args)\n714 |         True\n715 | \n716 |         \"\"\"\n717 |         return self.__class__\n```",
+              "start_line": 694,
+              "end_line": 717,
+              "code_omitted": false,
+              "original_code_length": 629
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_5",
+        "original_chain_info": {
+          "chain": [
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 1,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+            "diversity_value": "Target class from codegen module"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.9032764434814453,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "type": "class",
+            "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+            "start_line": 872,
+            "end_line": 908,
+            "code_omitted": false,
+            "original_code_length": 956
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 5,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_5"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-05T22:41:59.197329",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "location_description": "Lines 897-908: The _sympystr method and the not_in_args attribute",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of the String class uses `expr.func(**expr.kwargs()) == expr` for invariance, which is incorrect according to the issue description. We need to ensure that `expr.func(*expr.args) == expr` holds true. This requires modifying how arguments are handled in the String class, particularly in the `_sympystr` method and the `not_in_args` attribute.",
+                "suggested_approach": "1. Remove the `not_in_args` attribute as it is preventing the `text` attribute from being included in the `args` list.\n2. Modify the `_sympystr` method to use `*args` instead of `**kwargs`:\n```python\n907 |     def _sympystr(self, printer):\n908 |         return self.text\n```\n3. Ensure that the `String` class correctly handles its arguments when instantiated and when compared. This involves updating the `__new__` method to properly initialize the `args` tuple with the `text` attribute:\n```python\n899 |     def __new__(cls, text):\n900 |         text = cls._construct_text(text)\n901 |         obj = Basic.__new__(cls, text)\n902 |         obj.text = text\n903 |         return obj\n```\n4. Add a test case to verify the invariance property:\n```python\n# In sympy/codegen/tests/test_ast.py\nfrom sympy.codegen.ast import String\n\ndef test_string_invariance():\n    s = String('test')\n    assert s.func(*s.args) == s\n```\n5. Import necessary dependencies at the top of the file:\n```python\nfrom sympy.core.basic import Basic\n```\n6. Handle edge cases and validate input in the `_construct_text` method to ensure that only valid strings are accepted:\n```python\n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError('Argument text must be a string.')\n905 |         if not text.strip():\n906 |             raise ValueError('Argument text cannot be empty or whitespace.')\n907 |         return text\n```\n7. Ensure that the `String` class behaves consistently with other `Basic` subclasses by including the `text` attribute in the `args` tuple."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves removing the `not_in_args` attribute, modifying the `_sympystr` method to use positional arguments, and ensuring that the `String` class correctly initializes and handles its arguments. Additionally, we will add a test case to verify the invariance property and handle edge cases in the `_construct_text` method.",
+            "confidence": 95
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_5):**\n\n**Entity 1: sympy/codegen/ast.py:String**\nType: class\nLines: 872-908\nCode:\n```\n```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```\n```\n\n",
+      "num_agents": 1
+    }
+  },
+  "stage_7_round2_analysis": {
+    "timestamp": "2026-10-05T22:41:59.204436",
+    "data": {
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "location_description": "Lines 897-908: The _sympystr method and the not_in_args attribute",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of the String class uses `expr.func(**expr.kwargs()) == expr` for invariance, which is incorrect according to the issue description. We need to ensure that `expr.func(*expr.args) == expr` holds true. This requires modifying how arguments are handled in the String class, particularly in the `_sympystr` method and the `not_in_args` attribute.",
+                "suggested_approach": "1. Remove the `not_in_args` attribute as it is preventing the `text` attribute from being included in the `args` list.\n2. Modify the `_sympystr` method to use `*args` instead of `**kwargs`:\n```python\n907 |     def _sympystr(self, printer):\n908 |         return self.text\n```\n3. Ensure that the `String` class correctly handles its arguments when instantiated and when compared. This involves updating the `__new__` method to properly initialize the `args` tuple with the `text` attribute:\n```python\n899 |     def __new__(cls, text):\n900 |         text = cls._construct_text(text)\n901 |         obj = Basic.__new__(cls, text)\n902 |         obj.text = text\n903 |         return obj\n```\n4. Add a test case to verify the invariance property:\n```python\n# In sympy/codegen/tests/test_ast.py\nfrom sympy.codegen.ast import String\n\ndef test_string_invariance():\n    s = String('test')\n    assert s.func(*s.args) == s\n```\n5. Import necessary dependencies at the top of the file:\n```python\nfrom sympy.core.basic import Basic\n```\n6. Handle edge cases and validate input in the `_construct_text` method to ensure that only valid strings are accepted:\n```python\n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError('Argument text must be a string.')\n905 |         if not text.strip():\n906 |             raise ValueError('Argument text cannot be empty or whitespace.')\n907 |         return text\n```\n7. Ensure that the `String` class behaves consistently with other `Basic` subclasses by including the `text` attribute in the `args` tuple."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves removing the `not_in_args` attribute, modifying the `_sympystr` method to use positional arguments, and ensuring that the `String` class correctly initializes and handles its arguments. Additionally, we will add a test case to verify the invariance property and handle edge cases in the `_construct_text` method.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "location_description": "Lines 897-908: The _sympystr method and the not_in_args attribute",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of the String class uses `expr.func(**expr.kwargs()) == expr` for invariance, which is incorrect according to the issue description. We need to ensure that `expr.func(*expr.args) == expr` holds true. This requires modifying how arguments are handled in the String class, particularly in the `_sympystr` method and the `not_in_args` attribute.",
+                "suggested_approach": "1. Remove the `not_in_args` attribute as it is preventing the `text` attribute from being included in the `args` list.\n2. Modify the `_sympystr` method to use `*args` instead of `**kwargs`:\n```python\n907 |     def _sympystr(self, printer):\n908 |         return self.text\n```\n3. Ensure that the `String` class correctly handles its arguments when instantiated and when compared. This involves updating the `__new__` method to properly initialize the `args` tuple with the `text` attribute:\n```python\n899 |     def __new__(cls, text):\n900 |         text = cls._construct_text(text)\n901 |         obj = Basic.__new__(cls, text)\n902 |         obj.text = text\n903 |         return obj\n```\n4. Add a test case to verify the invariance property:\n```python\n# In sympy/codegen/tests/test_ast.py\nfrom sympy.codegen.ast import String\n\ndef test_string_invariance():\n    s = String('test')\n    assert s.func(*s.args) == s\n```\n5. Import necessary dependencies at the top of the file:\n```python\nfrom sympy.core.basic import Basic\n```\n6. Handle edge cases and validate input in the `_construct_text` method to ensure that only valid strings are accepted:\n```python\n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError('Argument text must be a string.')\n905 |         if not text.strip():\n906 |             raise ValueError('Argument text cannot be empty or whitespace.')\n907 |         return text\n```\n7. Ensure that the `String` class behaves consistently with other `Basic` subclasses by including the `text` attribute in the `args` tuple."
+              }
+            ]
+          }
+        }
+      ],
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "location_description": "Lines 897-908: The _sympystr method and the not_in_args attribute",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of the String class uses `expr.func(**expr.kwargs()) == expr` for invariance, which is incorrect according to the issue description. We need to ensure that `expr.func(*expr.args) == expr` holds true. This requires modifying how arguments are handled in the String class, particularly in the `_sympystr` method and the `not_in_args` attribute.",
+                "suggested_approach": "1. Remove the `not_in_args` attribute as it is preventing the `text` attribute from being included in the `args` list.\n2. Modify the `_sympystr` method to use `*args` instead of `**kwargs`:\n```python\n907 |     def _sympystr(self, printer):\n908 |         return self.text\n```\n3. Ensure that the `String` class correctly handles its arguments when instantiated and when compared. This involves updating the `__new__` method to properly initialize the `args` tuple with the `text` attribute:\n```python\n899 |     def __new__(cls, text):\n900 |         text = cls._construct_text(text)\n901 |         obj = Basic.__new__(cls, text)\n902 |         obj.text = text\n903 |         return obj\n```\n4. Add a test case to verify the invariance property:\n```python\n# In sympy/codegen/tests/test_ast.py\nfrom sympy.codegen.ast import String\n\ndef test_string_invariance():\n    s = String('test')\n    assert s.func(*s.args) == s\n```\n5. Import necessary dependencies at the top of the file:\n```python\nfrom sympy.core.basic import Basic\n```\n6. Handle edge cases and validate input in the `_construct_text` method to ensure that only valid strings are accepted:\n```python\n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError('Argument text must be a string.')\n905 |         if not text.strip():\n906 |             raise ValueError('Argument text cannot be empty or whitespace.')\n907 |         return text\n```\n7. Ensure that the `String` class behaves consistently with other `Basic` subclasses by including the `text` attribute in the `args` tuple."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves removing the `not_in_args` attribute, modifying the `_sympystr` method to use positional arguments, and ensuring that the `String` class correctly initializes and handles its arguments. Additionally, we will add a test case to verify the invariance property and handle edge cases in the `_construct_text` method.",
+            "confidence": 95
+          }
+        }
+      ]
+    }
+  },
+  "stage_7_final_plan": {
+    "timestamp": "2026-10-05T22:43:00.478114",
+    "data": {
+      "final_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Modify the `String` class in `sympy/codegen/ast.py` to support argument invariance using positional arguments, remove the `not_in_args` attribute, and update the `_sympystr` method.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Remove the `not_in_args` attribute from the `String` class",
+              "context": "sympy/codegen/ast.py:Line 898",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "The `not_in_args` attribute prevents the `String` class from supporting argument invariance using positional arguments, which is required to fix the issue.",
+              "implementation_notes": "Delete the line `not_in_args = ['text']`."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the `__init__` method to accept and store positional arguments",
+              "context": "sympy/codegen/ast.py:Line 872-879",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "The `__init__` method needs to accept positional arguments to support the required invariance property.",
+              "implementation_notes": "Update the `__init__` method to accept `*args` and store the first argument as `self.text`. Example: `def __init__(self, *args): self.text = args[0] if args else ''`."
+            },
+            {
+              "step": 3,
+              "instruction": "Modify the `_sympystr` method to use positional arguments",
+              "context": "sympy/codegen/ast.py:Line 907-908",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "The `_sympystr` method should return the string representation using the stored `text` attribute without relying on keyword arguments.",
+              "implementation_notes": "Update the `_sympystr` method to only use `self.text`. Example: `def _sympystr(self, printer): return self.text`."
+            },
+            {
+              "step": 4,
+              "instruction": "Add a test case to validate the invariance property",
+              "context": "sympy/codegen/tests/test_ast.py",
+              "type": "add_test",
+              "priority": "high",
+              "rationale": "A test case is necessary to ensure that the `String` class supports the required invariance property after the modifications.",
+              "implementation_notes": "Add a test case that creates a `String` object, retrieves its arguments, and checks if `expr.func(*expr.args) == expr`. Example: `def test_string_invariance(): s = String('foo') assert s.func(*s.args) == s`."
+            }
+          ],
+          "execution_order": "1 -> 2 -> 3 -> 4",
+          "testing_recommendations": "Run the existing test suite to ensure no regressions, then run the newly added test case to validate the invariance property.",
+          "risk_assessment": "The primary risk is breaking existing code that relies on the current behavior. To mitigate this, thoroughly review and test the changes, especially focusing on backward compatibility. Consider adding deprecation warnings if necessary."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the `not_in_args` attribute should be removed and the `_sympystr` method should be modified to use positional arguments. They also agreed on the need to add a test case to validate the invariance property.",
+        "resolved_conflicts": "There were no significant conflicts between the expert opinions. All recommendations aligned with the goal of supporting argument invariance using positional arguments."
+      },
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "location_description": "Lines 897-908: The _sympystr method and the not_in_args attribute",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of the String class uses `expr.func(**expr.kwargs()) == expr` for invariance, which is incorrect according to the issue description. We need to ensure that `expr.func(*expr.args) == expr` holds true. This requires modifying how arguments are handled in the String class, particularly in the `_sympystr` method and the `not_in_args` attribute.",
+                "suggested_approach": "1. Remove the `not_in_args` attribute as it is preventing the `text` attribute from being included in the `args` list.\n2. Modify the `_sympystr` method to use `*args` instead of `**kwargs`:\n```python\n907 |     def _sympystr(self, printer):\n908 |         return self.text\n```\n3. Ensure that the `String` class correctly handles its arguments when instantiated and when compared. This involves updating the `__new__` method to properly initialize the `args` tuple with the `text` attribute:\n```python\n899 |     def __new__(cls, text):\n900 |         text = cls._construct_text(text)\n901 |         obj = Basic.__new__(cls, text)\n902 |         obj.text = text\n903 |         return obj\n```\n4. Add a test case to verify the invariance property:\n```python\n# In sympy/codegen/tests/test_ast.py\nfrom sympy.codegen.ast import String\n\ndef test_string_invariance():\n    s = String('test')\n    assert s.func(*s.args) == s\n```\n5. Import necessary dependencies at the top of the file:\n```python\nfrom sympy.core.basic import Basic\n```\n6. Handle edge cases and validate input in the `_construct_text` method to ensure that only valid strings are accepted:\n```python\n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError('Argument text must be a string.')\n905 |         if not text.strip():\n906 |             raise ValueError('Argument text cannot be empty or whitespace.')\n907 |         return text\n```\n7. Ensure that the `String` class behaves consistently with other `Basic` subclasses by including the `text` attribute in the `args` tuple."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves removing the `not_in_args` attribute, modifying the `_sympystr` method to use positional arguments, and ensuring that the `String` class correctly initializes and handles its arguments. Additionally, we will add a test case to verify the invariance property and handle edge cases in the `_construct_text` method.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "sympy/codegen/ast.py:String",
+                "location_description": "Lines 897-908: The _sympystr method and the not_in_args attribute",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of the String class uses `expr.func(**expr.kwargs()) == expr` for invariance, which is incorrect according to the issue description. We need to ensure that `expr.func(*expr.args) == expr` holds true. This requires modifying how arguments are handled in the String class, particularly in the `_sympystr` method and the `not_in_args` attribute.",
+                "suggested_approach": "1. Remove the `not_in_args` attribute as it is preventing the `text` attribute from being included in the `args` list.\n2. Modify the `_sympystr` method to use `*args` instead of `**kwargs`:\n```python\n907 |     def _sympystr(self, printer):\n908 |         return self.text\n```\n3. Ensure that the `String` class correctly handles its arguments when instantiated and when compared. This involves updating the `__new__` method to properly initialize the `args` tuple with the `text` attribute:\n```python\n899 |     def __new__(cls, text):\n900 |         text = cls._construct_text(text)\n901 |         obj = Basic.__new__(cls, text)\n902 |         obj.text = text\n903 |         return obj\n```\n4. Add a test case to verify the invariance property:\n```python\n# In sympy/codegen/tests/test_ast.py\nfrom sympy.codegen.ast import String\n\ndef test_string_invariance():\n    s = String('test')\n    assert s.func(*s.args) == s\n```\n5. Import necessary dependencies at the top of the file:\n```python\nfrom sympy.core.basic import Basic\n```\n6. Handle edge cases and validate input in the `_construct_text` method to ensure that only valid strings are accepted:\n```python\n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError('Argument text must be a string.')\n905 |         if not text.strip():\n906 |             raise ValueError('Argument text cannot be empty or whitespace.')\n907 |         return text\n```\n7. Ensure that the `String` class behaves consistently with other `Basic` subclasses by including the `text` attribute in the `args` tuple."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "stage_8_edit_agent_prompt": {
+    "timestamp": "2026-10-05T22:43:00.484503",
+    "data": {
+      "edit_agent_prompt": "<issue>\nArgument invariance of codegen.ast String\nCurrently, the `codegen.ast` `String` class does not support argument invariance like:\r\n`expr.func(*expr.args) == expr`, but instead uses the invariance `expr.func(**expr.kwargs()) == expr`.\r\nThe former should hold for any `Basic` subclass, which `String` is.\n\n</issue>\n\n<plan>\n***stage 1***\ninstruction: Remove the `not_in_args` attribute from the `String` class\ncontext: sympy/codegen/ast.py:Line 898\n\n***stage 2***\ninstruction: Modify the `__init__` method to accept and store positional arguments\ncontext: sympy/codegen/ast.py:Line 872-879\n\n***stage 3***\ninstruction: Modify the `_sympystr` method to use positional arguments\ncontext: sympy/codegen/ast.py:Line 907-908\n\n***stage 4***\ninstruction: Add a test case to validate the invariance property\ncontext: sympy/codegen/tests/test_ast.py\n\n</plan>\n\n<code>\nsympy/codegen/ast.py:\n872   class String(Token):\n873       \"\"\" SymPy object representing a string.\n874   \n875       Atomic object which is not an expression (as opposed to Symbol).\n876   \n877       Parameters\n878       ==========\n879   \n880       text : str\n881   \n882       Examples\n883       ========\n884   \n885       >>> from sympy.codegen.ast import String\n886       >>> f = String('foo')\n887       >>> f\n888       foo\n889       >>> str(f)\n890       'foo'\n891       >>> f.text\n892       'foo'\n893       >>> print(repr(f))\n894       String('foo')\n895   \n896       \"\"\"\n897       __slots__ = ('text',)\n898       not_in_args = ['text']\n899       is_Atom = True\n900   \n901       @classmethod\n902       def _construct_text(cls, text):\n903           if not isinstance(text, str):\n904               raise TypeError(\"Argument text is not a string type.\")\n905           return text\n906   \n907       def _sympystr(self, printer, *args, **kwargs):\n908           return self.text\n\n</code>",
+      "modification_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Modify the `String` class in `sympy/codegen/ast.py` to support argument invariance using positional arguments, remove the `not_in_args` attribute, and update the `_sympystr` method.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Remove the `not_in_args` attribute from the `String` class",
+              "context": "sympy/codegen/ast.py:Line 898",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "The `not_in_args` attribute prevents the `String` class from supporting argument invariance using positional arguments, which is required to fix the issue.",
+              "implementation_notes": "Delete the line `not_in_args = ['text']`."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the `__init__` method to accept and store positional arguments",
+              "context": "sympy/codegen/ast.py:Line 872-879",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "The `__init__` method needs to accept positional arguments to support the required invariance property.",
+              "implementation_notes": "Update the `__init__` method to accept `*args` and store the first argument as `self.text`. Example: `def __init__(self, *args): self.text = args[0] if args else ''`."
+            },
+            {
+              "step": 3,
+              "instruction": "Modify the `_sympystr` method to use positional arguments",
+              "context": "sympy/codegen/ast.py:Line 907-908",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "The `_sympystr` method should return the string representation using the stored `text` attribute without relying on keyword arguments.",
+              "implementation_notes": "Update the `_sympystr` method to only use `self.text`. Example: `def _sympystr(self, printer): return self.text`."
+            },
+            {
+              "step": 4,
+              "instruction": "Add a test case to validate the invariance property",
+              "context": "sympy/codegen/tests/test_ast.py",
+              "type": "add_test",
+              "priority": "high",
+              "rationale": "A test case is necessary to ensure that the `String` class supports the required invariance property after the modifications.",
+              "implementation_notes": "Add a test case that creates a `String` object, retrieves its arguments, and checks if `expr.func(*expr.args) == expr`. Example: `def test_string_invariance(): s = String('foo') assert s.func(*s.args) == s`."
+            }
+          ],
+          "execution_order": "1 -> 2 -> 3 -> 4",
+          "testing_recommendations": "Run the existing test suite to ensure no regressions, then run the newly added test case to validate the invariance property.",
+          "risk_assessment": "The primary risk is breaking existing code that relies on the current behavior. To mitigate this, thoroughly review and test the changes, especially focusing on backward compatibility. Consider adding deprecation warnings if necessary."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the `not_in_args` attribute should be removed and the `_sympystr` method should be modified to use positional arguments. They also agreed on the need to add a test case to validate the invariance property.",
+        "resolved_conflicts": "There were no significant conflicts between the expert opinions. All recommendations aligned with the goal of supporting argument invariance using positional arguments."
+      },
+      "winning_chain": {
+        "chain_id": "chain_5",
+        "original_chain_info": {
+          "chain": [
+            "sympy/codegen/ast.py:String"
+          ],
+          "chain_length": 1,
+          "initial_entity": "args",
+          "start_entity": {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "entity_type": "class",
+            "relevance_reason": "The `String` class in `codegen.ast` is directly mentioned in the problem statement as needing to support argument invariance.",
+            "diversity_value": "Target class from codegen module"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.9032764434814453,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "sympy/codegen/ast.py:String",
+            "type": "class",
+            "code": "```\n872 | class String(Token):\n873 |     \"\"\" SymPy object representing a string.\n874 | \n875 |     Atomic object which is not an expression (as opposed to Symbol).\n876 | \n877 |     Parameters\n878 |     ==========\n879 | \n880 |     text : str\n881 | \n882 |     Examples\n883 |     ========\n884 | \n885 |     >>> from sympy.codegen.ast import String\n886 |     >>> f = String('foo')\n887 |     >>> f\n888 |     foo\n889 |     >>> str(f)\n890 |     'foo'\n891 |     >>> f.text\n892 |     'foo'\n893 |     >>> print(repr(f))\n894 |     String('foo')\n895 | \n896 |     \"\"\"\n897 |     __slots__ = ('text',)\n898 |     not_in_args = ['text']\n899 |     is_Atom = True\n900 | \n901 |     @classmethod\n902 |     def _construct_text(cls, text):\n903 |         if not isinstance(text, str):\n904 |             raise TypeError(\"Argument text is not a string type.\")\n905 |         return text\n906 | \n907 |     def _sympystr(self, printer, *args, **kwargs):\n908 |         return self.text\n```",
+            "start_line": 872,
+            "end_line": 908,
+            "code_omitted": false,
+            "original_code_length": 956
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 5,
+        "is_longest": false
+      }
+    }
+  }
+}

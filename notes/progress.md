@@ -18,8 +18,11 @@ repair of beets-5437 queued (186745, killable). Lanes refilled: ug lenient seeds
 Broke: Nothing. The EEE watcher missed three completions while the Mac was off (checked manually).
 Queue: ug 184574 SC seed 2 (running) -> 184575 SC seed 3 -> 184812 seed 4 -> 186752 seed 5 ->
 186753 seed 6 | killable 184607-9 Live a-c, 184861 shuffle 2, 186745 pilot repair.
-Next: Jingwei to confirm --reuse-chains for SC seed 3 onward (for-chat); score SC seed 2; once the
-pilot repair lands, score the Live pilot; replay with lp_conf held out once seeds 4-6 land; adaptive
+Later: Jingwei confirmed --reuse-chains; SC seed 3 own-chains run left to finish (already 34/75),
+reuse-chains SC seed 3 queued after it (186863; seed 4 re-pointed behind it). Runner synced to EEE.
+SC seed 2: 0.773 (SC seeds 1-2: 0.740 vs original 0.782). Live pilot repaired and scored: 0.575,
+debate 3 broke / 0 fixed (results.md). Live seed 2 started on killable with its first 40 (186864).
+Next: score SC seed 3 (both versions); replay with lp_conf held out once seeds 4-6 land; adaptive
 arm (real run) after the chain-debate question is settled.
 
 ## 2026-10-05

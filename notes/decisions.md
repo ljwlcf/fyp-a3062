@@ -806,3 +806,8 @@ original seed k with `--reuse-chains <original seed k>`, so arm vs original is a
 identical chains, and each arm run costs ~25% of the tokens / GPU time of a full run. Costs are
 reported as the reference's stages 1-5 plus the arm's own stages 6-8. Self-consistency seed 1 and
 the running seed 2 used independent chains; they stay as the independent-chain record.
+Confirmed by Jingwei 2026-10-06 ("switch SC seed 3 to reuse-chains"). SC seed 3 (184575) had
+already started (34/75) by then, so it was left to finish as a third own-chains seed, and the
+reuse-chains SC seed 3 was queued directly after it: job 186863, `--reuse-chains
+baseline_72b_lenient_v1/20261004-215633` (original seed 3), vote logprobs; lenient seed 4 now
+waits on it. Every later non-original arm runs with --reuse-chains against the matching original seed.

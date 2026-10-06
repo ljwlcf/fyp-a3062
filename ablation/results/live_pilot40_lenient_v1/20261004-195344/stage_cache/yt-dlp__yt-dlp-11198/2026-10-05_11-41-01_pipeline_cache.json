@@ -1,0 +1,2299 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-05T11:41:08.067264",
+    "data": {
+      "initial_entities": [
+        "sanitize_path",
+        "os.path.splitdrive",
+        "nt._path_splitroot",
+        "Python",
+        "yt_dlp"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 12997
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-05T11:43:06.936090",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "sanitize_path",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+              "diversity_value": "Core utility function where the main problem lies"
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_open",
+              "entity_type": "function",
+              "relevance_reason": "This function uses `sanitize_path` and could be affected by its incorrect behavior.",
+              "diversity_value": "Related utility function from the same file"
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL._sanitize_thumbnails",
+              "entity_type": "function",
+              "relevance_reason": "This function uses `sanitize_url` which might be related to path sanitization issues.",
+              "diversity_value": "Different file, part of the main application logic"
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "entity_type": "function",
+              "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+              "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+            }
+          ]
+        },
+        {
+          "initial_entity": "os.path.splitdrive",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths and is where the issue with drive relative paths needs to be addressed.",
+              "diversity_value": "Core utility function from utils module"
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+              "entity_type": "function",
+              "relevance_reason": "This function checks if a string is a path-like object, which is relevant for ensuring that the input to `sanitize_path` is correctly identified.",
+              "diversity_value": "Utility function from the same utils module, but different functionality"
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:_is_path",
+              "entity_type": "function",
+              "relevance_reason": "This function checks if a value contains path separators, which can be useful for validating paths before sanitization.",
+              "diversity_value": "Different file, related to path handling in cookies module"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/slideslive.py",
+              "entity_type": "file",
+              "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+              "diversity_value": "Extractor module from a different file, providing broader context"
+            }
+          ]
+        },
+        {
+          "initial_entity": "nt._path_splitroot",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for the path sanitization, which is the core of the issue.",
+              "diversity_value": "Core utility function where the bug resides"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "entity_type": "function",
+              "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+              "diversity_value": "Extractor initialization from different file"
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:_is_path",
+              "entity_type": "function",
+              "relevance_reason": "This function checks if a value is a path, which could be useful for ensuring correct path handling.",
+              "diversity_value": "Path checking utility from a different module"
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+              "entity_type": "function",
+              "relevance_reason": "This function determines if a value is path-like, which is crucial for ensuring that `sanitize_path` handles the correct types of inputs.",
+              "diversity_value": "Type checking utility from the same file but different functionality"
+            }
+          ]
+        },
+        {
+          "initial_entity": "Python",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for path sanitization, which is the core of the issue.",
+              "diversity_value": "Core utility function where the issue originates"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "The extractors are where the paths are often generated and used, and understanding how they interact with `sanitize_path` can help in fixing the issue.",
+              "diversity_value": "Extractor module, different from the utils file"
+            },
+            {
+              "entity_id": "yt_dlp/compat.py",
+              "entity_type": "file",
+              "relevance_reason": "This file contains compatibility functions and might have utilities for handling paths differently based on the Python version, which is relevant given the note about Python <3.12.",
+              "diversity_value": "Compatibility layer, different from the utils and extractor files"
+            },
+            {
+              "entity_id": "yt_dlp/ffmpeg.py",
+              "entity_type": "file",
+              "relevance_reason": "The error message indicates an issue with merging files, which involves the `ffmpeg.py` file. This could be related to how paths are handled during the merging process.",
+              "diversity_value": "Post-processing file, different from the utils, extractor, and compat files"
+            }
+          ]
+        },
+        {
+          "initial_entity": "yt_dlp",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for the path sanitization that is causing the issue.",
+              "diversity_value": "Core utility function from the utils module"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains initialization and setup for extractors which might use the `sanitize_path` function.",
+              "diversity_value": "Extractor initialization file from different location"
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+              "diversity_value": "Main processing function from the core module"
+            },
+            {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "entity_type": "function",
+              "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+              "diversity_value": "Post-processing function from the ffmpeg module"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-05T11:57:24.656979",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "sanitize_path",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+              "diversity_value": "Core utility function where the main problem lies"
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_open",
+              "entity_type": "function",
+              "relevance_reason": "This function uses `sanitize_path` and could be affected by its incorrect behavior.",
+              "diversity_value": "Related utility function from the same file"
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL._sanitize_thumbnails",
+              "entity_type": "function",
+              "relevance_reason": "This function uses `sanitize_url` which might be related to path sanitization issues.",
+              "diversity_value": "Different file, part of the main application logic"
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "entity_type": "function",
+              "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+              "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+                "diversity_value": "Core utility function where the main problem lies"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:sanitize_path",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "yt_dlp/utils/_utils.py:expand_path",
+                "yt_dlp/cookies.py:load_cookies",
+                "yt_dlp/cookies.py:extract_cookies_from_browser"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:sanitize_open",
+                "entity_type": "function",
+                "relevance_reason": "This function uses `sanitize_path` and could be affected by its incorrect behavior.",
+                "diversity_value": "Related utility function from the same file"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:sanitize_open",
+                "yt_dlp/utils/_utils.py:sanitize_path",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL._sanitize_thumbnails",
+                "entity_type": "function",
+                "relevance_reason": "This function uses `sanitize_url` which might be related to path sanitization issues.",
+                "diversity_value": "Different file, part of the main application logic"
+              },
+              "chain": [
+                "yt_dlp/YoutubeDL.py:YoutubeDL._sanitize_thumbnails",
+                "yt_dlp/utils/_utils.py:sanitize_url",
+                "yt_dlp/utils/_utils.py"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+                "entity_type": "function",
+                "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+                "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+              },
+              "chain": [
+                "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn"
+              ],
+              "chain_length": 2
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "os.path.splitdrive",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths and is where the issue with drive relative paths needs to be addressed.",
+              "diversity_value": "Core utility function from utils module"
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+              "entity_type": "function",
+              "relevance_reason": "This function checks if a string is a path-like object, which is relevant for ensuring that the input to `sanitize_path` is correctly identified.",
+              "diversity_value": "Utility function from the same utils module, but different functionality"
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:_is_path",
+              "entity_type": "function",
+              "relevance_reason": "This function checks if a value contains path separators, which can be useful for validating paths before sanitization.",
+              "diversity_value": "Different file, related to path handling in cookies module"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/slideslive.py",
+              "entity_type": "file",
+              "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+              "diversity_value": "Extractor module from a different file, providing broader context"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for sanitizing paths and is where the issue with drive relative paths needs to be addressed.",
+                "diversity_value": "Core utility function from utils module"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:sanitize_path",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "yt_dlp/utils/_utils.py:expand_path",
+                "yt_dlp/compat/__init__.py:compat_expanduser",
+                "yt_dlp/extractor/common.py"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+                "entity_type": "function",
+                "relevance_reason": "This function checks if a string is a path-like object, which is relevant for ensuring that the input to `sanitize_path` is correctly identified.",
+                "diversity_value": "Utility function from the same utils module, but different functionality"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:is_path_like",
+                "yt_dlp/utils/_utils.py",
+                "yt_dlp/utils/_utils.py:sanitize_path",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/cookies.py:_is_path",
+                "entity_type": "function",
+                "relevance_reason": "This function checks if a value contains path separators, which can be useful for validating paths before sanitization.",
+                "diversity_value": "Different file, related to path handling in cookies module"
+              },
+              "chain": [
+                "yt_dlp/cookies.py:_is_path",
+                "yt_dlp/cookies.py",
+                "yt_dlp/utils/__init__.py",
+                "yt_dlp/compat/compat_utils.py:passthrough_module",
+                "yt_dlp/compat/compat_utils.py:passthrough_module.from_child"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/extractor/slideslive.py",
+                "entity_type": "file",
+                "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+                "diversity_value": "Extractor module from a different file, providing broader context"
+              },
+              "chain": [
+                "yt_dlp/extractor/slideslive.py",
+                "yt_dlp/extractor/common.py:InfoExtractor",
+                "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+                "yt_dlp/extractor/common.py:InfoExtractor.supports_login"
+              ],
+              "chain_length": 4
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "nt._path_splitroot",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for the path sanitization, which is the core of the issue.",
+              "diversity_value": "Core utility function where the bug resides"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "entity_type": "function",
+              "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+              "diversity_value": "Extractor initialization from different file"
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:_is_path",
+              "entity_type": "function",
+              "relevance_reason": "This function checks if a value is a path, which could be useful for ensuring correct path handling.",
+              "diversity_value": "Path checking utility from a different module"
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+              "entity_type": "function",
+              "relevance_reason": "This function determines if a value is path-like, which is crucial for ensuring that `sanitize_path` handles the correct types of inputs.",
+              "diversity_value": "Type checking utility from the same file but different functionality"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for the path sanitization, which is the core of the issue.",
+                "diversity_value": "Core utility function where the bug resides"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:sanitize_path",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "yt_dlp/utils/_utils.py:expand_path",
+                "yt_dlp/compat/__init__.py:compat_expanduser",
+                "yt_dlp/extractor/common.py"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+                "entity_type": "function",
+                "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+                "diversity_value": "Extractor initialization from different file"
+              },
+              "chain": [
+                "yt_dlp/extractor/__init__.py:list_extractor_classes",
+                "yt_dlp/extractor/generic.py:GenericIE",
+                "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+                "yt_dlp/extractor/common.py:InfoExtractor._download_webpage"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/cookies.py:_is_path",
+                "entity_type": "function",
+                "relevance_reason": "This function checks if a value is a path, which could be useful for ensuring correct path handling.",
+                "diversity_value": "Path checking utility from a different module"
+              },
+              "chain": [
+                "yt_dlp/cookies.py:_is_path",
+                "yt_dlp/cookies.py",
+                "yt_dlp/utils/__init__.py",
+                "yt_dlp/utils/_utils.py"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+                "entity_type": "function",
+                "relevance_reason": "This function determines if a value is path-like, which is crucial for ensuring that `sanitize_path` handles the correct types of inputs.",
+                "diversity_value": "Type checking utility from the same file but different functionality"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:is_path_like",
+                "yt_dlp/utils/_utils.py"
+              ],
+              "chain_length": 2
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "Python",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for path sanitization, which is the core of the issue.",
+              "diversity_value": "Core utility function where the issue originates"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "The extractors are where the paths are often generated and used, and understanding how they interact with `sanitize_path` can help in fixing the issue.",
+              "diversity_value": "Extractor module, different from the utils file"
+            },
+            {
+              "entity_id": "yt_dlp/compat.py",
+              "entity_type": "file",
+              "relevance_reason": "This file contains compatibility functions and might have utilities for handling paths differently based on the Python version, which is relevant given the note about Python <3.12.",
+              "diversity_value": "Compatibility layer, different from the utils and extractor files"
+            },
+            {
+              "entity_id": "yt_dlp/ffmpeg.py",
+              "entity_type": "file",
+              "relevance_reason": "The error message indicates an issue with merging files, which involves the `ffmpeg.py` file. This could be related to how paths are handled during the merging process.",
+              "diversity_value": "Post-processing file, different from the utils, extractor, and compat files"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for path sanitization, which is the core of the issue.",
+                "diversity_value": "Core utility function where the issue originates"
+              },
+              "chain": [
+                "yt_dlp/utils/_utils.py:sanitize_path",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "yt_dlp/utils/_utils.py:expand_path",
+                "yt_dlp/cookies.py:load_cookies",
+                "yt_dlp/cookies.py:extract_cookies_from_browser"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/extractor/__init__.py",
+                "entity_type": "file",
+                "relevance_reason": "The extractors are where the paths are often generated and used, and understanding how they interact with `sanitize_path` can help in fixing the issue.",
+                "diversity_value": "Extractor module, different from the utils file"
+              },
+              "chain": [
+                "yt_dlp/extractor/__init__.py",
+                "yt_dlp/extractor/__init__.py:gen_extractor_classes",
+                "yt_dlp/extractor/extractors.py",
+                "yt_dlp/extractor/_extractors.py"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/compat.py",
+                "entity_type": "file",
+                "relevance_reason": "This file contains compatibility functions and might have utilities for handling paths differently based on the Python version, which is relevant given the note about Python <3.12.",
+                "diversity_value": "Compatibility layer, different from the utils and extractor files"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/ffmpeg.py",
+                "entity_type": "file",
+                "relevance_reason": "The error message indicates an issue with merging files, which involves the `ffmpeg.py` file. This could be related to how paths are handled during the merging process.",
+                "diversity_value": "Post-processing file, different from the utils, extractor, and compat files"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "yt_dlp",
+          "related_entities": [
+            {
+              "entity_id": "yt_dlp/utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for the path sanitization that is causing the issue.",
+              "diversity_value": "Core utility function from the utils module"
+            },
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Contains initialization and setup for extractors which might use the `sanitize_path` function.",
+              "diversity_value": "Extractor initialization file from different location"
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+              "diversity_value": "Main processing function from the core module"
+            },
+            {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "entity_type": "function",
+              "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+              "diversity_value": "Post-processing function from the ffmpeg module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/utils.py:sanitize_path",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for the path sanitization that is causing the issue.",
+                "diversity_value": "Core utility function from the utils module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/extractor/__init__.py",
+                "entity_type": "file",
+                "relevance_reason": "Contains initialization and setup for extractors which might use the `sanitize_path` function.",
+                "diversity_value": "Extractor initialization file from different location"
+              },
+              "chain": [
+                "yt_dlp/extractor/__init__.py",
+                "yt_dlp/extractor/__init__.py:gen_extractor_classes",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.add_default_info_extractors",
+                "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+                "entity_type": "function",
+                "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+                "diversity_value": "Main processing function from the core module"
+              },
+              "chain": [
+                "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+                "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+                "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+                "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+                "entity_type": "function",
+                "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+                "diversity_value": "Post-processing function from the ffmpeg module"
+              },
+              "chain": [
+                "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+                "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+                "yt_dlp/utils/_utils.py:encodeArgument",
+                "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+                "yt_dlp/utils/_utils.py:RetryManager"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/utils/_utils.py:expand_path",
+            "yt_dlp/cookies.py:load_cookies",
+            "yt_dlp/cookies.py:extract_cookies_from_browser"
+          ],
+          "chain_length": 5,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+            "diversity_value": "Core utility function where the main problem lies"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_open",
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+          ],
+          "chain_length": 4,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_open",
+            "entity_type": "function",
+            "relevance_reason": "This function uses `sanitize_path` and could be affected by its incorrect behavior.",
+            "diversity_value": "Related utility function from the same file"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/YoutubeDL.py:YoutubeDL._sanitize_thumbnails",
+            "yt_dlp/utils/_utils.py:sanitize_url",
+            "yt_dlp/utils/_utils.py"
+          ],
+          "chain_length": 3,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL._sanitize_thumbnails",
+            "entity_type": "function",
+            "relevance_reason": "This function uses `sanitize_url` which might be related to path sanitization issues.",
+            "diversity_value": "Different file, part of the main application logic"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn"
+          ],
+          "chain_length": 2,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+            "entity_type": "function",
+            "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+            "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/utils/_utils.py:expand_path",
+            "yt_dlp/compat/__init__.py:compat_expanduser",
+            "yt_dlp/extractor/common.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "os.path.splitdrive",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for sanitizing paths and is where the issue with drive relative paths needs to be addressed.",
+            "diversity_value": "Core utility function from utils module"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:is_path_like",
+            "yt_dlp/utils/_utils.py",
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+          ],
+          "chain_length": 5,
+          "initial_entity": "os.path.splitdrive",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+            "entity_type": "function",
+            "relevance_reason": "This function checks if a string is a path-like object, which is relevant for ensuring that the input to `sanitize_path` is correctly identified.",
+            "diversity_value": "Utility function from the same utils module, but different functionality"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/cookies.py:_is_path",
+            "yt_dlp/cookies.py",
+            "yt_dlp/utils/__init__.py",
+            "yt_dlp/compat/compat_utils.py:passthrough_module",
+            "yt_dlp/compat/compat_utils.py:passthrough_module.from_child"
+          ],
+          "chain_length": 5,
+          "initial_entity": "os.path.splitdrive",
+          "start_entity": {
+            "entity_id": "yt_dlp/cookies.py:_is_path",
+            "entity_type": "function",
+            "relevance_reason": "This function checks if a value contains path separators, which can be useful for validating paths before sanitization.",
+            "diversity_value": "Different file, related to path handling in cookies module"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/extractor/slideslive.py",
+            "yt_dlp/extractor/common.py:InfoExtractor",
+            "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+            "yt_dlp/extractor/common.py:InfoExtractor.supports_login"
+          ],
+          "chain_length": 4,
+          "initial_entity": "os.path.splitdrive",
+          "start_entity": {
+            "entity_id": "yt_dlp/extractor/slideslive.py",
+            "entity_type": "file",
+            "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+            "diversity_value": "Extractor module from a different file, providing broader context"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/utils/_utils.py:expand_path",
+            "yt_dlp/compat/__init__.py:compat_expanduser",
+            "yt_dlp/extractor/common.py"
+          ],
+          "chain_length": 5,
+          "initial_entity": "nt._path_splitroot",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for the path sanitization, which is the core of the issue.",
+            "diversity_value": "Core utility function where the bug resides"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/extractor/__init__.py:list_extractor_classes",
+            "yt_dlp/extractor/generic.py:GenericIE",
+            "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+            "yt_dlp/extractor/common.py:InfoExtractor._download_webpage"
+          ],
+          "chain_length": 4,
+          "initial_entity": "nt._path_splitroot",
+          "start_entity": {
+            "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+            "entity_type": "function",
+            "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+            "diversity_value": "Extractor initialization from different file"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/cookies.py:_is_path",
+            "yt_dlp/cookies.py",
+            "yt_dlp/utils/__init__.py",
+            "yt_dlp/utils/_utils.py"
+          ],
+          "chain_length": 4,
+          "initial_entity": "nt._path_splitroot",
+          "start_entity": {
+            "entity_id": "yt_dlp/cookies.py:_is_path",
+            "entity_type": "function",
+            "relevance_reason": "This function checks if a value is a path, which could be useful for ensuring correct path handling.",
+            "diversity_value": "Path checking utility from a different module"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:is_path_like",
+            "yt_dlp/utils/_utils.py"
+          ],
+          "chain_length": 2,
+          "initial_entity": "nt._path_splitroot",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:is_path_like",
+            "entity_type": "function",
+            "relevance_reason": "This function determines if a value is path-like, which is crucial for ensuring that `sanitize_path` handles the correct types of inputs.",
+            "diversity_value": "Type checking utility from the same file but different functionality"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/utils/_utils.py:expand_path",
+            "yt_dlp/cookies.py:load_cookies",
+            "yt_dlp/cookies.py:extract_cookies_from_browser"
+          ],
+          "chain_length": 5,
+          "initial_entity": "Python",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for path sanitization, which is the core of the issue.",
+            "diversity_value": "Core utility function where the issue originates"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/extractor/__init__.py",
+            "yt_dlp/extractor/__init__.py:gen_extractor_classes",
+            "yt_dlp/extractor/extractors.py",
+            "yt_dlp/extractor/_extractors.py"
+          ],
+          "chain_length": 4,
+          "initial_entity": "Python",
+          "start_entity": {
+            "entity_id": "yt_dlp/extractor/__init__.py",
+            "entity_type": "file",
+            "relevance_reason": "The extractors are where the paths are often generated and used, and understanding how they interact with `sanitize_path` can help in fixing the issue.",
+            "diversity_value": "Extractor module, different from the utils file"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/extractor/__init__.py",
+            "yt_dlp/extractor/__init__.py:gen_extractor_classes",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.add_default_info_extractors",
+            "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+          ],
+          "chain_length": 4,
+          "initial_entity": "yt_dlp",
+          "start_entity": {
+            "entity_id": "yt_dlp/extractor/__init__.py",
+            "entity_type": "file",
+            "relevance_reason": "Contains initialization and setup for extractors which might use the `sanitize_path` function.",
+            "diversity_value": "Extractor initialization file from different location"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+            "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+            "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+          ],
+          "chain_length": 4,
+          "initial_entity": "yt_dlp",
+          "start_entity": {
+            "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+            "entity_type": "function",
+            "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+            "diversity_value": "Main processing function from the core module"
+          }
+        },
+        {
+          "chain": [
+            "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+            "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+            "yt_dlp/utils/_utils.py:encodeArgument",
+            "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+            "yt_dlp/utils/_utils.py:RetryManager"
+          ],
+          "chain_length": 5,
+          "initial_entity": "yt_dlp",
+          "start_entity": {
+            "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+            "entity_type": "function",
+            "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+            "diversity_value": "Post-processing function from the ffmpeg module"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-05T11:57:31.990260",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/utils/_utils.py:expand_path",
+            "yt_dlp/cookies.py:load_cookies",
+            "yt_dlp/cookies.py:extract_cookies_from_browser"
+          ],
+          "chain_length": 5,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+            "diversity_value": "Core utility function where the main problem lies"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+            "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+            "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+          ],
+          "chain_length": 4,
+          "initial_entity": "yt_dlp",
+          "start_entity": {
+            "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+            "entity_type": "function",
+            "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+            "diversity_value": "Main processing function from the core module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.9145798683166504,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+            "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+            "yt_dlp/utils/_utils.py:encodeArgument",
+            "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+            "yt_dlp/utils/_utils.py:RetryManager"
+          ],
+          "chain_length": 5,
+          "initial_entity": "yt_dlp",
+          "start_entity": {
+            "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+            "entity_type": "function",
+            "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+            "diversity_value": "Post-processing function from the ffmpeg module"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.9153456091880798,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn"
+          ],
+          "chain_length": 2,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+            "entity_type": "function",
+            "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+            "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.9171363711357117,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "yt_dlp/extractor/slideslive.py",
+            "yt_dlp/extractor/common.py:InfoExtractor",
+            "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+            "yt_dlp/extractor/common.py:InfoExtractor.supports_login"
+          ],
+          "chain_length": 4,
+          "initial_entity": "os.path.splitdrive",
+          "start_entity": {
+            "entity_id": "yt_dlp/extractor/slideslive.py",
+            "entity_type": "file",
+            "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+            "diversity_value": "Extractor module from a different file, providing broader context"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.9188441038131714,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "yt_dlp/extractor/__init__.py:list_extractor_classes",
+            "yt_dlp/extractor/generic.py:GenericIE",
+            "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+            "yt_dlp/extractor/common.py:InfoExtractor._download_webpage"
+          ],
+          "chain_length": 4,
+          "initial_entity": "nt._path_splitroot",
+          "start_entity": {
+            "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+            "entity_type": "function",
+            "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+            "diversity_value": "Extractor initialization from different file"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.920419454574585,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-05T11:57:31.998196",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/utils/_utils.py:sanitize_path",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+              "yt_dlp/utils/_utils.py:expand_path",
+              "yt_dlp/cookies.py:load_cookies",
+              "yt_dlp/cookies.py:extract_cookies_from_browser"
+            ],
+            "chain_length": 5,
+            "initial_entity": "sanitize_path",
+            "start_entity": {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+              "diversity_value": "Core utility function where the main problem lies"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "type": "function",
+              "code": "```\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     # XXX: this handles drive relative paths (c:sth) incorrectly\n670 |     if sys.platform == 'win32':\n671 |         force = False\n672 |         drive_or_unc, _ = os.path.splitdrive(s)\n673 |     elif force:\n674 |         drive_or_unc = ''\n675 |     else:\n676 |         return s\n677 | \n678 |     norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n679 |     if drive_or_unc:\n680 |         norm_path.pop(0)\n681 |     sanitized_path = [\n682 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|\\\\?\\*]|[\\s.]$)', '#', path_part)\n683 |         for path_part in norm_path]\n684 |     if drive_or_unc:\n685 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n686 |     elif force and s and s[0] == os.path.sep:\n687 |         sanitized_path.insert(0, os.path.sep)\n688 |     # TODO: Fix behavioral differences <3.12\n689 |     # The workaround using `normpath` only superficially passes tests\n690 |     # Ref: https://github.com/python/cpython/pull/100351\n691 |     return os.path.normpath(os.path.join(*sanitized_path))\n```",
+              "start_line": 667,
+              "end_line": 691,
+              "code_omitted": false,
+              "original_code_length": 1177
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+              "type": "function",
+              "code": "```\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |         paths = self.params.get('paths', {})\n1145 |         assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |         path = os.path.join(\n1147 |             expand_path(paths.get('home', '').strip()),\n1148 |             expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1149 |             filename or '')\n1150 |         return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```",
+              "start_line": 1143,
+              "end_line": 1150,
+              "code_omitted": false,
+              "original_code_length": 513
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:expand_path",
+              "type": "function",
+              "code": "```\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     return os.path.expandvars(compat_expanduser(s))\n```",
+              "start_line": 726,
+              "end_line": 728,
+              "code_omitted": false,
+              "original_code_length": 136
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:load_cookies",
+              "type": "function",
+              "code": "```\n 94 | def load_cookies(cookie_file, browser_specification, ydl):\n 95 |     try:\n 96 |         cookie_jars = []\n 97 |         if browser_specification is not None:\n 98 |             browser_name, profile, keyring, container = _parse_browser_specification(*browser_specification)\n 99 |             cookie_jars.append(\n100 |                 extract_cookies_from_browser(browser_name, profile, YDLLogger(ydl), keyring=keyring, container=container))\n101 | \n102 |         if cookie_file is not None:\n103 |             is_filename = is_path_like(cookie_file)\n104 |             if is_filename:\n105 |                 cookie_file = expand_path(cookie_file)\n106 | \n107 |             jar = YoutubeDLCookieJar(cookie_file)\n108 |             if not is_filename or os.access(cookie_file, os.R_OK):\n109 |                 jar.load()\n110 |             cookie_jars.append(jar)\n111 | \n112 |         return _merge_cookie_jars(cookie_jars)\n113 |     except Exception:\n114 |         raise CookieLoadError('failed to load cookies')\n```",
+              "start_line": 94,
+              "end_line": 114,
+              "code_omitted": false,
+              "original_code_length": 1015
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:extract_cookies_from_browser",
+              "type": "function",
+              "code": "```\n117 | def extract_cookies_from_browser(browser_name, profile=None, logger=YDLLogger(), *, keyring=None, container=None):\n118 |     if browser_name == 'firefox':\n119 |         return _extract_firefox_cookies(profile, container, logger)\n120 |     elif browser_name == 'safari':\n121 |         return _extract_safari_cookies(profile, logger)\n122 |     elif browser_name in CHROMIUM_BASED_BROWSERS:\n123 |         return _extract_chrome_cookies(browser_name, profile, keyring, logger)\n124 |     else:\n125 |         raise ValueError(f'unknown browser: {browser_name}')\n```",
+              "start_line": 117,
+              "end_line": 125,
+              "code_omitted": false,
+              "original_code_length": 569
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+              "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+              "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+            ],
+            "chain_length": 4,
+            "initial_entity": "yt_dlp",
+            "start_entity": {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+              "diversity_value": "Main processing function from the core module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.9145798683166504,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "type": "function",
+              "code": "# Code too long (21813 chars) - omitted for brevity",
+              "start_line": 3216,
+              "end_line": 3576,
+              "code_omitted": true,
+              "original_code_length": 21813
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+              "type": "function",
+              "code": "```\n1453 | def prepare_filename(self, info_dict, dir_type='', *, outtmpl=None, warn=False):\n1454 |         \"\"\"Generate the output filename\"\"\"\n1455 |         if outtmpl:\n1456 |             assert not dir_type, 'outtmpl and dir_type are mutually exclusive'\n1457 |             dir_type = None\n1458 |         filename = self._prepare_filename(info_dict, tmpl_type=dir_type, outtmpl=outtmpl)\n1459 |         if not filename and dir_type not in ('', 'temp'):\n1460 |             return ''\n1461 | \n1462 |         if warn:\n1463 |             if not self.params.get('paths'):\n1464 |                 pass\n1465 |             elif filename == '-':\n1466 |                 self.report_warning('--paths is ignored when an outputting to stdout', only_once=True)\n1467 |             elif os.path.isabs(filename):\n1468 |                 self.report_warning('--paths is ignored since an absolute path is given in output template', only_once=True)\n1469 |         if filename == '-' or not filename:\n1470 |             return filename\n1471 | \n1472 |         return self.get_output_path(dir_type, filename)\n```",
+              "start_line": 1453,
+              "end_line": 1472,
+              "code_omitted": false,
+              "original_code_length": 1085
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+              "type": "function",
+              "code": "```\n1423 | def _prepare_filename(self, info_dict, *, outtmpl=None, tmpl_type=None):\n1424 |         assert None in (outtmpl, tmpl_type), 'outtmpl and tmpl_type are mutually exclusive'\n1425 |         if outtmpl is None:\n1426 |             outtmpl = self.params['outtmpl'].get(tmpl_type or 'default', self.params['outtmpl']['default'])\n1427 |         try:\n1428 |             outtmpl = self._outtmpl_expandpath(outtmpl)\n1429 |             filename = self.evaluate_outtmpl(outtmpl, info_dict, True)\n1430 |             if not filename:\n1431 |                 return None\n1432 | \n1433 |             if tmpl_type in ('', 'temp'):\n1434 |                 final_ext, ext = self.params.get('final_ext'), info_dict.get('ext')\n1435 |                 if final_ext and ext and final_ext != ext and filename.endswith(f'.{final_ext}'):\n1436 |                     filename = replace_extension(filename, ext, final_ext)\n1437 |             elif tmpl_type:\n1438 |                 force_ext = OUTTMPL_TYPES[tmpl_type]\n1439 |                 if force_ext:\n1440 |                     filename = replace_extension(filename, force_ext, info_dict.get('ext'))\n1441 | \n1442 |             # https://github.com/blackjack4494/youtube-dlc/issues/85\n1443 |             trim_file_name = self.params.get('trim_file_name', False)\n1444 |             if trim_file_name:\n1445 |                 no_ext, *ext = filename.rsplit('.', 2)\n1446 |                 filename = join_nonempty(no_ext[:trim_file_name], *ext, delim='.')\n1447 | \n1448 |             return filename\n1449 |         except ValueError as err:\n1450 |             self.report_error('Error in output template: ' + str(err) + ' (encoding: ' + repr(preferredencoding()) + ')')\n1451 |             return None\n```",
+              "start_line": 1423,
+              "end_line": 1451,
+              "code_omitted": false,
+              "original_code_length": 1729
+            },
+            {
+              "entity_id": "yt_dlp/extractor/openload.py:PhantomJSwrapper.get",
+              "type": "function",
+              "code": "```\n163 | def get(self, url, html=None, video_id=None, note=None, note2='Executing JS on webpage', headers={}, jscode='saveAndExit();'):\n164 |         \"\"\"\n165 |         Downloads webpage (if needed) and executes JS\n166 | \n167 |         Params:\n168 |             url: website url\n169 |             html: optional, html code of website\n170 |             video_id: video id\n171 |             note: optional, displayed when downloading webpage\n172 |             note2: optional, displayed when executing JS\n173 |             headers: custom http headers\n174 |             jscode: code to be executed when page is loaded\n175 | \n176 |         Returns tuple with:\n177 |             * downloaded website (after JS execution)\n178 |             * anything you print with `console.log` (but not inside `page.execute`!)\n179 | \n180 |         In most cases you don't need to add any `jscode`.\n181 |         It is executed in `page.onLoadFinished`.\n182 |         `saveAndExit();` is mandatory, use it instead of `phantom.exit()`\n183 |         It is possible to wait for some element on the webpage, e.g.\n184 |             var check = function() {\n185 |               var elementFound = page.evaluate(function() {\n186 |                 return document.querySelector('#b.done') !== null;\n187 |               });\n188 |               if(elementFound)\n189 |                 saveAndExit();\n190 |               else\n191 |                 window.setTimeout(check, 500);\n192 |             }\n193 | \n194 |             page.evaluate(function(){\n195 |               document.querySelector('#a').click();\n196 |             });\n197 |             check();\n198 |         \"\"\"\n199 |         if 'saveAndExit();' not in jscode:\n200 |             raise ExtractorError('`saveAndExit();` not found in `jscode`')\n201 |         if not html:\n202 |             html = self.extractor._download_webpage(url, video_id, note=note, headers=headers)\n203 |         with open(self._TMP_FILES['html'].name, 'wb') as f:\n204 |             f.write(html.encode())\n205 | \n206 |         self._save_cookies(url)\n207 | \n208 |         user_agent = headers.get('User-Agent') or self.extractor.get_param('http_headers')['User-Agent']\n209 |         jscode = self._TEMPLATE.format_map(self.options.new_child({\n210 |             'url': url,\n211 |             'ua': user_agent.replace('\"', '\\\\\"'),\n212 |             'jscode': jscode,\n213 |         }))\n214 | \n215 |         stdout = self.execute(jscode, video_id, note=note2)\n216 | \n217 |         with open(self._TMP_FILES['html'].name, 'rb') as f:\n218 |             html = f.read().decode('utf-8')\n219 |         self._load_cookies()\n220 | \n221 |         return html, stdout\n```",
+              "start_line": 163,
+              "end_line": 221,
+              "code_omitted": false,
+              "original_code_length": 2660
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+              "yt_dlp/utils/_utils.py:encodeArgument",
+              "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+              "yt_dlp/utils/_utils.py:RetryManager"
+            ],
+            "chain_length": 5,
+            "initial_entity": "yt_dlp",
+            "start_entity": {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "entity_type": "function",
+              "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+              "diversity_value": "Post-processing function from the ffmpeg module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.9153456091880798,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "type": "function",
+              "code": "```\n329 | def run_ffmpeg_multiple_files(self, input_paths, out_path, opts, **kwargs):\n330 |         return self.real_run_ffmpeg(\n331 |             [(path, []) for path in input_paths],\n332 |             [(out_path, opts)], **kwargs)\n```",
+              "start_line": 329,
+              "end_line": 332,
+              "code_omitted": false,
+              "original_code_length": 236
+            },
+            {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+              "type": "function",
+              "code": "```\n334 | def real_run_ffmpeg(self, input_path_opts, output_path_opts, *, expected_retcodes=(0,)):\n335 |         self.check_version()\n336 | \n337 |         oldest_mtime = min(\n338 |             os.stat(encodeFilename(path)).st_mtime for path, _ in input_path_opts if path)\n339 | \n340 |         cmd = [encodeFilename(self.executable, True), encodeArgument('-y')]\n341 |         # avconv does not have repeat option\n342 |         if self.basename == 'ffmpeg':\n343 |             cmd += [encodeArgument('-loglevel'), encodeArgument('repeat+info')]\n344 | \n345 |         def make_args(file, args, name, number):\n346 |             keys = [f'_{name}{number}', f'_{name}']\n347 |             if name == 'o':\n348 |                 args += ['-movflags', '+faststart']\n349 |                 if number == 1:\n350 |                     keys.append('')\n351 |             args += self._configuration_args(self.basename, keys)\n352 |             if name == 'i':\n353 |                 args.append('-i')\n354 |             return (\n355 |                 [encodeArgument(arg) for arg in args]\n356 |                 + [encodeFilename(self._ffmpeg_filename_argument(file), True)])\n357 | \n358 |         for arg_type, path_opts in (('i', input_path_opts), ('o', output_path_opts)):\n359 |             cmd += itertools.chain.from_iterable(\n360 |                 make_args(path, list(opts), arg_type, i + 1)\n361 |                 for i, (path, opts) in enumerate(path_opts) if path)\n362 | \n363 |         self.write_debug(f'ffmpeg command line: {shell_quote(cmd)}')\n364 |         _, stderr, returncode = Popen.run(\n365 |             cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)\n366 |         if returncode not in variadic(expected_retcodes):\n367 |             self.write_debug(stderr)\n368 |             raise FFmpegPostProcessorError(stderr.strip().splitlines()[-1])\n369 |         for out_path, _ in output_path_opts:\n370 |             if out_path:\n371 |                 self.try_utime(out_path, oldest_mtime, oldest_mtime)\n372 |         return stderr\n```",
+              "start_line": 334,
+              "end_line": 372,
+              "code_omitted": false,
+              "original_code_length": 2063
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:encodeArgument",
+              "type": "function",
+              "code": "```\n873 | def encodeArgument(s):\n874 |     # Legacy code that uses byte strings\n875 |     # Uncomment the following line after fixing all post processors\n876 |     # assert isinstance(s, str), 'Internal error: %r should be of type %r, is %r' % (s, str, type(s))\n877 |     return s if isinstance(s, str) else s.decode('ascii')\n```",
+              "start_line": 873,
+              "end_line": 877,
+              "code_omitted": false,
+              "original_code_length": 329
+            },
+            {
+              "entity_id": "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+              "type": "function",
+              "code": "```\n143 | def _call_downloader(self, tmpfilename, info_dict):\n144 |         \"\"\" Either overwrite this or implement _make_cmd \"\"\"\n145 |         cmd = [encodeArgument(a) for a in self._make_cmd(tmpfilename, info_dict)]\n146 | \n147 |         self._debug_cmd(cmd)\n148 | \n149 |         if 'fragments' not in info_dict:\n150 |             _, stderr, returncode = self._call_process(cmd, info_dict)\n151 |             if returncode and stderr:\n152 |                 self.to_stderr(stderr)\n153 |             return returncode\n154 | \n155 |         skip_unavailable_fragments = self.params.get('skip_unavailable_fragments', True)\n156 | \n157 |         retry_manager = RetryManager(self.params.get('fragment_retries'), self.report_retry,\n158 |                                      frag_index=None, fatal=not skip_unavailable_fragments)\n159 |         for retry in retry_manager:\n160 |             _, stderr, returncode = self._call_process(cmd, info_dict)\n161 |             if not returncode:\n162 |                 break\n163 |             # TODO: Decide whether to retry based on error code\n164 |             # https://aria2.github.io/manual/en/html/aria2c.html#exit-status\n165 |             if stderr:\n166 |                 self.to_stderr(stderr)\n167 |             retry.error = Exception()\n168 |             continue\n169 |         if not skip_unavailable_fragments and retry_manager.error:\n170 |             return -1\n171 | \n172 |         decrypt_fragment = self.decrypter(info_dict)\n173 |         dest, _ = self.sanitize_open(tmpfilename, 'wb')\n174 |         for frag_index, fragment in enumerate(info_dict['fragments']):\n175 |             fragment_filename = f'{tmpfilename}-Frag{frag_index}'\n176 |             try:\n177 |                 src, _ = self.sanitize_open(fragment_filename, 'rb')\n178 |             except OSError as err:\n179 |                 if skip_unavailable_fragments and frag_index > 1:\n180 |                     self.report_skip_fragment(frag_index, err)\n181 |                     continue\n182 |                 self.report_error(f'Unable to open fragment {frag_index}; {err}')\n183 |                 return -1\n184 |             dest.write(decrypt_fragment(fragment, src.read()))\n185 |             src.close()\n186 |             if not self.params.get('keep_fragments', False):\n187 |                 self.try_remove(encodeFilename(fragment_filename))\n188 |         dest.close()\n189 |         self.try_remove(encodeFilename(f'{tmpfilename}.frag.urls'))\n190 |         return 0\n```",
+              "start_line": 143,
+              "end_line": 190,
+              "code_omitted": false,
+              "original_code_length": 2482
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:RetryManager",
+              "type": "class",
+              "code": "```\n5173 | class RetryManager:\n5174 |     \"\"\"Usage:\n5175 |         for retry in RetryManager(...):\n5176 |             try:\n5177 |                 ...\n5178 |             except SomeException as err:\n5179 |                 retry.error = err\n5180 |                 continue\n5181 |     \"\"\"\n5182 |     attempt, _error = 0, None\n5183 | \n5184 |     def __init__(self, _retries, _error_callback, **kwargs):\n5185 |         self.retries = _retries or 0\n5186 |         self.error_callback = functools.partial(_error_callback, **kwargs)\n5187 | \n5188 |     def _should_retry(self):\n5189 |         return self._error is not NO_DEFAULT and self.attempt <= self.retries\n5190 | \n5191 |     @property\n5192 |     def error(self):\n5193 |         if self._error is NO_DEFAULT:\n5194 |             return None\n5195 |         return self._error\n5196 | \n5197 |     @error.setter\n5198 |     def error(self, value):\n5199 |         self._error = value\n5200 | \n5201 |     def __iter__(self):\n5202 |         while self._should_retry():\n5203 |             self.error = NO_DEFAULT\n5204 |             self.attempt += 1\n5205 |             yield self\n5206 |             if self.error:\n5207 |                 self.error_callback(self.error, self.attempt, self.retries)\n5208 | \n5209 |     @staticmethod\n5210 |     def report_retry(e, count, retries, *, sleep_func, info, warn, error=None, suffix=None):\n5211 |         \"\"\"Utility function for reporting retries\"\"\"\n5212 |         if count > retries:\n5213 |             if error:\n5214 |                 return error(f'{e}. Giving up after {count - 1} retries') if count > 1 else error(str(e))\n5215 |             raise e\n5216 | \n5217 |         if not count:\n5218 |             return warn(e)\n5219 |         elif isinstance(e, ExtractorError):\n5220 |             e = remove_end(str_or_none(e.cause) or e.orig_msg, '.')\n5221 |         warn(f'{e}. Retrying{format_field(suffix, None, \" %s\")} ({count}/{retries})...')\n5222 | \n5223 |         delay = float_or_none(sleep_func(n=count - 1)) if callable(sleep_func) else sleep_func\n5224 |         if delay:\n5225 |             info(f'Sleeping {delay:.2f} seconds ...')\n5226 |             time.sleep(delay)\n```",
+              "start_line": 5173,
+              "end_line": 5226,
+              "code_omitted": false,
+              "original_code_length": 2159
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn"
+            ],
+            "chain_length": 2,
+            "initial_entity": "sanitize_path",
+            "start_entity": {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "entity_type": "function",
+              "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+              "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.9171363711357117,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "type": "function",
+              "code": "```\n3637 | def sanitize_info(info_dict, remove_private_keys=False):\n3638 |         \"\"\" Sanitize the infodict for converting to json \"\"\"\n3639 |         if info_dict is None:\n3640 |             return info_dict\n3641 |         info_dict.setdefault('epoch', int(time.time()))\n3642 |         info_dict.setdefault('_type', 'video')\n3643 |         info_dict.setdefault('_version', {\n3644 |             'version': __version__,\n3645 |             'current_git_head': current_git_head(),\n3646 |             'release_git_head': RELEASE_GIT_HEAD,\n3647 |             'repository': ORIGIN,\n3648 |         })\n3649 | \n3650 |         if remove_private_keys:\n3651 |             reject = lambda k, v: v is None or k.startswith('__') or k in {\n3652 |                 'requested_downloads', 'requested_formats', 'requested_subtitles', 'requested_entries',\n3653 |                 'entries', 'filepath', '_filename', 'filename', 'infojson_filename', 'original_url',\n3654 |                 'playlist_autonumber',\n3655 |             }\n3656 |         else:\n3657 |             reject = lambda k, v: False\n3658 | \n3659 |         def filter_fn(obj):\n3660 |             if isinstance(obj, dict):\n3661 |                 return {k: filter_fn(v) for k, v in obj.items() if not reject(k, v)}\n3662 |             elif isinstance(obj, (list, tuple, set, LazyList)):\n3663 |                 return list(map(filter_fn, obj))\n3664 |             elif obj is None or isinstance(obj, (str, int, float, bool)):\n3665 |                 return obj\n3666 |             else:\n3667 |                 return repr(obj)\n3668 | \n3669 |         return filter_fn(info_dict)\n```",
+              "start_line": 3637,
+              "end_line": 3669,
+              "code_omitted": false,
+              "original_code_length": 1619
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn",
+              "type": "function",
+              "code": "```\n3659 | def filter_fn(obj):\n3660 |             if isinstance(obj, dict):\n3661 |                 return {k: filter_fn(v) for k, v in obj.items() if not reject(k, v)}\n3662 |             elif isinstance(obj, (list, tuple, set, LazyList)):\n3663 |                 return list(map(filter_fn, obj))\n3664 |             elif obj is None or isinstance(obj, (str, int, float, bool)):\n3665 |                 return obj\n3666 |             else:\n3667 |                 return repr(obj)\n```",
+              "start_line": 3659,
+              "end_line": 3667,
+              "code_omitted": false,
+              "original_code_length": 478
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/extractor/slideslive.py",
+              "yt_dlp/extractor/common.py:InfoExtractor",
+              "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+              "yt_dlp/extractor/common.py:InfoExtractor.supports_login"
+            ],
+            "chain_length": 4,
+            "initial_entity": "os.path.splitdrive",
+            "start_entity": {
+              "entity_id": "yt_dlp/extractor/slideslive.py",
+              "entity_type": "file",
+              "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+              "diversity_value": "Extractor module from a different file, providing broader context"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9188441038131714,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/extractor/slideslive.py",
+              "type": "file",
+              "code": "# Code too long (25233 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 555,
+              "code_omitted": true,
+              "original_code_length": 25233
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor",
+              "type": "class",
+              "code": "# Code too long (216045 chars) - omitted for brevity",
+              "start_line": 105,
+              "end_line": 3946,
+              "code_omitted": true,
+              "original_code_length": 216045
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+              "type": "function",
+              "code": "```\n574 | def _login_hint(self, method=NO_DEFAULT, netrc=None):\n575 |         password_hint = f'--username and --password, --netrc-cmd, or --netrc ({netrc or self._NETRC_MACHINE}) to provide account credentials'\n576 |         return {\n577 |             None: '',\n578 |             'any': f'Use --cookies, --cookies-from-browser, {password_hint}',\n579 |             'password': f'Use {password_hint}',\n580 |             'cookies': (\n581 |                 'Use --cookies-from-browser or --cookies for the authentication. '\n582 |                 'See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies'),\n583 |         }[method if method is not NO_DEFAULT else 'any' if self.supports_login() else 'cookies']\n```",
+              "start_line": 574,
+              "end_line": 583,
+              "code_omitted": false,
+              "original_code_length": 766
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor.supports_login",
+              "type": "function",
+              "code": "```\n629 | def supports_login(cls):\n630 |         return bool(cls._NETRC_MACHINE)\n```",
+              "start_line": 629,
+              "end_line": 630,
+              "code_omitted": false,
+              "original_code_length": 84
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "yt_dlp/extractor/generic.py:GenericIE",
+              "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+              "yt_dlp/extractor/common.py:InfoExtractor._download_webpage"
+            ],
+            "chain_length": 4,
+            "initial_entity": "nt._path_splitroot",
+            "start_entity": {
+              "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "entity_type": "function",
+              "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+              "diversity_value": "Extractor initialization from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.920419454574585,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "type": "function",
+              "code": "```\n23 | def list_extractor_classes(age_limit=None):\n24 |     \"\"\"Return a list of extractors that are suitable for the given age, sorted by extractor name\"\"\"\n25 |     from .generic import GenericIE\n26 | \n27 |     yield from sorted(filter(\n28 |         lambda ie: ie.is_suitable(age_limit) and ie != GenericIE,\n29 |         gen_extractor_classes()), key=lambda ie: ie.IE_NAME.lower())\n30 |     yield GenericIE\n```",
+              "start_line": 23,
+              "end_line": 30,
+              "code_omitted": false,
+              "original_code_length": 412
+            },
+            {
+              "entity_id": "yt_dlp/extractor/generic.py:GenericIE",
+              "type": "class",
+              "code": "# Code too long (138011 chars) - omitted for brevity",
+              "start_line": 49,
+              "end_line": 2845,
+              "code_omitted": true,
+              "original_code_length": 138011
+            },
+            {
+              "entity_id": "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+              "type": "function",
+              "code": "# Code too long (10945 chars) - omitted for brevity",
+              "start_line": 2332,
+              "end_line": 2526,
+              "code_omitted": true,
+              "original_code_length": 10945
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor._download_webpage",
+              "type": "function",
+              "code": "```\n1175 | def _download_webpage(\n1176 |             self, url_or_request, video_id, note=None, errnote=None,\n1177 |             fatal=True, tries=1, timeout=NO_DEFAULT, *args, **kwargs):\n1178 |         \"\"\"\n1179 |         Return the data of the page as a string.\n1180 | \n1181 |         Keyword arguments:\n1182 |         tries -- number of tries\n1183 |         timeout -- sleep interval between tries\n1184 | \n1185 |         See _download_webpage_handle docstring for other arguments specification.\n1186 |         \"\"\"\n1187 | \n1188 |         R''' # NB: These are unused; should they be deprecated?\n1189 |         if tries != 1:\n1190 |             self._downloader.deprecation_warning('tries argument is deprecated in InfoExtractor._download_webpage')\n1191 |         if timeout is NO_DEFAULT:\n1192 |             timeout = 5\n1193 |         else:\n1194 |             self._downloader.deprecation_warning('timeout argument is deprecated in InfoExtractor._download_webpage')\n1195 |         '''\n1196 | \n1197 |         try_count = 0\n1198 |         while True:\n1199 |             try:\n1200 |                 return self.__download_webpage(url_or_request, video_id, note, errnote, None, fatal, *args, **kwargs)\n1201 |             except IncompleteRead as e:\n1202 |                 try_count += 1\n1203 |                 if try_count >= tries:\n1204 |                     raise e\n1205 |                 self._sleep(timeout, video_id)\n```",
+              "start_line": 1175,
+              "end_line": 1205,
+              "code_omitted": false,
+              "original_code_length": 1421
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-05T11:58:48.313155",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_1",
+        "winning_chain": {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/utils/_utils.py:sanitize_path",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+              "yt_dlp/utils/_utils.py:expand_path",
+              "yt_dlp/cookies.py:load_cookies",
+              "yt_dlp/cookies.py:extract_cookies_from_browser"
+            ],
+            "chain_length": 5,
+            "initial_entity": "sanitize_path",
+            "start_entity": {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+              "diversity_value": "Core utility function where the main problem lies"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "type": "function",
+              "code": "```\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     # XXX: this handles drive relative paths (c:sth) incorrectly\n670 |     if sys.platform == 'win32':\n671 |         force = False\n672 |         drive_or_unc, _ = os.path.splitdrive(s)\n673 |     elif force:\n674 |         drive_or_unc = ''\n675 |     else:\n676 |         return s\n677 | \n678 |     norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n679 |     if drive_or_unc:\n680 |         norm_path.pop(0)\n681 |     sanitized_path = [\n682 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|\\\\?\\*]|[\\s.]$)', '#', path_part)\n683 |         for path_part in norm_path]\n684 |     if drive_or_unc:\n685 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n686 |     elif force and s and s[0] == os.path.sep:\n687 |         sanitized_path.insert(0, os.path.sep)\n688 |     # TODO: Fix behavioral differences <3.12\n689 |     # The workaround using `normpath` only superficially passes tests\n690 |     # Ref: https://github.com/python/cpython/pull/100351\n691 |     return os.path.normpath(os.path.join(*sanitized_path))\n```",
+              "start_line": 667,
+              "end_line": 691,
+              "code_omitted": false,
+              "original_code_length": 1177
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+              "type": "function",
+              "code": "```\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |         paths = self.params.get('paths', {})\n1145 |         assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |         path = os.path.join(\n1147 |             expand_path(paths.get('home', '').strip()),\n1148 |             expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1149 |             filename or '')\n1150 |         return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```",
+              "start_line": 1143,
+              "end_line": 1150,
+              "code_omitted": false,
+              "original_code_length": 513
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:expand_path",
+              "type": "function",
+              "code": "```\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     return os.path.expandvars(compat_expanduser(s))\n```",
+              "start_line": 726,
+              "end_line": 728,
+              "code_omitted": false,
+              "original_code_length": 136
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:load_cookies",
+              "type": "function",
+              "code": "```\n 94 | def load_cookies(cookie_file, browser_specification, ydl):\n 95 |     try:\n 96 |         cookie_jars = []\n 97 |         if browser_specification is not None:\n 98 |             browser_name, profile, keyring, container = _parse_browser_specification(*browser_specification)\n 99 |             cookie_jars.append(\n100 |                 extract_cookies_from_browser(browser_name, profile, YDLLogger(ydl), keyring=keyring, container=container))\n101 | \n102 |         if cookie_file is not None:\n103 |             is_filename = is_path_like(cookie_file)\n104 |             if is_filename:\n105 |                 cookie_file = expand_path(cookie_file)\n106 | \n107 |             jar = YoutubeDLCookieJar(cookie_file)\n108 |             if not is_filename or os.access(cookie_file, os.R_OK):\n109 |                 jar.load()\n110 |             cookie_jars.append(jar)\n111 | \n112 |         return _merge_cookie_jars(cookie_jars)\n113 |     except Exception:\n114 |         raise CookieLoadError('failed to load cookies')\n```",
+              "start_line": 94,
+              "end_line": 114,
+              "code_omitted": false,
+              "original_code_length": 1015
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:extract_cookies_from_browser",
+              "type": "function",
+              "code": "```\n117 | def extract_cookies_from_browser(browser_name, profile=None, logger=YDLLogger(), *, keyring=None, container=None):\n118 |     if browser_name == 'firefox':\n119 |         return _extract_firefox_cookies(profile, container, logger)\n120 |     elif browser_name == 'safari':\n121 |         return _extract_safari_cookies(profile, logger)\n122 |     elif browser_name in CHROMIUM_BASED_BROWSERS:\n123 |         return _extract_chrome_cookies(browser_name, profile, keyring, logger)\n124 |     else:\n125 |         raise ValueError(f'unknown browser: {browser_name}')\n```",
+              "start_line": 117,
+              "end_line": 125,
+              "code_omitted": false,
+              "original_code_length": 569
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 93.0,
+        "vote_distribution": {
+          "chain_1": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is directly responsible for handling and sanitizing paths. The issue described is specifically about how drive relative paths are treated, and the `sanitize_path` function is where this behavior is defined. Modifying this function to correctly handle drive relative paths would directly resolve the issue.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths (`D:test`) correctly by ensuring they remain relative and do not resolve to absolute paths.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. Modifying this function to handle drive relative paths correctly would directly solve the problem.",
+              "chain_2": "This chain involves the output path generation and preparation, but the core issue lies in the `sanitize_path` function. Changes here would not address the incorrect path handling.",
+              "chain_3": "This chain deals with the FFmpeg post-processing and argument encoding, which is not directly related to the path sanitization issue.",
+              "chain_4": "This chain is about sanitizing the info dictionary, which is not relevant to the path handling issue.",
+              "chain_5": "This chain involves login hints and extractor support, which is not related to the path sanitization issue.",
+              "chain_6": "This chain is about listing extractor classes and downloading webpages, which is not directly related to the path sanitization issue."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is directly responsible for handling and sanitizing file paths. The issue described is specifically about how drive relative paths are handled incorrectly, and this function is where the path manipulation and normalization occur. Modifying this function to correctly handle drive relative paths would directly resolve the issue.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths (`D:test`) correctly by ensuring they are treated as relative paths and not converted to absolute paths.",
+            "chain_analysis": {
+              "chain_1": "This chain is the best modification target because it directly deals with the path sanitization logic. The issue is rooted in how `sanitize_path` processes drive relative paths, and fixing this function will address the core problem.",
+              "chain_2": "While this chain involves the generation of output paths, the root issue lies in the `sanitize_path` function called within `get_output_path`. Modifying this chain would not directly fix the path handling issue.",
+              "chain_3": "This chain is involved in the FFmpeg post-processing, but the issue is not related to FFmpeg or the command-line arguments. It is more about how the paths are sanitized before being passed to FFmpeg.",
+              "chain_4": "This chain deals with sanitizing the info dictionary for JSON conversion, which is not relevant to the path handling issue described.",
+              "chain_5": "This chain is related to login and authentication methods, which are not directly connected to the path handling issue.",
+              "chain_6": "This chain involves listing and initializing extractors, which is not relevant to the path handling issue."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is explicitly mentioned in the issue description as treating drive relative paths incorrectly. Modifying this function to handle drive relative paths correctly would directly address the problem. The function is also well-structured and isolated, making it a safe and effective place to implement the fix.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths by preserving the relative subdirectory and ensuring that the path is not converted to an absolute path.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. It is well-structured and safe to modify, and fixing it would resolve the entire problem.",
+              "chain_2": "This chain involves the `get_output_path` and `prepare_filename` methods, which are downstream users of `sanitize_path`. While related, the issue is not caused by these methods, and modifying them would not address the core problem.",
+              "chain_3": "This chain involves the `run_ffmpeg_multiple_files` and `real_run_ffmpeg` methods, which are part of the post-processing pipeline. The issue is not related to these methods, and modifying them would not resolve the path sanitization problem.",
+              "chain_4": "This chain involves the `sanitize_info` method and its `filter_fn` inner function, which are used to clean up the info dictionary before conversion to JSON. The issue is not related to this chain, and modifying it would not address the path sanitization problem.",
+              "chain_5": "This chain involves the `_login_hint` and `supports_login` methods, which are related to login functionality. The issue is not related to these methods, and modifying them would not resolve the path sanitization problem.",
+              "chain_6": "This chain involves the `list_extractor_classes` function and the `GenericIE` class, which are related to the extraction process. The issue is not related to this chain, and modifying it would not address the path sanitization problem."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is explicitly mentioned in the issue description as treating drive relative paths incorrectly. This function is responsible for sanitizing and normalizing paths, especially on Windows. Modifying this function to correctly handle drive relative paths would directly address the issue and ensure that paths like 'D:test' are treated as relative paths.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths correctly by preserving the relative part of the path and ensuring it is not converted to an absolute path.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. It is the primary function responsible for path sanitization and normalization, and modifying it would directly resolve the problem.",
+              "chain_2": "This chain involves the `get_output_path` and `prepare_filename` methods, which use `sanitize_path`. While these methods are related to the issue, they do not contain the logic that needs to be fixed. Modifying them would not address the core problem.",
+              "chain_3": "This chain involves the `run_ffmpeg_multiple_files` and `real_run_ffmpeg` methods, which are used for post-processing and handling file paths. However, the issue is not related to post-processing but to the initial path sanitization, so this chain is less relevant.",
+              "chain_4": "This chain involves the `sanitize_info` method and its nested `filter_fn` function, which are used for sanitizing the info dictionary before converting it to JSON. This is not related to the path sanitization issue and would not help resolve the problem.",
+              "chain_5": "This chain involves login-related methods and is not directly related to path sanitization. It would not be a suitable target for fixing the issue.",
+              "chain_6": "This chain involves the `list_extractor_classes` and `_download_webpage` methods, which are used for listing extractors and downloading webpages. These methods are not related to path sanitization and would not help resolve the issue."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is explicitly mentioned in the issue description as treating drive relative paths incorrectly. This function is responsible for sanitizing and normalizing paths, and the issue is directly related to how it handles drive relative paths. Modifying this function to correctly handle drive relative paths would directly address the problem.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths correctly by preserving the relative subdirectory and ensuring that the path is not converted to an absolute path unnecessarily.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. Modifying this function to handle drive relative paths correctly would resolve the problem.",
+              "chain_2": "This chain involves the `get_output_path` and `prepare_filename` methods, which use `sanitize_path`. While these methods are related, the issue lies in the `sanitize_path` function itself, so modifying this chain would not directly address the root cause.",
+              "chain_3": "This chain involves the `run_ffmpeg_multiple_files` and `real_run_ffmpeg` methods, which are part of the post-processing pipeline. The issue is not related to these methods, so modifying this chain would not resolve the problem.",
+              "chain_4": "This chain involves the `sanitize_info` method and its nested `filter_fn` function. These methods are used for sanitizing the info dictionary, not for handling file paths. Modifying this chain would not address the issue.",
+              "chain_5": "This chain involves the `_login_hint` and `supports_login` methods, which are related to login functionality. The issue is not related to these methods, so modifying this chain would not resolve the problem.",
+              "chain_6": "This chain involves the `list_extractor_classes` and `_download_webpage` methods, which are related to the extraction process. The issue is not related to these methods, so modifying this chain would not address the problem."
+            },
+            "agent_id": 5
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is directly responsible for handling and sanitizing paths. The issue described is specifically about how drive relative paths are treated, and the `sanitize_path` function is where this behavior is defined. Modifying this function to correctly handle drive relative paths would directly resolve the issue.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths (`D:test`) correctly by ensuring they remain relative and do not resolve to absolute paths.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. Modifying this function to handle drive relative paths correctly would directly solve the problem.",
+              "chain_2": "This chain involves the output path generation and preparation, but the core issue lies in the `sanitize_path` function. Changes here would not address the incorrect path handling.",
+              "chain_3": "This chain deals with the FFmpeg post-processing and argument encoding, which is not directly related to the path sanitization issue.",
+              "chain_4": "This chain is about sanitizing the info dictionary, which is not relevant to the path handling issue.",
+              "chain_5": "This chain involves login hints and extractor support, which is not related to the path sanitization issue.",
+              "chain_6": "This chain is about listing extractor classes and downloading webpages, which is not directly related to the path sanitization issue."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is directly responsible for handling and sanitizing file paths. The issue described is specifically about how drive relative paths are handled incorrectly, and this function is where the path manipulation and normalization occur. Modifying this function to correctly handle drive relative paths would directly resolve the issue.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths (`D:test`) correctly by ensuring they are treated as relative paths and not converted to absolute paths.",
+            "chain_analysis": {
+              "chain_1": "This chain is the best modification target because it directly deals with the path sanitization logic. The issue is rooted in how `sanitize_path` processes drive relative paths, and fixing this function will address the core problem.",
+              "chain_2": "While this chain involves the generation of output paths, the root issue lies in the `sanitize_path` function called within `get_output_path`. Modifying this chain would not directly fix the path handling issue.",
+              "chain_3": "This chain is involved in the FFmpeg post-processing, but the issue is not related to FFmpeg or the command-line arguments. It is more about how the paths are sanitized before being passed to FFmpeg.",
+              "chain_4": "This chain deals with sanitizing the info dictionary for JSON conversion, which is not relevant to the path handling issue described.",
+              "chain_5": "This chain is related to login and authentication methods, which are not directly connected to the path handling issue.",
+              "chain_6": "This chain involves listing and initializing extractors, which is not relevant to the path handling issue."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is explicitly mentioned in the issue description as treating drive relative paths incorrectly. Modifying this function to handle drive relative paths correctly would directly address the problem. The function is also well-structured and isolated, making it a safe and effective place to implement the fix.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths by preserving the relative subdirectory and ensuring that the path is not converted to an absolute path.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. It is well-structured and safe to modify, and fixing it would resolve the entire problem.",
+              "chain_2": "This chain involves the `get_output_path` and `prepare_filename` methods, which are downstream users of `sanitize_path`. While related, the issue is not caused by these methods, and modifying them would not address the core problem.",
+              "chain_3": "This chain involves the `run_ffmpeg_multiple_files` and `real_run_ffmpeg` methods, which are part of the post-processing pipeline. The issue is not related to these methods, and modifying them would not resolve the path sanitization problem.",
+              "chain_4": "This chain involves the `sanitize_info` method and its `filter_fn` inner function, which are used to clean up the info dictionary before conversion to JSON. The issue is not related to this chain, and modifying it would not address the path sanitization problem.",
+              "chain_5": "This chain involves the `_login_hint` and `supports_login` methods, which are related to login functionality. The issue is not related to these methods, and modifying them would not resolve the path sanitization problem.",
+              "chain_6": "This chain involves the `list_extractor_classes` function and the `GenericIE` class, which are related to the extraction process. The issue is not related to this chain, and modifying it would not address the path sanitization problem."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 95,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is explicitly mentioned in the issue description as treating drive relative paths incorrectly. This function is responsible for sanitizing and normalizing paths, especially on Windows. Modifying this function to correctly handle drive relative paths would directly address the issue and ensure that paths like 'D:test' are treated as relative paths.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths correctly by preserving the relative part of the path and ensuring it is not converted to an absolute path.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. It is the primary function responsible for path sanitization and normalization, and modifying it would directly resolve the problem.",
+              "chain_2": "This chain involves the `get_output_path` and `prepare_filename` methods, which use `sanitize_path`. While these methods are related to the issue, they do not contain the logic that needs to be fixed. Modifying them would not address the core problem.",
+              "chain_3": "This chain involves the `run_ffmpeg_multiple_files` and `real_run_ffmpeg` methods, which are used for post-processing and handling file paths. However, the issue is not related to post-processing but to the initial path sanitization, so this chain is less relevant.",
+              "chain_4": "This chain involves the `sanitize_info` method and its nested `filter_fn` function, which are used for sanitizing the info dictionary before converting it to JSON. This is not related to the path sanitization issue and would not help resolve the problem.",
+              "chain_5": "This chain involves login-related methods and is not directly related to path sanitization. It would not be a suitable target for fixing the issue.",
+              "chain_6": "This chain involves the `list_extractor_classes` and `_download_webpage` methods, which are used for listing extractors and downloading webpages. These methods are not related to path sanitization and would not help resolve the issue."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_1",
+            "confidence": 90,
+            "reasoning": "Chain 1 contains the `sanitize_path` function, which is explicitly mentioned in the issue description as treating drive relative paths incorrectly. This function is responsible for sanitizing and normalizing paths, and the issue is directly related to how it handles drive relative paths. Modifying this function to correctly handle drive relative paths would directly address the problem.",
+            "modification_strategy": "Update the `sanitize_path` function to handle drive relative paths correctly by preserving the relative subdirectory and ensuring that the path is not converted to an absolute path unnecessarily.",
+            "chain_analysis": {
+              "chain_1": "This chain contains the `sanitize_path` function, which is the root cause of the issue. Modifying this function to handle drive relative paths correctly would resolve the problem.",
+              "chain_2": "This chain involves the `get_output_path` and `prepare_filename` methods, which use `sanitize_path`. While these methods are related, the issue lies in the `sanitize_path` function itself, so modifying this chain would not directly address the root cause.",
+              "chain_3": "This chain involves the `run_ffmpeg_multiple_files` and `real_run_ffmpeg` methods, which are part of the post-processing pipeline. The issue is not related to these methods, so modifying this chain would not resolve the problem.",
+              "chain_4": "This chain involves the `sanitize_info` method and its nested `filter_fn` function. These methods are used for sanitizing the info dictionary, not for handling file paths. Modifying this chain would not address the issue.",
+              "chain_5": "This chain involves the `_login_hint` and `supports_login` methods, which are related to login functionality. The issue is not related to these methods, so modifying this chain would not resolve the problem.",
+              "chain_6": "This chain involves the `list_extractor_classes` and `_download_webpage` methods, which are related to the extraction process. The issue is not related to these methods, so modifying this chain would not address the problem."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/utils/_utils.py:sanitize_path",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+              "yt_dlp/utils/_utils.py:expand_path",
+              "yt_dlp/cookies.py:load_cookies",
+              "yt_dlp/cookies.py:extract_cookies_from_browser"
+            ],
+            "chain_length": 5,
+            "initial_entity": "sanitize_path",
+            "start_entity": {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+              "diversity_value": "Core utility function where the main problem lies"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+              "type": "function",
+              "code": "```\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     # XXX: this handles drive relative paths (c:sth) incorrectly\n670 |     if sys.platform == 'win32':\n671 |         force = False\n672 |         drive_or_unc, _ = os.path.splitdrive(s)\n673 |     elif force:\n674 |         drive_or_unc = ''\n675 |     else:\n676 |         return s\n677 | \n678 |     norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n679 |     if drive_or_unc:\n680 |         norm_path.pop(0)\n681 |     sanitized_path = [\n682 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|\\\\?\\*]|[\\s.]$)', '#', path_part)\n683 |         for path_part in norm_path]\n684 |     if drive_or_unc:\n685 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n686 |     elif force and s and s[0] == os.path.sep:\n687 |         sanitized_path.insert(0, os.path.sep)\n688 |     # TODO: Fix behavioral differences <3.12\n689 |     # The workaround using `normpath` only superficially passes tests\n690 |     # Ref: https://github.com/python/cpython/pull/100351\n691 |     return os.path.normpath(os.path.join(*sanitized_path))\n```",
+              "start_line": 667,
+              "end_line": 691,
+              "code_omitted": false,
+              "original_code_length": 1177
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+              "type": "function",
+              "code": "```\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |         paths = self.params.get('paths', {})\n1145 |         assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |         path = os.path.join(\n1147 |             expand_path(paths.get('home', '').strip()),\n1148 |             expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1149 |             filename or '')\n1150 |         return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```",
+              "start_line": 1143,
+              "end_line": 1150,
+              "code_omitted": false,
+              "original_code_length": 513
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:expand_path",
+              "type": "function",
+              "code": "```\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     return os.path.expandvars(compat_expanduser(s))\n```",
+              "start_line": 726,
+              "end_line": 728,
+              "code_omitted": false,
+              "original_code_length": 136
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:load_cookies",
+              "type": "function",
+              "code": "```\n 94 | def load_cookies(cookie_file, browser_specification, ydl):\n 95 |     try:\n 96 |         cookie_jars = []\n 97 |         if browser_specification is not None:\n 98 |             browser_name, profile, keyring, container = _parse_browser_specification(*browser_specification)\n 99 |             cookie_jars.append(\n100 |                 extract_cookies_from_browser(browser_name, profile, YDLLogger(ydl), keyring=keyring, container=container))\n101 | \n102 |         if cookie_file is not None:\n103 |             is_filename = is_path_like(cookie_file)\n104 |             if is_filename:\n105 |                 cookie_file = expand_path(cookie_file)\n106 | \n107 |             jar = YoutubeDLCookieJar(cookie_file)\n108 |             if not is_filename or os.access(cookie_file, os.R_OK):\n109 |                 jar.load()\n110 |             cookie_jars.append(jar)\n111 | \n112 |         return _merge_cookie_jars(cookie_jars)\n113 |     except Exception:\n114 |         raise CookieLoadError('failed to load cookies')\n```",
+              "start_line": 94,
+              "end_line": 114,
+              "code_omitted": false,
+              "original_code_length": 1015
+            },
+            {
+              "entity_id": "yt_dlp/cookies.py:extract_cookies_from_browser",
+              "type": "function",
+              "code": "```\n117 | def extract_cookies_from_browser(browser_name, profile=None, logger=YDLLogger(), *, keyring=None, container=None):\n118 |     if browser_name == 'firefox':\n119 |         return _extract_firefox_cookies(profile, container, logger)\n120 |     elif browser_name == 'safari':\n121 |         return _extract_safari_cookies(profile, logger)\n122 |     elif browser_name in CHROMIUM_BASED_BROWSERS:\n123 |         return _extract_chrome_cookies(browser_name, profile, keyring, logger)\n124 |     else:\n125 |         raise ValueError(f'unknown browser: {browser_name}')\n```",
+              "start_line": 117,
+              "end_line": 125,
+              "code_omitted": false,
+              "original_code_length": 569
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+              "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+              "yt_dlp/extractor/openload.py:PhantomJSwrapper.get"
+            ],
+            "chain_length": 4,
+            "initial_entity": "yt_dlp",
+            "start_entity": {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the video information and calls the post-processing steps, including merging files.",
+              "diversity_value": "Main processing function from the core module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.9145798683166504,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.process_info",
+              "type": "function",
+              "code": "# Code too long (21813 chars) - omitted for brevity",
+              "start_line": 3216,
+              "end_line": 3576,
+              "code_omitted": true,
+              "original_code_length": 21813
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.prepare_filename",
+              "type": "function",
+              "code": "```\n1453 | def prepare_filename(self, info_dict, dir_type='', *, outtmpl=None, warn=False):\n1454 |         \"\"\"Generate the output filename\"\"\"\n1455 |         if outtmpl:\n1456 |             assert not dir_type, 'outtmpl and dir_type are mutually exclusive'\n1457 |             dir_type = None\n1458 |         filename = self._prepare_filename(info_dict, tmpl_type=dir_type, outtmpl=outtmpl)\n1459 |         if not filename and dir_type not in ('', 'temp'):\n1460 |             return ''\n1461 | \n1462 |         if warn:\n1463 |             if not self.params.get('paths'):\n1464 |                 pass\n1465 |             elif filename == '-':\n1466 |                 self.report_warning('--paths is ignored when an outputting to stdout', only_once=True)\n1467 |             elif os.path.isabs(filename):\n1468 |                 self.report_warning('--paths is ignored since an absolute path is given in output template', only_once=True)\n1469 |         if filename == '-' or not filename:\n1470 |             return filename\n1471 | \n1472 |         return self.get_output_path(dir_type, filename)\n```",
+              "start_line": 1453,
+              "end_line": 1472,
+              "code_omitted": false,
+              "original_code_length": 1085
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL._prepare_filename",
+              "type": "function",
+              "code": "```\n1423 | def _prepare_filename(self, info_dict, *, outtmpl=None, tmpl_type=None):\n1424 |         assert None in (outtmpl, tmpl_type), 'outtmpl and tmpl_type are mutually exclusive'\n1425 |         if outtmpl is None:\n1426 |             outtmpl = self.params['outtmpl'].get(tmpl_type or 'default', self.params['outtmpl']['default'])\n1427 |         try:\n1428 |             outtmpl = self._outtmpl_expandpath(outtmpl)\n1429 |             filename = self.evaluate_outtmpl(outtmpl, info_dict, True)\n1430 |             if not filename:\n1431 |                 return None\n1432 | \n1433 |             if tmpl_type in ('', 'temp'):\n1434 |                 final_ext, ext = self.params.get('final_ext'), info_dict.get('ext')\n1435 |                 if final_ext and ext and final_ext != ext and filename.endswith(f'.{final_ext}'):\n1436 |                     filename = replace_extension(filename, ext, final_ext)\n1437 |             elif tmpl_type:\n1438 |                 force_ext = OUTTMPL_TYPES[tmpl_type]\n1439 |                 if force_ext:\n1440 |                     filename = replace_extension(filename, force_ext, info_dict.get('ext'))\n1441 | \n1442 |             # https://github.com/blackjack4494/youtube-dlc/issues/85\n1443 |             trim_file_name = self.params.get('trim_file_name', False)\n1444 |             if trim_file_name:\n1445 |                 no_ext, *ext = filename.rsplit('.', 2)\n1446 |                 filename = join_nonempty(no_ext[:trim_file_name], *ext, delim='.')\n1447 | \n1448 |             return filename\n1449 |         except ValueError as err:\n1450 |             self.report_error('Error in output template: ' + str(err) + ' (encoding: ' + repr(preferredencoding()) + ')')\n1451 |             return None\n```",
+              "start_line": 1423,
+              "end_line": 1451,
+              "code_omitted": false,
+              "original_code_length": 1729
+            },
+            {
+              "entity_id": "yt_dlp/extractor/openload.py:PhantomJSwrapper.get",
+              "type": "function",
+              "code": "```\n163 | def get(self, url, html=None, video_id=None, note=None, note2='Executing JS on webpage', headers={}, jscode='saveAndExit();'):\n164 |         \"\"\"\n165 |         Downloads webpage (if needed) and executes JS\n166 | \n167 |         Params:\n168 |             url: website url\n169 |             html: optional, html code of website\n170 |             video_id: video id\n171 |             note: optional, displayed when downloading webpage\n172 |             note2: optional, displayed when executing JS\n173 |             headers: custom http headers\n174 |             jscode: code to be executed when page is loaded\n175 | \n176 |         Returns tuple with:\n177 |             * downloaded website (after JS execution)\n178 |             * anything you print with `console.log` (but not inside `page.execute`!)\n179 | \n180 |         In most cases you don't need to add any `jscode`.\n181 |         It is executed in `page.onLoadFinished`.\n182 |         `saveAndExit();` is mandatory, use it instead of `phantom.exit()`\n183 |         It is possible to wait for some element on the webpage, e.g.\n184 |             var check = function() {\n185 |               var elementFound = page.evaluate(function() {\n186 |                 return document.querySelector('#b.done') !== null;\n187 |               });\n188 |               if(elementFound)\n189 |                 saveAndExit();\n190 |               else\n191 |                 window.setTimeout(check, 500);\n192 |             }\n193 | \n194 |             page.evaluate(function(){\n195 |               document.querySelector('#a').click();\n196 |             });\n197 |             check();\n198 |         \"\"\"\n199 |         if 'saveAndExit();' not in jscode:\n200 |             raise ExtractorError('`saveAndExit();` not found in `jscode`')\n201 |         if not html:\n202 |             html = self.extractor._download_webpage(url, video_id, note=note, headers=headers)\n203 |         with open(self._TMP_FILES['html'].name, 'wb') as f:\n204 |             f.write(html.encode())\n205 | \n206 |         self._save_cookies(url)\n207 | \n208 |         user_agent = headers.get('User-Agent') or self.extractor.get_param('http_headers')['User-Agent']\n209 |         jscode = self._TEMPLATE.format_map(self.options.new_child({\n210 |             'url': url,\n211 |             'ua': user_agent.replace('\"', '\\\\\"'),\n212 |             'jscode': jscode,\n213 |         }))\n214 | \n215 |         stdout = self.execute(jscode, video_id, note=note2)\n216 | \n217 |         with open(self._TMP_FILES['html'].name, 'rb') as f:\n218 |             html = f.read().decode('utf-8')\n219 |         self._load_cookies()\n220 | \n221 |         return html, stdout\n```",
+              "start_line": 163,
+              "end_line": 221,
+              "code_omitted": false,
+              "original_code_length": 2660
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+              "yt_dlp/utils/_utils.py:encodeArgument",
+              "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+              "yt_dlp/utils/_utils.py:RetryManager"
+            ],
+            "chain_length": 5,
+            "initial_entity": "yt_dlp",
+            "start_entity": {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "entity_type": "function",
+              "relevance_reason": "This function handles the merging of video and audio files, and it uses paths that might be affected by the `sanitize_path` function.",
+              "diversity_value": "Post-processing function from the ffmpeg module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.9153456091880798,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.run_ffmpeg_multiple_files",
+              "type": "function",
+              "code": "```\n329 | def run_ffmpeg_multiple_files(self, input_paths, out_path, opts, **kwargs):\n330 |         return self.real_run_ffmpeg(\n331 |             [(path, []) for path in input_paths],\n332 |             [(out_path, opts)], **kwargs)\n```",
+              "start_line": 329,
+              "end_line": 332,
+              "code_omitted": false,
+              "original_code_length": 236
+            },
+            {
+              "entity_id": "yt_dlp/postprocessor/ffmpeg.py:FFmpegPostProcessor.real_run_ffmpeg",
+              "type": "function",
+              "code": "```\n334 | def real_run_ffmpeg(self, input_path_opts, output_path_opts, *, expected_retcodes=(0,)):\n335 |         self.check_version()\n336 | \n337 |         oldest_mtime = min(\n338 |             os.stat(encodeFilename(path)).st_mtime for path, _ in input_path_opts if path)\n339 | \n340 |         cmd = [encodeFilename(self.executable, True), encodeArgument('-y')]\n341 |         # avconv does not have repeat option\n342 |         if self.basename == 'ffmpeg':\n343 |             cmd += [encodeArgument('-loglevel'), encodeArgument('repeat+info')]\n344 | \n345 |         def make_args(file, args, name, number):\n346 |             keys = [f'_{name}{number}', f'_{name}']\n347 |             if name == 'o':\n348 |                 args += ['-movflags', '+faststart']\n349 |                 if number == 1:\n350 |                     keys.append('')\n351 |             args += self._configuration_args(self.basename, keys)\n352 |             if name == 'i':\n353 |                 args.append('-i')\n354 |             return (\n355 |                 [encodeArgument(arg) for arg in args]\n356 |                 + [encodeFilename(self._ffmpeg_filename_argument(file), True)])\n357 | \n358 |         for arg_type, path_opts in (('i', input_path_opts), ('o', output_path_opts)):\n359 |             cmd += itertools.chain.from_iterable(\n360 |                 make_args(path, list(opts), arg_type, i + 1)\n361 |                 for i, (path, opts) in enumerate(path_opts) if path)\n362 | \n363 |         self.write_debug(f'ffmpeg command line: {shell_quote(cmd)}')\n364 |         _, stderr, returncode = Popen.run(\n365 |             cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)\n366 |         if returncode not in variadic(expected_retcodes):\n367 |             self.write_debug(stderr)\n368 |             raise FFmpegPostProcessorError(stderr.strip().splitlines()[-1])\n369 |         for out_path, _ in output_path_opts:\n370 |             if out_path:\n371 |                 self.try_utime(out_path, oldest_mtime, oldest_mtime)\n372 |         return stderr\n```",
+              "start_line": 334,
+              "end_line": 372,
+              "code_omitted": false,
+              "original_code_length": 2063
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:encodeArgument",
+              "type": "function",
+              "code": "```\n873 | def encodeArgument(s):\n874 |     # Legacy code that uses byte strings\n875 |     # Uncomment the following line after fixing all post processors\n876 |     # assert isinstance(s, str), 'Internal error: %r should be of type %r, is %r' % (s, str, type(s))\n877 |     return s if isinstance(s, str) else s.decode('ascii')\n```",
+              "start_line": 873,
+              "end_line": 877,
+              "code_omitted": false,
+              "original_code_length": 329
+            },
+            {
+              "entity_id": "yt_dlp/downloader/external.py:ExternalFD._call_downloader",
+              "type": "function",
+              "code": "```\n143 | def _call_downloader(self, tmpfilename, info_dict):\n144 |         \"\"\" Either overwrite this or implement _make_cmd \"\"\"\n145 |         cmd = [encodeArgument(a) for a in self._make_cmd(tmpfilename, info_dict)]\n146 | \n147 |         self._debug_cmd(cmd)\n148 | \n149 |         if 'fragments' not in info_dict:\n150 |             _, stderr, returncode = self._call_process(cmd, info_dict)\n151 |             if returncode and stderr:\n152 |                 self.to_stderr(stderr)\n153 |             return returncode\n154 | \n155 |         skip_unavailable_fragments = self.params.get('skip_unavailable_fragments', True)\n156 | \n157 |         retry_manager = RetryManager(self.params.get('fragment_retries'), self.report_retry,\n158 |                                      frag_index=None, fatal=not skip_unavailable_fragments)\n159 |         for retry in retry_manager:\n160 |             _, stderr, returncode = self._call_process(cmd, info_dict)\n161 |             if not returncode:\n162 |                 break\n163 |             # TODO: Decide whether to retry based on error code\n164 |             # https://aria2.github.io/manual/en/html/aria2c.html#exit-status\n165 |             if stderr:\n166 |                 self.to_stderr(stderr)\n167 |             retry.error = Exception()\n168 |             continue\n169 |         if not skip_unavailable_fragments and retry_manager.error:\n170 |             return -1\n171 | \n172 |         decrypt_fragment = self.decrypter(info_dict)\n173 |         dest, _ = self.sanitize_open(tmpfilename, 'wb')\n174 |         for frag_index, fragment in enumerate(info_dict['fragments']):\n175 |             fragment_filename = f'{tmpfilename}-Frag{frag_index}'\n176 |             try:\n177 |                 src, _ = self.sanitize_open(fragment_filename, 'rb')\n178 |             except OSError as err:\n179 |                 if skip_unavailable_fragments and frag_index > 1:\n180 |                     self.report_skip_fragment(frag_index, err)\n181 |                     continue\n182 |                 self.report_error(f'Unable to open fragment {frag_index}; {err}')\n183 |                 return -1\n184 |             dest.write(decrypt_fragment(fragment, src.read()))\n185 |             src.close()\n186 |             if not self.params.get('keep_fragments', False):\n187 |                 self.try_remove(encodeFilename(fragment_filename))\n188 |         dest.close()\n189 |         self.try_remove(encodeFilename(f'{tmpfilename}.frag.urls'))\n190 |         return 0\n```",
+              "start_line": 143,
+              "end_line": 190,
+              "code_omitted": false,
+              "original_code_length": 2482
+            },
+            {
+              "entity_id": "yt_dlp/utils/_utils.py:RetryManager",
+              "type": "class",
+              "code": "```\n5173 | class RetryManager:\n5174 |     \"\"\"Usage:\n5175 |         for retry in RetryManager(...):\n5176 |             try:\n5177 |                 ...\n5178 |             except SomeException as err:\n5179 |                 retry.error = err\n5180 |                 continue\n5181 |     \"\"\"\n5182 |     attempt, _error = 0, None\n5183 | \n5184 |     def __init__(self, _retries, _error_callback, **kwargs):\n5185 |         self.retries = _retries or 0\n5186 |         self.error_callback = functools.partial(_error_callback, **kwargs)\n5187 | \n5188 |     def _should_retry(self):\n5189 |         return self._error is not NO_DEFAULT and self.attempt <= self.retries\n5190 | \n5191 |     @property\n5192 |     def error(self):\n5193 |         if self._error is NO_DEFAULT:\n5194 |             return None\n5195 |         return self._error\n5196 | \n5197 |     @error.setter\n5198 |     def error(self, value):\n5199 |         self._error = value\n5200 | \n5201 |     def __iter__(self):\n5202 |         while self._should_retry():\n5203 |             self.error = NO_DEFAULT\n5204 |             self.attempt += 1\n5205 |             yield self\n5206 |             if self.error:\n5207 |                 self.error_callback(self.error, self.attempt, self.retries)\n5208 | \n5209 |     @staticmethod\n5210 |     def report_retry(e, count, retries, *, sleep_func, info, warn, error=None, suffix=None):\n5211 |         \"\"\"Utility function for reporting retries\"\"\"\n5212 |         if count > retries:\n5213 |             if error:\n5214 |                 return error(f'{e}. Giving up after {count - 1} retries') if count > 1 else error(str(e))\n5215 |             raise e\n5216 | \n5217 |         if not count:\n5218 |             return warn(e)\n5219 |         elif isinstance(e, ExtractorError):\n5220 |             e = remove_end(str_or_none(e.cause) or e.orig_msg, '.')\n5221 |         warn(f'{e}. Retrying{format_field(suffix, None, \" %s\")} ({count}/{retries})...')\n5222 | \n5223 |         delay = float_or_none(sleep_func(n=count - 1)) if callable(sleep_func) else sleep_func\n5224 |         if delay:\n5225 |             info(f'Sleeping {delay:.2f} seconds ...')\n5226 |             time.sleep(delay)\n```",
+              "start_line": 5173,
+              "end_line": 5226,
+              "code_omitted": false,
+              "original_code_length": 2159
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn"
+            ],
+            "chain_length": 2,
+            "initial_entity": "sanitize_path",
+            "start_entity": {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "entity_type": "function",
+              "relevance_reason": "This function sanitizes information dictionaries, which might include paths.",
+              "diversity_value": "Different file, part of the main application logic, handles data sanitization"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.9171363711357117,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info",
+              "type": "function",
+              "code": "```\n3637 | def sanitize_info(info_dict, remove_private_keys=False):\n3638 |         \"\"\" Sanitize the infodict for converting to json \"\"\"\n3639 |         if info_dict is None:\n3640 |             return info_dict\n3641 |         info_dict.setdefault('epoch', int(time.time()))\n3642 |         info_dict.setdefault('_type', 'video')\n3643 |         info_dict.setdefault('_version', {\n3644 |             'version': __version__,\n3645 |             'current_git_head': current_git_head(),\n3646 |             'release_git_head': RELEASE_GIT_HEAD,\n3647 |             'repository': ORIGIN,\n3648 |         })\n3649 | \n3650 |         if remove_private_keys:\n3651 |             reject = lambda k, v: v is None or k.startswith('__') or k in {\n3652 |                 'requested_downloads', 'requested_formats', 'requested_subtitles', 'requested_entries',\n3653 |                 'entries', 'filepath', '_filename', 'filename', 'infojson_filename', 'original_url',\n3654 |                 'playlist_autonumber',\n3655 |             }\n3656 |         else:\n3657 |             reject = lambda k, v: False\n3658 | \n3659 |         def filter_fn(obj):\n3660 |             if isinstance(obj, dict):\n3661 |                 return {k: filter_fn(v) for k, v in obj.items() if not reject(k, v)}\n3662 |             elif isinstance(obj, (list, tuple, set, LazyList)):\n3663 |                 return list(map(filter_fn, obj))\n3664 |             elif obj is None or isinstance(obj, (str, int, float, bool)):\n3665 |                 return obj\n3666 |             else:\n3667 |                 return repr(obj)\n3668 | \n3669 |         return filter_fn(info_dict)\n```",
+              "start_line": 3637,
+              "end_line": 3669,
+              "code_omitted": false,
+              "original_code_length": 1619
+            },
+            {
+              "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.sanitize_info.filter_fn",
+              "type": "function",
+              "code": "```\n3659 | def filter_fn(obj):\n3660 |             if isinstance(obj, dict):\n3661 |                 return {k: filter_fn(v) for k, v in obj.items() if not reject(k, v)}\n3662 |             elif isinstance(obj, (list, tuple, set, LazyList)):\n3663 |                 return list(map(filter_fn, obj))\n3664 |             elif obj is None or isinstance(obj, (str, int, float, bool)):\n3665 |                 return obj\n3666 |             else:\n3667 |                 return repr(obj)\n```",
+              "start_line": 3659,
+              "end_line": 3667,
+              "code_omitted": false,
+              "original_code_length": 478
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/extractor/slideslive.py",
+              "yt_dlp/extractor/common.py:InfoExtractor",
+              "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+              "yt_dlp/extractor/common.py:InfoExtractor.supports_login"
+            ],
+            "chain_length": 4,
+            "initial_entity": "os.path.splitdrive",
+            "start_entity": {
+              "entity_id": "yt_dlp/extractor/slideslive.py",
+              "entity_type": "file",
+              "relevance_reason": "While not directly related to the issue, this file might contain examples of how paths are used in the context of file downloads and extractions, which can provide insights for fixing `sanitize_path`.",
+              "diversity_value": "Extractor module from a different file, providing broader context"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.9188441038131714,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/extractor/slideslive.py",
+              "type": "file",
+              "code": "# Code too long (25233 chars) - omitted for brevity",
+              "start_line": 1,
+              "end_line": 555,
+              "code_omitted": true,
+              "original_code_length": 25233
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor",
+              "type": "class",
+              "code": "# Code too long (216045 chars) - omitted for brevity",
+              "start_line": 105,
+              "end_line": 3946,
+              "code_omitted": true,
+              "original_code_length": 216045
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor._login_hint",
+              "type": "function",
+              "code": "```\n574 | def _login_hint(self, method=NO_DEFAULT, netrc=None):\n575 |         password_hint = f'--username and --password, --netrc-cmd, or --netrc ({netrc or self._NETRC_MACHINE}) to provide account credentials'\n576 |         return {\n577 |             None: '',\n578 |             'any': f'Use --cookies, --cookies-from-browser, {password_hint}',\n579 |             'password': f'Use {password_hint}',\n580 |             'cookies': (\n581 |                 'Use --cookies-from-browser or --cookies for the authentication. '\n582 |                 'See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies'),\n583 |         }[method if method is not NO_DEFAULT else 'any' if self.supports_login() else 'cookies']\n```",
+              "start_line": 574,
+              "end_line": 583,
+              "code_omitted": false,
+              "original_code_length": 766
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor.supports_login",
+              "type": "function",
+              "code": "```\n629 | def supports_login(cls):\n630 |         return bool(cls._NETRC_MACHINE)\n```",
+              "start_line": 629,
+              "end_line": 630,
+              "code_omitted": false,
+              "original_code_length": 84
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "yt_dlp/extractor/generic.py:GenericIE",
+              "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+              "yt_dlp/extractor/common.py:InfoExtractor._download_webpage"
+            ],
+            "chain_length": 4,
+            "initial_entity": "nt._path_splitroot",
+            "start_entity": {
+              "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "entity_type": "function",
+              "relevance_reason": "This function initializes and lists all extractors, which might indirectly affect how paths are handled during extraction.",
+              "diversity_value": "Extractor initialization from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.920419454574585,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "yt_dlp/extractor/__init__.py:list_extractor_classes",
+              "type": "function",
+              "code": "```\n23 | def list_extractor_classes(age_limit=None):\n24 |     \"\"\"Return a list of extractors that are suitable for the given age, sorted by extractor name\"\"\"\n25 |     from .generic import GenericIE\n26 | \n27 |     yield from sorted(filter(\n28 |         lambda ie: ie.is_suitable(age_limit) and ie != GenericIE,\n29 |         gen_extractor_classes()), key=lambda ie: ie.IE_NAME.lower())\n30 |     yield GenericIE\n```",
+              "start_line": 23,
+              "end_line": 30,
+              "code_omitted": false,
+              "original_code_length": 412
+            },
+            {
+              "entity_id": "yt_dlp/extractor/generic.py:GenericIE",
+              "type": "class",
+              "code": "# Code too long (138011 chars) - omitted for brevity",
+              "start_line": 49,
+              "end_line": 2845,
+              "code_omitted": true,
+              "original_code_length": 138011
+            },
+            {
+              "entity_id": "yt_dlp/extractor/generic.py:GenericIE._real_extract",
+              "type": "function",
+              "code": "# Code too long (10945 chars) - omitted for brevity",
+              "start_line": 2332,
+              "end_line": 2526,
+              "code_omitted": true,
+              "original_code_length": 10945
+            },
+            {
+              "entity_id": "yt_dlp/extractor/common.py:InfoExtractor._download_webpage",
+              "type": "function",
+              "code": "```\n1175 | def _download_webpage(\n1176 |             self, url_or_request, video_id, note=None, errnote=None,\n1177 |             fatal=True, tries=1, timeout=NO_DEFAULT, *args, **kwargs):\n1178 |         \"\"\"\n1179 |         Return the data of the page as a string.\n1180 | \n1181 |         Keyword arguments:\n1182 |         tries -- number of tries\n1183 |         timeout -- sleep interval between tries\n1184 | \n1185 |         See _download_webpage_handle docstring for other arguments specification.\n1186 |         \"\"\"\n1187 | \n1188 |         R''' # NB: These are unused; should they be deprecated?\n1189 |         if tries != 1:\n1190 |             self._downloader.deprecation_warning('tries argument is deprecated in InfoExtractor._download_webpage')\n1191 |         if timeout is NO_DEFAULT:\n1192 |             timeout = 5\n1193 |         else:\n1194 |             self._downloader.deprecation_warning('timeout argument is deprecated in InfoExtractor._download_webpage')\n1195 |         '''\n1196 | \n1197 |         try_count = 0\n1198 |         while True:\n1199 |             try:\n1200 |                 return self.__download_webpage(url_or_request, video_id, note, errnote, None, fatal, *args, **kwargs)\n1201 |             except IncompleteRead as e:\n1202 |                 try_count += 1\n1203 |                 if try_count >= tries:\n1204 |                     raise e\n1205 |                 self._sleep(timeout, video_id)\n```",
+              "start_line": 1175,
+              "end_line": 1205,
+              "code_omitted": false,
+              "original_code_length": 1421
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_1",
+        "original_chain_info": {
+          "chain": [
+            "yt_dlp/utils/_utils.py:sanitize_path",
+            "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "yt_dlp/utils/_utils.py:expand_path",
+            "yt_dlp/cookies.py:load_cookies",
+            "yt_dlp/cookies.py:extract_cookies_from_browser"
+          ],
+          "chain_length": 5,
+          "initial_entity": "sanitize_path",
+          "start_entity": {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for sanitizing paths, which is the core of the issue.",
+            "diversity_value": "Core utility function where the main problem lies"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "yt_dlp/utils/_utils.py:sanitize_path",
+            "type": "function",
+            "code": "```\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     # XXX: this handles drive relative paths (c:sth) incorrectly\n670 |     if sys.platform == 'win32':\n671 |         force = False\n672 |         drive_or_unc, _ = os.path.splitdrive(s)\n673 |     elif force:\n674 |         drive_or_unc = ''\n675 |     else:\n676 |         return s\n677 | \n678 |     norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n679 |     if drive_or_unc:\n680 |         norm_path.pop(0)\n681 |     sanitized_path = [\n682 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|\\\\?\\*]|[\\s.]$)', '#', path_part)\n683 |         for path_part in norm_path]\n684 |     if drive_or_unc:\n685 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n686 |     elif force and s and s[0] == os.path.sep:\n687 |         sanitized_path.insert(0, os.path.sep)\n688 |     # TODO: Fix behavioral differences <3.12\n689 |     # The workaround using `normpath` only superficially passes tests\n690 |     # Ref: https://github.com/python/cpython/pull/100351\n691 |     return os.path.normpath(os.path.join(*sanitized_path))\n```",
+            "start_line": 667,
+            "end_line": 691,
+            "code_omitted": false,
+            "original_code_length": 1177
+          },
+          {
+            "entity_id": "yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+            "type": "function",
+            "code": "```\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |         paths = self.params.get('paths', {})\n1145 |         assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |         path = os.path.join(\n1147 |             expand_path(paths.get('home', '').strip()),\n1148 |             expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1149 |             filename or '')\n1150 |         return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```",
+            "start_line": 1143,
+            "end_line": 1150,
+            "code_omitted": false,
+            "original_code_length": 513
+          },
+          {
+            "entity_id": "yt_dlp/utils/_utils.py:expand_path",
+            "type": "function",
+            "code": "```\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     return os.path.expandvars(compat_expanduser(s))\n```",
+            "start_line": 726,
+            "end_line": 728,
+            "code_omitted": false,
+            "original_code_length": 136
+          },
+          {
+            "entity_id": "yt_dlp/cookies.py:load_cookies",
+            "type": "function",
+            "code": "```\n 94 | def load_cookies(cookie_file, browser_specification, ydl):\n 95 |     try:\n 96 |         cookie_jars = []\n 97 |         if browser_specification is not None:\n 98 |             browser_name, profile, keyring, container = _parse_browser_specification(*browser_specification)\n 99 |             cookie_jars.append(\n100 |                 extract_cookies_from_browser(browser_name, profile, YDLLogger(ydl), keyring=keyring, container=container))\n101 | \n102 |         if cookie_file is not None:\n103 |             is_filename = is_path_like(cookie_file)\n104 |             if is_filename:\n105 |                 cookie_file = expand_path(cookie_file)\n106 | \n107 |             jar = YoutubeDLCookieJar(cookie_file)\n108 |             if not is_filename or os.access(cookie_file, os.R_OK):\n109 |                 jar.load()\n110 |             cookie_jars.append(jar)\n111 | \n112 |         return _merge_cookie_jars(cookie_jars)\n113 |     except Exception:\n114 |         raise CookieLoadError('failed to load cookies')\n```",
+            "start_line": 94,
+            "end_line": 114,
+            "code_omitted": false,
+            "original_code_length": 1015
+          },
+          {
+            "entity_id": "yt_dlp/cookies.py:extract_cookies_from_browser",
+            "type": "function",
+            "code": "```\n117 | def extract_cookies_from_browser(browser_name, profile=None, logger=YDLLogger(), *, keyring=None, container=None):\n118 |     if browser_name == 'firefox':\n119 |         return _extract_firefox_cookies(profile, container, logger)\n120 |     elif browser_name == 'safari':\n121 |         return _extract_safari_cookies(profile, logger)\n122 |     elif browser_name in CHROMIUM_BASED_BROWSERS:\n123 |         return _extract_chrome_cookies(browser_name, profile, keyring, logger)\n124 |     else:\n125 |         raise ValueError(f'unknown browser: {browser_name}')\n```",
+            "start_line": 117,
+            "end_line": 125,
+            "code_omitted": false,
+            "original_code_length": 569
+          }
+        ],
+        "chain_length": 5,
+        "selection_rank": 1,
+        "is_longest": true
+      },
+      "winning_chain_id": "chain_1"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-05T12:02:28.510067",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 3,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "Entity 1: yt_dlp/utils/_utils.py:sanitize_path",
+                "location_description": "Lines 672-680, where the path is split and normalized",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of `sanitize_path` incorrectly handles drive relative paths (e.g., 'D:test') by resolving them to absolute paths ('D:\\'). This is due to the use of `os.path.splitdrive` and subsequent normalization, which removes the relative part of the path. We need to modify the function to preserve the relative part of the path.",
+                "suggested_approach": "Modify the `sanitize_path` function to handle drive relative paths correctly. Specifically, we need to ensure that the relative part of the path is preserved after splitting the drive letter.\n\n1. **Import necessary modules**: Ensure that the `os` module is imported at the top of the file.\n2. **Modify the `sanitize_path` function**:\n   - On line 672, split the path into drive and tail using `os.path.splitdrive(s)`.\n   - On line 673, check if the drive part is non-empty and the tail starts with a backslash. If so, treat it as an absolute path and normalize it accordingly.\n   - Otherwise, treat it as a relative path and handle it differently.\n   - Normalize the tail part of the path separately.\n   - Join the drive and the normalized tail part to form the final sanitized path.\n\nHere is the updated code:\n```python\n672 | def sanitize_path(s, force=False):\n673 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n674 |     if sys.platform == 'win32':\n675 |         force = False\n676 |         drive, tail = os.path.splitdrive(s)\n677 |         if drive and tail.startswith(os.path.sep):\n678 |             # Absolute path with drive letter\n679 |             norm_path = os.path.normpath(tail).split(os.path.sep)\n680 |         else:\n681 |             # Relative path or no drive letter\n682 |             norm_path = os.path.normpath(s).split(os.path.sep)\n683 |             if drive:\n684 |                 norm_path.pop(0)\n685 |     elif force:\n686 |         drive = ''\n687 |         norm_path = os.path.normpath(s).split(os.path.sep)\n688 |     else:\n689 |         return s\n690 | \n691 |     sanitized_path = [\n692 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|?*]|[\\s.]$)', '#', path_part)\n693 |         for path_part in norm_path]\n694 |     if drive:\n695 |         sanitized_path.insert(0, drive + os.path.sep)\n696 |     elif force and s and s[0] == os.path.sep:\n697 |         sanitized_path.insert(0, os.path.sep)\n698 |     return os.path.normpath(os.path.join(*sanitized_path))\n```\n\nThis change ensures that drive relative paths are handled correctly by preserving the relative part of the path."
+              },
+              {
+                "entity_id": "Entity 2: yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "location_description": "Line 1147, where the path is constructed and sanitized",
+                "modification_type": "refactor",
+                "priority": "medium",
+                "reasoning": "While the `get_output_path` function currently calls `sanitize_path` to sanitize the constructed path, we should ensure that it correctly handles drive relative paths. This is more of a refactoring to align with the new behavior of `sanitize_path`.",
+                "suggested_approach": "Refactor the `get_output_path` function to ensure it correctly handles drive relative paths. This involves ensuring that the path components are joined and sanitized in a way that preserves the relative nature of the path.\n\n1. **Modify the `get_output_path` function**:\n   - On line 1147, construct the path using `os.path.join` but ensure that the drive relative paths are handled correctly.\n   - Call `sanitize_path` with the constructed path to ensure it is sanitized according to the new logic.\n\nHere is the updated code:\n```python\n1147 | path = os.path.join(\n1148 |     expand_path(paths.get('home', '').strip()),\n1149 |     expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1150 |     filename or '')\n1151 | return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```\n\nThis change ensures that the path construction and sanitization are consistent with the new behavior of `sanitize_path`."
+              },
+              {
+                "entity_id": "Entity 3: yt_dlp/utils/_utils.py:expand_path",
+                "location_description": "Lines 726-728, where the path is expanded",
+                "modification_type": "refactor",
+                "priority": "low",
+                "reasoning": "The `expand_path` function currently expands shell variables and home directories. While it does not directly cause the issue, it should be refactored to ensure it does not interfere with the correct handling of drive relative paths.",
+                "suggested_approach": "Refactor the `expand_path` function to ensure it correctly handles drive relative paths. This involves ensuring that the expansion does not alter the relative nature of the path.\n\n1. **Modify the `expand_path` function**:\n   - On line 728, ensure that the expansion of shell variables and home directories does not affect the relative part of the path.\n   - Use `os.path.normpath` to normalize the path after expansion.\n\nHere is the updated code:\n```python\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     expanded_path = os.path.expandvars(compat_expanduser(s))\n729 |     return os.path.normpath(expanded_path)\n```\n\nThis change ensures that the path expansion does not interfere with the relative nature of the path."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `sanitize_path` function to correctly handle drive relative paths, ensuring that the relative part of the path is preserved. We then refactor the `get_output_path` and `expand_path` functions to align with the new behavior of `sanitize_path`. This approach ensures that drive relative paths are treated as intended and do not resolve to absolute paths incorrectly.",
+            "confidence": 85
+          }
+        },
+        {
+          "agent_id": 2,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "Entity 1: yt_dlp/utils/_utils.py:sanitize_path",
+                "location_description": "Lines 672-685: Handle drive relative paths correctly",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of `sanitize_path` incorrectly handles drive relative paths (e.g., `D:test`). It removes the relative subdirectory, which is incorrect. We need to ensure that drive relative paths are preserved and resolved correctly.",
+                "suggested_approach": "1. Modify the `sanitize_path` function to handle drive relative paths correctly.\n2. Add a new function `is_drive_relative_path` to check if a path is drive relative.\n3. Use this function to conditionally handle drive relative paths.\n\n```python\nimport os\nimport re\nimport sys\n\n# Function to check if a path is drive relative\ndef is_drive_relative_path(s):\n    return bool(re.match(r'^[A-Za-z]:[^\\\\/]', s))\n\n# Modify the sanitize_path function\ndef sanitize_path(s, force=False):\n    \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n    if sys.platform == 'win32':\n        force = False\n        drive_or_unc, _ = os.path.splitdrive(s)\n    elif force:\n        drive_or_unc = ''\n    else:\n        return s\n\n    # Check if the path is drive relative\n    if is_drive_relative_path(s):\n        norm_path = s\n    else:\n        norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n        if drive_or_unc:\n            norm_path.pop(0)\n\n    sanitized_path = [\n        path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|?*]|[\\s.]$)', '#', path_part)\n        for path_part in norm_path]\n\n    if drive_or_unc:\n        sanitized_path.insert(0, drive_or_unc + os.path.sep)\n    elif force and s and s[0] == os.path.sep:\n        sanitized_path.insert(0, os.path.sep)\n\n    return os.path.normpath(os.path.join(*sanitized_path))\n```\n4. Ensure that the function `is_drive_relative_path` is imported at the top of the file.\n5. Test the function with various drive relative paths to ensure it behaves as expected."
+              },
+              {
+                "entity_id": "Entity 2: yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "location_description": "Line 1147: Ensure correct expansion and sanitization of paths",
+                "modification_type": "optimize",
+                "priority": "medium",
+                "reasoning": "The `get_output_path` function uses `expand_path` and `sanitize_path` to construct the final output path. We need to ensure that these functions handle drive relative paths correctly to avoid issues.",
+                "suggested_approach": "1. Ensure that `expand_path` and `sanitize_path` are called correctly and handle drive relative paths.\n2. Modify the `get_output_path` function to use the updated `sanitize_path` function.\n\n```python\ndef get_output_path(self, dir_type='', filename=None):\n    paths = self.params.get('paths', {})\n    assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n    path = os.path.join(\n        expand_path(paths.get('home', '').strip()),\n        expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n        filename or '')\n    return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```\n3. Test the function with various input paths, including drive relative paths, to ensure it constructs the correct output path."
+              },
+              {
+                "entity_id": "Entity 3: yt_dlp/utils/_utils.py:expand_path",
+                "location_description": "Lines 726-728: Ensure correct expansion of drive relative paths",
+                "modification_type": "optimize",
+                "priority": "medium",
+                "reasoning": "The `expand_path` function should correctly expand and handle drive relative paths. This ensures that paths are expanded before being sanitized.",
+                "suggested_approach": "1. Modify the `expand_path` function to handle drive relative paths correctly.\n2. Ensure that the function does not remove the relative subdirectory.\n\n```python\ndef expand_path(s):\n    \"\"\"Expand shell variables and ~\"\"\"\n    # Check if the path is drive relative\n    if is_drive_relative_path(s):\n        return s\n    else:\n        return os.path.expandvars(compat_expanduser(s))\n```\n3. Ensure that the function `is_drive_relative_path` is imported at the top of the file.\n4. Test the function with various input paths, including drive relative paths, to ensure it expands them correctly."
+              },
+              {
+                "entity_id": "Entity 4: yt_dlp/cookies.py:load_cookies",
+                "location_description": "Line 105: Ensure correct expansion of cookie file paths",
+                "modification_type": "optimize",
+                "priority": "low",
+                "reasoning": "The `load_cookies` function uses `expand_path` to expand the cookie file path. We need to ensure that this function handles drive relative paths correctly.",
+                "suggested_approach": "1. Ensure that `expand_path` is called correctly and handles drive relative paths.\n2. Modify the `load_cookies` function to use the updated `expand_path` function.\n\n```python\ndef load_cookies(cookie_file, browser_specification, ydl):\n    try:\n        cookie_jars = []\n        if browser_specification is not None:\n            browser_name, profile, keyring, container = _parse_browser_specification(*browser_specification)\n            cookie_jars.append(\n                extract_cookies_from_browser(browser_name, profile, YDLLogger(ydl), keyring=keyring, container=container))\n\n        if cookie_file is not None:\n            is_filename = is_path_like(cookie_file)\n            if is_filename:\n                cookie_file = expand_path(cookie_file)\n\n            jar = YoutubeDLCookieJar(cookie_file)\n            if not is_filename or os.access(cookie_file, os.R_OK):\n                jar.load()\n            cookie_jars.append(jar)\n\n        return _merge_cookie_jars(cookie_jars)\n    except Exception:\n        raise CookieLoadError('failed to load cookies')\n```\n3. Test the function with various input paths, including drive relative paths, to ensure it loads cookies correctly."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `sanitize_path` function to handle drive relative paths correctly. Additionally, we need to ensure that other functions like `expand_path` and `get_output_path` are updated to use the corrected `sanitize_path` function. This will ensure that drive relative paths are preserved and resolved correctly throughout the application.",
+            "confidence": 85
+          }
+        },
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "Entity 1: yt_dlp/utils/_utils.py:sanitize_path",
+                "location_description": "Lines 672-685",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of `sanitize_path` does not handle drive relative paths correctly. It strips the relative part of the path, leading to incorrect behavior. We need to ensure that drive relative paths are preserved.",
+                "suggested_approach": "1. Modify the `sanitize_path` function to handle drive relative paths correctly.\n2. Add a check to preserve the relative part of the path if it is a drive relative path.\n3. Ensure that the path is correctly split and joined.\n\nHere is the detailed implementation:\n\n```python\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     if sys.platform == 'win32':\n670 |         drive_or_unc, tail = os.path.splitdrive(s)\n671 |         if drive_or_unc and not os.path.isabs(tail):\n672 |             # Handle drive relative paths\n673 |             norm_path = [drive_or_unc, *tail.split(os.path.sep)]\n674 |         else:\n675 |             norm_path = os.path.normpath(tail).split(os.path.sep)\n676 |             if drive_or_unc:\n677 |                 norm_path.pop(0)\n678 |     elif force:\n679 |         drive_or_unc = ''\n680 |         norm_path = os.path.normpath(s).split(os.path.sep)\n681 |     else:\n682 |         return s\n683 | \n684 |     sanitized_path = [\n685 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|?*]|[\\s.]$)', '#', path_part)\n686 |         for path_part in norm_path]\n687 |     if drive_or_unc:\n688 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n689 |     elif force and s and s[0] == os.path.sep:\n690 |         sanitized_path.insert(0, os.path.sep)\n691 |     return os.path.normpath(os.path.join(*sanitized_path))\n```\n\nExplanation:\n- Line 670: Split the path into `drive_or_unc` and `tail`.\n- Line 671: Check if `drive_or_unc` is present and `tail` is not an absolute path.\n- Line 673: If it's a drive relative path, construct `norm_path` with `drive_or_unc` and the split parts of `tail`.\n- Line 675: Otherwise, proceed with the existing logic.\n- Line 684: Sanitize each part of the path.\n- Line 687: Reconstruct the path with the sanitized parts."
+              },
+              {
+                "entity_id": "Entity 2: yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "location_description": "Line 1147",
+                "modification_type": "refactor",
+                "priority": "medium",
+                "reasoning": "The `get_output_path` function uses `sanitize_path` to clean the final path. We need to ensure that the paths passed to `sanitize_path` are correctly expanded and handled, especially for drive relative paths.",
+                "suggested_approach": "1. Ensure that the paths are correctly expanded before passing them to `sanitize_path`.\n2. Use `expand_path` to expand both the home directory and the specific directory.\n\nHere is the detailed implementation:\n\n```python\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |     paths = self.params.get('paths', {})\n1145 |     assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |     home_dir = expand_path(paths.get('home', '').strip())\n1147 |     dir_path = expand_path(paths.get(dir_type, '').strip()) if dir_type else ''\n1148 |     path = os.path.join(home_dir, dir_path, filename or '')\n1149 |     return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```\n\nExplanation:\n- Line 1146: Expand the home directory path.\n- Line 1147: Expand the specific directory path.\n- Line 1148: Join the expanded paths and the filename.\n- Line 1149: Sanitize the final path."
+              },
+              {
+                "entity_id": "Entity 3: yt_dlp/utils/_utils.py:expand_path",
+                "location_description": "Lines 726-728",
+                "modification_type": "refactor",
+                "priority": "medium",
+                "reasoning": "The `expand_path` function should ensure that it correctly expands and handles drive relative paths. This function is used in multiple places, so ensuring its correctness is important.",
+                "suggested_approach": "1. Modify the `expand_path` function to handle drive relative paths correctly.\n2. Ensure that the path is expanded and normalized properly.\n\nHere is the detailed implementation:\n\n```python\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~, and handle drive relative paths\"\"\"\n728 |     expanded_path = os.path.expandvars(compat_expanduser(s))\n729 |     drive_or_unc, tail = os.path.splitdrive(expanded_path)\n730 |     if drive_or_unc and not os.path.isabs(tail):\n731 |         # Handle drive relative paths\n732 |         expanded_path = os.path.join(drive_or_unc, tail)\n733 |     return os.path.normpath(expanded_path)\n```\n\nExplanation:\n- Line 728: Expand the path using `os.path.expandvars` and `compat_expanduser`.\n- Line 729: Split the expanded path into `drive_or_unc` and `tail`.\n- Line 730: Check if `drive_or_unc` is present and `tail` is not an absolute path.\n- Line 732: If it's a drive relative path, join `drive_or_unc` and `tail`.\n- Line 733: Normalize the final path."
+              }
+            ],
+            "overall_strategy": "To solve the issue of `utils.sanitize_path` treating drive relative paths incorrectly, we need to modify the `sanitize_path` function to handle these paths correctly. Additionally, we should ensure that the `expand_path` function correctly expands and normalizes drive relative paths. These changes will ensure that the paths are handled consistently across different parts of the application, particularly in the `get_output_path` function where the final output path is constructed.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 5,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "Entity 1: yt_dlp/utils/_utils.py:sanitize_path",
+                "location_description": "Lines 672-680: Handling of drive relative paths",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of `sanitize_path` incorrectly handles drive relative paths (e.g., 'D:test'). It strips the relative part and leaves only the drive letter, which results in an incorrect path. This needs to be fixed to preserve the relative part of the path.",
+                "suggested_approach": "1. Modify the `sanitize_path` function to correctly handle drive relative paths.\n2. Change the logic at line 672 to include a check for drive relative paths.\n3. Use `os.path.abspath` to convert the path to an absolute path if it is not already one, but ensure that relative paths remain relative.\n4. Update the `norm_path` calculation to correctly handle the relative part of the path.\n\n```python\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     if sys.platform == 'win32':\n670 |         drive_or_unc, tail = os.path.splitdrive(s)\n671 |         if drive_or_unc and not os.path.isabs(tail):\n672 |             # Handle drive relative paths (e.g., 'D:test')\n673 |             norm_path = [drive_or_unc, tail]\n674 |         else:\n675 |             norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n676 |     elif force:\n677 |         drive_or_unc = ''\n678 |         norm_path = os.path.normpath(s).split(os.path.sep)\n679 |     else:\n680 |         return s\n681 | \n682 |     if drive_or_unc:\n683 |         norm_path.pop(0)\n684 |     sanitized_path = [\n685 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|?*]|[\\s.]$)', '#', path_part)\n686 |         for path_part in norm_path]\n687 |     if drive_or_unc:\n688 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n689 |     elif force and s and s[0] == os.path.sep:\n690 |         sanitized_path.insert(0, os.path.sep)\n691 |     return os.path.join(*sanitized_path)\n```\n5. Ensure that the function correctly handles both absolute and relative paths, including drive relative paths.\n6. Add unit tests to verify the behavior of `sanitize_path` for various input scenarios, including drive relative paths."
+              },
+              {
+                "entity_id": "Entity 2: yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "location_description": "Line 1147: Path construction",
+                "modification_type": "refactor",
+                "priority": "medium",
+                "reasoning": "The `get_output_path` function constructs the output path by joining multiple components. It should ensure that the final path is correctly sanitized and normalized, especially when dealing with drive relative paths.",
+                "suggested_approach": "1. Modify the `get_output_path` function to use the updated `sanitize_path` function.\n2. Ensure that the path components are correctly expanded and joined before sanitization.\n\n```python\n1143 | def get_output_path(self",
+                "filename=None)": "n1144 |     paths = self.params.get('paths'",
+                "\\\"paths\" parameter must be a dictionary": "n1146 |     path = os.path.join(\n1147 |         expand_path(paths.get('home', '').strip()),\n1148 |         expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1149 |         filename or '')\n1150 |     return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```\n3. Add a check to ensure that the `path` is correctly sanitized and does not lose its relative part.\n4. Add unit tests to verify the behavior of `get_output_path` for various input scenarios, including drive relative paths."
+              },
+              {
+                "entity_id": "Entity 3: yt_dlp/utils/_utils.py:expand_path",
+                "location_description": "Line 727: Path expansion",
+                "modification_type": "optimize",
+                "priority": "low",
+                "reasoning": "The `expand_path` function expands shell variables and home directories. It should ensure that the expanded path is correctly handled, especially when dealing with drive relative paths.",
+                "suggested_approach": "1. Modify the `expand_path` function to handle drive relative paths correctly.\n2. Ensure that the expanded path retains its relative part if it is a drive relative path.\n\n```python\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     expanded_path = os.path.expandvars(compat_expanduser(s))\n729 |     drive_or_unc, tail = os.path.splitdrive(expanded_path)\n730 |     if drive_or_unc and not os.path.isabs(tail):\n731 |         # Handle drive relative paths (e.g., 'D:test')\n732 |         return drive_or_unc + tail\n733 |     return expanded_path\n```\n3. Add unit tests to verify the behavior of `expand_path` for various input scenarios, including drive relative paths."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves fixing the `sanitize_path` function to correctly handle drive relative paths, ensuring that the `get_output_path` function uses the updated `sanitize_path` function, and optimizing the `expand_path` function to retain the relative part of drive relative paths. This will ensure that the paths are correctly sanitized and normalized, preserving their relative nature when necessary.",
+            "confidence": 85
+          }
+        },
+        {
+          "agent_id": 4,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "Entity 1: yt_dlp/utils/_utils.py:sanitize_path",
+                "location_description": "Lines 672-680: Path normalization and sanitization logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation of `sanitize_path` incorrectly handles drive relative paths (e.g., `D:test`). It removes the relative subdirectory and resolves to the root of the drive. This needs to be fixed to preserve the relative path structure.",
+                "suggested_approach": "Modify the `sanitize_path` function to correctly handle drive relative paths. Specifically, update the logic to ensure that drive relative paths are treated as relative and not converted to absolute paths. Here's the detailed step-by-step implementation:\n\n1. **Import necessary modules**: Ensure that the `os` and `re` modules are imported at the top of the file.\n2. **Update the split logic**: Modify the split logic to handle drive relative paths correctly.\n3. **Preserve relative paths**: Adjust the normalization and sanitization steps to preserve the relative path structure.\n\n```python\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     if sys.platform == 'win32':\n670 |         force = False\n671 |         drive_or_unc, tail = os.path.splitdrive(s)\n672 |         if drive_or_unc and not os.path.isabs(tail):\n673 |             # Handle drive relative paths\n674 |             norm_path = [drive_or_unc, tail]\n675 |         else:\n676 |             norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n677 |     elif force:\n678 |         drive_or_unc = ''\n679 |         norm_path = os.path.normpath(s).split(os.path.sep)\n680 |     else:\n681 |         return s\n682 | \n683 |     sanitized_path = [\n684 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|?*]|[\\s.]$)', '#', path_part)\n685 |         for path_part in norm_path]\n686 |     if drive_or_unc and not os.path.isabs(tail):\n687 |         # Reconstruct the drive relative path\n688 |         return os.path.join(*sanitized_path)\n689 |     else:\n690 |         return os.path.normpath(os.path.join(*sanitized_path))\n```\n\n**Explanation**:\n- **Line 672**: Check if the path is drive relative by verifying `drive_or_unc` and ensuring `tail` is not an absolute path.\n- **Line 674**: If the path is drive relative, set `norm_path` to include both the drive and the relative part.\n- **Line 686**: After sanitizing, reconstruct the path using `os.path.join` to ensure it remains relative.\n- **Line 688**: Return the reconstructed path if it is drive relative, otherwise normalize and join the sanitized path."
+              },
+              {
+                "entity_id": "Entity 2: yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path",
+                "location_description": "Line 1147: Path joining logic",
+                "modification_type": "refactor",
+                "priority": "medium",
+                "reasoning": "The `get_output_path` function uses `os.path.join` to construct the final path. This function should be updated to use the corrected `sanitize_path` function to ensure that drive relative paths are handled correctly.",
+                "suggested_approach": "Refactor the `get_output_path` function to use the updated `sanitize_path` function. This ensures that the final output path is correctly sanitized and normalized, especially for drive relative paths. Here's the detailed step-by-step implementation:\n\n1. **Update the path joining logic**: Replace the `os.path.join` call with the `sanitize_path` function to ensure proper handling of drive relative paths.\n\n```python\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |     paths = self.params.get('paths', {})\n1145 |     assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |     path = sanitize_path(\n1147 |         os.path.join(\n1148 |             expand_path(paths.get('home', '').strip()),\n1149 |             expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1150 |             filename or ''),\n1151 |         force=self.params.get('windowsfilenames'))\n1152 |     return path\n```\n\n**Explanation**:\n- **Line 1146**: Call `sanitize_path` with the result of `os.path.join` to ensure the final path is correctly sanitized and normalized.\n- **Line 1147-1150**: Pass the constructed path to `sanitize_path` along with the `force` parameter to handle Windows-specific filename sanitization."
+              },
+              {
+                "entity_id": "Entity 3: yt_dlp/utils/_utils.py:expand_path",
+                "location_description": "Lines 726-728: Path expansion logic",
+                "modification_type": "optimize",
+                "priority": "low",
+                "reasoning": "The `expand_path` function currently uses `os.path.expandvars` and `compat_expanduser` to expand shell variables and user home directories. While this is generally correct, it could be optimized to handle drive relative paths more efficiently.",
+                "suggested_approach": "Optimize the `expand_path` function to handle drive relative paths more efficiently. This involves checking if the path is drive relative and expanding it accordingly. Here's the detailed step-by-step implementation:\n\n1. **Check for drive relative paths**: Add a check to determine if the path is drive relative.\n2. **Expand the path**: Use `os.path.expandvars` and `compat_expanduser` only if the path is not drive relative.\n\n```python\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\n728 |     if sys.platform == 'win32' and os.path.splitdrive(s)[0]:\n729 |         # Handle drive relative paths\n730 |         return s\n731 |     else:\n732 |         return os.path.expandvars(compat_expanduser(s))\n```\n\n**Explanation**:\n- **Line 728**: Check if the path is drive relative by using `os.path.splitdrive` and verifying if the drive part is present.\n- **Line 730**: If the path is drive relative, return it as is without further expansion.\n- **Line 732**: Otherwise, expand the path using `os.path.expandvars` and `compat_expanduser`."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves fixing the `sanitize_path` function to correctly handle drive relative paths, refactoring the `get_output_path` function to use the updated `sanitize_path` function, and optimizing the `expand_path` function to handle drive relative paths more efficiently. These changes will ensure that drive relative paths are preserved and correctly resolved in the application.",
+            "confidence": 85
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_1):**\n\n**Entity 1: yt_dlp/utils/_utils.py:sanitize_path**\nType: function\nLines: 667-691\nCode:\n```\n```\n667 | def sanitize_path(s, force=False):\n668 |     \"\"\"Sanitizes and normalizes path on Windows\"\"\"\n669 |     # XXX: this handles drive relative paths (c:sth) incorrectly\n670 |     if sys.platform == 'win32':\n671 |         force = False\n672 |         drive_or_unc, _ = os.path.splitdrive(s)\n673 |     elif force:\n674 |         drive_or_unc = ''\n675 |     else:\n676 |         return s\n677 | \n678 |     norm_path = os.path.normpath(remove_start(s, drive_or_unc)).split(os.path.sep)\n679 |     if drive_or_unc:\n680 |         norm_path.pop(0)\n681 |     sanitized_path = [\n682 |         path_part if path_part in ['.', '..'] else re.sub(r'(?:[/<>:\"\\|\\\\?\\*]|[\\s.]$)', '#', path_part)\n683 |         for path_part in norm_path]\n684 |     if drive_or_unc:\n685 |         sanitized_path.insert(0, drive_or_unc + os.path.sep)\n686 |     elif force and s and s[0] == os.path.sep:\n687 |         sanitized_path.insert(0, os.path.sep)\n688 |     # TODO: Fix behavioral differences <3.12\n689 |     # The workaround using `normpath` only superficially passes tests\n690 |     # Ref: https://github.com/python/cpython/pull/100351\n691 |     return os.path.normpath(os.path.join(*sanitized_path))\n```\n```\n\n**Entity 2: yt_dlp/YoutubeDL.py:YoutubeDL.get_output_path**\nType: function\nLines: 1143-1150\nCode:\n```\n```\n1143 | def get_output_path(self, dir_type='', filename=None):\n1144 |         paths = self.params.get('paths', {})\n1145 |         assert isinstance(paths, dict), '\"paths\" parameter must be a dictionary'\n1146 |         path = os.path.join(\n1147 |             expand_path(paths.get('home', '').strip()),\n1148 |             expand_path(paths.get(dir_type, '').strip()) if dir_type else '',\n1149 |             filename or '')\n1150 |         return sanitize_path(path, force=self.params.get('windowsfilenames'))\n```\n```\n\n**Entity 3: yt_dlp/utils/_utils.py:expand_path**\nType: function\nLines: 726-728\nCode:\n```\n```\n726 | def expand_path(s):\n727 |     \"\"\"Expand shell variables and ~\"\"\"\n728 |     return os.path.expandvars(compat_expanduser(s))\n```\n```\n\n**Entity 4: yt_dlp/cookies.py:load_cookies**\nType: function\nLines: 94-114\nCode:\n```\n```\n 94 | def load_cookies(cookie_file, browser_specification, ydl):\n 95 |     try:\n 96 |         cookie_jars = []\n 97 |         if browser_specification is not None:\n 98 |             browser_name, profile, keyring, container = _parse_browser_specification(*browser_specification)\n 99 |             cookie_jars.append(\n100 |                 extract_cookies_from_browser(browser_name, profile, YDLLogger(ydl), keyring=keyring, container=container))\n101 | \n102 |         if cookie_file is not None:\n103 |             is_filename = is_path_like(cookie_file)\n104 |             if is_filename:\n105 |                 cookie_file = expand_path(cookie_file)\n106 | \n107 |             jar = YoutubeDLCookieJar(cookie_file)\n108 |             if not is_filename or os.access(cookie_file, os.R_OK):\n109 |                 jar.load()\n110 |             cookie_jars.append(jar)\n111 | \n112 |         return _merge_cookie_jars(cookie_jars)\n113 |     except Exception:\n114 |         raise CookieLoadError('failed to load cookies')\n```\n```\n\n**Entity 5: yt_dlp/cookies.py:extract_cookies_from_browser**\nType: function\nLines: 117-125\nCode:\n```\n```\n117 | def extract_cookies_from_browser(browser_name, profile=None, logger=YDLLogger(), *, keyring=None, container=None):\n118 |     if browser_name == 'firefox':\n119 |         return _extract_firefox_cookies(profile, container, logger)\n120 |     elif browser_name == 'safari':\n121 |         return _extract_safari_cookies(profile, logger)\n122 |     elif browser_name in CHROMIUM_BASED_BROWSERS:\n123 |         return _extract_chrome_cookies(browser_name, profile, keyring, logger)\n124 |     else:\n125 |         raise ValueError(f'unknown browser: {browser_name}')\n```\n```\n\n",
+      "num_agents": 5
+    }
+  }
+}

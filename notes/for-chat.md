@@ -9,13 +9,6 @@ Answered with a pointer.
 
 ## Open
 
-- **Run future arms on the original seeds' chains (`--reuse-chains`)?** (Jingwei; decisions.md
-  2026-10-06.) Each arm then votes/debates on exactly the chains original seed k built, so
-  differences are the arm's alone, and each arm run costs ~1/4 of a full run. Self-consistency
-  seeds 1-2 used their own chains and would stay as the independent-chain record; seed 3 (184575,
-  still queued) could be switched. Recommendation from the code side: yes, for SC seed 3 onward and
-  for the adaptive arm. A technical-design choice, but it changes how the arm comparison is
-  reported, so confirming here.
 - **Adaptive debate: should the triggered branch debate the CHAIN CHOICE, not the plan?**
   (Direction for chat and A/P Chen; raised 2026-10-05, results.md "trigger, offline replay".)
   Replay on the 72B runs: with lenient parsing, skipping the debate entirely (one agent writes the
@@ -152,6 +145,15 @@ Answered with a pointer.
   start by mid-October.
 
 ## Answered
+
+- **Run future arms on the original seeds' chains (`--reuse-chains`)?** (Jingwei; decisions.md
+  2026-10-06.) Each arm then votes/debates on exactly the chains original seed k built, so
+  differences are the arm's alone, and each arm run costs ~1/4 of a full run. Self-consistency
+  seeds 1-2 used their own chains and would stay as the independent-chain record; seed 3 (184575,
+  still queued) could be switched. Recommendation from the code side: yes, for SC seed 3 onward and
+  for the adaptive arm. A technical-design choice, but it changes how the arm comparison is
+  reported, so confirming here.
+  ANSWERED 2026-10-06 (Jingwei): yes, from SC seed 3 on. decisions.md 2026-10-06.
 
 <!-- - YYYY-MM-DD — question → answer, see decisions.md YYYY-MM-DD -->
 - 2026-10-02 — Which backbone? → Qwen2.5-72B-Instruct, bf16, 64k, 2x pro6000. Trial (10 instances):

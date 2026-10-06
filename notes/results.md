@@ -17,6 +17,27 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-06 — Self-consistency seed 2; first 72B SWE-bench-Live numbers (pilot, 40 instances)
+Raw: `baseline_72b_sc_lenient_v1/20261005-201603` (SC seed 2, job 184574);
+`live_pilot40_lenient_v1/20261004-195344` (Live pilot, job 183679 + repair 186745 for
+beetbox__beets-5437, 40/40 ok). Qwen2.5-72B @495f393, 2x pro6000, lenient, released order.
+* Self-consistency seed 2: Acc@1 0.773, kept 0.893, stage 6-7 tokens 98k. Seeds 1-2 pooled:
+  0.740 at 96k vs the original arm's 0.782 (seeds 1-3) at ~102k. Both SC seeds walked the graph
+  themselves (own chains); from seed 3 on the SC arm reuses the original seed's chains
+  (decisions.md 2026-10-06). The discriminator keeps the lone round-1 file in 97% of instances.
+* Live pilot (first 40 of the 386; verified split, created after 2024-09-19): Acc@1 0.575 (23/40),
+  selected 0.650, kept 0.750, built 0.825; vote agreement 0.96; tokens 640k per instance (stage 6-7
+  126k), ~1.6x the Verified subset. Debate effect: 23 unchanged right, 13 unchanged wrong, 3 broke,
+  1 changed to another wrong file, 0 fixed. Replay: always-skip 0.630 vs debate 0.575; per-instance
+  oracle 0.640.
+Takeaway: post-cutoff issues are much harder for the same pipeline (0.575 vs ~0.78), the loss is
+spread over every stage (built 0.83, kept 0.75, selected 0.65), and on these the debate did harm,
+not good. Consistent with adaptive debate skipping most debates.
+Caveats: 40 instances, one seed, first 40 lines of the id file (not a random sample: the file is
+in dataset order). The rest of the seed (parts a-c) is running; Live seed 2 started (186864).
+
+---
+
 ## 2026-10-06 — Lenient seed 1 and self-consistency seed 1 (72B); trigger replay over 3 seeds; correction
 Raw: `baseline_72b_lenient_v1/20261005-082019` (seed 1, job 184572, vote logprobs),
 `baseline_72b_sc_lenient_v1/20261005-153006` (self-consistency seed 1, job 184573),
