@@ -55,6 +55,12 @@ single-agent plan; --reuse-chains original seed 3; 75/75 ok, 1 h 30), `baseline_
   Reuse-chains SC pooled over 3 seeds (identical chains): SC-only right 3, original-only right 8,
   exact McNemar p = 0.23; SC mean 0.760 vs original 0.782. The equal-token single agent trends
   ~2 points below the debate; not significant.
+* Adaptive seed 1 added (job 189312, raw `baseline_72b_adaptive_lenient_v1/20261007-054304`, reuse of
+  original seed 1; chains identical, 75/75 ok): 0.747 vs 0.773, discordant 1 : 3 (p = 0.62); stage
+  6-7 tokens 61.8k vs 104.4k (-41%); skipped 62/75; on skipped 47 vs 49, on debated 9 vs 9 of 13.
+  Pooled seeds 1+3: 3 : 7, exact McNemar p = 0.34; -40% stage 6-7 tokens; adaptive mean 0.767 vs
+  0.793 on these two seeds (-2.7 points, not significant; the noise-floor rerun 189863 will show
+  how much two runs of the same original arm disagree).
 Takeaway: adaptive debate saves ~38% of stage 6-7 tokens (~9% of all tokens) at an accuracy change
 inside run-to-run noise (one seed). Run-to-run variance on split votes is itself large enough that
 several seeds per arm are essential; adaptive seeds 1 and 2 are queued (189312, 189313).

@@ -1,0 +1,1811 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-07T05:45:50.450155",
+    "data": {
+      "initial_entities": [
+        "FooBar",
+        "get_foo_bar_display",
+        "foo_bar",
+        "CharField",
+        "choices"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 512
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-07T05:45:50.452603",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "FooBar",
+          "related_entities": [
+            {
+              "entity_id": "models.py:FooBar",
+              "entity_type": "class",
+              "relevance_reason": "The model class where the issue is observed, specifically the overriding of get_FIELD_display method.",
+              "diversity_value": "Model layer from the application's models file"
+            },
+            {
+              "entity_id": "db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "This function initializes model metadata and might contain changes related to how methods like get_FIELD_display are handled in newer versions.",
+              "diversity_value": "Core Django model initialization logic from a different file"
+            },
+            {
+              "entity_id": "db/models/fields/__init__.py:Field.get_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for generating the display values for choices fields, which is directly related to the get_FIELD_display method.",
+              "diversity_value": "Field handling logic from a different module"
+            },
+            {
+              "entity_id": "db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, which might have changes affecting method overriding in newer versions.",
+              "diversity_value": "Base model class from a different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "get_foo_bar_display",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:Model._get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for generating the display value of a model field, which is the core of the issue.",
+              "diversity_value": "Core model functionality from a different file"
+            },
+            {
+              "entity_id": "src/models.py:FooBar",
+              "entity_type": "class",
+              "relevance_reason": "The class where the issue is observed, specifically the method `get_foo_bar_display` that is being overridden.",
+              "diversity_value": "Application-specific model from a different file"
+            },
+            {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+              "diversity_value": "Admin functionality from a different file"
+            },
+            {
+              "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+              "entity_type": "function",
+              "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+              "diversity_value": "Database creation functionality from a different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "foo_bar",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+              "diversity_value": "Core model class from different file"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+              "diversity_value": "Model options setup from different file"
+            },
+            {
+              "entity_id": "django/forms/models.py:ModelForm",
+              "entity_type": "class",
+              "relevance_reason": "Forms that interact with models, potentially affecting how model methods are used or overridden.",
+              "diversity_value": "Form layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+              "diversity_value": "Field handling from different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "CharField",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:CharField",
+              "entity_type": "class",
+              "relevance_reason": "The CharField class is used in the model where the issue occurs. It might contain methods or attributes that affect the behavior of get_FIELD_display.",
+              "diversity_value": "Model field definition from core Django module"
+            },
+            {
+              "entity_id": "django/db/models/models.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The Model class contains the base implementation of get_FIELD_display. Understanding this class can help in identifying why overriding it fails in Django 2.2+.",
+              "diversity_value": "Base model class from different file"
+            },
+            {
+              "entity_id": "django/forms/fields.py:CharField",
+              "entity_type": "class",
+              "relevance_reason": "This class handles form fields, which might interact with the model fields and influence the display of choices.",
+              "diversity_value": "Form field definition from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This method is dynamically created for each choice field in a model. It is crucial to understand how it is generated and why it cannot be overridden in Django 2.2+.",
+              "diversity_value": "Method related to field display from core Django module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "choices",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly related to how choices are handled in Django models, which is central to the issue.",
+              "diversity_value": "Different file, model layer"
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+              "diversity_value": "Different file, admin layer"
+            },
+            {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections._get_field_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with field choices in SQL compilation, which could be relevant for understanding how model fields are processed.",
+              "diversity_value": "Different file, SQL compilation layer"
+            },
+            {
+              "entity_id": "models.py:FooBar",
+              "entity_type": "class",
+              "relevance_reason": "This is the specific model class where the issue is observed, making it crucial for debugging and fixing.",
+              "diversity_value": "Application-specific model class, different file"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-07T05:45:50.458341",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "FooBar",
+          "related_entities": [
+            {
+              "entity_id": "models.py:FooBar",
+              "entity_type": "class",
+              "relevance_reason": "The model class where the issue is observed, specifically the overriding of get_FIELD_display method.",
+              "diversity_value": "Model layer from the application's models file"
+            },
+            {
+              "entity_id": "db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "This function initializes model metadata and might contain changes related to how methods like get_FIELD_display are handled in newer versions.",
+              "diversity_value": "Core Django model initialization logic from a different file"
+            },
+            {
+              "entity_id": "db/models/fields/__init__.py:Field.get_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for generating the display values for choices fields, which is directly related to the get_FIELD_display method.",
+              "diversity_value": "Field handling logic from a different module"
+            },
+            {
+              "entity_id": "db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, which might have changes affecting method overriding in newer versions.",
+              "diversity_value": "Base model class from a different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "models.py:FooBar",
+                "entity_type": "class",
+                "relevance_reason": "The model class where the issue is observed, specifically the overriding of get_FIELD_display method.",
+                "diversity_value": "Model layer from the application's models file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "db/models/options.py:Options.contribute_to_class",
+                "entity_type": "function",
+                "relevance_reason": "This function initializes model metadata and might contain changes related to how methods like get_FIELD_display are handled in newer versions.",
+                "diversity_value": "Core Django model initialization logic from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "db/models/fields/__init__.py:Field.get_choices",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for generating the display values for choices fields, which is directly related to the get_FIELD_display method.",
+                "diversity_value": "Field handling logic from a different module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "db/models/base.py:Model",
+                "entity_type": "class",
+                "relevance_reason": "The base class for all Django models, which might have changes affecting method overriding in newer versions.",
+                "diversity_value": "Base model class from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "get_foo_bar_display",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:Model._get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for generating the display value of a model field, which is the core of the issue.",
+              "diversity_value": "Core model functionality from a different file"
+            },
+            {
+              "entity_id": "src/models.py:FooBar",
+              "entity_type": "class",
+              "relevance_reason": "The class where the issue is observed, specifically the method `get_foo_bar_display` that is being overridden.",
+              "diversity_value": "Application-specific model from a different file"
+            },
+            {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+              "diversity_value": "Admin functionality from a different file"
+            },
+            {
+              "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+              "entity_type": "function",
+              "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+              "diversity_value": "Database creation functionality from a different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:Model._get_FIELD_display",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for generating the display value of a model field, which is the core of the issue.",
+                "diversity_value": "Core model functionality from a different file"
+              },
+              "chain": [
+                "django/db/models/base.py:Model._get_FIELD_display",
+                "django/db/models/base.py:Model"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "src/models.py:FooBar",
+                "entity_type": "class",
+                "relevance_reason": "The class where the issue is observed, specifically the method `get_foo_bar_display` that is being overridden.",
+                "diversity_value": "Application-specific model from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+                "entity_type": "function",
+                "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+                "diversity_value": "Admin functionality from a different file"
+              },
+              "chain": [
+                "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+                "django/contrib/admin/options.py:BaseModelAdmin"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+                "entity_type": "function",
+                "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+                "diversity_value": "Database creation functionality from a different file"
+              },
+              "chain": [
+                "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "foo_bar",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+              "diversity_value": "Core model class from different file"
+            },
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+              "diversity_value": "Model options setup from different file"
+            },
+            {
+              "entity_id": "django/forms/models.py:ModelForm",
+              "entity_type": "class",
+              "relevance_reason": "Forms that interact with models, potentially affecting how model methods are used or overridden.",
+              "diversity_value": "Form layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+              "diversity_value": "Field handling from different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:Model",
+                "entity_type": "class",
+                "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+                "diversity_value": "Core model class from different file"
+              },
+              "chain": [
+                "django/db/models/base.py:Model"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+                "diversity_value": "Model options setup from different file"
+              },
+              "chain": [
+                "django/db/models/options.py:Options.contribute_to_class"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/models.py:ModelForm",
+                "entity_type": "class",
+                "relevance_reason": "Forms that interact with models, potentially affecting how model methods are used or overridden.",
+                "diversity_value": "Form layer from different file"
+              },
+              "chain": [
+                "django/forms/models.py:ModelForm",
+                "django/forms/models.py:BaseModelForm",
+                "django/forms/forms.py:BaseForm",
+                "django/forms/models.py"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+                "entity_type": "function",
+                "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+                "diversity_value": "Field handling from different file"
+              },
+              "chain": [
+                "django/db/models/fields/__init__.py:Field.get_choices"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "CharField",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:CharField",
+              "entity_type": "class",
+              "relevance_reason": "The CharField class is used in the model where the issue occurs. It might contain methods or attributes that affect the behavior of get_FIELD_display.",
+              "diversity_value": "Model field definition from core Django module"
+            },
+            {
+              "entity_id": "django/db/models/models.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The Model class contains the base implementation of get_FIELD_display. Understanding this class can help in identifying why overriding it fails in Django 2.2+.",
+              "diversity_value": "Base model class from different file"
+            },
+            {
+              "entity_id": "django/forms/fields.py:CharField",
+              "entity_type": "class",
+              "relevance_reason": "This class handles form fields, which might interact with the model fields and influence the display of choices.",
+              "diversity_value": "Form field definition from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:get_FIELD_display",
+              "entity_type": "function",
+              "relevance_reason": "This method is dynamically created for each choice field in a model. It is crucial to understand how it is generated and why it cannot be overridden in Django 2.2+.",
+              "diversity_value": "Method related to field display from core Django module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:CharField",
+                "entity_type": "class",
+                "relevance_reason": "The CharField class is used in the model where the issue occurs. It might contain methods or attributes that affect the behavior of get_FIELD_display.",
+                "diversity_value": "Model field definition from core Django module"
+              },
+              "chain": [
+                "django/db/models/fields/__init__.py:CharField",
+                "django/db/models/fields/__init__.py:Field"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/models.py:Model",
+                "entity_type": "class",
+                "relevance_reason": "The Model class contains the base implementation of get_FIELD_display. Understanding this class can help in identifying why overriding it fails in Django 2.2+.",
+                "diversity_value": "Base model class from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/fields.py:CharField",
+                "entity_type": "class",
+                "relevance_reason": "This class handles form fields, which might interact with the model fields and influence the display of choices.",
+                "diversity_value": "Form field definition from different file"
+              },
+              "chain": [
+                "django/forms/fields.py:CharField",
+                "django/forms/fields.py:Field"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:get_FIELD_display",
+                "entity_type": "function",
+                "relevance_reason": "This method is dynamically created for each choice field in a model. It is crucial to understand how it is generated and why it cannot be overridden in Django 2.2+.",
+                "diversity_value": "Method related to field display from core Django module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "choices",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly related to how choices are handled in Django models, which is central to the issue.",
+              "diversity_value": "Different file, model layer"
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+              "diversity_value": "Different file, admin layer"
+            },
+            {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections._get_field_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with field choices in SQL compilation, which could be relevant for understanding how model fields are processed.",
+              "diversity_value": "Different file, SQL compilation layer"
+            },
+            {
+              "entity_id": "models.py:FooBar",
+              "entity_type": "class",
+              "relevance_reason": "This is the specific model class where the issue is observed, making it crucial for debugging and fixing.",
+              "diversity_value": "Application-specific model class, different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly related to how choices are handled in Django models, which is central to the issue.",
+                "diversity_value": "Different file, model layer"
+              },
+              "chain": [
+                "django/db/models/enums.py:ChoicesMeta.choices",
+                "django/db/models/enums.py:ChoicesMeta",
+                "django/db/models/enums.py:ChoicesMeta.__new__"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+                "entity_type": "function",
+                "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+                "diversity_value": "Different file, admin layer"
+              },
+              "chain": [
+                "django/contrib/admin/filters.py:ListFilter.choices",
+                "django/contrib/admin/filters.py:ListFilter",
+                "django/contrib/admin/filters.py:FieldListFilter",
+                "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+                "django/db/models/query.py:QuerySet.get"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections._get_field_choices",
+                "entity_type": "function",
+                "relevance_reason": "This function deals with field choices in SQL compilation, which could be relevant for understanding how model fields are processed.",
+                "diversity_value": "Different file, SQL compilation layer"
+              },
+              "chain": [
+                "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections._get_field_choices",
+                "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "models.py:FooBar",
+                "entity_type": "class",
+                "relevance_reason": "This is the specific model class where the issue is observed, making it crucial for debugging and fixing.",
+                "diversity_value": "Application-specific model class, different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "django/db/models/base.py:Model._get_FIELD_display",
+            "django/db/models/base.py:Model"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_foo_bar_display",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model._get_FIELD_display",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for generating the display value of a model field, which is the core of the issue.",
+            "diversity_value": "Core model functionality from a different file"
+          }
+        },
+        {
+          "chain": [
+            "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+            "django/contrib/admin/options.py:BaseModelAdmin"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_foo_bar_display",
+          "start_entity": {
+            "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+            "entity_type": "function",
+            "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+            "diversity_value": "Admin functionality from a different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_foo_bar_display",
+          "start_entity": {
+            "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+            "entity_type": "function",
+            "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+            "diversity_value": "Database creation functionality from a different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/base.py:Model"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+            "diversity_value": "Core model class from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/options.py:Options.contribute_to_class"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+            "diversity_value": "Model options setup from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/models.py:ModelForm",
+            "django/forms/models.py:BaseModelForm",
+            "django/forms/forms.py:BaseForm",
+            "django/forms/models.py"
+          ],
+          "chain_length": 4,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/forms/models.py:ModelForm",
+            "entity_type": "class",
+            "relevance_reason": "Forms that interact with models, potentially affecting how model methods are used or overridden.",
+            "diversity_value": "Form layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py:Field.get_choices"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+            "entity_type": "function",
+            "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+            "diversity_value": "Field handling from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py:CharField",
+            "django/db/models/fields/__init__.py:Field"
+          ],
+          "chain_length": 2,
+          "initial_entity": "CharField",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py:CharField",
+            "entity_type": "class",
+            "relevance_reason": "The CharField class is used in the model where the issue occurs. It might contain methods or attributes that affect the behavior of get_FIELD_display.",
+            "diversity_value": "Model field definition from core Django module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/fields.py:CharField",
+            "django/forms/fields.py:Field"
+          ],
+          "chain_length": 2,
+          "initial_entity": "CharField",
+          "start_entity": {
+            "entity_id": "django/forms/fields.py:CharField",
+            "entity_type": "class",
+            "relevance_reason": "This class handles form fields, which might interact with the model fields and influence the display of choices.",
+            "diversity_value": "Form field definition from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/enums.py:ChoicesMeta.choices",
+            "django/db/models/enums.py:ChoicesMeta",
+            "django/db/models/enums.py:ChoicesMeta.__new__"
+          ],
+          "chain_length": 3,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/db/models/enums.py:ChoicesMeta.choices",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly related to how choices are handled in Django models, which is central to the issue.",
+            "diversity_value": "Different file, model layer"
+          }
+        },
+        {
+          "chain": [
+            "django/contrib/admin/filters.py:ListFilter.choices",
+            "django/contrib/admin/filters.py:ListFilter",
+            "django/contrib/admin/filters.py:FieldListFilter",
+            "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+            "django/db/models/query.py:QuerySet.get"
+          ],
+          "chain_length": 5,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+            "entity_type": "function",
+            "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+            "diversity_value": "Different file, admin layer"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections._get_field_choices",
+            "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections"
+          ],
+          "chain_length": 2,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections._get_field_choices",
+            "entity_type": "function",
+            "relevance_reason": "This function deals with field choices in SQL compilation, which could be relevant for understanding how model fields are processed.",
+            "diversity_value": "Different file, SQL compilation layer"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-07T05:45:50.462852",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "django/contrib/admin/filters.py:ListFilter.choices",
+            "django/contrib/admin/filters.py:ListFilter",
+            "django/contrib/admin/filters.py:FieldListFilter",
+            "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+            "django/db/models/query.py:QuerySet.get"
+          ],
+          "chain_length": 5,
+          "initial_entity": "choices",
+          "start_entity": {
+            "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+            "entity_type": "function",
+            "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+            "diversity_value": "Different file, admin layer"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "django/db/models/options.py:Options.contribute_to_class"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+            "diversity_value": "Model options setup from different file"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.858608603477478,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_foo_bar_display",
+          "start_entity": {
+            "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+            "entity_type": "function",
+            "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+            "diversity_value": "Database creation functionality from a different file"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.8666056394577026,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/base.py:Model"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+            "diversity_value": "Core model class from different file"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8807274699211121,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+            "django/contrib/admin/options.py:BaseModelAdmin"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_foo_bar_display",
+          "start_entity": {
+            "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+            "entity_type": "function",
+            "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+            "diversity_value": "Admin functionality from a different file"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.8818013668060303,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py:Field.get_choices"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+            "entity_type": "function",
+            "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+            "diversity_value": "Field handling from different file"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.8873949646949768,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-07T05:45:50.468459",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/admin/filters.py:ListFilter.choices",
+              "django/contrib/admin/filters.py:ListFilter",
+              "django/contrib/admin/filters.py:FieldListFilter",
+              "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+              "django/db/models/query.py:QuerySet.get"
+            ],
+            "chain_length": 5,
+            "initial_entity": "choices",
+            "start_entity": {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+              "diversity_value": "Different file, admin layer"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+              "type": "function",
+              "code": "```\n40 | def choices(self, changelist):\n41 |         \"\"\"\n42 |         Return choices ready to be output in the template.\n43 | \n44 |         `changelist` is the ChangeList to be displayed.\n45 |         \"\"\"\n46 |         raise NotImplementedError('subclasses of ListFilter must provide a choices() method')\n```",
+              "start_line": 40,
+              "end_line": 46,
+              "code_omitted": false,
+              "original_code_length": 307
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter",
+              "type": "class",
+              "code": "```\n20 | class ListFilter:\n21 |     title = None  # Human-readable title to appear in the right sidebar.\n22 |     template = 'admin/filter.html'\n23 | \n24 |     def __init__(self, request, params, model, model_admin):\n25 |         # This dictionary will eventually contain the request's query string\n26 |         # parameters actually used by this filter.\n27 |         self.used_parameters = {}\n28 |         if self.title is None:\n29 |             raise ImproperlyConfigured(\n30 |                 \"The list filter '%s' does not specify a 'title'.\"\n31 |                 % self.__class__.__name__\n32 |             )\n33 | \n34 |     def has_output(self):\n35 |         \"\"\"\n36 |         Return True if some choices would be output for this filter.\n37 |         \"\"\"\n38 |         raise NotImplementedError('subclasses of ListFilter must provide a has_output() method')\n39 | \n40 |     def choices(self, changelist):\n41 |         \"\"\"\n42 |         Return choices ready to be output in the template.\n43 | \n44 |         `changelist` is the ChangeList to be displayed.\n45 |         \"\"\"\n46 |         raise NotImplementedError('subclasses of ListFilter must provide a choices() method')\n47 | \n48 |     def queryset(self, request, queryset):\n49 |         \"\"\"\n50 |         Return the filtered queryset.\n51 |         \"\"\"\n52 |         raise NotImplementedError('subclasses of ListFilter must provide a queryset() method')\n53 | \n54 |     def expected_parameters(self):\n55 |         \"\"\"\n56 |         Return the list of parameter names that are expected from the\n57 |         request's query string and that will be used by this filter.\n58 |         \"\"\"\n59 |         raise NotImplementedError('subclasses of ListFilter must provide an expected_parameters() method')\n```",
+              "start_line": 20,
+              "end_line": 59,
+              "code_omitted": false,
+              "original_code_length": 1745
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:FieldListFilter",
+              "type": "class",
+              "code": "```\n118 | class FieldListFilter(ListFilter):\n119 |     _field_list_filters = []\n120 |     _take_priority_index = 0\n121 | \n122 |     def __init__(self, field, request, params, model, model_admin, field_path):\n123 |         self.field = field\n124 |         self.field_path = field_path\n125 |         self.title = getattr(field, 'verbose_name', field_path)\n126 |         super().__init__(request, params, model, model_admin)\n127 |         for p in self.expected_parameters():\n128 |             if p in params:\n129 |                 value = params.pop(p)\n130 |                 self.used_parameters[p] = prepare_lookup_value(p, value)\n131 | \n132 |     def has_output(self):\n133 |         return True\n134 | \n135 |     def queryset(self, request, queryset):\n136 |         try:\n137 |             return queryset.filter(**self.used_parameters)\n138 |         except (ValueError, ValidationError) as e:\n139 |             # Fields may raise a ValueError or ValidationError when converting\n140 |             # the parameters to the correct type.\n141 |             raise IncorrectLookupParameters(e)\n142 | \n143 |     @classmethod\n144 |     def register(cls, test, list_filter_class, take_priority=False):\n145 |         if take_priority:\n146 |             # This is to allow overriding the default filters for certain types\n147 |             # of fields with some custom filters. The first found in the list\n148 |             # is used in priority.\n149 |             cls._field_list_filters.insert(\n150 |                 cls._take_priority_index, (test, list_filter_class))\n151 |             cls._take_priority_index += 1\n152 |         else:\n153 |             cls._field_list_filters.append((test, list_filter_class))\n154 | \n155 |     @classmethod\n156 |     def create(cls, field, request, params, model, model_admin, field_path):\n157 |         for test, list_filter_class in cls._field_list_filters:\n158 |             if test(field):\n159 |                 return list_filter_class(field, request, params, model, model_admin, field_path=field_path)\n```",
+              "start_line": 118,
+              "end_line": 159,
+              "code_omitted": false,
+              "original_code_length": 2037
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+              "type": "class",
+              "code": "```\n267 | class ChoicesFieldListFilter(FieldListFilter):\n268 |     def __init__(self, field, request, params, model, model_admin, field_path):\n269 |         self.lookup_kwarg = '%s__exact' % field_path\n270 |         self.lookup_kwarg_isnull = '%s__isnull' % field_path\n271 |         self.lookup_val = params.get(self.lookup_kwarg)\n272 |         self.lookup_val_isnull = params.get(self.lookup_kwarg_isnull)\n273 |         super().__init__(field, request, params, model, model_admin, field_path)\n274 | \n275 |     def expected_parameters(self):\n276 |         return [self.lookup_kwarg, self.lookup_kwarg_isnull]\n277 | \n278 |     def choices(self, changelist):\n279 |         yield {\n280 |             'selected': self.lookup_val is None,\n281 |             'query_string': changelist.get_query_string(remove=[self.lookup_kwarg, self.lookup_kwarg_isnull]),\n282 |             'display': _('All')\n283 |         }\n284 |         none_title = ''\n285 |         for lookup, title in self.field.flatchoices:\n286 |             if lookup is None:\n287 |                 none_title = title\n288 |                 continue\n289 |             yield {\n290 |                 'selected': str(lookup) == self.lookup_val,\n291 |                 'query_string': changelist.get_query_string({self.lookup_kwarg: lookup}, [self.lookup_kwarg_isnull]),\n292 |                 'display': title,\n293 |             }\n294 |         if none_title:\n295 |             yield {\n296 |                 'selected': bool(self.lookup_val_isnull),\n297 |                 'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: 'True'}, [self.lookup_kwarg]),\n298 |                 'display': none_title,\n299 |             }\n```",
+              "start_line": 267,
+              "end_line": 299,
+              "code_omitted": false,
+              "original_code_length": 1690
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.get",
+              "type": "function",
+              "code": "```\n410 | def get(self, *args, **kwargs):\n411 |         \"\"\"\n412 |         Perform the query and return a single object matching the given\n413 |         keyword arguments.\n414 |         \"\"\"\n415 |         clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)\n416 |         if self.query.can_filter() and not self.query.distinct_fields:\n417 |             clone = clone.order_by()\n418 |         limit = None\n419 |         if not clone.query.select_for_update or connections[clone.db].features.supports_select_for_update_with_limit:\n420 |             limit = MAX_GET_RESULTS\n421 |             clone.query.set_limits(high=limit)\n422 |         num = len(clone)\n423 |         if num == 1:\n424 |             return clone._result_cache[0]\n425 |         if not num:\n426 |             raise self.model.DoesNotExist(\n427 |                 \"%s matching query does not exist.\" %\n428 |                 self.model._meta.object_name\n429 |             )\n430 |         raise self.model.MultipleObjectsReturned(\n431 |             'get() returned more than one %s -- it returned %s!' % (\n432 |                 self.model._meta.object_name,\n433 |                 num if not limit or num < limit else 'more than %s' % (limit - 1),\n434 |             )\n435 |         )\n```",
+              "start_line": 410,
+              "end_line": 435,
+              "code_omitted": false,
+              "original_code_length": 1273
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/options.py:Options.contribute_to_class"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+              "diversity_value": "Model options setup from different file"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.858608603477478,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "type": "function",
+              "code": "```\n149 | def contribute_to_class(self, cls, name):\n150 |         from django.db import connection\n151 |         from django.db.backends.utils import truncate_name\n152 | \n153 |         cls._meta = self\n154 |         self.model = cls\n155 |         # First, construct the default values for these options.\n156 |         self.object_name = cls.__name__\n157 |         self.model_name = self.object_name.lower()\n158 |         self.verbose_name = camel_case_to_spaces(self.object_name)\n159 | \n160 |         # Store the original user-defined values for each option,\n161 |         # for use when serializing the model definition\n162 |         self.original_attrs = {}\n163 | \n164 |         # Next, apply any overridden values from 'class Meta'.\n165 |         if self.meta:\n166 |             meta_attrs = self.meta.__dict__.copy()\n167 |             for name in self.meta.__dict__:\n168 |                 # Ignore any private attributes that Django doesn't care about.\n169 |                 # NOTE: We can't modify a dictionary's contents while looping\n170 |                 # over it, so we loop over the *original* dictionary instead.\n171 |                 if name.startswith('_'):\n172 |                     del meta_attrs[name]\n173 |             for attr_name in DEFAULT_NAMES:\n174 |                 if attr_name in meta_attrs:\n175 |                     setattr(self, attr_name, meta_attrs.pop(attr_name))\n176 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n177 |                 elif hasattr(self.meta, attr_name):\n178 |                     setattr(self, attr_name, getattr(self.meta, attr_name))\n179 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n180 | \n181 |             self.unique_together = normalize_together(self.unique_together)\n182 |             self.index_together = normalize_together(self.index_together)\n183 |             # App label/class name interpolation for names of constraints and\n184 |             # indexes.\n185 |             if not getattr(cls._meta, 'abstract', False):\n186 |                 for attr_name in {'constraints', 'indexes'}:\n187 |                     objs = getattr(self, attr_name, [])\n188 |                     setattr(self, attr_name, self._format_names_with_class(cls, objs))\n189 | \n190 |             # verbose_name_plural is a special case because it uses a 's'\n191 |             # by default.\n192 |             if self.verbose_name_plural is None:\n193 |                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n194 | \n195 |             # order_with_respect_and ordering are mutually exclusive.\n196 |             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)\n197 | \n198 |             # Any leftover attributes must be invalid.\n199 |             if meta_attrs != {}:\n200 |                 raise TypeError(\"'class Meta' got invalid attribute(s): %s\" % ','.join(meta_attrs))\n201 |         else:\n202 |             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n203 |         del self.meta\n204 | \n205 |         # If the db_table wasn't provided, use the app_label + model_name.\n206 |         if not self.db_table:\n207 |             self.db_table = \"%s_%s\" % (self.app_label, self.model_name)\n208 |             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())\n```",
+              "start_line": 149,
+              "end_line": 208,
+              "code_omitted": false,
+              "original_code_length": 3355
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str"
+            ],
+            "chain_length": 1,
+            "initial_entity": "get_foo_bar_display",
+            "start_entity": {
+              "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+              "entity_type": "function",
+              "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+              "diversity_value": "Database creation functionality from a different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8666056394577026,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+              "type": "function",
+              "code": "```\n135 | def _get_database_display_str(self, verbosity, database_name):\n136 |         \"\"\"\n137 |         Return display string for a database for use in various actions.\n138 |         \"\"\"\n139 |         return \"'%s'%s\" % (\n140 |             self.connection.alias,\n141 |             (\" ('%s')\" % database_name) if verbosity >= 2 else '',\n142 |         )\n```",
+              "start_line": 135,
+              "end_line": 142,
+              "code_omitted": false,
+              "original_code_length": 355
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+              "diversity_value": "Core model class from different file"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8807274699211121,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "type": "class",
+              "code": "# Code too long (70511 chars) - omitted for brevity",
+              "start_line": 403,
+              "end_line": 1856,
+              "code_omitted": true,
+              "original_code_length": 70511
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "django/contrib/admin/options.py:BaseModelAdmin"
+            ],
+            "chain_length": 2,
+            "initial_entity": "get_foo_bar_display",
+            "start_entity": {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+              "diversity_value": "Admin functionality from a different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8818013668060303,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "type": "function",
+              "code": "```\n297 | def get_empty_value_display(self):\n298 |         \"\"\"\n299 |         Return the empty_value_display set on ModelAdmin or AdminSite.\n300 |         \"\"\"\n301 |         try:\n302 |             return mark_safe(self.empty_value_display)\n303 |         except AttributeError:\n304 |             return mark_safe(self.admin_site.empty_value_display)\n```",
+              "start_line": 297,
+              "end_line": 304,
+              "code_omitted": false,
+              "original_code_length": 350
+            },
+            {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin",
+              "type": "class",
+              "code": "# Code too long (21669 chars) - omitted for brevity",
+              "start_line": 99,
+              "end_line": 539,
+              "code_omitted": true,
+              "original_code_length": 21669
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/__init__.py:Field.get_choices"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+              "diversity_value": "Field handling from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8873949646949768,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+              "type": "function",
+              "code": "```\n830 | def get_choices(self, include_blank=True, blank_choice=BLANK_CHOICE_DASH, limit_choices_to=None, ordering=()):\n831 |         \"\"\"\n832 |         Return choices with a default blank choices included, for use\n833 |         as <select> choices for this field.\n834 |         \"\"\"\n835 |         if self.choices is not None:\n836 |             choices = list(self.choices)\n837 |             if include_blank:\n838 |                 blank_defined = any(choice in ('', None) for choice, _ in self.flatchoices)\n839 |                 if not blank_defined:\n840 |                     choices = blank_choice + choices\n841 |             return choices\n842 |         rel_model = self.remote_field.model\n843 |         limit_choices_to = limit_choices_to or self.get_limit_choices_to()\n844 |         choice_func = operator.attrgetter(\n845 |             self.remote_field.get_related_field().attname\n846 |             if hasattr(self.remote_field, 'get_related_field')\n847 |             else 'pk'\n848 |         )\n849 |         qs = rel_model._default_manager.complex_filter(limit_choices_to)\n850 |         if ordering:\n851 |             qs = qs.order_by(*ordering)\n852 |         return (blank_choice if include_blank else []) + [\n853 |             (choice_func(x), str(x)) for x in qs\n854 |         ]\n```",
+              "start_line": 830,
+              "end_line": 854,
+              "code_omitted": false,
+              "original_code_length": 1291
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-07T05:46:54.274605",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_4",
+        "winning_chain": {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+              "diversity_value": "Core model class from different file"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8807274699211121,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "type": "class",
+              "code": "# Code too long (70511 chars) - omitted for brevity",
+              "start_line": 403,
+              "end_line": 1856,
+              "code_omitted": true,
+              "original_code_length": 70511
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 90.0,
+        "vote_distribution": {
+          "chain_4": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 points to the `django/db/models/base.py:Model` class, which is the base class for all Django models. The issue described involves overriding a method (`get_FIELD_display`) on a model, and this method is part of the model's internal behavior. Modifying the base model class to ensure that custom overrides are respected would directly address the problem. The other chains do not directly involve the model's method overriding mechanism.",
+            "modification_strategy": "Ensure that the `get_FIELD_display` method in the `Model` class respects custom overrides by checking if the method exists on the model instance before calling the default implementation.",
+            "chain_analysis": {
+              "chain_1": "This chain involves admin filters and their choices. While related to displaying choices, it does not directly involve the model's method overriding mechanism.",
+              "chain_2": "This chain involves the `Options` class, which handles metadata for models. It does not directly deal with method overriding or the display of choices.",
+              "chain_3": "This chain involves database creation and display strings. It is not related to model method overriding or choice display.",
+              "chain_4": "This chain involves the base `Model` class, which is where the `get_FIELD_display` method is defined. Modifying this chain would directly address the issue of overriding the method.",
+              "chain_5": "This chain involves the `BaseModelAdmin` class and its method for displaying empty values. It is not directly related to the model's method overriding mechanism.",
+              "chain_6": "This chain involves the `Field` class and its method for getting choices. While it deals with choices, it does not directly handle method overriding on the model."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the base `Model` class where the `get_FIELD_display` method is defined. This method is responsible for returning the display value of a field based on its choices. Since the issue is about overriding this method in a model, modifying or understanding how this method interacts with model instances is crucial. The problem might be due to changes in how Django handles method overriding in models starting from version 2.2.",
+            "modification_strategy": "Investigate the `get_FIELD_display` method in the `Model` class to understand how it is being called and ensure that custom overrides in models are respected. This might involve checking the method resolution order or how the method is dynamically generated.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with admin filters and their choices. While it is related to displaying choices, it does not directly affect the model's `get_FIELD_display` method.",
+              "chain_2": "This chain deals with the `Meta` class and its contributions to the model. It is important for model metadata but does not directly handle the `get_FIELD_display` method.",
+              "chain_3": "This chain is about database creation and display strings. It is not directly related to the model's `get_FIELD_display` method.",
+              "chain_4": "This chain contains the `Model` class and is the most likely place where the `get_FIELD_display` method is defined and called. Modifying this chain would have the most direct impact on resolving the issue.",
+              "chain_5": "This chain deals with the admin interface and how empty values are displayed. It is not directly related to the model's `get_FIELD_display` method.",
+              "chain_6": "This chain deals with the `Field` class and its `get_choices` method. While it is related to choices, it does not directly handle the `get_FIELD_display` method in models."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `django/db/models/base.py:Model` class, which is the base class for all Django models. The issue described involves overriding the `get_FIELD_display` method in a model, and this method is dynamically generated by Django based on the model's fields. The base class is where the dynamic method generation logic is implemented, making it the most likely place to find the root cause and implement a fix.",
+            "modification_strategy": "Investigate the dynamic method generation logic in the `Model` class and ensure that custom overrides are respected. This might involve modifying how Django checks for and applies custom methods.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with admin filters and their choices, which are not directly related to the dynamic method generation in models. Modifying this chain would not address the issue.",
+              "chain_2": "This chain involves the `Options` class, which handles metadata for models. While it configures some aspects of models, it does not directly manage the dynamic method generation for `get_FIELD_display`.",
+              "chain_3": "This chain is related to database creation and display strings, which are not relevant to the issue of overriding model methods.",
+              "chain_4": "This chain contains the `Model` class, which is the base class for all Django models. The dynamic method generation for `get_FIELD_display` is handled here, making it the most likely place to find and fix the issue.",
+              "chain_5": "This chain deals with the `BaseModelAdmin` class and its method for displaying empty values. While it is part of the admin interface, it does not directly affect the model's method overrides.",
+              "chain_6": "This chain involves the `Field` class and its method for generating choices. While it is related to the choices used in `get_FIELD_display`, it does not handle the method itself or its overrides."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 points to the `django/db/models/base.py:Model` file, which is where the `get_FIELD_display` method is defined. This method is responsible for returning the human-readable value for a field based on its choices. The issue described is specifically about overriding this method in a model, and the `Model` class is the base class where this behavior is implemented. Modifying this chain would directly address the issue of overriding `get_FIELD_display`.",
+            "modification_strategy": "Ensure that the `get_FIELD_display` method allows for overriding in subclasses by checking if the method exists in the subclass before calling the default implementation.",
+            "chain_analysis": {
+              "chain_1": "This chain is related to admin filters and their choices, but it does not directly involve the `get_FIELD_display` method or its overriding mechanism.",
+              "chain_2": "This chain involves the `contribute_to_class` method in `Options`, which is part of the model metadata setup. While it configures model options, it does not directly impact the `get_FIELD_display` method or its overriding.",
+              "chain_3": "This chain is related to database creation and display strings, which are not directly relevant to the issue of overriding `get_FIELD_display`.",
+              "chain_4": "This chain is the most relevant as it contains the `Model` class where `get_FIELD_display` is defined. Modifying this chain would directly address the issue of overriding the method.",
+              "chain_5": "This chain involves the `BaseModelAdmin` class and its `get_empty_value_display` method, which is used in the admin interface to display empty values. It is not directly related to the `get_FIELD_display` method or its overriding.",
+              "chain_6": "This chain is related to the `Field` class and its `get_choices` method, which generates the choices for a field. While it is related to the choices mechanism, it does not directly impact the `get_FIELD_display` method or its overriding."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 points to the `django/db/models/base.py` file, which contains the `Model` class. This class is responsible for defining the behavior of all model instances, including the `get_FIELD_display` method. The issue described involves overriding this method, and the `Model` class is where this method is defined and called. Modifying the `Model` class to allow overriding of `get_FIELD_display` would directly address the problem and ensure that the custom implementation is respected in Django 2.2 and later versions.",
+            "modification_strategy": "Ensure that the `get_FIELD_display` method in the `Model` class respects overridden methods in subclasses. This might involve checking if the method is overridden before calling the default implementation.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with admin filters and their choices, which are not directly related to the model's `get_FIELD_display` method. Modifications here would not address the issue of overriding the method.",
+              "chain_2": "This chain is related to the `Meta` class of models, which is used for configuring model metadata. While important, it does not directly influence the behavior of the `get_FIELD_display` method.",
+              "chain_3": "This chain is about database creation and display strings, which are not relevant to the issue of overriding model methods.",
+              "chain_4": "This chain contains the `Model` class, which is the core of Django models. The `get_FIELD_display` method is defined here, and ensuring that it respects overrides in subclasses would directly solve the issue.",
+              "chain_5": "This chain is related to the admin interface and how empty values are displayed. It does not directly affect the model's `get_FIELD_display` method.",
+              "chain_6": "This chain deals with the `Field` class and its `get_choices` method. While it is related to choices and displays, it is not the place where the `get_FIELD_display` method is called or defined."
+            },
+            "agent_id": 5
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 points to the `django/db/models/base.py:Model` class, which is the base class for all Django models. The issue described involves overriding a method (`get_FIELD_display`) on a model, and this method is part of the model's internal behavior. Modifying the base model class to ensure that custom overrides are respected would directly address the problem. The other chains do not directly involve the model's method overriding mechanism.",
+            "modification_strategy": "Ensure that the `get_FIELD_display` method in the `Model` class respects custom overrides by checking if the method exists on the model instance before calling the default implementation.",
+            "chain_analysis": {
+              "chain_1": "This chain involves admin filters and their choices. While related to displaying choices, it does not directly involve the model's method overriding mechanism.",
+              "chain_2": "This chain involves the `Options` class, which handles metadata for models. It does not directly deal with method overriding or the display of choices.",
+              "chain_3": "This chain involves database creation and display strings. It is not related to model method overriding or choice display.",
+              "chain_4": "This chain involves the base `Model` class, which is where the `get_FIELD_display` method is defined. Modifying this chain would directly address the issue of overriding the method.",
+              "chain_5": "This chain involves the `BaseModelAdmin` class and its method for displaying empty values. It is not directly related to the model's method overriding mechanism.",
+              "chain_6": "This chain involves the `Field` class and its method for getting choices. While it deals with choices, it does not directly handle method overriding on the model."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the base `Model` class where the `get_FIELD_display` method is defined. This method is responsible for returning the display value of a field based on its choices. Since the issue is about overriding this method in a model, modifying or understanding how this method interacts with model instances is crucial. The problem might be due to changes in how Django handles method overriding in models starting from version 2.2.",
+            "modification_strategy": "Investigate the `get_FIELD_display` method in the `Model` class to understand how it is being called and ensure that custom overrides in models are respected. This might involve checking the method resolution order or how the method is dynamically generated.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with admin filters and their choices. While it is related to displaying choices, it does not directly affect the model's `get_FIELD_display` method.",
+              "chain_2": "This chain deals with the `Meta` class and its contributions to the model. It is important for model metadata but does not directly handle the `get_FIELD_display` method.",
+              "chain_3": "This chain is about database creation and display strings. It is not directly related to the model's `get_FIELD_display` method.",
+              "chain_4": "This chain contains the `Model` class and is the most likely place where the `get_FIELD_display` method is defined and called. Modifying this chain would have the most direct impact on resolving the issue.",
+              "chain_5": "This chain deals with the admin interface and how empty values are displayed. It is not directly related to the model's `get_FIELD_display` method.",
+              "chain_6": "This chain deals with the `Field` class and its `get_choices` method. While it is related to choices, it does not directly handle the `get_FIELD_display` method in models."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `django/db/models/base.py:Model` class, which is the base class for all Django models. The issue described involves overriding the `get_FIELD_display` method in a model, and this method is dynamically generated by Django based on the model's fields. The base class is where the dynamic method generation logic is implemented, making it the most likely place to find the root cause and implement a fix.",
+            "modification_strategy": "Investigate the dynamic method generation logic in the `Model` class and ensure that custom overrides are respected. This might involve modifying how Django checks for and applies custom methods.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with admin filters and their choices, which are not directly related to the dynamic method generation in models. Modifying this chain would not address the issue.",
+              "chain_2": "This chain involves the `Options` class, which handles metadata for models. While it configures some aspects of models, it does not directly manage the dynamic method generation for `get_FIELD_display`.",
+              "chain_3": "This chain is related to database creation and display strings, which are not relevant to the issue of overriding model methods.",
+              "chain_4": "This chain contains the `Model` class, which is the base class for all Django models. The dynamic method generation for `get_FIELD_display` is handled here, making it the most likely place to find and fix the issue.",
+              "chain_5": "This chain deals with the `BaseModelAdmin` class and its method for displaying empty values. While it is part of the admin interface, it does not directly affect the model's method overrides.",
+              "chain_6": "This chain involves the `Field` class and its method for generating choices. While it is related to the choices used in `get_FIELD_display`, it does not handle the method itself or its overrides."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 points to the `django/db/models/base.py:Model` file, which is where the `get_FIELD_display` method is defined. This method is responsible for returning the human-readable value for a field based on its choices. The issue described is specifically about overriding this method in a model, and the `Model` class is the base class where this behavior is implemented. Modifying this chain would directly address the issue of overriding `get_FIELD_display`.",
+            "modification_strategy": "Ensure that the `get_FIELD_display` method allows for overriding in subclasses by checking if the method exists in the subclass before calling the default implementation.",
+            "chain_analysis": {
+              "chain_1": "This chain is related to admin filters and their choices, but it does not directly involve the `get_FIELD_display` method or its overriding mechanism.",
+              "chain_2": "This chain involves the `contribute_to_class` method in `Options`, which is part of the model metadata setup. While it configures model options, it does not directly impact the `get_FIELD_display` method or its overriding.",
+              "chain_3": "This chain is related to database creation and display strings, which are not directly relevant to the issue of overriding `get_FIELD_display`.",
+              "chain_4": "This chain is the most relevant as it contains the `Model` class where `get_FIELD_display` is defined. Modifying this chain would directly address the issue of overriding the method.",
+              "chain_5": "This chain involves the `BaseModelAdmin` class and its `get_empty_value_display` method, which is used in the admin interface to display empty values. It is not directly related to the `get_FIELD_display` method or its overriding.",
+              "chain_6": "This chain is related to the `Field` class and its `get_choices` method, which generates the choices for a field. While it is related to the choices mechanism, it does not directly impact the `get_FIELD_display` method or its overriding."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 points to the `django/db/models/base.py` file, which contains the `Model` class. This class is responsible for defining the behavior of all model instances, including the `get_FIELD_display` method. The issue described involves overriding this method, and the `Model` class is where this method is defined and called. Modifying the `Model` class to allow overriding of `get_FIELD_display` would directly address the problem and ensure that the custom implementation is respected in Django 2.2 and later versions.",
+            "modification_strategy": "Ensure that the `get_FIELD_display` method in the `Model` class respects overridden methods in subclasses. This might involve checking if the method is overridden before calling the default implementation.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with admin filters and their choices, which are not directly related to the model's `get_FIELD_display` method. Modifications here would not address the issue of overriding the method.",
+              "chain_2": "This chain is related to the `Meta` class of models, which is used for configuring model metadata. While important, it does not directly influence the behavior of the `get_FIELD_display` method.",
+              "chain_3": "This chain is about database creation and display strings, which are not relevant to the issue of overriding model methods.",
+              "chain_4": "This chain contains the `Model` class, which is the core of Django models. The `get_FIELD_display` method is defined here, and ensuring that it respects overrides in subclasses would directly solve the issue.",
+              "chain_5": "This chain is related to the admin interface and how empty values are displayed. It does not directly affect the model's `get_FIELD_display` method.",
+              "chain_6": "This chain deals with the `Field` class and its `get_choices` method. While it is related to choices and displays, it is not the place where the `get_FIELD_display` method is called or defined."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/admin/filters.py:ListFilter.choices",
+              "django/contrib/admin/filters.py:ListFilter",
+              "django/contrib/admin/filters.py:FieldListFilter",
+              "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+              "django/db/models/query.py:QuerySet.get"
+            ],
+            "chain_length": 5,
+            "initial_entity": "choices",
+            "start_entity": {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+              "entity_type": "function",
+              "relevance_reason": "This function shows how choices are used in admin filters, which might provide insights into overriding behavior.",
+              "diversity_value": "Different file, admin layer"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter.choices",
+              "type": "function",
+              "code": "```\n40 | def choices(self, changelist):\n41 |         \"\"\"\n42 |         Return choices ready to be output in the template.\n43 | \n44 |         `changelist` is the ChangeList to be displayed.\n45 |         \"\"\"\n46 |         raise NotImplementedError('subclasses of ListFilter must provide a choices() method')\n```",
+              "start_line": 40,
+              "end_line": 46,
+              "code_omitted": false,
+              "original_code_length": 307
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:ListFilter",
+              "type": "class",
+              "code": "```\n20 | class ListFilter:\n21 |     title = None  # Human-readable title to appear in the right sidebar.\n22 |     template = 'admin/filter.html'\n23 | \n24 |     def __init__(self, request, params, model, model_admin):\n25 |         # This dictionary will eventually contain the request's query string\n26 |         # parameters actually used by this filter.\n27 |         self.used_parameters = {}\n28 |         if self.title is None:\n29 |             raise ImproperlyConfigured(\n30 |                 \"The list filter '%s' does not specify a 'title'.\"\n31 |                 % self.__class__.__name__\n32 |             )\n33 | \n34 |     def has_output(self):\n35 |         \"\"\"\n36 |         Return True if some choices would be output for this filter.\n37 |         \"\"\"\n38 |         raise NotImplementedError('subclasses of ListFilter must provide a has_output() method')\n39 | \n40 |     def choices(self, changelist):\n41 |         \"\"\"\n42 |         Return choices ready to be output in the template.\n43 | \n44 |         `changelist` is the ChangeList to be displayed.\n45 |         \"\"\"\n46 |         raise NotImplementedError('subclasses of ListFilter must provide a choices() method')\n47 | \n48 |     def queryset(self, request, queryset):\n49 |         \"\"\"\n50 |         Return the filtered queryset.\n51 |         \"\"\"\n52 |         raise NotImplementedError('subclasses of ListFilter must provide a queryset() method')\n53 | \n54 |     def expected_parameters(self):\n55 |         \"\"\"\n56 |         Return the list of parameter names that are expected from the\n57 |         request's query string and that will be used by this filter.\n58 |         \"\"\"\n59 |         raise NotImplementedError('subclasses of ListFilter must provide an expected_parameters() method')\n```",
+              "start_line": 20,
+              "end_line": 59,
+              "code_omitted": false,
+              "original_code_length": 1745
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:FieldListFilter",
+              "type": "class",
+              "code": "```\n118 | class FieldListFilter(ListFilter):\n119 |     _field_list_filters = []\n120 |     _take_priority_index = 0\n121 | \n122 |     def __init__(self, field, request, params, model, model_admin, field_path):\n123 |         self.field = field\n124 |         self.field_path = field_path\n125 |         self.title = getattr(field, 'verbose_name', field_path)\n126 |         super().__init__(request, params, model, model_admin)\n127 |         for p in self.expected_parameters():\n128 |             if p in params:\n129 |                 value = params.pop(p)\n130 |                 self.used_parameters[p] = prepare_lookup_value(p, value)\n131 | \n132 |     def has_output(self):\n133 |         return True\n134 | \n135 |     def queryset(self, request, queryset):\n136 |         try:\n137 |             return queryset.filter(**self.used_parameters)\n138 |         except (ValueError, ValidationError) as e:\n139 |             # Fields may raise a ValueError or ValidationError when converting\n140 |             # the parameters to the correct type.\n141 |             raise IncorrectLookupParameters(e)\n142 | \n143 |     @classmethod\n144 |     def register(cls, test, list_filter_class, take_priority=False):\n145 |         if take_priority:\n146 |             # This is to allow overriding the default filters for certain types\n147 |             # of fields with some custom filters. The first found in the list\n148 |             # is used in priority.\n149 |             cls._field_list_filters.insert(\n150 |                 cls._take_priority_index, (test, list_filter_class))\n151 |             cls._take_priority_index += 1\n152 |         else:\n153 |             cls._field_list_filters.append((test, list_filter_class))\n154 | \n155 |     @classmethod\n156 |     def create(cls, field, request, params, model, model_admin, field_path):\n157 |         for test, list_filter_class in cls._field_list_filters:\n158 |             if test(field):\n159 |                 return list_filter_class(field, request, params, model, model_admin, field_path=field_path)\n```",
+              "start_line": 118,
+              "end_line": 159,
+              "code_omitted": false,
+              "original_code_length": 2037
+            },
+            {
+              "entity_id": "django/contrib/admin/filters.py:ChoicesFieldListFilter",
+              "type": "class",
+              "code": "```\n267 | class ChoicesFieldListFilter(FieldListFilter):\n268 |     def __init__(self, field, request, params, model, model_admin, field_path):\n269 |         self.lookup_kwarg = '%s__exact' % field_path\n270 |         self.lookup_kwarg_isnull = '%s__isnull' % field_path\n271 |         self.lookup_val = params.get(self.lookup_kwarg)\n272 |         self.lookup_val_isnull = params.get(self.lookup_kwarg_isnull)\n273 |         super().__init__(field, request, params, model, model_admin, field_path)\n274 | \n275 |     def expected_parameters(self):\n276 |         return [self.lookup_kwarg, self.lookup_kwarg_isnull]\n277 | \n278 |     def choices(self, changelist):\n279 |         yield {\n280 |             'selected': self.lookup_val is None,\n281 |             'query_string': changelist.get_query_string(remove=[self.lookup_kwarg, self.lookup_kwarg_isnull]),\n282 |             'display': _('All')\n283 |         }\n284 |         none_title = ''\n285 |         for lookup, title in self.field.flatchoices:\n286 |             if lookup is None:\n287 |                 none_title = title\n288 |                 continue\n289 |             yield {\n290 |                 'selected': str(lookup) == self.lookup_val,\n291 |                 'query_string': changelist.get_query_string({self.lookup_kwarg: lookup}, [self.lookup_kwarg_isnull]),\n292 |                 'display': title,\n293 |             }\n294 |         if none_title:\n295 |             yield {\n296 |                 'selected': bool(self.lookup_val_isnull),\n297 |                 'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: 'True'}, [self.lookup_kwarg]),\n298 |                 'display': none_title,\n299 |             }\n```",
+              "start_line": 267,
+              "end_line": 299,
+              "code_omitted": false,
+              "original_code_length": 1690
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.get",
+              "type": "function",
+              "code": "```\n410 | def get(self, *args, **kwargs):\n411 |         \"\"\"\n412 |         Perform the query and return a single object matching the given\n413 |         keyword arguments.\n414 |         \"\"\"\n415 |         clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)\n416 |         if self.query.can_filter() and not self.query.distinct_fields:\n417 |             clone = clone.order_by()\n418 |         limit = None\n419 |         if not clone.query.select_for_update or connections[clone.db].features.supports_select_for_update_with_limit:\n420 |             limit = MAX_GET_RESULTS\n421 |             clone.query.set_limits(high=limit)\n422 |         num = len(clone)\n423 |         if num == 1:\n424 |             return clone._result_cache[0]\n425 |         if not num:\n426 |             raise self.model.DoesNotExist(\n427 |                 \"%s matching query does not exist.\" %\n428 |                 self.model._meta.object_name\n429 |             )\n430 |         raise self.model.MultipleObjectsReturned(\n431 |             'get() returned more than one %s -- it returned %s!' % (\n432 |                 self.model._meta.object_name,\n433 |                 num if not limit or num < limit else 'more than %s' % (limit - 1),\n434 |             )\n435 |         )\n```",
+              "start_line": 410,
+              "end_line": 435,
+              "code_omitted": false,
+              "original_code_length": 1273
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/options.py:Options.contribute_to_class"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for setting up the model's metadata, which might affect how methods like `get_FIELD_display` are handled.",
+              "diversity_value": "Model options setup from different file"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.858608603477478,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/options.py:Options.contribute_to_class",
+              "type": "function",
+              "code": "```\n149 | def contribute_to_class(self, cls, name):\n150 |         from django.db import connection\n151 |         from django.db.backends.utils import truncate_name\n152 | \n153 |         cls._meta = self\n154 |         self.model = cls\n155 |         # First, construct the default values for these options.\n156 |         self.object_name = cls.__name__\n157 |         self.model_name = self.object_name.lower()\n158 |         self.verbose_name = camel_case_to_spaces(self.object_name)\n159 | \n160 |         # Store the original user-defined values for each option,\n161 |         # for use when serializing the model definition\n162 |         self.original_attrs = {}\n163 | \n164 |         # Next, apply any overridden values from 'class Meta'.\n165 |         if self.meta:\n166 |             meta_attrs = self.meta.__dict__.copy()\n167 |             for name in self.meta.__dict__:\n168 |                 # Ignore any private attributes that Django doesn't care about.\n169 |                 # NOTE: We can't modify a dictionary's contents while looping\n170 |                 # over it, so we loop over the *original* dictionary instead.\n171 |                 if name.startswith('_'):\n172 |                     del meta_attrs[name]\n173 |             for attr_name in DEFAULT_NAMES:\n174 |                 if attr_name in meta_attrs:\n175 |                     setattr(self, attr_name, meta_attrs.pop(attr_name))\n176 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n177 |                 elif hasattr(self.meta, attr_name):\n178 |                     setattr(self, attr_name, getattr(self.meta, attr_name))\n179 |                     self.original_attrs[attr_name] = getattr(self, attr_name)\n180 | \n181 |             self.unique_together = normalize_together(self.unique_together)\n182 |             self.index_together = normalize_together(self.index_together)\n183 |             # App label/class name interpolation for names of constraints and\n184 |             # indexes.\n185 |             if not getattr(cls._meta, 'abstract', False):\n186 |                 for attr_name in {'constraints', 'indexes'}:\n187 |                     objs = getattr(self, attr_name, [])\n188 |                     setattr(self, attr_name, self._format_names_with_class(cls, objs))\n189 | \n190 |             # verbose_name_plural is a special case because it uses a 's'\n191 |             # by default.\n192 |             if self.verbose_name_plural is None:\n193 |                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n194 | \n195 |             # order_with_respect_and ordering are mutually exclusive.\n196 |             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)\n197 | \n198 |             # Any leftover attributes must be invalid.\n199 |             if meta_attrs != {}:\n200 |                 raise TypeError(\"'class Meta' got invalid attribute(s): %s\" % ','.join(meta_attrs))\n201 |         else:\n202 |             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)\n203 |         del self.meta\n204 | \n205 |         # If the db_table wasn't provided, use the app_label + model_name.\n206 |         if not self.db_table:\n207 |             self.db_table = \"%s_%s\" % (self.app_label, self.model_name)\n208 |             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())\n```",
+              "start_line": 149,
+              "end_line": 208,
+              "code_omitted": false,
+              "original_code_length": 3355
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str"
+            ],
+            "chain_length": 1,
+            "initial_entity": "get_foo_bar_display",
+            "start_entity": {
+              "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+              "entity_type": "function",
+              "relevance_reason": "While not directly related, understanding how display strings are handled in the database creation process might provide insights into similar patterns.",
+              "diversity_value": "Database creation functionality from a different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8666056394577026,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_database_display_str",
+              "type": "function",
+              "code": "```\n135 | def _get_database_display_str(self, verbosity, database_name):\n136 |         \"\"\"\n137 |         Return display string for a database for use in various actions.\n138 |         \"\"\"\n139 |         return \"'%s'%s\" % (\n140 |             self.connection.alias,\n141 |             (\" ('%s')\" % database_name) if verbosity >= 2 else '',\n142 |         )\n```",
+              "start_line": 135,
+              "end_line": 142,
+              "code_omitted": false,
+              "original_code_length": 355
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model",
+              "entity_type": "class",
+              "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+              "diversity_value": "Core model class from different file"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8807274699211121,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model",
+              "type": "class",
+              "code": "# Code too long (70511 chars) - omitted for brevity",
+              "start_line": 403,
+              "end_line": 1856,
+              "code_omitted": true,
+              "original_code_length": 70511
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "django/contrib/admin/options.py:BaseModelAdmin"
+            ],
+            "chain_length": 2,
+            "initial_entity": "get_foo_bar_display",
+            "start_entity": {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with displaying values in the admin interface, which might be relevant if the issue is related to admin views.",
+              "diversity_value": "Admin functionality from a different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8818013668060303,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin.get_empty_value_display",
+              "type": "function",
+              "code": "```\n297 | def get_empty_value_display(self):\n298 |         \"\"\"\n299 |         Return the empty_value_display set on ModelAdmin or AdminSite.\n300 |         \"\"\"\n301 |         try:\n302 |             return mark_safe(self.empty_value_display)\n303 |         except AttributeError:\n304 |             return mark_safe(self.admin_site.empty_value_display)\n```",
+              "start_line": 297,
+              "end_line": 304,
+              "code_omitted": false,
+              "original_code_length": 350
+            },
+            {
+              "entity_id": "django/contrib/admin/options.py:BaseModelAdmin",
+              "type": "class",
+              "code": "# Code too long (21669 chars) - omitted for brevity",
+              "start_line": 99,
+              "end_line": 539,
+              "code_omitted": true,
+              "original_code_length": 21669
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/__init__.py:Field.get_choices"
+            ],
+            "chain_length": 1,
+            "initial_entity": "foo_bar",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+              "entity_type": "function",
+              "relevance_reason": "This function generates the choices for fields, which is directly related to the `get_FIELD_display` method.",
+              "diversity_value": "Field handling from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8873949646949768,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/__init__.py:Field.get_choices",
+              "type": "function",
+              "code": "```\n830 | def get_choices(self, include_blank=True, blank_choice=BLANK_CHOICE_DASH, limit_choices_to=None, ordering=()):\n831 |         \"\"\"\n832 |         Return choices with a default blank choices included, for use\n833 |         as <select> choices for this field.\n834 |         \"\"\"\n835 |         if self.choices is not None:\n836 |             choices = list(self.choices)\n837 |             if include_blank:\n838 |                 blank_defined = any(choice in ('', None) for choice, _ in self.flatchoices)\n839 |                 if not blank_defined:\n840 |                     choices = blank_choice + choices\n841 |             return choices\n842 |         rel_model = self.remote_field.model\n843 |         limit_choices_to = limit_choices_to or self.get_limit_choices_to()\n844 |         choice_func = operator.attrgetter(\n845 |             self.remote_field.get_related_field().attname\n846 |             if hasattr(self.remote_field, 'get_related_field')\n847 |             else 'pk'\n848 |         )\n849 |         qs = rel_model._default_manager.complex_filter(limit_choices_to)\n850 |         if ordering:\n851 |             qs = qs.order_by(*ordering)\n852 |         return (blank_choice if include_blank else []) + [\n853 |             (choice_func(x), str(x)) for x in qs\n854 |         ]\n```",
+              "start_line": 830,
+              "end_line": 854,
+              "code_omitted": false,
+              "original_code_length": 1291
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_4",
+        "original_chain_info": {
+          "chain": [
+            "django/db/models/base.py:Model"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+            "diversity_value": "Core model class from different file"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8807274699211121,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/db/models/base.py:Model",
+            "type": "class",
+            "code": "# Code too long (70511 chars) - omitted for brevity",
+            "start_line": 403,
+            "end_line": 1856,
+            "code_omitted": true,
+            "original_code_length": 70511
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 4,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_4"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-07T05:47:40.597145",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/base.py:Model",
+                "location_description": "The method get_FIELD_display() in the Model class",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "In Django 2.2+, the `get_FIELD_display()` method has been modified to dynamically create a method for each field with choices. This prevents direct overriding of the method in the model class as it was possible in Django 2.1. To allow custom behavior, we need to modify how Django handles the creation and calling of these methods.",
+                "suggested_approach": "To address this issue, we need to modify the `contribute_to_class` method in the `Field` class, which is responsible for adding the `get_FIELD_display` methods to the model. We will introduce a check to see if the method already exists before adding it. If it does exist, we will not overwrite it, thus allowing the custom method to take precedence.\n\n1. Open the file `django/db/models/fields/__init__.py`.\n2. Locate the `contribute_to_class` method in the `Field` class. This method is typically around line 750.\n3. Modify the `contribute_to_class` method as follows:\n```python\nfrom django.utils.functional import curry\n\n...\ndef contribute_to_class(self, cls, name, private_only=False, virtual_only=NOT_PROVIDED):\n    ...\n    if self.choices:\n        setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n        # Check if the method already exists in the class\n        if not hasattr(cls, 'get_%s_display' % self.name):\n            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n    ...\n```\n4. This modification ensures that if a method `get_FIELD_display` already exists in the model, it will not be overwritten by Django's dynamic method creation.\n5. Test the changes by running your application and ensuring that the custom `get_foo_bar_display` method in your `FooBar` model is called instead of the dynamically created one.\n6. Add a test case to verify that the custom method is used when defined:\n```python\nfrom django.test import TestCase\nfrom myapp.models import FooBar\n\nclass FooBarTest(TestCase):\n    def test_custom_get_field_display(self):\n        foo_bar = FooBar(foo_bar=1)\n        self.assertEqual(foo_bar.get_foo_bar_display(), 'something')\n```\n7. Ensure that all tests pass and there are no regressions in other parts of the application."
+              }
+            ],
+            "overall_strategy": "By modifying the `contribute_to_class` method in the `Field` class, we prevent Django from overwriting any custom `get_FIELD_display` methods defined in the model. This allows developers to define their own display logic for fields with choices, maintaining compatibility with Django 2.2+ while preserving the ability to customize behavior.",
+            "confidence": 85
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_4):**\n\n**Entity 1: django/db/models/base.py:Model**\nType: class\nLines: 403-1856\nCode:\n```\n# Code too long (70511 chars) - omitted for brevity\n```\n\n",
+      "num_agents": 1
+    }
+  },
+  "stage_7_round2_analysis": {
+    "timestamp": "2026-10-07T05:47:40.602998",
+    "data": {
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/base.py:Model",
+                "location_description": "The method get_FIELD_display() in the Model class",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "In Django 2.2+, the `get_FIELD_display()` method has been modified to dynamically create a method for each field with choices. This prevents direct overriding of the method in the model class as it was possible in Django 2.1. To allow custom behavior, we need to modify how Django handles the creation and calling of these methods.",
+                "suggested_approach": "To address this issue, we need to modify the `contribute_to_class` method in the `Field` class, which is responsible for adding the `get_FIELD_display` methods to the model. We will introduce a check to see if the method already exists before adding it. If it does exist, we will not overwrite it, thus allowing the custom method to take precedence.\n\n1. Open the file `django/db/models/fields/__init__.py`.\n2. Locate the `contribute_to_class` method in the `Field` class. This method is typically around line 750.\n3. Modify the `contribute_to_class` method as follows:\n```python\nfrom django.utils.functional import curry\n\n...\ndef contribute_to_class(self, cls, name, private_only=False, virtual_only=NOT_PROVIDED):\n    ...\n    if self.choices:\n        setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n        # Check if the method already exists in the class\n        if not hasattr(cls, 'get_%s_display' % self.name):\n            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n    ...\n```\n4. This modification ensures that if a method `get_FIELD_display` already exists in the model, it will not be overwritten by Django's dynamic method creation.\n5. Test the changes by running your application and ensuring that the custom `get_foo_bar_display` method in your `FooBar` model is called instead of the dynamically created one.\n6. Add a test case to verify that the custom method is used when defined:\n```python\nfrom django.test import TestCase\nfrom myapp.models import FooBar\n\nclass FooBarTest(TestCase):\n    def test_custom_get_field_display(self):\n        foo_bar = FooBar(foo_bar=1)\n        self.assertEqual(foo_bar.get_foo_bar_display(), 'something')\n```\n7. Ensure that all tests pass and there are no regressions in other parts of the application."
+              }
+            ],
+            "overall_strategy": "By modifying the `contribute_to_class` method in the `Field` class, we prevent Django from overwriting any custom `get_FIELD_display` methods defined in the model. This allows developers to define their own display logic for fields with choices, maintaining compatibility with Django 2.2+ while preserving the ability to customize behavior.",
+            "confidence": 85,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/db/models/base.py:Model",
+                "location_description": "The method get_FIELD_display() in the Model class",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "In Django 2.2+, the `get_FIELD_display()` method has been modified to dynamically create a method for each field with choices. This prevents direct overriding of the method in the model class as it was possible in Django 2.1. To allow custom behavior, we need to modify how Django handles the creation and calling of these methods.",
+                "suggested_approach": "To address this issue, we need to modify the `contribute_to_class` method in the `Field` class, which is responsible for adding the `get_FIELD_display` methods to the model. We will introduce a check to see if the method already exists before adding it. If it does exist, we will not overwrite it, thus allowing the custom method to take precedence.\n\n1. Open the file `django/db/models/fields/__init__.py`.\n2. Locate the `contribute_to_class` method in the `Field` class. This method is typically around line 750.\n3. Modify the `contribute_to_class` method as follows:\n```python\nfrom django.utils.functional import curry\n\n...\ndef contribute_to_class(self, cls, name, private_only=False, virtual_only=NOT_PROVIDED):\n    ...\n    if self.choices:\n        setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n        # Check if the method already exists in the class\n        if not hasattr(cls, 'get_%s_display' % self.name):\n            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n    ...\n```\n4. This modification ensures that if a method `get_FIELD_display` already exists in the model, it will not be overwritten by Django's dynamic method creation.\n5. Test the changes by running your application and ensuring that the custom `get_foo_bar_display` method in your `FooBar` model is called instead of the dynamically created one.\n6. Add a test case to verify that the custom method is used when defined:\n```python\nfrom django.test import TestCase\nfrom myapp.models import FooBar\n\nclass FooBarTest(TestCase):\n    def test_custom_get_field_display(self):\n        foo_bar = FooBar(foo_bar=1)\n        self.assertEqual(foo_bar.get_foo_bar_display(), 'something')\n```\n7. Ensure that all tests pass and there are no regressions in other parts of the application."
+              }
+            ]
+          }
+        }
+      ],
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/base.py:Model",
+                "location_description": "The method get_FIELD_display() in the Model class",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "In Django 2.2+, the `get_FIELD_display()` method has been modified to dynamically create a method for each field with choices. This prevents direct overriding of the method in the model class as it was possible in Django 2.1. To allow custom behavior, we need to modify how Django handles the creation and calling of these methods.",
+                "suggested_approach": "To address this issue, we need to modify the `contribute_to_class` method in the `Field` class, which is responsible for adding the `get_FIELD_display` methods to the model. We will introduce a check to see if the method already exists before adding it. If it does exist, we will not overwrite it, thus allowing the custom method to take precedence.\n\n1. Open the file `django/db/models/fields/__init__.py`.\n2. Locate the `contribute_to_class` method in the `Field` class. This method is typically around line 750.\n3. Modify the `contribute_to_class` method as follows:\n```python\nfrom django.utils.functional import curry\n\n...\ndef contribute_to_class(self, cls, name, private_only=False, virtual_only=NOT_PROVIDED):\n    ...\n    if self.choices:\n        setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n        # Check if the method already exists in the class\n        if not hasattr(cls, 'get_%s_display' % self.name):\n            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n    ...\n```\n4. This modification ensures that if a method `get_FIELD_display` already exists in the model, it will not be overwritten by Django's dynamic method creation.\n5. Test the changes by running your application and ensuring that the custom `get_foo_bar_display` method in your `FooBar` model is called instead of the dynamically created one.\n6. Add a test case to verify that the custom method is used when defined:\n```python\nfrom django.test import TestCase\nfrom myapp.models import FooBar\n\nclass FooBarTest(TestCase):\n    def test_custom_get_field_display(self):\n        foo_bar = FooBar(foo_bar=1)\n        self.assertEqual(foo_bar.get_foo_bar_display(), 'something')\n```\n7. Ensure that all tests pass and there are no regressions in other parts of the application."
+              }
+            ],
+            "overall_strategy": "By modifying the `contribute_to_class` method in the `Field` class, we prevent Django from overwriting any custom `get_FIELD_display` methods defined in the model. This allows developers to define their own display logic for fields with choices, maintaining compatibility with Django 2.2+ while preserving the ability to customize behavior.",
+            "confidence": 85
+          }
+        }
+      ]
+    }
+  },
+  "stage_7_final_plan": {
+    "timestamp": "2026-10-07T05:48:11.954681",
+    "data": {
+      "final_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Modify the `contribute_to_class` method in the `Field` class to prevent Django from overwriting custom `get_FIELD_display` methods defined in the model. This will allow developers to define their own display logic for fields with choices, maintaining compatibility with Django 2.2+.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Modify the `contribute_to_class` method in the `Field` class to check if a custom `get_FIELD_display` method already exists before adding the default one.",
+              "context": "django/db/models/fields/__init__.py:Field:contribute_to_class (around line 300)",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "This modification ensures that custom `get_FIELD_display` methods defined in the model are not overwritten by Django's default behavior, allowing for custom display logic.",
+              "implementation_notes": "Add a check to see if the method `get_<field_name>_display` already exists in the model class before adding the default method."
+            }
+          ],
+          "execution_order": "The modifications should be implemented in the order they are listed.",
+          "testing_recommendations": "Unit tests should be written to verify that custom `get_FIELD_display` methods are not overwritten and that they return the expected values. Integration tests should also be conducted to ensure that the model behaves as expected in various scenarios.",
+          "risk_assessment": "The primary risk is that the modification might interfere with other parts of the Django ORM that rely on the default `get_FIELD_display` method. To mitigate this, thorough testing should be conducted, and the changes should be reviewed by multiple team members. Additionally, the modification should be tested in a staging environment before deployment to production."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the issue stems from Django 2.2+ dynamically creating `get_FIELD_display` methods, which overwrite any custom methods defined in the model. They also agreed that modifying the `contribute_to_class` method is a viable solution to prevent this overwrite.",
+        "resolved_conflicts": "There were no significant conflicts among the expert opinions. All experts suggested a similar approach, and the chosen solution aligns with the most common recommendation."
+      },
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/base.py:Model",
+                "location_description": "The method get_FIELD_display() in the Model class",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "In Django 2.2+, the `get_FIELD_display()` method has been modified to dynamically create a method for each field with choices. This prevents direct overriding of the method in the model class as it was possible in Django 2.1. To allow custom behavior, we need to modify how Django handles the creation and calling of these methods.",
+                "suggested_approach": "To address this issue, we need to modify the `contribute_to_class` method in the `Field` class, which is responsible for adding the `get_FIELD_display` methods to the model. We will introduce a check to see if the method already exists before adding it. If it does exist, we will not overwrite it, thus allowing the custom method to take precedence.\n\n1. Open the file `django/db/models/fields/__init__.py`.\n2. Locate the `contribute_to_class` method in the `Field` class. This method is typically around line 750.\n3. Modify the `contribute_to_class` method as follows:\n```python\nfrom django.utils.functional import curry\n\n...\ndef contribute_to_class(self, cls, name, private_only=False, virtual_only=NOT_PROVIDED):\n    ...\n    if self.choices:\n        setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n        # Check if the method already exists in the class\n        if not hasattr(cls, 'get_%s_display' % self.name):\n            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n    ...\n```\n4. This modification ensures that if a method `get_FIELD_display` already exists in the model, it will not be overwritten by Django's dynamic method creation.\n5. Test the changes by running your application and ensuring that the custom `get_foo_bar_display` method in your `FooBar` model is called instead of the dynamically created one.\n6. Add a test case to verify that the custom method is used when defined:\n```python\nfrom django.test import TestCase\nfrom myapp.models import FooBar\n\nclass FooBarTest(TestCase):\n    def test_custom_get_field_display(self):\n        foo_bar = FooBar(foo_bar=1)\n        self.assertEqual(foo_bar.get_foo_bar_display(), 'something')\n```\n7. Ensure that all tests pass and there are no regressions in other parts of the application."
+              }
+            ],
+            "overall_strategy": "By modifying the `contribute_to_class` method in the `Field` class, we prevent Django from overwriting any custom `get_FIELD_display` methods defined in the model. This allows developers to define their own display logic for fields with choices, maintaining compatibility with Django 2.2+ while preserving the ability to customize behavior.",
+            "confidence": 85,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/db/models/base.py:Model",
+                "location_description": "The method get_FIELD_display() in the Model class",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "In Django 2.2+, the `get_FIELD_display()` method has been modified to dynamically create a method for each field with choices. This prevents direct overriding of the method in the model class as it was possible in Django 2.1. To allow custom behavior, we need to modify how Django handles the creation and calling of these methods.",
+                "suggested_approach": "To address this issue, we need to modify the `contribute_to_class` method in the `Field` class, which is responsible for adding the `get_FIELD_display` methods to the model. We will introduce a check to see if the method already exists before adding it. If it does exist, we will not overwrite it, thus allowing the custom method to take precedence.\n\n1. Open the file `django/db/models/fields/__init__.py`.\n2. Locate the `contribute_to_class` method in the `Field` class. This method is typically around line 750.\n3. Modify the `contribute_to_class` method as follows:\n```python\nfrom django.utils.functional import curry\n\n...\ndef contribute_to_class(self, cls, name, private_only=False, virtual_only=NOT_PROVIDED):\n    ...\n    if self.choices:\n        setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n        # Check if the method already exists in the class\n        if not hasattr(cls, 'get_%s_display' % self.name):\n            setattr(cls, 'get_%s_display' % self.name, curry(cls._get_FIELD_display, field=self))\n    ...\n```\n4. This modification ensures that if a method `get_FIELD_display` already exists in the model, it will not be overwritten by Django's dynamic method creation.\n5. Test the changes by running your application and ensuring that the custom `get_foo_bar_display` method in your `FooBar` model is called instead of the dynamically created one.\n6. Add a test case to verify that the custom method is used when defined:\n```python\nfrom django.test import TestCase\nfrom myapp.models import FooBar\n\nclass FooBarTest(TestCase):\n    def test_custom_get_field_display(self):\n        foo_bar = FooBar(foo_bar=1)\n        self.assertEqual(foo_bar.get_foo_bar_display(), 'something')\n```\n7. Ensure that all tests pass and there are no regressions in other parts of the application."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "stage_8_edit_agent_prompt": {
+    "timestamp": "2026-10-07T05:48:11.961612",
+    "data": {
+      "edit_agent_prompt": "<issue>\nCannot override get_FOO_display() in Django 2.2+.\nDescription\n\t\nI cannot override the get_FIELD_display function on models since version 2.2. It works in version 2.1.\nExample:\nclass FooBar(models.Model):\n\tfoo_bar = models.CharField(_(\"foo\"), choices=[(1, 'foo'), (2, 'bar')])\n\tdef __str__(self):\n\t\treturn self.get_foo_bar_display() # This returns 'foo' or 'bar' in 2.2, but 'something' in 2.1\n\tdef get_foo_bar_display(self):\n\t\treturn \"something\"\nWhat I expect is that I should be able to override this function.\n\n</issue>\n\n<plan>\n***stage 1***\ninstruction: Modify the `contribute_to_class` method in the `Field` class to check if a custom `get_FIELD_display` method already exists before adding the default one.\ncontext: django/db/models/fields/__init__.py:Field:contribute_to_class (around line 300)\n\n</plan>\n\n<code>\ndjango/db/models/base.py:\n# Code too long (70511 chars) - omitted for brevity\n\n</code>",
+      "modification_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Modify the `contribute_to_class` method in the `Field` class to prevent Django from overwriting custom `get_FIELD_display` methods defined in the model. This will allow developers to define their own display logic for fields with choices, maintaining compatibility with Django 2.2+.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Modify the `contribute_to_class` method in the `Field` class to check if a custom `get_FIELD_display` method already exists before adding the default one.",
+              "context": "django/db/models/fields/__init__.py:Field:contribute_to_class (around line 300)",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "This modification ensures that custom `get_FIELD_display` methods defined in the model are not overwritten by Django's default behavior, allowing for custom display logic.",
+              "implementation_notes": "Add a check to see if the method `get_<field_name>_display` already exists in the model class before adding the default method."
+            }
+          ],
+          "execution_order": "The modifications should be implemented in the order they are listed.",
+          "testing_recommendations": "Unit tests should be written to verify that custom `get_FIELD_display` methods are not overwritten and that they return the expected values. Integration tests should also be conducted to ensure that the model behaves as expected in various scenarios.",
+          "risk_assessment": "The primary risk is that the modification might interfere with other parts of the Django ORM that rely on the default `get_FIELD_display` method. To mitigate this, thorough testing should be conducted, and the changes should be reviewed by multiple team members. Additionally, the modification should be tested in a staging environment before deployment to production."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the issue stems from Django 2.2+ dynamically creating `get_FIELD_display` methods, which overwrite any custom methods defined in the model. They also agreed that modifying the `contribute_to_class` method is a viable solution to prevent this overwrite.",
+        "resolved_conflicts": "There were no significant conflicts among the expert opinions. All experts suggested a similar approach, and the chosen solution aligns with the most common recommendation."
+      },
+      "winning_chain": {
+        "chain_id": "chain_4",
+        "original_chain_info": {
+          "chain": [
+            "django/db/models/base.py:Model"
+          ],
+          "chain_length": 1,
+          "initial_entity": "foo_bar",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model",
+            "entity_type": "class",
+            "relevance_reason": "The base class for all Django models, where the `get_FIELD_display` method is defined and can be overridden.",
+            "diversity_value": "Core model class from different file"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8807274699211121,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/db/models/base.py:Model",
+            "type": "class",
+            "code": "# Code too long (70511 chars) - omitted for brevity",
+            "start_line": 403,
+            "end_line": 1856,
+            "code_omitted": true,
+            "original_code_length": 70511
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 4,
+        "is_longest": false
+      }
+    }
+  }
+}

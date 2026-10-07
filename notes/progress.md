@@ -27,6 +27,8 @@ Seed 4 done (0.733; original arm mean 0.770 over 4 seeds); noise-floor rerun on 
 queued (189863, SEED=103) after adaptive s2, seed 5 re-pointed behind it. Replay over 4 seeds:
 unanimous-skip -0.2 [-1.9, +1.8] at -39% tokens. Scorer fix for a '₁' logprob token. Scratch venv
 recreated (json_repair, pyyaml) after the session restart.
+Adaptive seed 1 done: 0.747 vs 0.773 (1:3), -41% tokens; pooled seeds 1+3 3:7 (p=0.34), -40%.
+Adaptive seed 4 queued (190072, reuse of seed 4) after the noise-floor rerun; seed 5 re-pointed.
 
 ## 2026-10-06
 Did: Fetched and scored lenient seed 1 (0.773, vote logprobs) and self-consistency seed 1 (0.707);
