@@ -18,6 +18,11 @@ Queue: ug 184812 lenient seed 4 (running) -> 189312 adaptive s1 -> 189313 adapti
 -> 186753 s6 | killable 184607-9 Live a-c, 184861 shuffle 2, 186864 Live seed 2 (all pending).
 Next: score adaptive seeds 1-2 and pool (3 paired seeds); replay with lp_conf held out once seeds
 4-6 land; Live parts when the killable lane gets cards.
+Later (new session, 10:30): no job ended; lanes full, killable all pending. Power calculation for
+the adaptive non-inferiority claim (3 paired seeds prove only ~4-5 points; 3 points needs ~5-10
+seeds of 75 or ~1-2.5 runs of Lite) parked in for-chat.md. Planned (decisions.md 2026-10-07): a
+noise-floor control (original arm re-run on its own chains, config baseline_72b_rerun_lenient_v1,
+copied to EEE) and adaptive seeds 4-6; queue both as ug slots free (next: when seed 4 ends).
 
 ## 2026-10-06
 Did: Fetched and scored lenient seed 1 (0.773, vote logprobs) and self-consistency seed 1 (0.707);
