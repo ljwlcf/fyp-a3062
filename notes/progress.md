@@ -7,6 +7,18 @@ Did:
 Broke:
 Next:
 
+## 2026-10-07
+Did: Scored the first real adaptive run (paired with seed 3): 0.787 vs 0.813 (2:4, p=0.69) at -38%
+stage 6-7 tokens; the gap sits on the 17 split-vote instances where the same released debate was
+re-run (12 vs 16), not on the 58 skipped (0.81 vs 0.78). Reuse-chains SC seed 2: 0.733 vs 0.760;
+reuse SC pooled 3:8 (p=0.23). Queued adaptive seeds 1 and 2 (189312, 189313, reuse) ahead of
+lenient seed 5 (re-pointed).
+Broke: Nothing.
+Queue: ug 184812 lenient seed 4 (running) -> 189312 adaptive s1 -> 189313 adaptive s2 -> 186752 s5
+-> 186753 s6 | killable 184607-9 Live a-c, 184861 shuffle 2, 186864 Live seed 2 (all pending).
+Next: score adaptive seeds 1-2 and pool (3 paired seeds); replay with lp_conf held out once seeds
+4-6 land; Live parts when the killable lane gets cards.
+
 ## 2026-10-06
 Did: Fetched and scored lenient seed 1 (0.773, vote logprobs) and self-consistency seed 1 (0.707);
 replay over 3 lenient seeds (skip-on-unanimous -0.4 points at -39% stage 6-7 tokens; debate's few

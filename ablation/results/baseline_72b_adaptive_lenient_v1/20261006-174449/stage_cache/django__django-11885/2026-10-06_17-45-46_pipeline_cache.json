@@ -1,0 +1,1924 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-06T17:45:46.636148",
+    "data": {
+      "initial_entities": [
+        "Person",
+        "User",
+        "Entry",
+        "delete",
+        "ForeignKey"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 1296
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-06T17:45:46.637432",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "Person",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector",
+              "entity_type": "class",
+              "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and handling cascading deletes, which is directly related to optimizing delete queries.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+              "diversity_value": "SQL compilation layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+              "diversity_value": "QuerySet layer from different file"
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+              "diversity_value": "Database operations layer from different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "User",
+          "related_entities": [
+            {
+              "entity_id": "django/contrib/auth/models.py:User",
+              "entity_type": "class",
+              "relevance_reason": "The User model is directly mentioned in the problem statement and is crucial for understanding the deletion process.",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/deletion.py:Collector",
+              "entity_type": "class",
+              "relevance_reason": "The Collector class is responsible for collecting and executing the deletion queries, which is central to the problem of optimizing DELETE queries.",
+              "diversity_value": "Different file, core deletion logic"
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "This function is where the actual delete operations are performed on the queryset, which is essential for implementing the combined delete queries.",
+              "diversity_value": "Different file, queryset operation"
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:DatabaseOperations.sql_delete_table",
+              "entity_type": "function",
+              "relevance_reason": "This function generates the SQL for deleting rows from a table, which is necessary for understanding and modifying how delete queries are constructed.",
+              "diversity_value": "Different file, database operation layer"
+            }
+          ]
+        },
+        {
+          "initial_entity": "Entry",
+          "related_entities": [
+            {
+              "entity_id": "models.py:Person",
+              "entity_type": "class",
+              "relevance_reason": "Directly mentioned in the problem statement, represents the model with ManyToMany relationship",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "models.py:User",
+              "entity_type": "class",
+              "relevance_reason": "Directly mentioned in the problem statement, represents the model with ForeignKey relationships",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "models.py:Entry",
+              "entity_type": "class",
+              "relevance_reason": "Directly mentioned in the problem statement, represents the model with multiple ForeignKey relationships to User",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.collect",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for collecting deletions and potentially optimizing the deletion process, which is central to the problem of reducing database roundtrips",
+              "diversity_value": "Core Django deletion handling from different module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "delete",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "entity_type": "function",
+              "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "This function handles the deletion of QuerySets, which is where the actual SQL DELETE commands are generated and executed.",
+              "diversity_value": "Query handling from different file"
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.delete",
+              "entity_type": "function",
+              "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+              "diversity_value": "Model instance deletion from different file"
+            },
+            {
+              "entity_id": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model",
+              "entity_type": "function",
+              "relevance_reason": "While not directly involved in the deletion of data, this method is responsible for schema changes, which might be relevant if schema optimizations are considered.",
+              "diversity_value": "Schema management from different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "ForeignKey",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey",
+              "entity_type": "class",
+              "relevance_reason": "The ForeignKey class defines the behavior of foreign key relationships, which are central to the cascading delete operations described in the problem.",
+              "diversity_value": "Model field definition from core Django module"
+            },
+            {
+              "entity_id": "django/db/models/deletion.py:Collector",
+              "entity_type": "class",
+              "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and performing the actual deletion, including handling cascades.",
+              "diversity_value": "Deletion logic from different file in core Django module"
+            },
+            {
+              "entity_id": "django/db/models/sql/query.py:Query",
+              "entity_type": "class",
+              "relevance_reason": "The Query class is involved in constructing SQL queries, which would need to be modified to combine delete queries as described.",
+              "diversity_value": "SQL query construction from different file in core Django module"
+            },
+            {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "entity_type": "function",
+              "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+              "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-06T17:45:46.643009",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "Person",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector",
+              "entity_type": "class",
+              "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and handling cascading deletes, which is directly related to optimizing delete queries.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+              "diversity_value": "SQL compilation layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+              "diversity_value": "QuerySet layer from different file"
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+              "diversity_value": "Database operations layer from different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/deletion.py:Collector",
+                "entity_type": "class",
+                "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and handling cascading deletes, which is directly related to optimizing delete queries.",
+                "diversity_value": "Core deletion logic from different file"
+              },
+              "chain": [
+                "django/db/models/deletion.py:Collector",
+                "django/db/models/deletion.py:Collector.can_fast_delete",
+                "django/db/models/deletion.py:Collector.collect"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+                "entity_type": "function",
+                "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+                "diversity_value": "SQL compilation layer from different file"
+              },
+              "chain": [
+                "django/db/models/sql/compiler.py:SQLCompiler.execute_sql"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/query.py:QuerySet.delete",
+                "entity_type": "function",
+                "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+                "diversity_value": "QuerySet layer from different file"
+              },
+              "chain": [
+                "django/db/models/query.py:QuerySet.delete"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+                "entity_type": "function",
+                "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+                "diversity_value": "Database operations layer from different file"
+              },
+              "chain": [
+                "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "User",
+          "related_entities": [
+            {
+              "entity_id": "django/contrib/auth/models.py:User",
+              "entity_type": "class",
+              "relevance_reason": "The User model is directly mentioned in the problem statement and is crucial for understanding the deletion process.",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/deletion.py:Collector",
+              "entity_type": "class",
+              "relevance_reason": "The Collector class is responsible for collecting and executing the deletion queries, which is central to the problem of optimizing DELETE queries.",
+              "diversity_value": "Different file, core deletion logic"
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "This function is where the actual delete operations are performed on the queryset, which is essential for implementing the combined delete queries.",
+              "diversity_value": "Different file, queryset operation"
+            },
+            {
+              "entity_id": "django/db/backends/base/operations.py:DatabaseOperations.sql_delete_table",
+              "entity_type": "function",
+              "relevance_reason": "This function generates the SQL for deleting rows from a table, which is necessary for understanding and modifying how delete queries are constructed.",
+              "diversity_value": "Different file, database operation layer"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/auth/models.py:User",
+                "entity_type": "class",
+                "relevance_reason": "The User model is directly mentioned in the problem statement and is crucial for understanding the deletion process.",
+                "diversity_value": "Model layer from different file"
+              },
+              "chain": [
+                "django/contrib/auth/models.py:User",
+                "django/contrib/auth/models.py:AbstractUser",
+                "django/contrib/auth/base_user.py:AbstractBaseUser",
+                "django/db/models/base.py:Model"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/deletion.py:Collector",
+                "entity_type": "class",
+                "relevance_reason": "The Collector class is responsible for collecting and executing the deletion queries, which is central to the problem of optimizing DELETE queries.",
+                "diversity_value": "Different file, core deletion logic"
+              },
+              "chain": [
+                "django/db/models/deletion.py:Collector",
+                "django/db/models/deletion.py:Collector.can_fast_delete",
+                "django/db/models/deletion.py:Collector.delete"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/query.py:QuerySet.delete",
+                "entity_type": "function",
+                "relevance_reason": "This function is where the actual delete operations are performed on the queryset, which is essential for implementing the combined delete queries.",
+                "diversity_value": "Different file, queryset operation"
+              },
+              "chain": [
+                "django/db/models/query.py:QuerySet.delete"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/backends/base/operations.py:DatabaseOperations.sql_delete_table",
+                "entity_type": "function",
+                "relevance_reason": "This function generates the SQL for deleting rows from a table, which is necessary for understanding and modifying how delete queries are constructed.",
+                "diversity_value": "Different file, database operation layer"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "Entry",
+          "related_entities": [
+            {
+              "entity_id": "models.py:Person",
+              "entity_type": "class",
+              "relevance_reason": "Directly mentioned in the problem statement, represents the model with ManyToMany relationship",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "models.py:User",
+              "entity_type": "class",
+              "relevance_reason": "Directly mentioned in the problem statement, represents the model with ForeignKey relationships",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "models.py:Entry",
+              "entity_type": "class",
+              "relevance_reason": "Directly mentioned in the problem statement, represents the model with multiple ForeignKey relationships to User",
+              "diversity_value": "Model layer from different file"
+            },
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.collect",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for collecting deletions and potentially optimizing the deletion process, which is central to the problem of reducing database roundtrips",
+              "diversity_value": "Core Django deletion handling from different module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "models.py:Person",
+                "entity_type": "class",
+                "relevance_reason": "Directly mentioned in the problem statement, represents the model with ManyToMany relationship",
+                "diversity_value": "Model layer from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "models.py:User",
+                "entity_type": "class",
+                "relevance_reason": "Directly mentioned in the problem statement, represents the model with ForeignKey relationships",
+                "diversity_value": "Model layer from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "models.py:Entry",
+                "entity_type": "class",
+                "relevance_reason": "Directly mentioned in the problem statement, represents the model with multiple ForeignKey relationships to User",
+                "diversity_value": "Model layer from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/deletion.py:Collector.collect",
+                "entity_type": "function",
+                "relevance_reason": "Responsible for collecting deletions and potentially optimizing the deletion process, which is central to the problem of reducing database roundtrips",
+                "diversity_value": "Core Django deletion handling from different module"
+              },
+              "chain": [
+                "django/db/models/deletion.py:Collector.collect"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "delete",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "entity_type": "function",
+              "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "This function handles the deletion of QuerySets, which is where the actual SQL DELETE commands are generated and executed.",
+              "diversity_value": "Query handling from different file"
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model.delete",
+              "entity_type": "function",
+              "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+              "diversity_value": "Model instance deletion from different file"
+            },
+            {
+              "entity_id": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model",
+              "entity_type": "function",
+              "relevance_reason": "While not directly involved in the deletion of data, this method is responsible for schema changes, which might be relevant if schema optimizations are considered.",
+              "diversity_value": "Schema management from different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "entity_type": "function",
+                "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+                "diversity_value": "Core deletion logic from different file"
+              },
+              "chain": [
+                "django/db/models/deletion.py:Collector.delete"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/query.py:QuerySet.delete",
+                "entity_type": "function",
+                "relevance_reason": "This function handles the deletion of QuerySets, which is where the actual SQL DELETE commands are generated and executed.",
+                "diversity_value": "Query handling from different file"
+              },
+              "chain": [
+                "django/db/models/query.py:QuerySet.delete"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:Model.delete",
+                "entity_type": "function",
+                "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+                "diversity_value": "Model instance deletion from different file"
+              },
+              "chain": [
+                "django/db/models/base.py:Model.delete"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model",
+                "entity_type": "function",
+                "relevance_reason": "While not directly involved in the deletion of data, this method is responsible for schema changes, which might be relevant if schema optimizations are considered.",
+                "diversity_value": "Schema management from different file"
+              },
+              "chain": [
+                "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "ForeignKey",
+          "related_entities": [
+            {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey",
+              "entity_type": "class",
+              "relevance_reason": "The ForeignKey class defines the behavior of foreign key relationships, which are central to the cascading delete operations described in the problem.",
+              "diversity_value": "Model field definition from core Django module"
+            },
+            {
+              "entity_id": "django/db/models/deletion.py:Collector",
+              "entity_type": "class",
+              "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and performing the actual deletion, including handling cascades.",
+              "diversity_value": "Deletion logic from different file in core Django module"
+            },
+            {
+              "entity_id": "django/db/models/sql/query.py:Query",
+              "entity_type": "class",
+              "relevance_reason": "The Query class is involved in constructing SQL queries, which would need to be modified to combine delete queries as described.",
+              "diversity_value": "SQL query construction from different file in core Django module"
+            },
+            {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "entity_type": "function",
+              "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+              "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/related.py:ForeignKey",
+                "entity_type": "class",
+                "relevance_reason": "The ForeignKey class defines the behavior of foreign key relationships, which are central to the cascading delete operations described in the problem.",
+                "diversity_value": "Model field definition from core Django module"
+              },
+              "chain": [
+                "django/db/models/fields/related.py:ForeignKey",
+                "django/db/models/fields/related.py:ForeignKey._check_on_delete",
+                "django/db/models/fields/related.py:ForeignKey.check"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/deletion.py:Collector",
+                "entity_type": "class",
+                "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and performing the actual deletion, including handling cascades.",
+                "diversity_value": "Deletion logic from different file in core Django module"
+              },
+              "chain": [
+                "django/db/models/deletion.py:Collector",
+                "django/db/models/deletion.py:Collector.can_fast_delete",
+                "django/db/models/deletion.py:Collector.delete"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/sql/query.py:Query",
+                "entity_type": "class",
+                "relevance_reason": "The Query class is involved in constructing SQL queries, which would need to be modified to combine delete queries as described.",
+                "diversity_value": "SQL query construction from different file in core Django module"
+              },
+              "chain": [
+                "django/db/models/sql/query.py:Query",
+                "django/db/models/sql/subqueries.py:DeleteQuery",
+                "django/db/models/deletion.py:Collector.delete"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+                "entity_type": "function",
+                "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+                "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+              },
+              "chain": [
+                "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+                "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+                "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+                "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+                "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "django/db/models/deletion.py:Collector",
+            "django/db/models/deletion.py:Collector.can_fast_delete",
+            "django/db/models/deletion.py:Collector.collect"
+          ],
+          "chain_length": 3,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector",
+            "entity_type": "class",
+            "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and handling cascading deletes, which is directly related to optimizing delete queries.",
+            "diversity_value": "Core deletion logic from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/sql/compiler.py:SQLCompiler.execute_sql"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+            "entity_type": "function",
+            "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+            "diversity_value": "SQL compilation layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/query.py:QuerySet.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/models/query.py:QuerySet.delete",
+            "entity_type": "function",
+            "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+            "diversity_value": "QuerySet layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+            "entity_type": "function",
+            "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+            "diversity_value": "Database operations layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/contrib/auth/models.py:User",
+            "django/contrib/auth/models.py:AbstractUser",
+            "django/contrib/auth/base_user.py:AbstractBaseUser",
+            "django/db/models/base.py:Model"
+          ],
+          "chain_length": 4,
+          "initial_entity": "User",
+          "start_entity": {
+            "entity_id": "django/contrib/auth/models.py:User",
+            "entity_type": "class",
+            "relevance_reason": "The User model is directly mentioned in the problem statement and is crucial for understanding the deletion process.",
+            "diversity_value": "Model layer from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/deletion.py:Collector",
+            "django/db/models/deletion.py:Collector.can_fast_delete",
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 3,
+          "initial_entity": "User",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector",
+            "entity_type": "class",
+            "relevance_reason": "The Collector class is responsible for collecting and executing the deletion queries, which is central to the problem of optimizing DELETE queries.",
+            "diversity_value": "Different file, core deletion logic"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/query.py:QuerySet.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "User",
+          "start_entity": {
+            "entity_id": "django/db/models/query.py:QuerySet.delete",
+            "entity_type": "function",
+            "relevance_reason": "This function is where the actual delete operations are performed on the queryset, which is essential for implementing the combined delete queries.",
+            "diversity_value": "Different file, queryset operation"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/deletion.py:Collector.collect"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Entry",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector.collect",
+            "entity_type": "function",
+            "relevance_reason": "Responsible for collecting deletions and potentially optimizing the deletion process, which is central to the problem of reducing database roundtrips",
+            "diversity_value": "Core Django deletion handling from different module"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector.delete",
+            "entity_type": "function",
+            "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+            "diversity_value": "Core deletion logic from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/query.py:QuerySet.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/query.py:QuerySet.delete",
+            "entity_type": "function",
+            "relevance_reason": "This function handles the deletion of QuerySets, which is where the actual SQL DELETE commands are generated and executed.",
+            "diversity_value": "Query handling from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/base.py:Model.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model.delete",
+            "entity_type": "function",
+            "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+            "diversity_value": "Model instance deletion from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model",
+            "entity_type": "function",
+            "relevance_reason": "While not directly involved in the deletion of data, this method is responsible for schema changes, which might be relevant if schema optimizations are considered.",
+            "diversity_value": "Schema management from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/related.py:ForeignKey",
+            "django/db/models/fields/related.py:ForeignKey._check_on_delete",
+            "django/db/models/fields/related.py:ForeignKey.check"
+          ],
+          "chain_length": 3,
+          "initial_entity": "ForeignKey",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/related.py:ForeignKey",
+            "entity_type": "class",
+            "relevance_reason": "The ForeignKey class defines the behavior of foreign key relationships, which are central to the cascading delete operations described in the problem.",
+            "diversity_value": "Model field definition from core Django module"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/deletion.py:Collector",
+            "django/db/models/deletion.py:Collector.can_fast_delete",
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 3,
+          "initial_entity": "ForeignKey",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector",
+            "entity_type": "class",
+            "relevance_reason": "The Collector class is responsible for collecting instances to be deleted and performing the actual deletion, including handling cascades.",
+            "diversity_value": "Deletion logic from different file in core Django module"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/sql/query.py:Query",
+            "django/db/models/sql/subqueries.py:DeleteQuery",
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 3,
+          "initial_entity": "ForeignKey",
+          "start_entity": {
+            "entity_id": "django/db/models/sql/query.py:Query",
+            "entity_type": "class",
+            "relevance_reason": "The Query class is involved in constructing SQL queries, which would need to be modified to combine delete queries as described.",
+            "diversity_value": "SQL query construction from different file in core Django module"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+            "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+            "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+            "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+            "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items"
+          ],
+          "chain_length": 5,
+          "initial_entity": "ForeignKey",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+            "entity_type": "function",
+            "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+            "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-06T17:45:46.647520",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+            "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+            "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+            "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+            "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items"
+          ],
+          "chain_length": 5,
+          "initial_entity": "ForeignKey",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+            "entity_type": "function",
+            "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+            "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "django/db/models/query.py:QuerySet.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/models/query.py:QuerySet.delete",
+            "entity_type": "function",
+            "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+            "diversity_value": "QuerySet layer from different file"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8406450152397156,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/base.py:Model.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model.delete",
+            "entity_type": "function",
+            "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+            "diversity_value": "Model instance deletion from different file"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.8453529477119446,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector.delete",
+            "entity_type": "function",
+            "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+            "diversity_value": "Core deletion logic from different file"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8499560356140137,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+            "entity_type": "function",
+            "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+            "diversity_value": "Database operations layer from different file"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.8505587577819824,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/models/sql/compiler.py:SQLCompiler.execute_sql"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Person",
+          "start_entity": {
+            "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+            "entity_type": "function",
+            "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+            "diversity_value": "SQL compilation layer from different file"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.8525891304016113,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-06T17:45:46.651855",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+              "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+              "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+              "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items"
+            ],
+            "chain_length": 5,
+            "initial_entity": "ForeignKey",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "entity_type": "function",
+              "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+              "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "type": "function",
+              "code": "```\n947 | def contribute_to_related_class(self, cls, related):\n948 |         super().contribute_to_related_class(cls, related)\n949 |         if self.remote_field.field_name is None:\n950 |             self.remote_field.field_name = cls._meta.pk.name\n```",
+              "start_line": 947,
+              "end_line": 950,
+              "code_omitted": false,
+              "original_code_length": 252
+            },
+            {
+              "entity_id": "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+              "type": "function",
+              "code": "```\n1593 | def contribute_to_related_class(self, cls, related):\n1594 |         # Internal M2Ms (i.e., those with a related name ending with '+')\n1595 |         # and swapped models don't get a related descriptor.\n1596 |         if not self.remote_field.is_hidden() and not related.related_model._meta.swapped:\n1597 |             setattr(cls, related.get_accessor_name(), ManyToManyDescriptor(self.remote_field, reverse=True))\n1598 | \n1599 |         # Set up the accessors for the column names on the m2m table.\n1600 |         self.m2m_column_name = partial(self._get_m2m_attr, related, 'column')\n1601 |         self.m2m_reverse_name = partial(self._get_m2m_reverse_attr, related, 'column')\n1602 | \n1603 |         self.m2m_field_name = partial(self._get_m2m_attr, related, 'name')\n1604 |         self.m2m_reverse_field_name = partial(self._get_m2m_reverse_attr, related, 'name')\n1605 | \n1606 |         get_m2m_rel = partial(self._get_m2m_attr, related, 'remote_field')\n1607 |         self.m2m_target_field_name = lambda: get_m2m_rel().field_name\n1608 |         get_m2m_reverse_rel = partial(self._get_m2m_reverse_attr, related, 'remote_field')\n1609 |         self.m2m_reverse_target_field_name = lambda: get_m2m_reverse_rel().field_name\n```",
+              "start_line": 1593,
+              "end_line": 1609,
+              "code_omitted": false,
+              "original_code_length": 1239
+            },
+            {
+              "entity_id": "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+              "type": "class",
+              "code": "```\n756 | class ManyToManyDescriptor(ReverseManyToOneDescriptor):\n757 |     \"\"\"\n758 |     Accessor to the related objects manager on the forward and reverse sides of\n759 |     a many-to-many relation.\n760 | \n761 |     In the example::\n762 | \n763 |         class Pizza(Model):\n764 |             toppings = ManyToManyField(Topping, related_name='pizzas')\n765 | \n766 |     ``Pizza.toppings`` and ``Topping.pizzas`` are ``ManyToManyDescriptor``\n767 |     instances.\n768 | \n769 |     Most of the implementation is delegated to a dynamically defined manager\n770 |     class built by ``create_forward_many_to_many_manager()`` defined below.\n771 |     \"\"\"\n772 | \n773 |     def __init__(self, rel, reverse=False):\n774 |         super().__init__(rel)\n775 | \n776 |         self.reverse = reverse\n777 | \n778 |     @property\n779 |     def through(self):\n780 |         # through is provided so that you have easy access to the through\n781 |         # model (Book.authors.through) for inlines, etc. This is done as\n782 |         # a property to ensure that the fully resolved value is returned.\n783 |         return self.rel.through\n784 | \n785 |     @cached_property\n786 |     def related_manager_cls(self):\n787 |         related_model = self.rel.related_model if self.reverse else self.rel.model\n788 | \n789 |         return create_forward_many_to_many_manager(\n790 |             related_model._default_manager.__class__,\n791 |             self.rel,\n792 |             reverse=self.reverse,\n793 |         )\n794 | \n795 |     def _get_set_deprecation_msg_params(self):\n796 |         return (\n797 |             '%s side of a many-to-many set' % ('reverse' if self.reverse else 'forward'),\n798 |             self.rel.get_accessor_name() if self.reverse else self.field.name,\n799 |         )\n```",
+              "start_line": 756,
+              "end_line": 799,
+              "code_omitted": false,
+              "original_code_length": 1774
+            },
+            {
+              "entity_id": "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+              "type": "function",
+              "code": "```\n779 | def through(self):\n780 |         # through is provided so that you have easy access to the through\n781 |         # model (Book.authors.through) for inlines, etc. This is done as\n782 |         # a property to ensure that the fully resolved value is returned.\n783 |         return self.rel.through\n```",
+              "start_line": 779,
+              "end_line": 783,
+              "code_omitted": false,
+              "original_code_length": 309
+            },
+            {
+              "entity_id": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items",
+              "type": "function",
+              "code": "```\n1111 | def _add_items(self, source_field_name, target_field_name, *objs, through_defaults=None):\n1112 |             # source_field_name: the PK fieldname in join table for the source object\n1113 |             # target_field_name: the PK fieldname in join table for the target object\n1114 |             # *objs - objects to add. Either object instances, or primary keys of object instances.\n1115 |             through_defaults = through_defaults or {}\n1116 | \n1117 |             # If there aren't any objects, there is nothing to do.\n1118 |             if objs:\n1119 |                 target_ids = self._get_target_ids(target_field_name, objs)\n1120 |                 db = router.db_for_write(self.through, instance=self.instance)\n1121 |                 can_ignore_conflicts, must_send_signals, can_fast_add = self._get_add_plan(db, source_field_name)\n1122 |                 if can_fast_add:\n1123 |                     self.through._default_manager.using(db).bulk_create([\n1124 |                         self.through(**{\n1125 |                             '%s_id' % source_field_name: self.related_val[0],\n1126 |                             '%s_id' % target_field_name: target_id,\n1127 |                         })\n1128 |                         for target_id in target_ids\n1129 |                     ], ignore_conflicts=True)\n1130 |                     return\n1131 | \n1132 |                 missing_target_ids = self._get_missing_target_ids(\n1133 |                     source_field_name, target_field_name, db, target_ids\n1134 |                 )\n1135 |                 with transaction.atomic(using=db, savepoint=False):\n1136 |                     if must_send_signals:\n1137 |                         signals.m2m_changed.send(\n1138 |                             sender=self.through, action='pre_add',\n1139 |                             instance=self.instance, reverse=self.reverse,\n1140 |                             model=self.model, pk_set=missing_target_ids, using=db,\n1141 |                         )\n1142 | \n1143 |                     # Add the ones that aren't there already.\n1144 |                     self.through._default_manager.using(db).bulk_create([\n1145 |                         self.through(**through_defaults, **{\n1146 |                             '%s_id' % source_field_name: self.related_val[0],\n1147 |                             '%s_id' % target_field_name: target_id,\n1148 |                         })\n1149 |                         for target_id in missing_target_ids\n1150 |                     ], ignore_conflicts=can_ignore_conflicts)\n1151 | \n1152 |                     if must_send_signals:\n1153 |                         signals.m2m_changed.send(\n1154 |                             sender=self.through, action='post_add',\n1155 |                             instance=self.instance, reverse=self.reverse,\n1156 |                             model=self.model, pk_set=missing_target_ids, using=db,\n1157 |                         )\n```",
+              "start_line": 1111,
+              "end_line": 1157,
+              "code_omitted": false,
+              "original_code_length": 2961
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/query.py:QuerySet.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Person",
+            "start_entity": {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+              "diversity_value": "QuerySet layer from different file"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8406450152397156,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "type": "function",
+              "code": "```\n697 | def delete(self):\n698 |         \"\"\"Delete the records in the current QuerySet.\"\"\"\n699 |         assert not self.query.is_sliced, \\\n700 |             \"Cannot use 'limit' or 'offset' with delete.\"\n701 | \n702 |         if self._fields is not None:\n703 |             raise TypeError(\"Cannot call delete() after .values() or .values_list()\")\n704 | \n705 |         del_query = self._chain()\n706 | \n707 |         # The delete is actually 2 queries - one to find related objects,\n708 |         # and one to delete. Make sure that the discovery of related\n709 |         # objects is performed on the same database as the deletion.\n710 |         del_query._for_write = True\n711 | \n712 |         # Disable non-supported fields.\n713 |         del_query.query.select_for_update = False\n714 |         del_query.query.select_related = False\n715 |         del_query.query.clear_ordering(force_empty=True)\n716 | \n717 |         collector = Collector(using=del_query.db)\n718 |         collector.collect(del_query)\n719 |         deleted, _rows_count = collector.delete()\n720 | \n721 |         # Clear the result cache, in case this QuerySet gets reused.\n722 |         self._result_cache = None\n723 |         return deleted, _rows_count\n```",
+              "start_line": 697,
+              "end_line": 723,
+              "code_omitted": false,
+              "original_code_length": 1227
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "delete",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model.delete",
+              "entity_type": "function",
+              "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+              "diversity_value": "Model instance deletion from different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8453529477119446,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model.delete",
+              "type": "function",
+              "code": "```\n928 | def delete(self, using=None, keep_parents=False):\n929 |         using = using or router.db_for_write(self.__class__, instance=self)\n930 |         assert self.pk is not None, (\n931 |             \"%s object can't be deleted because its %s attribute is set to None.\" %\n932 |             (self._meta.object_name, self._meta.pk.attname)\n933 |         )\n934 | \n935 |         collector = Collector(using=using)\n936 |         collector.collect([self], keep_parents=keep_parents)\n937 |         return collector.delete()\n```",
+              "start_line": 928,
+              "end_line": 937,
+              "code_omitted": false,
+              "original_code_length": 524
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/deletion.py:Collector.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "delete",
+            "start_entity": {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "entity_type": "function",
+              "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8499560356140137,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "type": "function",
+              "code": "```\n283 | def delete(self):\n284 |         # sort instance collections\n285 |         for model, instances in self.data.items():\n286 |             self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287 | \n288 |         # if possible, bring the models in an order suitable for databases that\n289 |         # don't support transactions or cannot defer constraint checks until the\n290 |         # end of a transaction.\n291 |         self.sort()\n292 |         # number of objects deleted for each model label\n293 |         deleted_counter = Counter()\n294 | \n295 |         # Optimize for the case with a single obj and no dependencies\n296 |         if len(self.data) == 1 and len(instances) == 1:\n297 |             instance = list(instances)[0]\n298 |             if self.can_fast_delete(instance):\n299 |                 with transaction.mark_for_rollback_on_error():\n300 |                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301 |                 setattr(instance, model._meta.pk.attname, None)\n302 |                 return count, {model._meta.label: count}\n303 | \n304 |         with transaction.atomic(using=self.using, savepoint=False):\n305 |             # send pre_delete signals\n306 |             for model, obj in self.instances_with_model():\n307 |                 if not model._meta.auto_created:\n308 |                     signals.pre_delete.send(\n309 |                         sender=model, instance=obj, using=self.using\n310 |                     )\n311 | \n312 |             # fast deletes\n313 |             for qs in self.fast_deletes:\n314 |                 count = qs._raw_delete(using=self.using)\n315 |                 deleted_counter[qs.model._meta.label] += count\n316 | \n317 |             # update fields\n318 |             for model, instances_for_fieldvalues in self.field_updates.items():\n319 |                 for (field, value), instances in instances_for_fieldvalues.items():\n320 |                     query = sql.UpdateQuery(model)\n321 |                     query.update_batch([obj.pk for obj in instances],\n322 |                                        {field.name: value}, self.using)\n323 | \n324 |             # reverse instance collections\n325 |             for instances in self.data.values():\n326 |                 instances.reverse()\n327 | \n328 |             # delete instances\n329 |             for model, instances in self.data.items():\n330 |                 query = sql.DeleteQuery(model)\n331 |                 pk_list = [obj.pk for obj in instances]\n332 |                 count = query.delete_batch(pk_list, self.using)\n333 |                 deleted_counter[model._meta.label] += count\n334 | \n335 |                 if not model._meta.auto_created:\n336 |                     for obj in instances:\n337 |                         signals.post_delete.send(\n338 |                             sender=model, instance=obj, using=self.using\n339 |                         )\n340 | \n341 |         # update collected instances\n342 |         for instances_for_fieldvalues in self.field_updates.values():\n343 |             for (field, value), instances in instances_for_fieldvalues.items():\n344 |                 for obj in instances:\n345 |                     setattr(obj, field.attname, value)\n346 |         for model, instances in self.data.items():\n347 |             for instance in instances:\n348 |                 setattr(instance, model._meta.pk.attname, None)\n349 |         return sum(deleted_counter.values()), dict(deleted_counter)\n```",
+              "start_line": 283,
+              "end_line": 349,
+              "code_omitted": false,
+              "original_code_length": 3496
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Person",
+            "start_entity": {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+              "diversity_value": "Database operations layer from different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8505587577819824,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+              "type": "function",
+              "code": "```\n334 | def quote_name(self, name):\n335 |         \"\"\"\n336 |         Return a quoted version of the given table, index, or column name. Do\n337 |         not quote the given name if it's already been quoted.\n338 |         \"\"\"\n339 |         raise NotImplementedError('subclasses of BaseDatabaseOperations may require a quote_name() method')\n```",
+              "start_line": 334,
+              "end_line": 339,
+              "code_omitted": false,
+              "original_code_length": 343
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/sql/compiler.py:SQLCompiler.execute_sql"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Person",
+            "start_entity": {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+              "diversity_value": "SQL compilation layer from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8525891304016113,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+              "type": "function",
+              "code": "```\n1062 | def execute_sql(self, result_type=MULTI, chunked_fetch=False, chunk_size=GET_ITERATOR_CHUNK_SIZE):\n1063 |         \"\"\"\n1064 |         Run the query against the database and return the result(s). The\n1065 |         return value is a single data item if result_type is SINGLE, or an\n1066 |         iterator over the results if the result_type is MULTI.\n1067 | \n1068 |         result_type is either MULTI (use fetchmany() to retrieve all rows),\n1069 |         SINGLE (only retrieve a single row), or None. In this last case, the\n1070 |         cursor is returned if any query is executed, since it's used by\n1071 |         subclasses such as InsertQuery). It's possible, however, that no query\n1072 |         is needed, as the filters describe an empty set. In that case, None is\n1073 |         returned, to avoid any unnecessary database interaction.\n1074 |         \"\"\"\n1075 |         result_type = result_type or NO_RESULTS\n1076 |         try:\n1077 |             sql, params = self.as_sql()\n1078 |             if not sql:\n1079 |                 raise EmptyResultSet\n1080 |         except EmptyResultSet:\n1081 |             if result_type == MULTI:\n1082 |                 return iter([])\n1083 |             else:\n1084 |                 return\n1085 |         if chunked_fetch:\n1086 |             cursor = self.connection.chunked_cursor()\n1087 |         else:\n1088 |             cursor = self.connection.cursor()\n1089 |         try:\n1090 |             cursor.execute(sql, params)\n1091 |         except Exception:\n1092 |             # Might fail for server-side cursors (e.g. connection closed)\n1093 |             cursor.close()\n1094 |             raise\n1095 | \n1096 |         if result_type == CURSOR:\n1097 |             # Give the caller the cursor to process and close.\n1098 |             return cursor\n1099 |         if result_type == SINGLE:\n1100 |             try:\n1101 |                 val = cursor.fetchone()\n1102 |                 if val:\n1103 |                     return val[0:self.col_count]\n1104 |                 return val\n1105 |             finally:\n1106 |                 # done with the cursor\n1107 |                 cursor.close()\n1108 |         if result_type == NO_RESULTS:\n1109 |             cursor.close()\n1110 |             return\n1111 | \n1112 |         result = cursor_iter(\n1113 |             cursor, self.connection.features.empty_fetchmany_value,\n1114 |             self.col_count if self.has_extra_select else None,\n1115 |             chunk_size,\n1116 |         )\n1117 |         if not chunked_fetch or not self.connection.features.can_use_chunked_reads:\n1118 |             try:\n1119 |                 # If we are using non-chunked reads, we return the same data\n1120 |                 # structure as normally, but ensure it is all read into memory\n1121 |                 # before going any further. Use chunked_fetch if requested,\n1122 |                 # unless the database doesn't support it.\n1123 |                 return list(result)\n1124 |             finally:\n1125 |                 # done with the cursor\n1126 |                 cursor.close()\n1127 |         return result\n```",
+              "start_line": 1062,
+              "end_line": 1127,
+              "code_omitted": false,
+              "original_code_length": 3119
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-06T17:47:08.804199",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_4",
+        "winning_chain": {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/deletion.py:Collector.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "delete",
+            "start_entity": {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "entity_type": "function",
+              "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8499560356140137,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "type": "function",
+              "code": "```\n283 | def delete(self):\n284 |         # sort instance collections\n285 |         for model, instances in self.data.items():\n286 |             self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287 | \n288 |         # if possible, bring the models in an order suitable for databases that\n289 |         # don't support transactions or cannot defer constraint checks until the\n290 |         # end of a transaction.\n291 |         self.sort()\n292 |         # number of objects deleted for each model label\n293 |         deleted_counter = Counter()\n294 | \n295 |         # Optimize for the case with a single obj and no dependencies\n296 |         if len(self.data) == 1 and len(instances) == 1:\n297 |             instance = list(instances)[0]\n298 |             if self.can_fast_delete(instance):\n299 |                 with transaction.mark_for_rollback_on_error():\n300 |                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301 |                 setattr(instance, model._meta.pk.attname, None)\n302 |                 return count, {model._meta.label: count}\n303 | \n304 |         with transaction.atomic(using=self.using, savepoint=False):\n305 |             # send pre_delete signals\n306 |             for model, obj in self.instances_with_model():\n307 |                 if not model._meta.auto_created:\n308 |                     signals.pre_delete.send(\n309 |                         sender=model, instance=obj, using=self.using\n310 |                     )\n311 | \n312 |             # fast deletes\n313 |             for qs in self.fast_deletes:\n314 |                 count = qs._raw_delete(using=self.using)\n315 |                 deleted_counter[qs.model._meta.label] += count\n316 | \n317 |             # update fields\n318 |             for model, instances_for_fieldvalues in self.field_updates.items():\n319 |                 for (field, value), instances in instances_for_fieldvalues.items():\n320 |                     query = sql.UpdateQuery(model)\n321 |                     query.update_batch([obj.pk for obj in instances],\n322 |                                        {field.name: value}, self.using)\n323 | \n324 |             # reverse instance collections\n325 |             for instances in self.data.values():\n326 |                 instances.reverse()\n327 | \n328 |             # delete instances\n329 |             for model, instances in self.data.items():\n330 |                 query = sql.DeleteQuery(model)\n331 |                 pk_list = [obj.pk for obj in instances]\n332 |                 count = query.delete_batch(pk_list, self.using)\n333 |                 deleted_counter[model._meta.label] += count\n334 | \n335 |                 if not model._meta.auto_created:\n336 |                     for obj in instances:\n337 |                         signals.post_delete.send(\n338 |                             sender=model, instance=obj, using=self.using\n339 |                         )\n340 | \n341 |         # update collected instances\n342 |         for instances_for_fieldvalues in self.field_updates.values():\n343 |             for (field, value), instances in instances_for_fieldvalues.items():\n344 |                 for obj in instances:\n345 |                     setattr(obj, field.attname, value)\n346 |         for model, instances in self.data.items():\n347 |             for instance in instances:\n348 |                 setattr(instance, model._meta.pk.attname, None)\n349 |         return sum(deleted_counter.values()), dict(deleted_counter)\n```",
+              "start_line": 283,
+              "end_line": 349,
+              "code_omitted": false,
+              "original_code_length": 3496
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 91.2,
+        "vote_distribution": {
+          "chain_4": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 92,
+            "reasoning": "Chain 4 contains the `Collector.delete` method, which is responsible for executing the deletion queries. This is where the fast delete queries are generated and executed, and where the issue of multiple DELETE queries for related models can be addressed. By modifying the logic to combine these queries, we can directly resolve the performance issue described.",
+            "modification_strategy": "Modify the `fast_deletes` loop to combine DELETE queries for the same table by using OR conditions",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the setup of ForeignKey and ManyToManyField relations. While it is important for defining relationships, it does not directly handle the execution of deletion queries.",
+              "chain_2": "This chain handles the deletion of a QuerySet, but it delegates the actual deletion logic to the Collector. While it is part of the deletion process, it is not the best place to implement the query combination logic.",
+              "chain_3": "This chain handles the deletion of a single Model instance, similar to Chain 2. It also delegates the actual deletion logic to the Collector, making it less suitable for the required changes.",
+              "chain_4": "This chain contains the `Collector.delete` method, which is the core of the deletion process. It generates and executes the fast delete queries. Modifying this method to combine DELETE queries for the same table would directly address the performance issue.",
+              "chain_5": "This chain deals with the database-specific quoting of names. While it is important for SQL generation, it is not directly related to the issue of combining DELETE queries.",
+              "chain_6": "This chain handles the execution of SQL queries. While it is involved in the final step of executing the DELETE queries, it is not the place where the queries are generated. Therefore, it is not the best target for combining DELETE queries."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 92,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion operations. This method handles the batch deletion of objects and their related objects, which is where the issue of multiple DELETE queries being issued instead of a single combined query is most likely to be addressed. Modifying the logic in this method to combine DELETE queries by table would directly solve the reported issue.",
+            "modification_strategy": "Modify the Collector.delete method to detect and combine DELETE queries for the same table by using OR conditions in the WHERE clause.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the initialization of ForeignKey and ManyToManyField relationships. While it sets up the relationships, it does not directly handle the deletion logic or query generation.",
+              "chain_2": "This chain contains the QuerySet.delete method, which initializes the deletion process. However, the actual deletion logic is delegated to the Collector, making this chain less critical for the specific issue of combining DELETE queries.",
+              "chain_3": "This chain contains the Model.delete method, which is a high-level method for deleting a single model instance. It delegates the actual deletion to the Collector, similar to Chain 2. This chain is not the best place to implement the optimization for combining DELETE queries.",
+              "chain_4": "This chain contains the Collector.delete method, which is responsible for the actual deletion of objects and their related objects. It generates and executes the DELETE queries. Modifying this method to combine DELETE queries for the same table would directly address the issue of reducing the number of roundtrips to the database.",
+              "chain_5": "This chain deals with the quoting of table, index, or column names in SQL queries. While important for SQL generation, it does not directly handle the logic of combining DELETE queries.",
+              "chain_6": "This chain contains the SQLCompiler.execute_sql method, which is responsible for executing SQL queries. While it is involved in the execution of DELETE queries, it does not control the generation of these queries. Therefore, it is not the best place to implement the optimization for combining DELETE queries."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion queries. The issue described involves optimizing the deletion process by combining multiple DELETE queries into a single query with OR conditions. This chain is the best modification target because it directly handles the creation and execution of these deletion queries, and modifying it would allow for the implementation of the desired optimization.",
+            "modification_strategy": "Modify the Collector.delete method to combine DELETE queries for the same table by using OR conditions instead of separate queries. This would involve updating the logic in the fast_deletes loop to detect and merge queries for the same table.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the initialization of ForeignKey and ManyToManyField. While it sets up the relationships, it does not directly handle the deletion logic and thus is not the best place to implement the optimization.",
+              "chain_2": "This chain contains the QuerySet.delete method, which initiates the deletion process. However, the actual deletion logic is delegated to the Collector, so while it is related, it is not the best place to implement the optimization.",
+              "chain_3": "This chain contains the Model.delete method, which is a high-level entry point for deleting a single model instance. It delegates the deletion to the Collector, similar to Chain 2. While it is part of the deletion process, it is not the best place to implement the optimization.",
+              "chain_4": "This chain contains the Collector.delete method, which is the core of the deletion process. It is responsible for creating and executing the deletion queries. Modifying this chain would directly address the issue of optimizing the deletion process by combining queries.",
+              "chain_5": "This chain deals with the quoting of database names and is not directly related to the deletion process or the optimization of deletion queries.",
+              "chain_6": "This chain contains the SQLCompiler.execute_sql method, which executes the SQL queries generated by the ORM. While it is involved in the execution of the deletion queries, it is not the best place to implement the optimization logic, as it is more of a generic SQL execution handler."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion operations. The issue described involves optimizing the deletion process to combine multiple DELETE queries into a single query with OR conditions. This chain is the most appropriate place to implement such optimizations because it directly handles the batch deletion logic and the generation of SQL delete statements. Modifying this chain would allow us to intercept and combine the DELETE queries before they are executed, thus reducing the number of roundtrips to the database.",
+            "modification_strategy": "Modify the Collector.delete method to combine DELETE queries for the same table by using OR conditions in the WHERE clause. This would involve checking if multiple queries are being generated for the same table and then merging them.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the contribution of ForeignKey and ManyToManyField to related classes. While it sets up the relationships, it does not handle the actual deletion logic and is not the place to optimize DELETE queries.",
+              "chain_2": "This chain includes the QuerySet.delete method, which initiates the deletion process. However, the actual deletion logic is delegated to the Collector, making it less suitable for the optimization described.",
+              "chain_3": "This chain contains the Model.delete method, which is a high-level method that delegates the deletion process to the Collector. While it is part of the deletion flow, it is not where the SQL queries are generated or executed.",
+              "chain_4": "This chain is the most relevant as it contains the Collector.delete method, which is responsible for executing the deletion operations. It is the best place to implement the optimization to combine DELETE queries.",
+              "chain_5": "This chain deals with the quoting of names in SQL queries. While it is important for generating valid SQL, it does not handle the logic of combining DELETE queries and is not the right place for the optimization.",
+              "chain_6": "This chain includes the SQLCompiler.execute_sql method, which executes the SQL queries. While it is involved in the execution of the DELETE queries, it is too low-level to implement the logic for combining queries."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 92,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion operations, including the fast delete queries. The issue described involves optimizing these fast delete queries to combine multiple DELETE statements into a single query using OR conditions. Modifying the Collector.delete method to handle this optimization would directly address the problem and reduce the number of roundtrips to the database.",
+            "modification_strategy": "Modify the Collector.delete method to detect and combine multiple DELETE queries for the same table into a single query using OR conditions.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the initialization of ForeignKey and ManyToManyField relationships. While it sets up the relationships, it does not directly handle the deletion logic and is not the place where the optimization for combining delete queries would be implemented.",
+              "chain_2": "This chain handles the deletion of a QuerySet, which triggers the Collector to collect and delete related objects. However, the actual execution of the delete queries is handled in the Collector, making this chain less suitable for the specific optimization required.",
+              "chain_3": "This chain handles the deletion of a single Model instance, which also uses the Collector to collect and delete related objects. Similar to Chain 2, the actual deletion logic is in the Collector, so this chain is not the best target for the optimization.",
+              "chain_4": "This chain is the most appropriate target for the optimization. The Collector.delete method is responsible for executing the fast delete queries, and modifying this method to combine multiple DELETE statements into a single query would directly address the issue and improve performance.",
+              "chain_5": "This chain deals with the database-specific quoting of names, which is not directly related to the deletion logic or the optimization of combining delete queries. Changes here would not impact the issue described.",
+              "chain_6": "This chain handles the execution of SQL queries, including DELETE queries. While it is involved in the execution, the logic for generating and optimizing the queries is not here. Modifying this chain would not provide the necessary control over the query generation process."
+            },
+            "agent_id": 5
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 92,
+            "reasoning": "Chain 4 contains the `Collector.delete` method, which is responsible for executing the deletion queries. This is where the fast delete queries are generated and executed, and where the issue of multiple DELETE queries for related models can be addressed. By modifying the logic to combine these queries, we can directly resolve the performance issue described.",
+            "modification_strategy": "Modify the `fast_deletes` loop to combine DELETE queries for the same table by using OR conditions",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the setup of ForeignKey and ManyToManyField relations. While it is important for defining relationships, it does not directly handle the execution of deletion queries.",
+              "chain_2": "This chain handles the deletion of a QuerySet, but it delegates the actual deletion logic to the Collector. While it is part of the deletion process, it is not the best place to implement the query combination logic.",
+              "chain_3": "This chain handles the deletion of a single Model instance, similar to Chain 2. It also delegates the actual deletion logic to the Collector, making it less suitable for the required changes.",
+              "chain_4": "This chain contains the `Collector.delete` method, which is the core of the deletion process. It generates and executes the fast delete queries. Modifying this method to combine DELETE queries for the same table would directly address the performance issue.",
+              "chain_5": "This chain deals with the database-specific quoting of names. While it is important for SQL generation, it is not directly related to the issue of combining DELETE queries.",
+              "chain_6": "This chain handles the execution of SQL queries. While it is involved in the final step of executing the DELETE queries, it is not the place where the queries are generated. Therefore, it is not the best target for combining DELETE queries."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 92,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion operations. This method handles the batch deletion of objects and their related objects, which is where the issue of multiple DELETE queries being issued instead of a single combined query is most likely to be addressed. Modifying the logic in this method to combine DELETE queries by table would directly solve the reported issue.",
+            "modification_strategy": "Modify the Collector.delete method to detect and combine DELETE queries for the same table by using OR conditions in the WHERE clause.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the initialization of ForeignKey and ManyToManyField relationships. While it sets up the relationships, it does not directly handle the deletion logic or query generation.",
+              "chain_2": "This chain contains the QuerySet.delete method, which initializes the deletion process. However, the actual deletion logic is delegated to the Collector, making this chain less critical for the specific issue of combining DELETE queries.",
+              "chain_3": "This chain contains the Model.delete method, which is a high-level method for deleting a single model instance. It delegates the actual deletion to the Collector, similar to Chain 2. This chain is not the best place to implement the optimization for combining DELETE queries.",
+              "chain_4": "This chain contains the Collector.delete method, which is responsible for the actual deletion of objects and their related objects. It generates and executes the DELETE queries. Modifying this method to combine DELETE queries for the same table would directly address the issue of reducing the number of roundtrips to the database.",
+              "chain_5": "This chain deals with the quoting of table, index, or column names in SQL queries. While important for SQL generation, it does not directly handle the logic of combining DELETE queries.",
+              "chain_6": "This chain contains the SQLCompiler.execute_sql method, which is responsible for executing SQL queries. While it is involved in the execution of DELETE queries, it does not control the generation of these queries. Therefore, it is not the best place to implement the optimization for combining DELETE queries."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion queries. The issue described involves optimizing the deletion process by combining multiple DELETE queries into a single query with OR conditions. This chain is the best modification target because it directly handles the creation and execution of these deletion queries, and modifying it would allow for the implementation of the desired optimization.",
+            "modification_strategy": "Modify the Collector.delete method to combine DELETE queries for the same table by using OR conditions instead of separate queries. This would involve updating the logic in the fast_deletes loop to detect and merge queries for the same table.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the initialization of ForeignKey and ManyToManyField. While it sets up the relationships, it does not directly handle the deletion logic and thus is not the best place to implement the optimization.",
+              "chain_2": "This chain contains the QuerySet.delete method, which initiates the deletion process. However, the actual deletion logic is delegated to the Collector, so while it is related, it is not the best place to implement the optimization.",
+              "chain_3": "This chain contains the Model.delete method, which is a high-level entry point for deleting a single model instance. It delegates the deletion to the Collector, similar to Chain 2. While it is part of the deletion process, it is not the best place to implement the optimization.",
+              "chain_4": "This chain contains the Collector.delete method, which is the core of the deletion process. It is responsible for creating and executing the deletion queries. Modifying this chain would directly address the issue of optimizing the deletion process by combining queries.",
+              "chain_5": "This chain deals with the quoting of database names and is not directly related to the deletion process or the optimization of deletion queries.",
+              "chain_6": "This chain contains the SQLCompiler.execute_sql method, which executes the SQL queries generated by the ORM. While it is involved in the execution of the deletion queries, it is not the best place to implement the optimization logic, as it is more of a generic SQL execution handler."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion operations. The issue described involves optimizing the deletion process to combine multiple DELETE queries into a single query with OR conditions. This chain is the most appropriate place to implement such optimizations because it directly handles the batch deletion logic and the generation of SQL delete statements. Modifying this chain would allow us to intercept and combine the DELETE queries before they are executed, thus reducing the number of roundtrips to the database.",
+            "modification_strategy": "Modify the Collector.delete method to combine DELETE queries for the same table by using OR conditions in the WHERE clause. This would involve checking if multiple queries are being generated for the same table and then merging them.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the contribution of ForeignKey and ManyToManyField to related classes. While it sets up the relationships, it does not handle the actual deletion logic and is not the place to optimize DELETE queries.",
+              "chain_2": "This chain includes the QuerySet.delete method, which initiates the deletion process. However, the actual deletion logic is delegated to the Collector, making it less suitable for the optimization described.",
+              "chain_3": "This chain contains the Model.delete method, which is a high-level method that delegates the deletion process to the Collector. While it is part of the deletion flow, it is not where the SQL queries are generated or executed.",
+              "chain_4": "This chain is the most relevant as it contains the Collector.delete method, which is responsible for executing the deletion operations. It is the best place to implement the optimization to combine DELETE queries.",
+              "chain_5": "This chain deals with the quoting of names in SQL queries. While it is important for generating valid SQL, it does not handle the logic of combining DELETE queries and is not the right place for the optimization.",
+              "chain_6": "This chain includes the SQLCompiler.execute_sql method, which executes the SQL queries. While it is involved in the execution of the DELETE queries, it is too low-level to implement the logic for combining queries."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 92,
+            "reasoning": "Chain 4 contains the Collector.delete method, which is responsible for executing the deletion operations, including the fast delete queries. The issue described involves optimizing these fast delete queries to combine multiple DELETE statements into a single query using OR conditions. Modifying the Collector.delete method to handle this optimization would directly address the problem and reduce the number of roundtrips to the database.",
+            "modification_strategy": "Modify the Collector.delete method to detect and combine multiple DELETE queries for the same table into a single query using OR conditions.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the initialization of ForeignKey and ManyToManyField relationships. While it sets up the relationships, it does not directly handle the deletion logic and is not the place where the optimization for combining delete queries would be implemented.",
+              "chain_2": "This chain handles the deletion of a QuerySet, which triggers the Collector to collect and delete related objects. However, the actual execution of the delete queries is handled in the Collector, making this chain less suitable for the specific optimization required.",
+              "chain_3": "This chain handles the deletion of a single Model instance, which also uses the Collector to collect and delete related objects. Similar to Chain 2, the actual deletion logic is in the Collector, so this chain is not the best target for the optimization.",
+              "chain_4": "This chain is the most appropriate target for the optimization. The Collector.delete method is responsible for executing the fast delete queries, and modifying this method to combine multiple DELETE statements into a single query would directly address the issue and improve performance.",
+              "chain_5": "This chain deals with the database-specific quoting of names, which is not directly related to the deletion logic or the optimization of combining delete queries. Changes here would not impact the issue described.",
+              "chain_6": "This chain handles the execution of SQL queries, including DELETE queries. While it is involved in the execution, the logic for generating and optimizing the queries is not here. Modifying this chain would not provide the necessary control over the query generation process."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+              "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+              "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+              "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items"
+            ],
+            "chain_length": 5,
+            "initial_entity": "ForeignKey",
+            "start_entity": {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "entity_type": "function",
+              "relevance_reason": "This method contributes to the setup of related classes, which is crucial for understanding how foreign keys are linked and how deletions propagate.",
+              "diversity_value": "Contribution method from ForeignKey class, providing deeper insight into relationship management"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/fields/related.py:ForeignKey.contribute_to_related_class",
+              "type": "function",
+              "code": "```\n947 | def contribute_to_related_class(self, cls, related):\n948 |         super().contribute_to_related_class(cls, related)\n949 |         if self.remote_field.field_name is None:\n950 |             self.remote_field.field_name = cls._meta.pk.name\n```",
+              "start_line": 947,
+              "end_line": 950,
+              "code_omitted": false,
+              "original_code_length": 252
+            },
+            {
+              "entity_id": "django/db/models/fields/related.py:ManyToManyField.contribute_to_related_class",
+              "type": "function",
+              "code": "```\n1593 | def contribute_to_related_class(self, cls, related):\n1594 |         # Internal M2Ms (i.e., those with a related name ending with '+')\n1595 |         # and swapped models don't get a related descriptor.\n1596 |         if not self.remote_field.is_hidden() and not related.related_model._meta.swapped:\n1597 |             setattr(cls, related.get_accessor_name(), ManyToManyDescriptor(self.remote_field, reverse=True))\n1598 | \n1599 |         # Set up the accessors for the column names on the m2m table.\n1600 |         self.m2m_column_name = partial(self._get_m2m_attr, related, 'column')\n1601 |         self.m2m_reverse_name = partial(self._get_m2m_reverse_attr, related, 'column')\n1602 | \n1603 |         self.m2m_field_name = partial(self._get_m2m_attr, related, 'name')\n1604 |         self.m2m_reverse_field_name = partial(self._get_m2m_reverse_attr, related, 'name')\n1605 | \n1606 |         get_m2m_rel = partial(self._get_m2m_attr, related, 'remote_field')\n1607 |         self.m2m_target_field_name = lambda: get_m2m_rel().field_name\n1608 |         get_m2m_reverse_rel = partial(self._get_m2m_reverse_attr, related, 'remote_field')\n1609 |         self.m2m_reverse_target_field_name = lambda: get_m2m_reverse_rel().field_name\n```",
+              "start_line": 1593,
+              "end_line": 1609,
+              "code_omitted": false,
+              "original_code_length": 1239
+            },
+            {
+              "entity_id": "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor",
+              "type": "class",
+              "code": "```\n756 | class ManyToManyDescriptor(ReverseManyToOneDescriptor):\n757 |     \"\"\"\n758 |     Accessor to the related objects manager on the forward and reverse sides of\n759 |     a many-to-many relation.\n760 | \n761 |     In the example::\n762 | \n763 |         class Pizza(Model):\n764 |             toppings = ManyToManyField(Topping, related_name='pizzas')\n765 | \n766 |     ``Pizza.toppings`` and ``Topping.pizzas`` are ``ManyToManyDescriptor``\n767 |     instances.\n768 | \n769 |     Most of the implementation is delegated to a dynamically defined manager\n770 |     class built by ``create_forward_many_to_many_manager()`` defined below.\n771 |     \"\"\"\n772 | \n773 |     def __init__(self, rel, reverse=False):\n774 |         super().__init__(rel)\n775 | \n776 |         self.reverse = reverse\n777 | \n778 |     @property\n779 |     def through(self):\n780 |         # through is provided so that you have easy access to the through\n781 |         # model (Book.authors.through) for inlines, etc. This is done as\n782 |         # a property to ensure that the fully resolved value is returned.\n783 |         return self.rel.through\n784 | \n785 |     @cached_property\n786 |     def related_manager_cls(self):\n787 |         related_model = self.rel.related_model if self.reverse else self.rel.model\n788 | \n789 |         return create_forward_many_to_many_manager(\n790 |             related_model._default_manager.__class__,\n791 |             self.rel,\n792 |             reverse=self.reverse,\n793 |         )\n794 | \n795 |     def _get_set_deprecation_msg_params(self):\n796 |         return (\n797 |             '%s side of a many-to-many set' % ('reverse' if self.reverse else 'forward'),\n798 |             self.rel.get_accessor_name() if self.reverse else self.field.name,\n799 |         )\n```",
+              "start_line": 756,
+              "end_line": 799,
+              "code_omitted": false,
+              "original_code_length": 1774
+            },
+            {
+              "entity_id": "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.through",
+              "type": "function",
+              "code": "```\n779 | def through(self):\n780 |         # through is provided so that you have easy access to the through\n781 |         # model (Book.authors.through) for inlines, etc. This is done as\n782 |         # a property to ensure that the fully resolved value is returned.\n783 |         return self.rel.through\n```",
+              "start_line": 779,
+              "end_line": 783,
+              "code_omitted": false,
+              "original_code_length": 309
+            },
+            {
+              "entity_id": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager.ManyRelatedManager._add_items",
+              "type": "function",
+              "code": "```\n1111 | def _add_items(self, source_field_name, target_field_name, *objs, through_defaults=None):\n1112 |             # source_field_name: the PK fieldname in join table for the source object\n1113 |             # target_field_name: the PK fieldname in join table for the target object\n1114 |             # *objs - objects to add. Either object instances, or primary keys of object instances.\n1115 |             through_defaults = through_defaults or {}\n1116 | \n1117 |             # If there aren't any objects, there is nothing to do.\n1118 |             if objs:\n1119 |                 target_ids = self._get_target_ids(target_field_name, objs)\n1120 |                 db = router.db_for_write(self.through, instance=self.instance)\n1121 |                 can_ignore_conflicts, must_send_signals, can_fast_add = self._get_add_plan(db, source_field_name)\n1122 |                 if can_fast_add:\n1123 |                     self.through._default_manager.using(db).bulk_create([\n1124 |                         self.through(**{\n1125 |                             '%s_id' % source_field_name: self.related_val[0],\n1126 |                             '%s_id' % target_field_name: target_id,\n1127 |                         })\n1128 |                         for target_id in target_ids\n1129 |                     ], ignore_conflicts=True)\n1130 |                     return\n1131 | \n1132 |                 missing_target_ids = self._get_missing_target_ids(\n1133 |                     source_field_name, target_field_name, db, target_ids\n1134 |                 )\n1135 |                 with transaction.atomic(using=db, savepoint=False):\n1136 |                     if must_send_signals:\n1137 |                         signals.m2m_changed.send(\n1138 |                             sender=self.through, action='pre_add',\n1139 |                             instance=self.instance, reverse=self.reverse,\n1140 |                             model=self.model, pk_set=missing_target_ids, using=db,\n1141 |                         )\n1142 | \n1143 |                     # Add the ones that aren't there already.\n1144 |                     self.through._default_manager.using(db).bulk_create([\n1145 |                         self.through(**through_defaults, **{\n1146 |                             '%s_id' % source_field_name: self.related_val[0],\n1147 |                             '%s_id' % target_field_name: target_id,\n1148 |                         })\n1149 |                         for target_id in missing_target_ids\n1150 |                     ], ignore_conflicts=can_ignore_conflicts)\n1151 | \n1152 |                     if must_send_signals:\n1153 |                         signals.m2m_changed.send(\n1154 |                             sender=self.through, action='post_add',\n1155 |                             instance=self.instance, reverse=self.reverse,\n1156 |                             model=self.model, pk_set=missing_target_ids, using=db,\n1157 |                         )\n```",
+              "start_line": 1111,
+              "end_line": 1157,
+              "code_omitted": false,
+              "original_code_length": 2961
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/query.py:QuerySet.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Person",
+            "start_entity": {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "entity_type": "function",
+              "relevance_reason": "The delete method of QuerySet is used to delete objects from the database. It interacts with the Collector and is essential for implementing the optimization of delete queries.",
+              "diversity_value": "QuerySet layer from different file"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8406450152397156,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/query.py:QuerySet.delete",
+              "type": "function",
+              "code": "```\n697 | def delete(self):\n698 |         \"\"\"Delete the records in the current QuerySet.\"\"\"\n699 |         assert not self.query.is_sliced, \\\n700 |             \"Cannot use 'limit' or 'offset' with delete.\"\n701 | \n702 |         if self._fields is not None:\n703 |             raise TypeError(\"Cannot call delete() after .values() or .values_list()\")\n704 | \n705 |         del_query = self._chain()\n706 | \n707 |         # The delete is actually 2 queries - one to find related objects,\n708 |         # and one to delete. Make sure that the discovery of related\n709 |         # objects is performed on the same database as the deletion.\n710 |         del_query._for_write = True\n711 | \n712 |         # Disable non-supported fields.\n713 |         del_query.query.select_for_update = False\n714 |         del_query.query.select_related = False\n715 |         del_query.query.clear_ordering(force_empty=True)\n716 | \n717 |         collector = Collector(using=del_query.db)\n718 |         collector.collect(del_query)\n719 |         deleted, _rows_count = collector.delete()\n720 | \n721 |         # Clear the result cache, in case this QuerySet gets reused.\n722 |         self._result_cache = None\n723 |         return deleted, _rows_count\n```",
+              "start_line": 697,
+              "end_line": 723,
+              "code_omitted": false,
+              "original_code_length": 1227
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/base.py:Model.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "delete",
+            "start_entity": {
+              "entity_id": "django/db/models/base.py:Model.delete",
+              "entity_type": "function",
+              "relevance_reason": "This method is called when deleting individual model instances and triggers the deletion process, including cascading deletions.",
+              "diversity_value": "Model instance deletion from different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8453529477119446,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/base.py:Model.delete",
+              "type": "function",
+              "code": "```\n928 | def delete(self, using=None, keep_parents=False):\n929 |         using = using or router.db_for_write(self.__class__, instance=self)\n930 |         assert self.pk is not None, (\n931 |             \"%s object can't be deleted because its %s attribute is set to None.\" %\n932 |             (self._meta.object_name, self._meta.pk.attname)\n933 |         )\n934 | \n935 |         collector = Collector(using=using)\n936 |         collector.collect([self], keep_parents=keep_parents)\n937 |         return collector.delete()\n```",
+              "start_line": 928,
+              "end_line": 937,
+              "code_omitted": false,
+              "original_code_length": 524
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/deletion.py:Collector.delete"
+            ],
+            "chain_length": 1,
+            "initial_entity": "delete",
+            "start_entity": {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "entity_type": "function",
+              "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+              "diversity_value": "Core deletion logic from different file"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8499560356140137,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/deletion.py:Collector.delete",
+              "type": "function",
+              "code": "```\n283 | def delete(self):\n284 |         # sort instance collections\n285 |         for model, instances in self.data.items():\n286 |             self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287 | \n288 |         # if possible, bring the models in an order suitable for databases that\n289 |         # don't support transactions or cannot defer constraint checks until the\n290 |         # end of a transaction.\n291 |         self.sort()\n292 |         # number of objects deleted for each model label\n293 |         deleted_counter = Counter()\n294 | \n295 |         # Optimize for the case with a single obj and no dependencies\n296 |         if len(self.data) == 1 and len(instances) == 1:\n297 |             instance = list(instances)[0]\n298 |             if self.can_fast_delete(instance):\n299 |                 with transaction.mark_for_rollback_on_error():\n300 |                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301 |                 setattr(instance, model._meta.pk.attname, None)\n302 |                 return count, {model._meta.label: count}\n303 | \n304 |         with transaction.atomic(using=self.using, savepoint=False):\n305 |             # send pre_delete signals\n306 |             for model, obj in self.instances_with_model():\n307 |                 if not model._meta.auto_created:\n308 |                     signals.pre_delete.send(\n309 |                         sender=model, instance=obj, using=self.using\n310 |                     )\n311 | \n312 |             # fast deletes\n313 |             for qs in self.fast_deletes:\n314 |                 count = qs._raw_delete(using=self.using)\n315 |                 deleted_counter[qs.model._meta.label] += count\n316 | \n317 |             # update fields\n318 |             for model, instances_for_fieldvalues in self.field_updates.items():\n319 |                 for (field, value), instances in instances_for_fieldvalues.items():\n320 |                     query = sql.UpdateQuery(model)\n321 |                     query.update_batch([obj.pk for obj in instances],\n322 |                                        {field.name: value}, self.using)\n323 | \n324 |             # reverse instance collections\n325 |             for instances in self.data.values():\n326 |                 instances.reverse()\n327 | \n328 |             # delete instances\n329 |             for model, instances in self.data.items():\n330 |                 query = sql.DeleteQuery(model)\n331 |                 pk_list = [obj.pk for obj in instances]\n332 |                 count = query.delete_batch(pk_list, self.using)\n333 |                 deleted_counter[model._meta.label] += count\n334 | \n335 |                 if not model._meta.auto_created:\n336 |                     for obj in instances:\n337 |                         signals.post_delete.send(\n338 |                             sender=model, instance=obj, using=self.using\n339 |                         )\n340 | \n341 |         # update collected instances\n342 |         for instances_for_fieldvalues in self.field_updates.values():\n343 |             for (field, value), instances in instances_for_fieldvalues.items():\n344 |                 for obj in instances:\n345 |                     setattr(obj, field.attname, value)\n346 |         for model, instances in self.data.items():\n347 |             for instance in instances:\n348 |                 setattr(instance, model._meta.pk.attname, None)\n349 |         return sum(deleted_counter.values()), dict(deleted_counter)\n```",
+              "start_line": 283,
+              "end_line": 349,
+              "code_omitted": false,
+              "original_code_length": 3496
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Person",
+            "start_entity": {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to quote table and column names in SQL queries. Ensuring correct quoting is important when constructing complex delete queries with OR conditions.",
+              "diversity_value": "Database operations layer from different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8505587577819824,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/backends/base/operations.py:BaseDatabaseOperations.quote_name",
+              "type": "function",
+              "code": "```\n334 | def quote_name(self, name):\n335 |         \"\"\"\n336 |         Return a quoted version of the given table, index, or column name. Do\n337 |         not quote the given name if it's already been quoted.\n338 |         \"\"\"\n339 |         raise NotImplementedError('subclasses of BaseDatabaseOperations may require a quote_name() method')\n```",
+              "start_line": 334,
+              "end_line": 339,
+              "code_omitted": false,
+              "original_code_length": 343
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/models/sql/compiler.py:SQLCompiler.execute_sql"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Person",
+            "start_entity": {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SQL compilation process and is crucial for executing SQL queries, including DELETE statements. It can be modified to optimize how delete queries are executed.",
+              "diversity_value": "SQL compilation layer from different file"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8525891304016113,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+              "type": "function",
+              "code": "```\n1062 | def execute_sql(self, result_type=MULTI, chunked_fetch=False, chunk_size=GET_ITERATOR_CHUNK_SIZE):\n1063 |         \"\"\"\n1064 |         Run the query against the database and return the result(s). The\n1065 |         return value is a single data item if result_type is SINGLE, or an\n1066 |         iterator over the results if the result_type is MULTI.\n1067 | \n1068 |         result_type is either MULTI (use fetchmany() to retrieve all rows),\n1069 |         SINGLE (only retrieve a single row), or None. In this last case, the\n1070 |         cursor is returned if any query is executed, since it's used by\n1071 |         subclasses such as InsertQuery). It's possible, however, that no query\n1072 |         is needed, as the filters describe an empty set. In that case, None is\n1073 |         returned, to avoid any unnecessary database interaction.\n1074 |         \"\"\"\n1075 |         result_type = result_type or NO_RESULTS\n1076 |         try:\n1077 |             sql, params = self.as_sql()\n1078 |             if not sql:\n1079 |                 raise EmptyResultSet\n1080 |         except EmptyResultSet:\n1081 |             if result_type == MULTI:\n1082 |                 return iter([])\n1083 |             else:\n1084 |                 return\n1085 |         if chunked_fetch:\n1086 |             cursor = self.connection.chunked_cursor()\n1087 |         else:\n1088 |             cursor = self.connection.cursor()\n1089 |         try:\n1090 |             cursor.execute(sql, params)\n1091 |         except Exception:\n1092 |             # Might fail for server-side cursors (e.g. connection closed)\n1093 |             cursor.close()\n1094 |             raise\n1095 | \n1096 |         if result_type == CURSOR:\n1097 |             # Give the caller the cursor to process and close.\n1098 |             return cursor\n1099 |         if result_type == SINGLE:\n1100 |             try:\n1101 |                 val = cursor.fetchone()\n1102 |                 if val:\n1103 |                     return val[0:self.col_count]\n1104 |                 return val\n1105 |             finally:\n1106 |                 # done with the cursor\n1107 |                 cursor.close()\n1108 |         if result_type == NO_RESULTS:\n1109 |             cursor.close()\n1110 |             return\n1111 | \n1112 |         result = cursor_iter(\n1113 |             cursor, self.connection.features.empty_fetchmany_value,\n1114 |             self.col_count if self.has_extra_select else None,\n1115 |             chunk_size,\n1116 |         )\n1117 |         if not chunked_fetch or not self.connection.features.can_use_chunked_reads:\n1118 |             try:\n1119 |                 # If we are using non-chunked reads, we return the same data\n1120 |                 # structure as normally, but ensure it is all read into memory\n1121 |                 # before going any further. Use chunked_fetch if requested,\n1122 |                 # unless the database doesn't support it.\n1123 |                 return list(result)\n1124 |             finally:\n1125 |                 # done with the cursor\n1126 |                 cursor.close()\n1127 |         return result\n```",
+              "start_line": 1062,
+              "end_line": 1127,
+              "code_omitted": false,
+              "original_code_length": 3119
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_4",
+        "original_chain_info": {
+          "chain": [
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector.delete",
+            "entity_type": "function",
+            "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+            "diversity_value": "Core deletion logic from different file"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8499560356140137,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/db/models/deletion.py:Collector.delete",
+            "type": "function",
+            "code": "```\n283 | def delete(self):\n284 |         # sort instance collections\n285 |         for model, instances in self.data.items():\n286 |             self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287 | \n288 |         # if possible, bring the models in an order suitable for databases that\n289 |         # don't support transactions or cannot defer constraint checks until the\n290 |         # end of a transaction.\n291 |         self.sort()\n292 |         # number of objects deleted for each model label\n293 |         deleted_counter = Counter()\n294 | \n295 |         # Optimize for the case with a single obj and no dependencies\n296 |         if len(self.data) == 1 and len(instances) == 1:\n297 |             instance = list(instances)[0]\n298 |             if self.can_fast_delete(instance):\n299 |                 with transaction.mark_for_rollback_on_error():\n300 |                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301 |                 setattr(instance, model._meta.pk.attname, None)\n302 |                 return count, {model._meta.label: count}\n303 | \n304 |         with transaction.atomic(using=self.using, savepoint=False):\n305 |             # send pre_delete signals\n306 |             for model, obj in self.instances_with_model():\n307 |                 if not model._meta.auto_created:\n308 |                     signals.pre_delete.send(\n309 |                         sender=model, instance=obj, using=self.using\n310 |                     )\n311 | \n312 |             # fast deletes\n313 |             for qs in self.fast_deletes:\n314 |                 count = qs._raw_delete(using=self.using)\n315 |                 deleted_counter[qs.model._meta.label] += count\n316 | \n317 |             # update fields\n318 |             for model, instances_for_fieldvalues in self.field_updates.items():\n319 |                 for (field, value), instances in instances_for_fieldvalues.items():\n320 |                     query = sql.UpdateQuery(model)\n321 |                     query.update_batch([obj.pk for obj in instances],\n322 |                                        {field.name: value}, self.using)\n323 | \n324 |             # reverse instance collections\n325 |             for instances in self.data.values():\n326 |                 instances.reverse()\n327 | \n328 |             # delete instances\n329 |             for model, instances in self.data.items():\n330 |                 query = sql.DeleteQuery(model)\n331 |                 pk_list = [obj.pk for obj in instances]\n332 |                 count = query.delete_batch(pk_list, self.using)\n333 |                 deleted_counter[model._meta.label] += count\n334 | \n335 |                 if not model._meta.auto_created:\n336 |                     for obj in instances:\n337 |                         signals.post_delete.send(\n338 |                             sender=model, instance=obj, using=self.using\n339 |                         )\n340 | \n341 |         # update collected instances\n342 |         for instances_for_fieldvalues in self.field_updates.values():\n343 |             for (field, value), instances in instances_for_fieldvalues.items():\n344 |                 for obj in instances:\n345 |                     setattr(obj, field.attname, value)\n346 |         for model, instances in self.data.items():\n347 |             for instance in instances:\n348 |                 setattr(instance, model._meta.pk.attname, None)\n349 |         return sum(deleted_counter.values()), dict(deleted_counter)\n```",
+            "start_line": 283,
+            "end_line": 349,
+            "code_omitted": false,
+            "original_code_length": 3496
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 4,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_4"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-06T17:48:00.026609",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "location_description": "Lines 313-315: Loop where fast deletes are performed",
+                "modification_type": "optimize",
+                "priority": "high",
+                "reasoning": "The current implementation performs separate DELETE queries for each relationship, leading to multiple roundtrips to the database. By combining these queries using OR conditions, we can reduce the number of queries and improve performance.",
+                "suggested_approach": "To optimize the fast delete queries, modify the loop that handles `fast_deletes` to combine DELETE queries for the same table. Here are the detailed steps:\n\n1. **Import necessary modules**: Ensure you have the necessary imports at the top of the file.\n   ```python\n   from django.db.models.sql import Query\n   from django.db.models import Q\n   ```\n\n2. **Modify the fast delete loop**: Change the loop starting at line 313 to collect DELETE queries for the same table and combine them.\n   ```python\n   313 | # fast deletes\n   314 | combined_deletes = defaultdict(list)\n   315 | for qs in self.fast_deletes:\n   316 |     combined_deletes[qs.model].append(qs)\n   317 |\n   318 | for model, qs_list in combined_deletes.items():\n   319 |     if not qs_list:\n   320 |         continue\n   321 |\n   322 |     # Combine all Q objects from the queryset filters\n   323 |     combined_q = Q()\n   324 |     for qs in qs_list:\n   325 |         combined_q |= qs.query.where\n   326 |\n   327 |     # Create a new DeleteQuery and apply the combined Q object\n   328 |     query = Query(model)\n   329 |     query.add_q(combined_q)\n   330 |     count = query.get_compiler(self.using).execute_sql()\n   331 |     deleted_counter[model._meta.label] += count\n   ```\n\n3. **Error Handling and Edge Cases**:\n   - Ensure that the `combined_q` is not empty before executing the DELETE query. If it is empty, skip the execution to avoid unnecessary database calls.\n   - Handle any potential exceptions that might occur during the execution of the DELETE query, such as `DatabaseError` or `OperationalError`, by wrapping the query execution in a try-except block.\n   ```python\n   330 | try:\n   331 |     count = query.get_compiler(self.using).execute_sql()\n   332 | except (DatabaseError, OperationalError) as e:\n   333 |     logger.error(f\"Error executing combined delete query for model {model.__name__}: {e}\")\n   334 |     # Optionally, re-raise the exception or handle it as needed\n   335 |     raise\n   ```\n\n4. **Testing**: After making these changes, thoroughly test the deletion process with various scenarios, including cascading deletions involving multiple foreign keys and many-to-many relationships, to ensure that the combined queries work correctly and efficiently."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `Collector.delete` method to collect and combine DELETE queries for the same table. This reduces the number of roundtrips to the database, improving performance and efficiency. The changes focus on optimizing the fast delete path by using logical OR conditions to combine multiple DELETE queries into a single query.",
+            "confidence": 85
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_4):**\n\n**Entity 1: django/db/models/deletion.py:Collector.delete**\nType: function\nLines: 283-349\nCode:\n```\n```\n283 | def delete(self):\n284 |         # sort instance collections\n285 |         for model, instances in self.data.items():\n286 |             self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287 | \n288 |         # if possible, bring the models in an order suitable for databases that\n289 |         # don't support transactions or cannot defer constraint checks until the\n290 |         # end of a transaction.\n291 |         self.sort()\n292 |         # number of objects deleted for each model label\n293 |         deleted_counter = Counter()\n294 | \n295 |         # Optimize for the case with a single obj and no dependencies\n296 |         if len(self.data) == 1 and len(instances) == 1:\n297 |             instance = list(instances)[0]\n298 |             if self.can_fast_delete(instance):\n299 |                 with transaction.mark_for_rollback_on_error():\n300 |                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301 |                 setattr(instance, model._meta.pk.attname, None)\n302 |                 return count, {model._meta.label: count}\n303 | \n304 |         with transaction.atomic(using=self.using, savepoint=False):\n305 |             # send pre_delete signals\n306 |             for model, obj in self.instances_with_model():\n307 |                 if not model._meta.auto_created:\n308 |                     signals.pre_delete.send(\n309 |                         sender=model, instance=obj, using=self.using\n310 |                     )\n311 | \n312 |             # fast deletes\n313 |             for qs in self.fast_deletes:\n314 |                 count = qs._raw_delete(using=self.using)\n315 |                 deleted_counter[qs.model._meta.label] += count\n316 | \n317 |             # update fields\n318 |             for model, instances_for_fieldvalues in self.field_updates.items():\n319 |                 for (field, value), instances in instances_for_fieldvalues.items():\n320 |                     query = sql.UpdateQuery(model)\n321 |                     query.update_batch([obj.pk for obj in instances],\n322 |                                        {field.name: value}, self.using)\n323 | \n324 |             # reverse instance collections\n325 |             for instances in self.data.values():\n326 |                 instances.reverse()\n327 | \n328 |             # delete instances\n329 |             for model, instances in self.data.items():\n330 |                 query = sql.DeleteQuery(model)\n331 |                 pk_list = [obj.pk for obj in instances]\n332 |                 count = query.delete_batch(pk_list, self.using)\n333 |                 deleted_counter[model._meta.label] += count\n334 | \n335 |                 if not model._meta.auto_created:\n336 |                     for obj in instances:\n337 |                         signals.post_delete.send(\n338 |                             sender=model, instance=obj, using=self.using\n339 |                         )\n340 | \n341 |         # update collected instances\n342 |         for instances_for_fieldvalues in self.field_updates.values():\n343 |             for (field, value), instances in instances_for_fieldvalues.items():\n344 |                 for obj in instances:\n345 |                     setattr(obj, field.attname, value)\n346 |         for model, instances in self.data.items():\n347 |             for instance in instances:\n348 |                 setattr(instance, model._meta.pk.attname, None)\n349 |         return sum(deleted_counter.values()), dict(deleted_counter)\n```\n```\n\n",
+      "num_agents": 1
+    }
+  },
+  "stage_7_round2_analysis": {
+    "timestamp": "2026-10-06T17:48:00.033823",
+    "data": {
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "location_description": "Lines 313-315: Loop where fast deletes are performed",
+                "modification_type": "optimize",
+                "priority": "high",
+                "reasoning": "The current implementation performs separate DELETE queries for each relationship, leading to multiple roundtrips to the database. By combining these queries using OR conditions, we can reduce the number of queries and improve performance.",
+                "suggested_approach": "To optimize the fast delete queries, modify the loop that handles `fast_deletes` to combine DELETE queries for the same table. Here are the detailed steps:\n\n1. **Import necessary modules**: Ensure you have the necessary imports at the top of the file.\n   ```python\n   from django.db.models.sql import Query\n   from django.db.models import Q\n   ```\n\n2. **Modify the fast delete loop**: Change the loop starting at line 313 to collect DELETE queries for the same table and combine them.\n   ```python\n   313 | # fast deletes\n   314 | combined_deletes = defaultdict(list)\n   315 | for qs in self.fast_deletes:\n   316 |     combined_deletes[qs.model].append(qs)\n   317 |\n   318 | for model, qs_list in combined_deletes.items():\n   319 |     if not qs_list:\n   320 |         continue\n   321 |\n   322 |     # Combine all Q objects from the queryset filters\n   323 |     combined_q = Q()\n   324 |     for qs in qs_list:\n   325 |         combined_q |= qs.query.where\n   326 |\n   327 |     # Create a new DeleteQuery and apply the combined Q object\n   328 |     query = Query(model)\n   329 |     query.add_q(combined_q)\n   330 |     count = query.get_compiler(self.using).execute_sql()\n   331 |     deleted_counter[model._meta.label] += count\n   ```\n\n3. **Error Handling and Edge Cases**:\n   - Ensure that the `combined_q` is not empty before executing the DELETE query. If it is empty, skip the execution to avoid unnecessary database calls.\n   - Handle any potential exceptions that might occur during the execution of the DELETE query, such as `DatabaseError` or `OperationalError`, by wrapping the query execution in a try-except block.\n   ```python\n   330 | try:\n   331 |     count = query.get_compiler(self.using).execute_sql()\n   332 | except (DatabaseError, OperationalError) as e:\n   333 |     logger.error(f\"Error executing combined delete query for model {model.__name__}: {e}\")\n   334 |     # Optionally, re-raise the exception or handle it as needed\n   335 |     raise\n   ```\n\n4. **Testing**: After making these changes, thoroughly test the deletion process with various scenarios, including cascading deletions involving multiple foreign keys and many-to-many relationships, to ensure that the combined queries work correctly and efficiently."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `Collector.delete` method to collect and combine DELETE queries for the same table. This reduces the number of roundtrips to the database, improving performance and efficiency. The changes focus on optimizing the fast delete path by using logical OR conditions to combine multiple DELETE queries into a single query.",
+            "confidence": 85,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "location_description": "Lines 313-315: Loop where fast deletes are performed",
+                "modification_type": "optimize",
+                "priority": "high",
+                "reasoning": "The current implementation performs separate DELETE queries for each relationship, leading to multiple roundtrips to the database. By combining these queries using OR conditions, we can reduce the number of queries and improve performance.",
+                "suggested_approach": "To optimize the fast delete queries, modify the loop that handles `fast_deletes` to combine DELETE queries for the same table. Here are the detailed steps:\n\n1. **Import necessary modules**: Ensure you have the necessary imports at the top of the file.\n   ```python\n   from django.db.models.sql import Query\n   from django.db.models import Q\n   ```\n\n2. **Modify the fast delete loop**: Change the loop starting at line 313 to collect DELETE queries for the same table and combine them.\n   ```python\n   313 | # fast deletes\n   314 | combined_deletes = defaultdict(list)\n   315 | for qs in self.fast_deletes:\n   316 |     combined_deletes[qs.model].append(qs)\n   317 |\n   318 | for model, qs_list in combined_deletes.items():\n   319 |     if not qs_list:\n   320 |         continue\n   321 |\n   322 |     # Combine all Q objects from the queryset filters\n   323 |     combined_q = Q()\n   324 |     for qs in qs_list:\n   325 |         combined_q |= qs.query.where\n   326 |\n   327 |     # Create a new DeleteQuery and apply the combined Q object\n   328 |     query = Query(model)\n   329 |     query.add_q(combined_q)\n   330 |     count = query.get_compiler(self.using).execute_sql()\n   331 |     deleted_counter[model._meta.label] += count\n   ```\n\n3. **Error Handling and Edge Cases**:\n   - Ensure that the `combined_q` is not empty before executing the DELETE query. If it is empty, skip the execution to avoid unnecessary database calls.\n   - Handle any potential exceptions that might occur during the execution of the DELETE query, such as `DatabaseError` or `OperationalError`, by wrapping the query execution in a try-except block.\n   ```python\n   330 | try:\n   331 |     count = query.get_compiler(self.using).execute_sql()\n   332 | except (DatabaseError, OperationalError) as e:\n   333 |     logger.error(f\"Error executing combined delete query for model {model.__name__}: {e}\")\n   334 |     # Optionally, re-raise the exception or handle it as needed\n   335 |     raise\n   ```\n\n4. **Testing**: After making these changes, thoroughly test the deletion process with various scenarios, including cascading deletions involving multiple foreign keys and many-to-many relationships, to ensure that the combined queries work correctly and efficiently."
+              }
+            ]
+          }
+        }
+      ],
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "location_description": "Lines 313-315: Loop where fast deletes are performed",
+                "modification_type": "optimize",
+                "priority": "high",
+                "reasoning": "The current implementation performs separate DELETE queries for each relationship, leading to multiple roundtrips to the database. By combining these queries using OR conditions, we can reduce the number of queries and improve performance.",
+                "suggested_approach": "To optimize the fast delete queries, modify the loop that handles `fast_deletes` to combine DELETE queries for the same table. Here are the detailed steps:\n\n1. **Import necessary modules**: Ensure you have the necessary imports at the top of the file.\n   ```python\n   from django.db.models.sql import Query\n   from django.db.models import Q\n   ```\n\n2. **Modify the fast delete loop**: Change the loop starting at line 313 to collect DELETE queries for the same table and combine them.\n   ```python\n   313 | # fast deletes\n   314 | combined_deletes = defaultdict(list)\n   315 | for qs in self.fast_deletes:\n   316 |     combined_deletes[qs.model].append(qs)\n   317 |\n   318 | for model, qs_list in combined_deletes.items():\n   319 |     if not qs_list:\n   320 |         continue\n   321 |\n   322 |     # Combine all Q objects from the queryset filters\n   323 |     combined_q = Q()\n   324 |     for qs in qs_list:\n   325 |         combined_q |= qs.query.where\n   326 |\n   327 |     # Create a new DeleteQuery and apply the combined Q object\n   328 |     query = Query(model)\n   329 |     query.add_q(combined_q)\n   330 |     count = query.get_compiler(self.using).execute_sql()\n   331 |     deleted_counter[model._meta.label] += count\n   ```\n\n3. **Error Handling and Edge Cases**:\n   - Ensure that the `combined_q` is not empty before executing the DELETE query. If it is empty, skip the execution to avoid unnecessary database calls.\n   - Handle any potential exceptions that might occur during the execution of the DELETE query, such as `DatabaseError` or `OperationalError`, by wrapping the query execution in a try-except block.\n   ```python\n   330 | try:\n   331 |     count = query.get_compiler(self.using).execute_sql()\n   332 | except (DatabaseError, OperationalError) as e:\n   333 |     logger.error(f\"Error executing combined delete query for model {model.__name__}: {e}\")\n   334 |     # Optionally, re-raise the exception or handle it as needed\n   335 |     raise\n   ```\n\n4. **Testing**: After making these changes, thoroughly test the deletion process with various scenarios, including cascading deletions involving multiple foreign keys and many-to-many relationships, to ensure that the combined queries work correctly and efficiently."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `Collector.delete` method to collect and combine DELETE queries for the same table. This reduces the number of roundtrips to the database, improving performance and efficiency. The changes focus on optimizing the fast delete path by using logical OR conditions to combine multiple DELETE queries into a single query.",
+            "confidence": 85
+          }
+        }
+      ]
+    }
+  },
+  "stage_7_final_plan": {
+    "timestamp": "2026-10-06T17:49:02.152144",
+    "data": {
+      "final_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Optimize the `Collector.delete` method to combine DELETE queries for the same table using logical OR conditions, reducing the number of roundtrips to the database and improving performance.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Add a dictionary to track combined delete queries",
+              "context": "django/db/models/deletion.py:Collector.delete, Line 293",
+              "type": "add_feature",
+              "priority": "high",
+              "rationale": "This dictionary will store the combined delete queries for each table, allowing us to merge multiple DELETE statements into a single query.",
+              "implementation_notes": "Initialize a dictionary named `combined_deletes` at the beginning of the `delete` method."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the loop where fast deletes are performed to collect and combine DELETE queries",
+              "context": "django/db/models/deletion.py:Collector.delete, Lines 313-315",
+              "type": "optimize",
+              "priority": "high",
+              "rationale": "Instead of executing each DELETE query immediately, collect them in the `combined_deletes` dictionary and combine queries for the same table.",
+              "implementation_notes": "Iterate through `self.fast_deletes`, check if the query's model is already in `combined_deletes`, and if so, append the condition to the existing query. If not, add a new entry in `combined_deletes`."
+            },
+            {
+              "step": 3,
+              "instruction": "Add a new loop to execute the combined DELETE queries",
+              "context": "django/db/models/deletion.py:Collector.delete, after Line 315",
+              "type": "add_feature",
+              "priority": "high",
+              "rationale": "After collecting and combining the DELETE queries, execute them in a new loop to reduce the number of database roundtrips.",
+              "implementation_notes": "Iterate through `combined_deletes` and execute each combined DELETE query using `_raw_delete`."
+            },
+            {
+              "step": 4,
+              "instruction": "Update the `can_fast_delete` method to support combined DELETE queries",
+              "context": "django/db/models/deletion.py:Collector.can_fast_delete, Lines 150-160",
+              "type": "optimize",
+              "priority": "medium",
+              "rationale": "Ensure that the `can_fast_delete` method correctly identifies when combined DELETE queries can be used, maintaining the integrity of the fast delete path.",
+              "implementation_notes": "Review the conditions in `can_fast_delete` to ensure they are compatible with the new combined DELETE queries logic."
+            },
+            {
+              "step": 5,
+              "instruction": "Modify the `delete_batch` method to handle combined DELETE queries",
+              "context": "django/db/models/sql/query.py:DeleteQuery.delete_batch, Lines 100-120",
+              "type": "optimize",
+              "priority": "medium",
+              "rationale": "The `delete_batch` method needs to be updated to handle the combined DELETE queries generated by the `Collector`.",
+              "implementation_notes": "Update the method to accept a list of conditions and construct a single DELETE query with OR conditions."
+            }
+          ],
+          "execution_order": "1, 2, 3, 4, 5",
+          "testing_recommendations": "Unit tests should be written to validate the new combined DELETE queries logic. Integration tests should be run to ensure that the overall deletion process works as expected and that the number of database queries is reduced.",
+          "risk_assessment": "Potential risks include incorrect query construction leading to data loss or incomplete deletions. To mitigate these risks, thorough unit and integration testing should be conducted, and the changes should be reviewed by multiple team members. Additionally, a rollback plan should be in place in case issues are discovered post-deployment."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that combining DELETE queries using logical OR conditions would significantly reduce the number of database roundtrips and improve performance. They also agreed that the `Collector.delete` method is the primary area for modification.",
+        "resolved_conflicts": "There were no significant conflicts in the expert opinions. All experts aligned on the need to optimize the fast delete path and the approach to combine DELETE queries."
+      },
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "location_description": "Lines 313-315: Loop where fast deletes are performed",
+                "modification_type": "optimize",
+                "priority": "high",
+                "reasoning": "The current implementation performs separate DELETE queries for each relationship, leading to multiple roundtrips to the database. By combining these queries using OR conditions, we can reduce the number of queries and improve performance.",
+                "suggested_approach": "To optimize the fast delete queries, modify the loop that handles `fast_deletes` to combine DELETE queries for the same table. Here are the detailed steps:\n\n1. **Import necessary modules**: Ensure you have the necessary imports at the top of the file.\n   ```python\n   from django.db.models.sql import Query\n   from django.db.models import Q\n   ```\n\n2. **Modify the fast delete loop**: Change the loop starting at line 313 to collect DELETE queries for the same table and combine them.\n   ```python\n   313 | # fast deletes\n   314 | combined_deletes = defaultdict(list)\n   315 | for qs in self.fast_deletes:\n   316 |     combined_deletes[qs.model].append(qs)\n   317 |\n   318 | for model, qs_list in combined_deletes.items():\n   319 |     if not qs_list:\n   320 |         continue\n   321 |\n   322 |     # Combine all Q objects from the queryset filters\n   323 |     combined_q = Q()\n   324 |     for qs in qs_list:\n   325 |         combined_q |= qs.query.where\n   326 |\n   327 |     # Create a new DeleteQuery and apply the combined Q object\n   328 |     query = Query(model)\n   329 |     query.add_q(combined_q)\n   330 |     count = query.get_compiler(self.using).execute_sql()\n   331 |     deleted_counter[model._meta.label] += count\n   ```\n\n3. **Error Handling and Edge Cases**:\n   - Ensure that the `combined_q` is not empty before executing the DELETE query. If it is empty, skip the execution to avoid unnecessary database calls.\n   - Handle any potential exceptions that might occur during the execution of the DELETE query, such as `DatabaseError` or `OperationalError`, by wrapping the query execution in a try-except block.\n   ```python\n   330 | try:\n   331 |     count = query.get_compiler(self.using).execute_sql()\n   332 | except (DatabaseError, OperationalError) as e:\n   333 |     logger.error(f\"Error executing combined delete query for model {model.__name__}: {e}\")\n   334 |     # Optionally, re-raise the exception or handle it as needed\n   335 |     raise\n   ```\n\n4. **Testing**: After making these changes, thoroughly test the deletion process with various scenarios, including cascading deletions involving multiple foreign keys and many-to-many relationships, to ensure that the combined queries work correctly and efficiently."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `Collector.delete` method to collect and combine DELETE queries for the same table. This reduces the number of roundtrips to the database, improving performance and efficiency. The changes focus on optimizing the fast delete path by using logical OR conditions to combine multiple DELETE queries into a single query.",
+            "confidence": 85,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/db/models/deletion.py:Collector.delete",
+                "location_description": "Lines 313-315: Loop where fast deletes are performed",
+                "modification_type": "optimize",
+                "priority": "high",
+                "reasoning": "The current implementation performs separate DELETE queries for each relationship, leading to multiple roundtrips to the database. By combining these queries using OR conditions, we can reduce the number of queries and improve performance.",
+                "suggested_approach": "To optimize the fast delete queries, modify the loop that handles `fast_deletes` to combine DELETE queries for the same table. Here are the detailed steps:\n\n1. **Import necessary modules**: Ensure you have the necessary imports at the top of the file.\n   ```python\n   from django.db.models.sql import Query\n   from django.db.models import Q\n   ```\n\n2. **Modify the fast delete loop**: Change the loop starting at line 313 to collect DELETE queries for the same table and combine them.\n   ```python\n   313 | # fast deletes\n   314 | combined_deletes = defaultdict(list)\n   315 | for qs in self.fast_deletes:\n   316 |     combined_deletes[qs.model].append(qs)\n   317 |\n   318 | for model, qs_list in combined_deletes.items():\n   319 |     if not qs_list:\n   320 |         continue\n   321 |\n   322 |     # Combine all Q objects from the queryset filters\n   323 |     combined_q = Q()\n   324 |     for qs in qs_list:\n   325 |         combined_q |= qs.query.where\n   326 |\n   327 |     # Create a new DeleteQuery and apply the combined Q object\n   328 |     query = Query(model)\n   329 |     query.add_q(combined_q)\n   330 |     count = query.get_compiler(self.using).execute_sql()\n   331 |     deleted_counter[model._meta.label] += count\n   ```\n\n3. **Error Handling and Edge Cases**:\n   - Ensure that the `combined_q` is not empty before executing the DELETE query. If it is empty, skip the execution to avoid unnecessary database calls.\n   - Handle any potential exceptions that might occur during the execution of the DELETE query, such as `DatabaseError` or `OperationalError`, by wrapping the query execution in a try-except block.\n   ```python\n   330 | try:\n   331 |     count = query.get_compiler(self.using).execute_sql()\n   332 | except (DatabaseError, OperationalError) as e:\n   333 |     logger.error(f\"Error executing combined delete query for model {model.__name__}: {e}\")\n   334 |     # Optionally, re-raise the exception or handle it as needed\n   335 |     raise\n   ```\n\n4. **Testing**: After making these changes, thoroughly test the deletion process with various scenarios, including cascading deletions involving multiple foreign keys and many-to-many relationships, to ensure that the combined queries work correctly and efficiently."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "stage_8_edit_agent_prompt": {
+    "timestamp": "2026-10-06T17:49:02.156956",
+    "data": {
+      "edit_agent_prompt": "<issue>\nCombine fast delete queries\nDescription\n\t\nWhen emulating ON DELETE CASCADE via on_delete=models.CASCADE the deletion.Collector will try to perform fast queries which are DELETE FROM table WHERE table.pk IN .... There's a few conditions required for this fast path to be taken but when this happens the collection logic should combine such queries by table to reduce the number of roundtrips to the database.\nFor example, given the following models\nclass Person(models.Model):\n\tfriends = models.ManyToManyField('self')\nclass User(models.Model):\n\tpass\nclass Entry(models.Model):\n\tcreated_by = models.ForeignKey(User)\n\tupdated_by = models.ForeignKey(User)\nIssuing a person.delete() or user.delete() will result in 3 queries of the form\nDELETE FROM person_friends WHERE from_id = :id\nDELETE FROM person_friends WHERE to_id = :id\nDELETE FROM person WHERE id = :id\nDELETE FROM entry WHERE created_by_id = :id\nDELETE FROM entry WHERE updated_by = :id\nDELETRE FROM user WHERE id = :id\nBut both queries (or N queries depending on the number of foreign relationships) can be combined into a single one by using OR\nDELETE FROM person_friends WHERE from_id = :id OR to_id = :id\nDELETE FROM person WHERE id = :id\nDELETE FROM entry WHERE created_by_id = :id OR updated_by = :id\nDELETE FROM user WHERE id = :id\n\n</issue>\n\n<plan>\n***stage 1***\ninstruction: Add a dictionary to track combined delete queries\ncontext: django/db/models/deletion.py:Collector.delete, Line 293\n\n***stage 2***\ninstruction: Modify the loop where fast deletes are performed to collect and combine DELETE queries\ncontext: django/db/models/deletion.py:Collector.delete, Lines 313-315\n\n***stage 3***\ninstruction: Add a new loop to execute the combined DELETE queries\ncontext: django/db/models/deletion.py:Collector.delete, after Line 315\n\n***stage 4***\ninstruction: Update the `can_fast_delete` method to support combined DELETE queries\ncontext: django/db/models/deletion.py:Collector.can_fast_delete, Lines 150-160\n\n***stage 5***\ninstruction: Modify the `delete_batch` method to handle combined DELETE queries\ncontext: django/db/models/sql/query.py:DeleteQuery.delete_batch, Lines 100-120\n\n</plan>\n\n<code>\ndjango/db/models/deletion.py:\n283   def delete(self):\n284           # sort instance collections\n285           for model, instances in self.data.items():\n286               self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287   \n288           # if possible, bring the models in an order suitable for databases that\n289           # don't support transactions or cannot defer constraint checks until the\n290           # end of a transaction.\n291           self.sort()\n292           # number of objects deleted for each model label\n293           deleted_counter = Counter()\n294   \n295           # Optimize for the case with a single obj and no dependencies\n296           if len(self.data) == 1 and len(instances) == 1:\n297               instance = list(instances)[0]\n298               if self.can_fast_delete(instance):\n299                   with transaction.mark_for_rollback_on_error():\n300                       count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301                   setattr(instance, model._meta.pk.attname, None)\n302                   return count, {model._meta.label: count}\n303   \n304           with transaction.atomic(using=self.using, savepoint=False):\n305               # send pre_delete signals\n306               for model, obj in self.instances_with_model():\n307                   if not model._meta.auto_created:\n308                       signals.pre_delete.send(\n309                           sender=model, instance=obj, using=self.using\n310                       )\n311   \n312               # fast deletes\n313               for qs in self.fast_deletes:\n314                   count = qs._raw_delete(using=self.using)\n315                   deleted_counter[qs.model._meta.label] += count\n316   \n317               # update fields\n318               for model, instances_for_fieldvalues in self.field_updates.items():\n319                   for (field, value), instances in instances_for_fieldvalues.items():\n320                       query = sql.UpdateQuery(model)\n321                       query.update_batch([obj.pk for obj in instances],\n322                                          {field.name: value}, self.using)\n323   \n324               # reverse instance collections\n325               for instances in self.data.values():\n326                   instances.reverse()\n327   \n328               # delete instances\n329               for model, instances in self.data.items():\n330                   query = sql.DeleteQuery(model)\n331                   pk_list = [obj.pk for obj in instances]\n332                   count = query.delete_batch(pk_list, self.using)\n333                   deleted_counter[model._meta.label] += count\n334   \n335                   if not model._meta.auto_created:\n336                       for obj in instances:\n337                           signals.post_delete.send(\n338                               sender=model, instance=obj, using=self.using\n339                           )\n340   \n341           # update collected instances\n342           for instances_for_fieldvalues in self.field_updates.values():\n343               for (field, value), instances in instances_for_fieldvalues.items():\n344                   for obj in instances:\n345                       setattr(obj, field.attname, value)\n346           for model, instances in self.data.items():\n347               for instance in instances:\n348                   setattr(instance, model._meta.pk.attname, None)\n349           return sum(deleted_counter.values()), dict(deleted_counter)\n\n</code>",
+      "modification_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Optimize the `Collector.delete` method to combine DELETE queries for the same table using logical OR conditions, reducing the number of roundtrips to the database and improving performance.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Add a dictionary to track combined delete queries",
+              "context": "django/db/models/deletion.py:Collector.delete, Line 293",
+              "type": "add_feature",
+              "priority": "high",
+              "rationale": "This dictionary will store the combined delete queries for each table, allowing us to merge multiple DELETE statements into a single query.",
+              "implementation_notes": "Initialize a dictionary named `combined_deletes` at the beginning of the `delete` method."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the loop where fast deletes are performed to collect and combine DELETE queries",
+              "context": "django/db/models/deletion.py:Collector.delete, Lines 313-315",
+              "type": "optimize",
+              "priority": "high",
+              "rationale": "Instead of executing each DELETE query immediately, collect them in the `combined_deletes` dictionary and combine queries for the same table.",
+              "implementation_notes": "Iterate through `self.fast_deletes`, check if the query's model is already in `combined_deletes`, and if so, append the condition to the existing query. If not, add a new entry in `combined_deletes`."
+            },
+            {
+              "step": 3,
+              "instruction": "Add a new loop to execute the combined DELETE queries",
+              "context": "django/db/models/deletion.py:Collector.delete, after Line 315",
+              "type": "add_feature",
+              "priority": "high",
+              "rationale": "After collecting and combining the DELETE queries, execute them in a new loop to reduce the number of database roundtrips.",
+              "implementation_notes": "Iterate through `combined_deletes` and execute each combined DELETE query using `_raw_delete`."
+            },
+            {
+              "step": 4,
+              "instruction": "Update the `can_fast_delete` method to support combined DELETE queries",
+              "context": "django/db/models/deletion.py:Collector.can_fast_delete, Lines 150-160",
+              "type": "optimize",
+              "priority": "medium",
+              "rationale": "Ensure that the `can_fast_delete` method correctly identifies when combined DELETE queries can be used, maintaining the integrity of the fast delete path.",
+              "implementation_notes": "Review the conditions in `can_fast_delete` to ensure they are compatible with the new combined DELETE queries logic."
+            },
+            {
+              "step": 5,
+              "instruction": "Modify the `delete_batch` method to handle combined DELETE queries",
+              "context": "django/db/models/sql/query.py:DeleteQuery.delete_batch, Lines 100-120",
+              "type": "optimize",
+              "priority": "medium",
+              "rationale": "The `delete_batch` method needs to be updated to handle the combined DELETE queries generated by the `Collector`.",
+              "implementation_notes": "Update the method to accept a list of conditions and construct a single DELETE query with OR conditions."
+            }
+          ],
+          "execution_order": "1, 2, 3, 4, 5",
+          "testing_recommendations": "Unit tests should be written to validate the new combined DELETE queries logic. Integration tests should be run to ensure that the overall deletion process works as expected and that the number of database queries is reduced.",
+          "risk_assessment": "Potential risks include incorrect query construction leading to data loss or incomplete deletions. To mitigate these risks, thorough unit and integration testing should be conducted, and the changes should be reviewed by multiple team members. Additionally, a rollback plan should be in place in case issues are discovered post-deployment."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that combining DELETE queries using logical OR conditions would significantly reduce the number of database roundtrips and improve performance. They also agreed that the `Collector.delete` method is the primary area for modification.",
+        "resolved_conflicts": "There were no significant conflicts in the expert opinions. All experts aligned on the need to optimize the fast delete path and the approach to combine DELETE queries."
+      },
+      "winning_chain": {
+        "chain_id": "chain_4",
+        "original_chain_info": {
+          "chain": [
+            "django/db/models/deletion.py:Collector.delete"
+          ],
+          "chain_length": 1,
+          "initial_entity": "delete",
+          "start_entity": {
+            "entity_id": "django/db/models/deletion.py:Collector.delete",
+            "entity_type": "function",
+            "relevance_reason": "The Collector class is responsible for collecting and deleting related objects, which is central to the issue of optimizing cascade deletes.",
+            "diversity_value": "Core deletion logic from different file"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8499560356140137,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/db/models/deletion.py:Collector.delete",
+            "type": "function",
+            "code": "```\n283 | def delete(self):\n284 |         # sort instance collections\n285 |         for model, instances in self.data.items():\n286 |             self.data[model] = sorted(instances, key=attrgetter(\"pk\"))\n287 | \n288 |         # if possible, bring the models in an order suitable for databases that\n289 |         # don't support transactions or cannot defer constraint checks until the\n290 |         # end of a transaction.\n291 |         self.sort()\n292 |         # number of objects deleted for each model label\n293 |         deleted_counter = Counter()\n294 | \n295 |         # Optimize for the case with a single obj and no dependencies\n296 |         if len(self.data) == 1 and len(instances) == 1:\n297 |             instance = list(instances)[0]\n298 |             if self.can_fast_delete(instance):\n299 |                 with transaction.mark_for_rollback_on_error():\n300 |                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)\n301 |                 setattr(instance, model._meta.pk.attname, None)\n302 |                 return count, {model._meta.label: count}\n303 | \n304 |         with transaction.atomic(using=self.using, savepoint=False):\n305 |             # send pre_delete signals\n306 |             for model, obj in self.instances_with_model():\n307 |                 if not model._meta.auto_created:\n308 |                     signals.pre_delete.send(\n309 |                         sender=model, instance=obj, using=self.using\n310 |                     )\n311 | \n312 |             # fast deletes\n313 |             for qs in self.fast_deletes:\n314 |                 count = qs._raw_delete(using=self.using)\n315 |                 deleted_counter[qs.model._meta.label] += count\n316 | \n317 |             # update fields\n318 |             for model, instances_for_fieldvalues in self.field_updates.items():\n319 |                 for (field, value), instances in instances_for_fieldvalues.items():\n320 |                     query = sql.UpdateQuery(model)\n321 |                     query.update_batch([obj.pk for obj in instances],\n322 |                                        {field.name: value}, self.using)\n323 | \n324 |             # reverse instance collections\n325 |             for instances in self.data.values():\n326 |                 instances.reverse()\n327 | \n328 |             # delete instances\n329 |             for model, instances in self.data.items():\n330 |                 query = sql.DeleteQuery(model)\n331 |                 pk_list = [obj.pk for obj in instances]\n332 |                 count = query.delete_batch(pk_list, self.using)\n333 |                 deleted_counter[model._meta.label] += count\n334 | \n335 |                 if not model._meta.auto_created:\n336 |                     for obj in instances:\n337 |                         signals.post_delete.send(\n338 |                             sender=model, instance=obj, using=self.using\n339 |                         )\n340 | \n341 |         # update collected instances\n342 |         for instances_for_fieldvalues in self.field_updates.values():\n343 |             for (field, value), instances in instances_for_fieldvalues.items():\n344 |                 for obj in instances:\n345 |                     setattr(obj, field.attname, value)\n346 |         for model, instances in self.data.items():\n347 |             for instance in instances:\n348 |                 setattr(instance, model._meta.pk.attname, None)\n349 |         return sum(deleted_counter.values()), dict(deleted_counter)\n```",
+            "start_line": 283,
+            "end_line": 349,
+            "code_omitted": false,
+            "original_code_length": 3496
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 4,
+        "is_longest": false
+      }
+    }
+  }
+}

@@ -1,0 +1,2004 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-06T17:45:46.521998",
+    "data": {
+      "initial_entities": [
+        "parse_http_date",
+        "rfc850-date",
+        "two-digit",
+        "current_year",
+        "timestamp"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 626
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-06T17:45:46.523379",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "parse_http_date",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+              "diversity_value": "Core utility function in the HTTP module"
+            },
+            {
+              "entity_id": "django/utils/http.py:parse_http_date_safe",
+              "entity_type": "function",
+              "relevance_reason": "This function wraps `parse_http_date` and handles exceptions, making it important to review and possibly update in conjunction with `parse_http_date`.",
+              "diversity_value": "Error handling wrapper in the same HTTP utility file"
+            },
+            {
+              "entity_id": "django/http/cookie.py:parse_cookie",
+              "entity_type": "function",
+              "relevance_reason": "Cookies often contain expiration dates, and this function might interact with `parse_http_date` when processing cookie data.",
+              "diversity_value": "Different file, related to HTTP cookies"
+            },
+            {
+              "entity_id": "django/core/handlers/exception.py:HttpResponseBadRequest",
+              "entity_type": "class",
+              "relevance_reason": "If the date parsing fails, it might be used to return a bad request response, which could be relevant for error handling.",
+              "diversity_value": "Exception handling class from a different module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "rfc850-date",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates, including those in RFC 850 format, and is where the two-digit year logic needs to be corrected.",
+              "diversity_value": "Core utility function for HTTP date parsing"
+            },
+            {
+              "entity_id": "django/utils/feedgenerator.py:rfc2822_date",
+              "entity_type": "function",
+              "relevance_reason": "This function formats dates according to RFC 2822, which is related to the date formatting standards mentioned in the problem statement. It might provide useful insights or patterns for implementing the correct two-digit year logic.",
+              "diversity_value": "Different file, related to date formatting standards"
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model._perform_date_checks",
+              "entity_type": "function",
+              "relevance_reason": "This function performs date checks and validations on model instances, which could be relevant for ensuring that the corrected date parsing logic is applied correctly in the database layer.",
+              "diversity_value": "Model layer from different file, ensures database consistency"
+            },
+            {
+              "entity_id": "django/db/backends/utils.py:typecast_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+              "diversity_value": "Database backend utility, different file, handles date conversion"
+            }
+          ]
+        },
+        {
+          "initial_entity": "two-digit",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, including those with two-digit years.",
+              "diversity_value": "Core utility function directly related to the issue"
+            },
+            {
+              "entity_id": "django/conf/global_settings.py:DATETIME_INPUT_FORMATS",
+              "entity_type": "variable",
+              "relevance_reason": "These settings define the formats used for datetime input, which could influence how two-digit years are interpreted.",
+              "diversity_value": "Configuration settings from a different file"
+            },
+            {
+              "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+              "diversity_value": "Request handling logic from a different module"
+            },
+            {
+              "entity_id": "django/test/client.py:Client.get",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to send GET requests in tests, which might include HTTP headers with dates. Useful for testing the fix.",
+              "diversity_value": "Testing functionality from a different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "current_year",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, which includes handling two-digit years.",
+              "diversity_value": "Core utility function from different file"
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+              "diversity_value": "View mixin from different file"
+            },
+            {
+              "entity_id": "django/conf/global_settings.py:USE_TZ",
+              "entity_type": "variable",
+              "relevance_reason": "Time zone settings can affect how dates are parsed and interpreted, which might be relevant when fixing the two-digit year issue.",
+              "diversity_value": "Configuration setting from different file"
+            },
+            {
+              "entity_id": "django/utils/timesince.py:timesince",
+              "entity_type": "function",
+              "relevance_reason": "This function handles time differences and might offer useful logic for interpreting dates relative to the current year.",
+              "diversity_value": "Utility function from different module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "timestamp",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "The function directly parses HTTP dates and is the primary target for fixing the two-digit year interpretation issue.",
+              "diversity_value": "Core utility function from the HTTP module"
+            },
+            {
+              "entity_id": "django/db/backends/utils.py:typecast_timestamp",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to convert timestamp strings into datetime objects, which might be relevant for understanding how timestamps are handled in Django.",
+              "diversity_value": "Database backend utility function"
+            },
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+              "entity_type": "function",
+              "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+              "diversity_value": "Security and signing module function"
+            },
+            {
+              "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "entity_type": "function",
+              "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+              "diversity_value": "Migration utility function from a different module"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-06T17:45:46.533334",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "parse_http_date",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+              "diversity_value": "Core utility function in the HTTP module"
+            },
+            {
+              "entity_id": "django/utils/http.py:parse_http_date_safe",
+              "entity_type": "function",
+              "relevance_reason": "This function wraps `parse_http_date` and handles exceptions, making it important to review and possibly update in conjunction with `parse_http_date`.",
+              "diversity_value": "Error handling wrapper in the same HTTP utility file"
+            },
+            {
+              "entity_id": "django/http/cookie.py:parse_cookie",
+              "entity_type": "function",
+              "relevance_reason": "Cookies often contain expiration dates, and this function might interact with `parse_http_date` when processing cookie data.",
+              "diversity_value": "Different file, related to HTTP cookies"
+            },
+            {
+              "entity_id": "django/core/handlers/exception.py:HttpResponseBadRequest",
+              "entity_type": "class",
+              "relevance_reason": "If the date parsing fails, it might be used to return a bad request response, which could be relevant for error handling.",
+              "diversity_value": "Exception handling class from a different module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+                "diversity_value": "Core utility function in the HTTP module"
+              },
+              "chain": [
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/utils/http.py:parse_http_date_safe",
+                "entity_type": "function",
+                "relevance_reason": "This function wraps `parse_http_date` and handles exceptions, making it important to review and possibly update in conjunction with `parse_http_date`.",
+                "diversity_value": "Error handling wrapper in the same HTTP utility file"
+              },
+              "chain": [
+                "django/utils/http.py:parse_http_date_safe",
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/http/cookie.py:parse_cookie",
+                "entity_type": "function",
+                "relevance_reason": "Cookies often contain expiration dates, and this function might interact with `parse_http_date` when processing cookie data.",
+                "diversity_value": "Different file, related to HTTP cookies"
+              },
+              "chain": [
+                "django/http/cookie.py:parse_cookie",
+                "django/http/cookie.py",
+                "django/http/response.py"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/core/handlers/exception.py:HttpResponseBadRequest",
+                "entity_type": "class",
+                "relevance_reason": "If the date parsing fails, it might be used to return a bad request response, which could be relevant for error handling.",
+                "diversity_value": "Exception handling class from a different module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "rfc850-date",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates, including those in RFC 850 format, and is where the two-digit year logic needs to be corrected.",
+              "diversity_value": "Core utility function for HTTP date parsing"
+            },
+            {
+              "entity_id": "django/utils/feedgenerator.py:rfc2822_date",
+              "entity_type": "function",
+              "relevance_reason": "This function formats dates according to RFC 2822, which is related to the date formatting standards mentioned in the problem statement. It might provide useful insights or patterns for implementing the correct two-digit year logic.",
+              "diversity_value": "Different file, related to date formatting standards"
+            },
+            {
+              "entity_id": "django/db/models/base.py:Model._perform_date_checks",
+              "entity_type": "function",
+              "relevance_reason": "This function performs date checks and validations on model instances, which could be relevant for ensuring that the corrected date parsing logic is applied correctly in the database layer.",
+              "diversity_value": "Model layer from different file, ensures database consistency"
+            },
+            {
+              "entity_id": "django/db/backends/utils.py:typecast_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+              "diversity_value": "Database backend utility, different file, handles date conversion"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for parsing HTTP dates, including those in RFC 850 format, and is where the two-digit year logic needs to be corrected.",
+                "diversity_value": "Core utility function for HTTP date parsing"
+              },
+              "chain": [
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/utils/feedgenerator.py:rfc2822_date",
+                "entity_type": "function",
+                "relevance_reason": "This function formats dates according to RFC 2822, which is related to the date formatting standards mentioned in the problem statement. It might provide useful insights or patterns for implementing the correct two-digit year logic.",
+                "diversity_value": "Different file, related to date formatting standards"
+              },
+              "chain": [
+                "django/utils/feedgenerator.py:rfc2822_date",
+                "django/template/defaultfilters.py:time",
+                "django/utils/dateparse.py:parse_time"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/base.py:Model._perform_date_checks",
+                "entity_type": "function",
+                "relevance_reason": "This function performs date checks and validations on model instances, which could be relevant for ensuring that the corrected date parsing logic is applied correctly in the database layer.",
+                "diversity_value": "Model layer from different file, ensures database consistency"
+              },
+              "chain": [
+                "django/db/models/base.py:Model._perform_date_checks",
+                "django/db/models/base.py:Model.date_error_message",
+                "django/core/exceptions.py:ValidationError"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/backends/utils.py:typecast_date",
+                "entity_type": "function",
+                "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+                "diversity_value": "Database backend utility, different file, handles date conversion"
+              },
+              "chain": [
+                "django/db/backends/utils.py:typecast_date",
+                "django/template/defaultfilters.py:date"
+              ],
+              "chain_length": 2
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "two-digit",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, including those with two-digit years.",
+              "diversity_value": "Core utility function directly related to the issue"
+            },
+            {
+              "entity_id": "django/conf/global_settings.py:DATETIME_INPUT_FORMATS",
+              "entity_type": "variable",
+              "relevance_reason": "These settings define the formats used for datetime input, which could influence how two-digit years are interpreted.",
+              "diversity_value": "Configuration settings from a different file"
+            },
+            {
+              "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+              "diversity_value": "Request handling logic from a different module"
+            },
+            {
+              "entity_id": "django/test/client.py:Client.get",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to send GET requests in tests, which might include HTTP headers with dates. Useful for testing the fix.",
+              "diversity_value": "Testing functionality from a different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, including those with two-digit years.",
+                "diversity_value": "Core utility function directly related to the issue"
+              },
+              "chain": [
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/conf/global_settings.py:DATETIME_INPUT_FORMATS",
+                "entity_type": "variable",
+                "relevance_reason": "These settings define the formats used for datetime input, which could influence how two-digit years are interpreted.",
+                "diversity_value": "Configuration settings from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+                "entity_type": "function",
+                "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+                "diversity_value": "Request handling logic from a different module"
+              },
+              "chain": [
+                "django/core/handlers/base.py:BaseHandler.get_response",
+                "django/contrib/gis/geos/mutable_list.py:ListMixin.append"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/test/client.py:Client.get",
+                "entity_type": "function",
+                "relevance_reason": "This function is used to send GET requests in tests, which might include HTTP headers with dates. Useful for testing the fix.",
+                "diversity_value": "Testing functionality from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "current_year",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, which includes handling two-digit years.",
+              "diversity_value": "Core utility function from different file"
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+              "diversity_value": "View mixin from different file"
+            },
+            {
+              "entity_id": "django/conf/global_settings.py:USE_TZ",
+              "entity_type": "variable",
+              "relevance_reason": "Time zone settings can affect how dates are parsed and interpreted, which might be relevant when fixing the two-digit year issue.",
+              "diversity_value": "Configuration setting from different file"
+            },
+            {
+              "entity_id": "django/utils/timesince.py:timesince",
+              "entity_type": "function",
+              "relevance_reason": "This function handles time differences and might offer useful logic for interpreting dates relative to the current year.",
+              "diversity_value": "Utility function from different module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, which includes handling two-digit years.",
+                "diversity_value": "Core utility function from different file"
+              },
+              "chain": [
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+                "entity_type": "function",
+                "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+                "diversity_value": "View mixin from different file"
+              },
+              "chain": [
+                "django/views/generic/dates.py:YearMixin._get_current_year",
+                "django/views/generic/dates.py:YearMixin",
+                "django/views/generic/dates.py:YearMixin.get_year",
+                "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/conf/global_settings.py:USE_TZ",
+                "entity_type": "variable",
+                "relevance_reason": "Time zone settings can affect how dates are parsed and interpreted, which might be relevant when fixing the two-digit year issue.",
+                "diversity_value": "Configuration setting from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/utils/timesince.py:timesince",
+                "entity_type": "function",
+                "relevance_reason": "This function handles time differences and might offer useful logic for interpreting dates relative to the current year.",
+                "diversity_value": "Utility function from different module"
+              },
+              "chain": [
+                "django/utils/timesince.py:timesince",
+                "django/utils/datetime_safe.py:datetime",
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 3
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "timestamp",
+          "related_entities": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "The function directly parses HTTP dates and is the primary target for fixing the two-digit year interpretation issue.",
+              "diversity_value": "Core utility function from the HTTP module"
+            },
+            {
+              "entity_id": "django/db/backends/utils.py:typecast_timestamp",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to convert timestamp strings into datetime objects, which might be relevant for understanding how timestamps are handled in Django.",
+              "diversity_value": "Database backend utility function"
+            },
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+              "entity_type": "function",
+              "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+              "diversity_value": "Security and signing module function"
+            },
+            {
+              "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "entity_type": "function",
+              "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+              "diversity_value": "Migration utility function from a different module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "entity_type": "function",
+                "relevance_reason": "The function directly parses HTTP dates and is the primary target for fixing the two-digit year interpretation issue.",
+                "diversity_value": "Core utility function from the HTTP module"
+              },
+              "chain": [
+                "django/utils/http.py:parse_http_date"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/backends/utils.py:typecast_timestamp",
+                "entity_type": "function",
+                "relevance_reason": "This function is used to convert timestamp strings into datetime objects, which might be relevant for understanding how timestamps are handled in Django.",
+                "diversity_value": "Database backend utility function"
+              },
+              "chain": [
+                "django/db/backends/utils.py:typecast_timestamp",
+                "django/db/backends/utils.py:typecast_date",
+                "django/utils/datetime_safe.py:datetime.date"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+                "entity_type": "function",
+                "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+                "diversity_value": "Security and signing module function"
+              },
+              "chain": [
+                "django/core/signing.py:TimestampSigner.timestamp",
+                "django/core/signing.py:TimestampSigner",
+                "django/core/signing.py:TimestampSigner.unsign",
+                "django/http/request.py:HttpRequest.get_signed_cookie",
+                "django/http/request.py:HttpRequest"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+                "entity_type": "function",
+                "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+                "diversity_value": "Migration utility function from a different module"
+              },
+              "chain": [
+                "django/db/migrations/utils.py:get_migration_name_timestamp",
+                "django/utils/datetime_safe.py:date.strftime"
+              ],
+              "chain_length": 2
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "parse_http_date",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+            "diversity_value": "Core utility function in the HTTP module"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date_safe",
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 2,
+          "initial_entity": "parse_http_date",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date_safe",
+            "entity_type": "function",
+            "relevance_reason": "This function wraps `parse_http_date` and handles exceptions, making it important to review and possibly update in conjunction with `parse_http_date`.",
+            "diversity_value": "Error handling wrapper in the same HTTP utility file"
+          }
+        },
+        {
+          "chain": [
+            "django/http/cookie.py:parse_cookie",
+            "django/http/cookie.py",
+            "django/http/response.py"
+          ],
+          "chain_length": 3,
+          "initial_entity": "parse_http_date",
+          "start_entity": {
+            "entity_id": "django/http/cookie.py:parse_cookie",
+            "entity_type": "function",
+            "relevance_reason": "Cookies often contain expiration dates, and this function might interact with `parse_http_date` when processing cookie data.",
+            "diversity_value": "Different file, related to HTTP cookies"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "rfc850-date",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for parsing HTTP dates, including those in RFC 850 format, and is where the two-digit year logic needs to be corrected.",
+            "diversity_value": "Core utility function for HTTP date parsing"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/feedgenerator.py:rfc2822_date",
+            "django/template/defaultfilters.py:time",
+            "django/utils/dateparse.py:parse_time"
+          ],
+          "chain_length": 3,
+          "initial_entity": "rfc850-date",
+          "start_entity": {
+            "entity_id": "django/utils/feedgenerator.py:rfc2822_date",
+            "entity_type": "function",
+            "relevance_reason": "This function formats dates according to RFC 2822, which is related to the date formatting standards mentioned in the problem statement. It might provide useful insights or patterns for implementing the correct two-digit year logic.",
+            "diversity_value": "Different file, related to date formatting standards"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/base.py:Model._perform_date_checks",
+            "django/db/models/base.py:Model.date_error_message",
+            "django/core/exceptions.py:ValidationError"
+          ],
+          "chain_length": 3,
+          "initial_entity": "rfc850-date",
+          "start_entity": {
+            "entity_id": "django/db/models/base.py:Model._perform_date_checks",
+            "entity_type": "function",
+            "relevance_reason": "This function performs date checks and validations on model instances, which could be relevant for ensuring that the corrected date parsing logic is applied correctly in the database layer.",
+            "diversity_value": "Model layer from different file, ensures database consistency"
+          }
+        },
+        {
+          "chain": [
+            "django/db/backends/utils.py:typecast_date",
+            "django/template/defaultfilters.py:date"
+          ],
+          "chain_length": 2,
+          "initial_entity": "rfc850-date",
+          "start_entity": {
+            "entity_id": "django/db/backends/utils.py:typecast_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+            "diversity_value": "Database backend utility, different file, handles date conversion"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "two-digit",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, including those with two-digit years.",
+            "diversity_value": "Core utility function directly related to the issue"
+          }
+        },
+        {
+          "chain": [
+            "django/core/handlers/base.py:BaseHandler.get_response",
+            "django/contrib/gis/geos/mutable_list.py:ListMixin.append"
+          ],
+          "chain_length": 2,
+          "initial_entity": "two-digit",
+          "start_entity": {
+            "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+            "entity_type": "function",
+            "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+            "diversity_value": "Request handling logic from a different module"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "current_year",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly mentioned in the problem statement and is responsible for parsing HTTP dates, which includes handling two-digit years.",
+            "diversity_value": "Core utility function from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/views/generic/dates.py:YearMixin._get_current_year",
+            "django/views/generic/dates.py:YearMixin",
+            "django/views/generic/dates.py:YearMixin.get_year",
+            "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items"
+          ],
+          "chain_length": 4,
+          "initial_entity": "current_year",
+          "start_entity": {
+            "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+            "entity_type": "function",
+            "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+            "diversity_value": "View mixin from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/timesince.py:timesince",
+            "django/utils/datetime_safe.py:datetime",
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 3,
+          "initial_entity": "current_year",
+          "start_entity": {
+            "entity_id": "django/utils/timesince.py:timesince",
+            "entity_type": "function",
+            "relevance_reason": "This function handles time differences and might offer useful logic for interpreting dates relative to the current year.",
+            "diversity_value": "Utility function from different module"
+          }
+        },
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "timestamp",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "The function directly parses HTTP dates and is the primary target for fixing the two-digit year interpretation issue.",
+            "diversity_value": "Core utility function from the HTTP module"
+          }
+        },
+        {
+          "chain": [
+            "django/db/backends/utils.py:typecast_timestamp",
+            "django/db/backends/utils.py:typecast_date",
+            "django/utils/datetime_safe.py:datetime.date"
+          ],
+          "chain_length": 3,
+          "initial_entity": "timestamp",
+          "start_entity": {
+            "entity_id": "django/db/backends/utils.py:typecast_timestamp",
+            "entity_type": "function",
+            "relevance_reason": "This function is used to convert timestamp strings into datetime objects, which might be relevant for understanding how timestamps are handled in Django.",
+            "diversity_value": "Database backend utility function"
+          }
+        },
+        {
+          "chain": [
+            "django/core/signing.py:TimestampSigner.timestamp",
+            "django/core/signing.py:TimestampSigner",
+            "django/core/signing.py:TimestampSigner.unsign",
+            "django/http/request.py:HttpRequest.get_signed_cookie",
+            "django/http/request.py:HttpRequest"
+          ],
+          "chain_length": 5,
+          "initial_entity": "timestamp",
+          "start_entity": {
+            "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+            "entity_type": "function",
+            "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+            "diversity_value": "Security and signing module function"
+          }
+        },
+        {
+          "chain": [
+            "django/db/migrations/utils.py:get_migration_name_timestamp",
+            "django/utils/datetime_safe.py:date.strftime"
+          ],
+          "chain_length": 2,
+          "initial_entity": "timestamp",
+          "start_entity": {
+            "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+            "entity_type": "function",
+            "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+            "diversity_value": "Migration utility function from a different module"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-06T17:45:46.537302",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "django/core/signing.py:TimestampSigner.timestamp",
+            "django/core/signing.py:TimestampSigner",
+            "django/core/signing.py:TimestampSigner.unsign",
+            "django/http/request.py:HttpRequest.get_signed_cookie",
+            "django/http/request.py:HttpRequest"
+          ],
+          "chain_length": 5,
+          "initial_entity": "timestamp",
+          "start_entity": {
+            "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+            "entity_type": "function",
+            "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+            "diversity_value": "Security and signing module function"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "parse_http_date",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+            "diversity_value": "Core utility function in the HTTP module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8680034279823303,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/backends/utils.py:typecast_date",
+            "django/template/defaultfilters.py:date"
+          ],
+          "chain_length": 2,
+          "initial_entity": "rfc850-date",
+          "start_entity": {
+            "entity_id": "django/db/backends/utils.py:typecast_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+            "diversity_value": "Database backend utility, different file, handles date conversion"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.8718708753585815,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/core/handlers/base.py:BaseHandler.get_response",
+            "django/contrib/gis/geos/mutable_list.py:ListMixin.append"
+          ],
+          "chain_length": 2,
+          "initial_entity": "two-digit",
+          "start_entity": {
+            "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+            "entity_type": "function",
+            "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+            "diversity_value": "Request handling logic from a different module"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8735746145248413,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/views/generic/dates.py:YearMixin._get_current_year",
+            "django/views/generic/dates.py:YearMixin",
+            "django/views/generic/dates.py:YearMixin.get_year",
+            "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items"
+          ],
+          "chain_length": 4,
+          "initial_entity": "current_year",
+          "start_entity": {
+            "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+            "entity_type": "function",
+            "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+            "diversity_value": "View mixin from different file"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.8742627501487732,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/db/migrations/utils.py:get_migration_name_timestamp",
+            "django/utils/datetime_safe.py:date.strftime"
+          ],
+          "chain_length": 2,
+          "initial_entity": "timestamp",
+          "start_entity": {
+            "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+            "entity_type": "function",
+            "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+            "diversity_value": "Migration utility function from a different module"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.8838310837745667,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-06T17:45:46.541971",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/core/signing.py:TimestampSigner.timestamp",
+              "django/core/signing.py:TimestampSigner",
+              "django/core/signing.py:TimestampSigner.unsign",
+              "django/http/request.py:HttpRequest.get_signed_cookie",
+              "django/http/request.py:HttpRequest"
+            ],
+            "chain_length": 5,
+            "initial_entity": "timestamp",
+            "start_entity": {
+              "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+              "entity_type": "function",
+              "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+              "diversity_value": "Security and signing module function"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+              "type": "function",
+              "code": "```\n175 | def timestamp(self):\n176 |         return baseconv.base62.encode(int(time.time()))\n```",
+              "start_line": 175,
+              "end_line": 176,
+              "code_omitted": false,
+              "original_code_length": 96
+            },
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner",
+              "type": "class",
+              "code": "```\n173 | class TimestampSigner(Signer):\n174 | \n175 |     def timestamp(self):\n176 |         return baseconv.base62.encode(int(time.time()))\n177 | \n178 |     def sign(self, value):\n179 |         value = '%s%s%s' % (value, self.sep, self.timestamp())\n180 |         return super().sign(value)\n181 | \n182 |     def unsign(self, value, max_age=None):\n183 |         \"\"\"\n184 |         Retrieve original value and check it wasn't signed more\n185 |         than max_age seconds ago.\n186 |         \"\"\"\n187 |         result = super().unsign(value)\n188 |         value, timestamp = result.rsplit(self.sep, 1)\n189 |         timestamp = baseconv.base62.decode(timestamp)\n190 |         if max_age is not None:\n191 |             if isinstance(max_age, datetime.timedelta):\n192 |                 max_age = max_age.total_seconds()\n193 |             # Check timestamp is not older than max_age\n194 |             age = time.time() - timestamp\n195 |             if age > max_age:\n196 |                 raise SignatureExpired(\n197 |                     'Signature age %s > %s seconds' % (age, max_age))\n198 |         return value\n```",
+              "start_line": 173,
+              "end_line": 198,
+              "code_omitted": false,
+              "original_code_length": 1112
+            },
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner.unsign",
+              "type": "function",
+              "code": "```\n182 | def unsign(self, value, max_age=None):\n183 |         \"\"\"\n184 |         Retrieve original value and check it wasn't signed more\n185 |         than max_age seconds ago.\n186 |         \"\"\"\n187 |         result = super().unsign(value)\n188 |         value, timestamp = result.rsplit(self.sep, 1)\n189 |         timestamp = baseconv.base62.decode(timestamp)\n190 |         if max_age is not None:\n191 |             if isinstance(max_age, datetime.timedelta):\n192 |                 max_age = max_age.total_seconds()\n193 |             # Check timestamp is not older than max_age\n194 |             age = time.time() - timestamp\n195 |             if age > max_age:\n196 |                 raise SignatureExpired(\n197 |                     'Signature age %s > %s seconds' % (age, max_age))\n198 |         return value\n```",
+              "start_line": 182,
+              "end_line": 198,
+              "code_omitted": false,
+              "original_code_length": 814
+            },
+            {
+              "entity_id": "django/http/request.py:HttpRequest.get_signed_cookie",
+              "type": "function",
+              "code": "```\n147 | def get_signed_cookie(self, key, default=RAISE_ERROR, salt='', max_age=None):\n148 |         \"\"\"\n149 |         Attempt to return a signed cookie. If the signature fails or the\n150 |         cookie has expired, raise an exception, unless the `default` argument\n151 |         is provided,  in which case return that value.\n152 |         \"\"\"\n153 |         try:\n154 |             cookie_value = self.COOKIES[key]\n155 |         except KeyError:\n156 |             if default is not RAISE_ERROR:\n157 |                 return default\n158 |             else:\n159 |                 raise\n160 |         try:\n161 |             value = signing.get_cookie_signer(salt=key + salt).unsign(\n162 |                 cookie_value, max_age=max_age)\n163 |         except signing.BadSignature:\n164 |             if default is not RAISE_ERROR:\n165 |                 return default\n166 |             else:\n167 |                 raise\n168 |         return value\n```",
+              "start_line": 147,
+              "end_line": 168,
+              "code_omitted": false,
+              "original_code_length": 947
+            },
+            {
+              "entity_id": "django/http/request.py:HttpRequest",
+              "type": "class",
+              "code": "# Code too long (15216 chars) - omitted for brevity",
+              "start_line": 40,
+              "end_line": 370,
+              "code_omitted": true,
+              "original_code_length": 15216
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/utils/http.py:parse_http_date"
+            ],
+            "chain_length": 1,
+            "initial_entity": "parse_http_date",
+            "start_entity": {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+              "diversity_value": "Core utility function in the HTTP module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8680034279823303,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "type": "function",
+              "code": "```\n158 | def parse_http_date(date):\n159 |     \"\"\"\n160 |     Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161 | \n162 |     The three formats allowed by the RFC are accepted, even if only the first\n163 |     one is still in widespread use.\n164 | \n165 |     Return an integer expressed in seconds since the epoch, in UTC.\n166 |     \"\"\"\n167 |     # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168 |     # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169 |     # our own RFC-compliant parsing.\n170 |     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171 |         m = regex.match(date)\n172 |         if m is not None:\n173 |             break\n174 |     else:\n175 |         raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176 |     try:\n177 |         year = int(m.group('year'))\n178 |         if year < 100:\n179 |             if year < 70:\n180 |                 year += 2000\n181 |             else:\n182 |                 year += 1900\n183 |         month = MONTHS.index(m.group('mon').lower()) + 1\n184 |         day = int(m.group('day'))\n185 |         hour = int(m.group('hour'))\n186 |         min = int(m.group('min'))\n187 |         sec = int(m.group('sec'))\n188 |         result = datetime.datetime(year, month, day, hour, min, sec)\n189 |         return calendar.timegm(result.utctimetuple())\n190 |     except Exception as exc:\n191 |         raise ValueError(\"%r is not a valid date\" % date) from exc\n```",
+              "start_line": 158,
+              "end_line": 191,
+              "code_omitted": false,
+              "original_code_length": 1493
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/db/backends/utils.py:typecast_date",
+              "django/template/defaultfilters.py:date"
+            ],
+            "chain_length": 2,
+            "initial_entity": "rfc850-date",
+            "start_entity": {
+              "entity_id": "django/db/backends/utils.py:typecast_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+              "diversity_value": "Database backend utility, different file, handles date conversion"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8718708753585815,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/backends/utils.py:typecast_date",
+              "type": "function",
+              "code": "```\n138 | def typecast_date(s):\n139 |     return datetime.date(*map(int, s.split('-'))) if s else None\n```",
+              "start_line": 138,
+              "end_line": 139,
+              "code_omitted": false,
+              "original_code_length": 106
+            },
+            {
+              "entity_id": "django/template/defaultfilters.py:date",
+              "type": "function",
+              "code": "```\n696 | def date(value, arg=None):\n697 |     \"\"\"Format a date according to the given format.\"\"\"\n698 |     if value in (None, ''):\n699 |         return ''\n700 |     try:\n701 |         return formats.date_format(value, arg)\n702 |     except AttributeError:\n703 |         try:\n704 |             return format(value, arg)\n705 |         except AttributeError:\n706 |             return ''\n```",
+              "start_line": 696,
+              "end_line": 706,
+              "code_omitted": false,
+              "original_code_length": 388
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/core/handlers/base.py:BaseHandler.get_response",
+              "django/contrib/gis/geos/mutable_list.py:ListMixin.append"
+            ],
+            "chain_length": 2,
+            "initial_entity": "two-digit",
+            "start_entity": {
+              "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+              "diversity_value": "Request handling logic from a different module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8735746145248413,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+              "type": "function",
+              "code": "```\n71 | def get_response(self, request):\n72 |         \"\"\"Return an HttpResponse object for the given HttpRequest.\"\"\"\n73 |         # Setup default url resolver for this thread\n74 |         set_urlconf(settings.ROOT_URLCONF)\n75 |         response = self._middleware_chain(request)\n76 |         response._closable_objects.append(request)\n77 |         if response.status_code >= 400:\n78 |             log_response(\n79 |                 '%s: %s', response.reason_phrase, request.path,\n80 |                 response=response,\n81 |                 request=request,\n82 |             )\n83 |         return response\n```",
+              "start_line": 71,
+              "end_line": 83,
+              "code_omitted": false,
+              "original_code_length": 610
+            },
+            {
+              "entity_id": "django/contrib/gis/geos/mutable_list.py:ListMixin.append",
+              "type": "function",
+              "code": "```\n185 | def append(self, val):\n186 |         \"Standard list append method\"\n187 |         self[len(self):] = [val]\n```",
+              "start_line": 185,
+              "end_line": 187,
+              "code_omitted": false,
+              "original_code_length": 119
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/views/generic/dates.py:YearMixin._get_current_year",
+              "django/views/generic/dates.py:YearMixin",
+              "django/views/generic/dates.py:YearMixin.get_year",
+              "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items"
+            ],
+            "chain_length": 4,
+            "initial_entity": "current_year",
+            "start_entity": {
+              "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+              "diversity_value": "View mixin from different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8742627501487732,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+              "type": "function",
+              "code": "```\n63 | def _get_current_year(self, date):\n64 |         \"\"\"Return the start date of the current interval.\"\"\"\n65 |         return date.replace(month=1, day=1)\n```",
+              "start_line": 63,
+              "end_line": 65,
+              "code_omitted": false,
+              "original_code_length": 162
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin",
+              "type": "class",
+              "code": "```\n19 | class YearMixin:\n20 |     \"\"\"Mixin for views manipulating year-based data.\"\"\"\n21 |     year_format = '%Y'\n22 |     year = None\n23 | \n24 |     def get_year_format(self):\n25 |         \"\"\"\n26 |         Get a year format string in strptime syntax to be used to parse the\n27 |         year from url variables.\n28 |         \"\"\"\n29 |         return self.year_format\n30 | \n31 |     def get_year(self):\n32 |         \"\"\"Return the year for which this view should display data.\"\"\"\n33 |         year = self.year\n34 |         if year is None:\n35 |             try:\n36 |                 year = self.kwargs['year']\n37 |             except KeyError:\n38 |                 try:\n39 |                     year = self.request.GET['year']\n40 |                 except KeyError:\n41 |                     raise Http404(_(\"No year specified\"))\n42 |         return year\n43 | \n44 |     def get_next_year(self, date):\n45 |         \"\"\"Get the next valid year.\"\"\"\n46 |         return _get_next_prev(self, date, is_previous=False, period='year')\n47 | \n48 |     def get_previous_year(self, date):\n49 |         \"\"\"Get the previous valid year.\"\"\"\n50 |         return _get_next_prev(self, date, is_previous=True, period='year')\n51 | \n52 |     def _get_next_year(self, date):\n53 |         \"\"\"\n54 |         Return the start date of the next interval.\n55 | \n56 |         The interval is defined by start date <= item date < next start date.\n57 |         \"\"\"\n58 |         try:\n59 |             return date.replace(year=date.year + 1, month=1, day=1)\n60 |         except ValueError:\n61 |             raise Http404(_(\"Date out of range\"))\n62 | \n63 |     def _get_current_year(self, date):\n64 |         \"\"\"Return the start date of the current interval.\"\"\"\n65 |         return date.replace(month=1, day=1)\n```",
+              "start_line": 19,
+              "end_line": 65,
+              "code_omitted": false,
+              "original_code_length": 1774
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin.get_year",
+              "type": "function",
+              "code": "```\n31 | def get_year(self):\n32 |         \"\"\"Return the year for which this view should display data.\"\"\"\n33 |         year = self.year\n34 |         if year is None:\n35 |             try:\n36 |                 year = self.kwargs['year']\n37 |             except KeyError:\n38 |                 try:\n39 |                     year = self.request.GET['year']\n40 |                 except KeyError:\n41 |                     raise Http404(_(\"No year specified\"))\n42 |         return year\n```",
+              "start_line": 31,
+              "end_line": 42,
+              "code_omitted": false,
+              "original_code_length": 481
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items",
+              "type": "function",
+              "code": "```\n402 | def get_dated_items(self):\n403 |         \"\"\"Return (date_list, items, extra_context) for this request.\"\"\"\n404 |         year = self.get_year()\n405 | \n406 |         date_field = self.get_date_field()\n407 |         date = _date_from_string(year, self.get_year_format())\n408 | \n409 |         since = self._make_date_lookup_arg(date)\n410 |         until = self._make_date_lookup_arg(self._get_next_year(date))\n411 |         lookup_kwargs = {\n412 |             '%s__gte' % date_field: since,\n413 |             '%s__lt' % date_field: until,\n414 |         }\n415 | \n416 |         qs = self.get_dated_queryset(**lookup_kwargs)\n417 |         date_list = self.get_date_list(qs)\n418 | \n419 |         if not self.get_make_object_list():\n420 |             # We need this to be a queryset since parent classes introspect it\n421 |             # to find information about the model.\n422 |             qs = qs.none()\n423 | \n424 |         return (date_list, qs, {\n425 |             'year': date,\n426 |             'next_year': self.get_next_year(date),\n427 |             'previous_year': self.get_previous_year(date),\n428 |         })\n```",
+              "start_line": 402,
+              "end_line": 428,
+              "code_omitted": false,
+              "original_code_length": 1129
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "django/utils/datetime_safe.py:date.strftime"
+            ],
+            "chain_length": 2,
+            "initial_entity": "timestamp",
+            "start_entity": {
+              "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "entity_type": "function",
+              "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+              "diversity_value": "Migration utility function from a different module"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8838310837745667,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "type": "function",
+              "code": "```\n16 | def get_migration_name_timestamp():\n17 |     return datetime.datetime.now().strftime(\"%Y%m%d_%H%M\")\n```",
+              "start_line": 16,
+              "end_line": 17,
+              "code_omitted": false,
+              "original_code_length": 112
+            },
+            {
+              "entity_id": "django/utils/datetime_safe.py:date.strftime",
+              "type": "function",
+              "code": "```\n18 | def strftime(self, fmt):\n19 |         return strftime(self, fmt)\n```",
+              "start_line": 18,
+              "end_line": 19,
+              "code_omitted": false,
+              "original_code_length": 77
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-06T17:46:57.059040",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_2",
+        "winning_chain": {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/utils/http.py:parse_http_date"
+            ],
+            "chain_length": 1,
+            "initial_entity": "parse_http_date",
+            "start_entity": {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+              "diversity_value": "Core utility function in the HTTP module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8680034279823303,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "type": "function",
+              "code": "```\n158 | def parse_http_date(date):\n159 |     \"\"\"\n160 |     Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161 | \n162 |     The three formats allowed by the RFC are accepted, even if only the first\n163 |     one is still in widespread use.\n164 | \n165 |     Return an integer expressed in seconds since the epoch, in UTC.\n166 |     \"\"\"\n167 |     # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168 |     # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169 |     # our own RFC-compliant parsing.\n170 |     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171 |         m = regex.match(date)\n172 |         if m is not None:\n173 |             break\n174 |     else:\n175 |         raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176 |     try:\n177 |         year = int(m.group('year'))\n178 |         if year < 100:\n179 |             if year < 70:\n180 |                 year += 2000\n181 |             else:\n182 |                 year += 1900\n183 |         month = MONTHS.index(m.group('mon').lower()) + 1\n184 |         day = int(m.group('day'))\n185 |         hour = int(m.group('hour'))\n186 |         min = int(m.group('min'))\n187 |         sec = int(m.group('sec'))\n188 |         result = datetime.datetime(year, month, day, hour, min, sec)\n189 |         return calendar.timegm(result.utctimetuple())\n190 |     except Exception as exc:\n191 |         raise ValueError(\"%r is not a valid date\" % date) from exc\n```",
+              "start_line": 158,
+              "end_line": 191,
+              "code_omitted": false,
+              "original_code_length": 1493
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 95.0,
+        "vote_distribution": {
+          "chain_2": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is explicitly mentioned in the issue description. This function is responsible for parsing HTTP dates, including those with two-digit years, and the current implementation incorrectly handles the year conversion. Modifying this function to correctly interpret two-digit years according to the RFC 7231 specification would directly resolve the issue.",
+            "modification_strategy": "Update the year conversion logic in the `parse_http_date` function to interpret two-digit years based on the current year, ensuring that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamp generation, which is unrelated to the HTTP date parsing issue. Modifying this chain would not address the problem.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the issue is described. It is the best target for modification.",
+              "chain_3": "This chain involves date formatting and type casting, which are not directly related to the HTTP date parsing issue. Changes here would not fix the problem.",
+              "chain_4": "This chain is related to the request handling and middleware processing, which does not involve HTTP date parsing. Modifying this chain would not address the issue.",
+              "chain_5": "This chain deals with generic date views and year-based data manipulation, which is not directly related to HTTP date parsing. Changes here would not resolve the problem.",
+              "chain_6": "This chain involves migration name timestamps and safe date formatting, which are not relevant to the HTTP date parsing issue. Modifying this chain would not help."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates and handling the two-digit year logic. This function is where the issue of incorrect year interpretation is explicitly mentioned and needs to be fixed. Modifying this function to correctly interpret two-digit years based on the current year will directly resolve the problem as per RFC 7231.",
+            "modification_strategy": "Update the two-digit year logic in `parse_http_date` to correctly interpret years more than 50 years in the future as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamping, which is not directly related to parsing HTTP dates. Modifying this chain would not address the issue.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year logic is implemented. Fixing this function will directly resolve the issue.",
+              "chain_3": "This chain involves date formatting and typecasting, which are not directly related to the HTTP date parsing issue. Modifying this chain would not fix the problem.",
+              "chain_4": "This chain is about handling HTTP responses and middleware, which is not relevant to the HTTP date parsing issue. Modifying this chain would not address the problem.",
+              "chain_5": "This chain deals with generic date views and year-based data manipulation, which is not directly related to HTTP date parsing. Modifying this chain would not fix the issue.",
+              "chain_6": "This chain involves migration timestamps and safe date formatting, which are not directly related to the HTTP date parsing issue. Modifying this chain would not address the problem."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates. The issue described pertains to the incorrect handling of two-digit years in this function. Modifying this function to correctly interpret two-digit years based on the current year would directly resolve the problem as per RFC 7231 and RFC 2822 guidelines.",
+            "modification_strategy": "Update the two-digit year interpretation logic to compare against the current year and adjust accordingly to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamp generation, which is unrelated to the HTTP date parsing issue. Modifying this chain would not address the core problem.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year interpretation needs to be fixed. It is the most direct and appropriate place to make the necessary changes.",
+              "chain_3": "This chain involves date formatting and type casting, which are not directly related to the HTTP date parsing issue. Changes here would not resolve the problem.",
+              "chain_4": "This chain deals with middleware and response handling, which are not relevant to the HTTP date parsing issue. Modifying this chain would not address the core problem.",
+              "chain_5": "This chain is related to generic date views and year manipulation, which do not involve HTTP date parsing. Changes here would not resolve the issue.",
+              "chain_6": "This chain involves migration naming and safe date formatting, which are not related to the HTTP date parsing issue. Modifying this chain would not address the core problem."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates. The issue described is specifically about the incorrect handling of two-digit years in this function. Modifying the logic in this function to correctly interpret two-digit years based on the current year would directly resolve the problem.",
+            "modification_strategy": "Update the two-digit year logic to compare against the current year and adjust accordingly, ensuring that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamp encoding/decoding. While it involves date and time, it is not directly related to the HTTP date parsing issue.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year issue needs to be fixed. It is the most relevant and direct modification target.",
+              "chain_3": "This chain involves database date typecasting and template date formatting. These functionalities are not related to HTTP date parsing and would not address the issue.",
+              "chain_4": "This chain deals with middleware and response handling. It is not related to the HTTP date parsing logic and would not help resolve the issue.",
+              "chain_5": "This chain involves generic date views and year-based data manipulation. While it handles dates, it is not specific to HTTP date parsing and would not directly fix the issue.",
+              "chain_6": "This chain involves migration name timestamps and safe date formatting. It is not related to HTTP date parsing and would not address the issue."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates. The issue described pertains to the incorrect handling of two-digit years in HTTP dates, specifically in the `parse_http_date` function. Modifying this function to correctly interpret two-digit years based on the current year would directly address the problem as per RFC 7231.",
+            "modification_strategy": "Update the logic in `parse_http_date` to correctly interpret two-digit years by comparing them to the current year and adjusting accordingly.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamping values, which is unrelated to the HTTP date parsing issue. Modifying this chain would not address the problem.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year issue needs to be fixed. It is the most direct and appropriate place to implement the necessary changes.",
+              "chain_3": "This chain involves database type casting and date formatting in templates, which are not directly related to the HTTP date parsing issue. Changes here would not resolve the problem.",
+              "chain_4": "This chain includes middleware and generic view mixins, which are not involved in HTTP date parsing. Modifying this chain would not address the issue.",
+              "chain_5": "This chain deals with generic date views and year-based data manipulation, which is not relevant to the HTTP date parsing issue. Changes here would not resolve the problem.",
+              "chain_6": "This chain involves migration name timestamps and safe date formatting, which are not related to the HTTP date parsing issue. Modifying this chain would not address the problem."
+            },
+            "agent_id": 5
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is explicitly mentioned in the issue description. This function is responsible for parsing HTTP dates, including those with two-digit years, and the current implementation incorrectly handles the year conversion. Modifying this function to correctly interpret two-digit years according to the RFC 7231 specification would directly resolve the issue.",
+            "modification_strategy": "Update the year conversion logic in the `parse_http_date` function to interpret two-digit years based on the current year, ensuring that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamp generation, which is unrelated to the HTTP date parsing issue. Modifying this chain would not address the problem.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the issue is described. It is the best target for modification.",
+              "chain_3": "This chain involves date formatting and type casting, which are not directly related to the HTTP date parsing issue. Changes here would not fix the problem.",
+              "chain_4": "This chain is related to the request handling and middleware processing, which does not involve HTTP date parsing. Modifying this chain would not address the issue.",
+              "chain_5": "This chain deals with generic date views and year-based data manipulation, which is not directly related to HTTP date parsing. Changes here would not resolve the problem.",
+              "chain_6": "This chain involves migration name timestamps and safe date formatting, which are not relevant to the HTTP date parsing issue. Modifying this chain would not help."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates and handling the two-digit year logic. This function is where the issue of incorrect year interpretation is explicitly mentioned and needs to be fixed. Modifying this function to correctly interpret two-digit years based on the current year will directly resolve the problem as per RFC 7231.",
+            "modification_strategy": "Update the two-digit year logic in `parse_http_date` to correctly interpret years more than 50 years in the future as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamping, which is not directly related to parsing HTTP dates. Modifying this chain would not address the issue.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year logic is implemented. Fixing this function will directly resolve the issue.",
+              "chain_3": "This chain involves date formatting and typecasting, which are not directly related to the HTTP date parsing issue. Modifying this chain would not fix the problem.",
+              "chain_4": "This chain is about handling HTTP responses and middleware, which is not relevant to the HTTP date parsing issue. Modifying this chain would not address the problem.",
+              "chain_5": "This chain deals with generic date views and year-based data manipulation, which is not directly related to HTTP date parsing. Modifying this chain would not fix the issue.",
+              "chain_6": "This chain involves migration timestamps and safe date formatting, which are not directly related to the HTTP date parsing issue. Modifying this chain would not address the problem."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates. The issue described pertains to the incorrect handling of two-digit years in this function. Modifying this function to correctly interpret two-digit years based on the current year would directly resolve the problem as per RFC 7231 and RFC 2822 guidelines.",
+            "modification_strategy": "Update the two-digit year interpretation logic to compare against the current year and adjust accordingly to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamp generation, which is unrelated to the HTTP date parsing issue. Modifying this chain would not address the core problem.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year interpretation needs to be fixed. It is the most direct and appropriate place to make the necessary changes.",
+              "chain_3": "This chain involves date formatting and type casting, which are not directly related to the HTTP date parsing issue. Changes here would not resolve the problem.",
+              "chain_4": "This chain deals with middleware and response handling, which are not relevant to the HTTP date parsing issue. Modifying this chain would not address the core problem.",
+              "chain_5": "This chain is related to generic date views and year manipulation, which do not involve HTTP date parsing. Changes here would not resolve the issue.",
+              "chain_6": "This chain involves migration naming and safe date formatting, which are not related to the HTTP date parsing issue. Modifying this chain would not address the core problem."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates. The issue described is specifically about the incorrect handling of two-digit years in this function. Modifying the logic in this function to correctly interpret two-digit years based on the current year would directly resolve the problem.",
+            "modification_strategy": "Update the two-digit year logic to compare against the current year and adjust accordingly, ensuring that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamp encoding/decoding. While it involves date and time, it is not directly related to the HTTP date parsing issue.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year issue needs to be fixed. It is the most relevant and direct modification target.",
+              "chain_3": "This chain involves database date typecasting and template date formatting. These functionalities are not related to HTTP date parsing and would not address the issue.",
+              "chain_4": "This chain deals with middleware and response handling. It is not related to the HTTP date parsing logic and would not help resolve the issue.",
+              "chain_5": "This chain involves generic date views and year-based data manipulation. While it handles dates, it is not specific to HTTP date parsing and would not directly fix the issue.",
+              "chain_6": "This chain involves migration name timestamps and safe date formatting. It is not related to HTTP date parsing and would not address the issue."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 95,
+            "reasoning": "Chain 2 contains the `parse_http_date` function, which is directly responsible for parsing HTTP dates. The issue described pertains to the incorrect handling of two-digit years in HTTP dates, specifically in the `parse_http_date` function. Modifying this function to correctly interpret two-digit years based on the current year would directly address the problem as per RFC 7231.",
+            "modification_strategy": "Update the logic in `parse_http_date` to correctly interpret two-digit years by comparing them to the current year and adjusting accordingly.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with signing and timestamping values, which is unrelated to the HTTP date parsing issue. Modifying this chain would not address the problem.",
+              "chain_2": "This chain contains the `parse_http_date` function, which is the exact location where the two-digit year issue needs to be fixed. It is the most direct and appropriate place to implement the necessary changes.",
+              "chain_3": "This chain involves database type casting and date formatting in templates, which are not directly related to the HTTP date parsing issue. Changes here would not resolve the problem.",
+              "chain_4": "This chain includes middleware and generic view mixins, which are not involved in HTTP date parsing. Modifying this chain would not address the issue.",
+              "chain_5": "This chain deals with generic date views and year-based data manipulation, which is not relevant to the HTTP date parsing issue. Changes here would not resolve the problem.",
+              "chain_6": "This chain involves migration name timestamps and safe date formatting, which are not related to the HTTP date parsing issue. Modifying this chain would not address the problem."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/core/signing.py:TimestampSigner.timestamp",
+              "django/core/signing.py:TimestampSigner",
+              "django/core/signing.py:TimestampSigner.unsign",
+              "django/http/request.py:HttpRequest.get_signed_cookie",
+              "django/http/request.py:HttpRequest"
+            ],
+            "chain_length": 5,
+            "initial_entity": "timestamp",
+            "start_entity": {
+              "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+              "entity_type": "function",
+              "relevance_reason": "This function generates timestamps, which could be useful for testing the corrected parse_http_date function.",
+              "diversity_value": "Security and signing module function"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner.timestamp",
+              "type": "function",
+              "code": "```\n175 | def timestamp(self):\n176 |         return baseconv.base62.encode(int(time.time()))\n```",
+              "start_line": 175,
+              "end_line": 176,
+              "code_omitted": false,
+              "original_code_length": 96
+            },
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner",
+              "type": "class",
+              "code": "```\n173 | class TimestampSigner(Signer):\n174 | \n175 |     def timestamp(self):\n176 |         return baseconv.base62.encode(int(time.time()))\n177 | \n178 |     def sign(self, value):\n179 |         value = '%s%s%s' % (value, self.sep, self.timestamp())\n180 |         return super().sign(value)\n181 | \n182 |     def unsign(self, value, max_age=None):\n183 |         \"\"\"\n184 |         Retrieve original value and check it wasn't signed more\n185 |         than max_age seconds ago.\n186 |         \"\"\"\n187 |         result = super().unsign(value)\n188 |         value, timestamp = result.rsplit(self.sep, 1)\n189 |         timestamp = baseconv.base62.decode(timestamp)\n190 |         if max_age is not None:\n191 |             if isinstance(max_age, datetime.timedelta):\n192 |                 max_age = max_age.total_seconds()\n193 |             # Check timestamp is not older than max_age\n194 |             age = time.time() - timestamp\n195 |             if age > max_age:\n196 |                 raise SignatureExpired(\n197 |                     'Signature age %s > %s seconds' % (age, max_age))\n198 |         return value\n```",
+              "start_line": 173,
+              "end_line": 198,
+              "code_omitted": false,
+              "original_code_length": 1112
+            },
+            {
+              "entity_id": "django/core/signing.py:TimestampSigner.unsign",
+              "type": "function",
+              "code": "```\n182 | def unsign(self, value, max_age=None):\n183 |         \"\"\"\n184 |         Retrieve original value and check it wasn't signed more\n185 |         than max_age seconds ago.\n186 |         \"\"\"\n187 |         result = super().unsign(value)\n188 |         value, timestamp = result.rsplit(self.sep, 1)\n189 |         timestamp = baseconv.base62.decode(timestamp)\n190 |         if max_age is not None:\n191 |             if isinstance(max_age, datetime.timedelta):\n192 |                 max_age = max_age.total_seconds()\n193 |             # Check timestamp is not older than max_age\n194 |             age = time.time() - timestamp\n195 |             if age > max_age:\n196 |                 raise SignatureExpired(\n197 |                     'Signature age %s > %s seconds' % (age, max_age))\n198 |         return value\n```",
+              "start_line": 182,
+              "end_line": 198,
+              "code_omitted": false,
+              "original_code_length": 814
+            },
+            {
+              "entity_id": "django/http/request.py:HttpRequest.get_signed_cookie",
+              "type": "function",
+              "code": "```\n147 | def get_signed_cookie(self, key, default=RAISE_ERROR, salt='', max_age=None):\n148 |         \"\"\"\n149 |         Attempt to return a signed cookie. If the signature fails or the\n150 |         cookie has expired, raise an exception, unless the `default` argument\n151 |         is provided,  in which case return that value.\n152 |         \"\"\"\n153 |         try:\n154 |             cookie_value = self.COOKIES[key]\n155 |         except KeyError:\n156 |             if default is not RAISE_ERROR:\n157 |                 return default\n158 |             else:\n159 |                 raise\n160 |         try:\n161 |             value = signing.get_cookie_signer(salt=key + salt).unsign(\n162 |                 cookie_value, max_age=max_age)\n163 |         except signing.BadSignature:\n164 |             if default is not RAISE_ERROR:\n165 |                 return default\n166 |             else:\n167 |                 raise\n168 |         return value\n```",
+              "start_line": 147,
+              "end_line": 168,
+              "code_omitted": false,
+              "original_code_length": 947
+            },
+            {
+              "entity_id": "django/http/request.py:HttpRequest",
+              "type": "class",
+              "code": "# Code too long (15216 chars) - omitted for brevity",
+              "start_line": 40,
+              "end_line": 370,
+              "code_omitted": true,
+              "original_code_length": 15216
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/utils/http.py:parse_http_date"
+            ],
+            "chain_length": 1,
+            "initial_entity": "parse_http_date",
+            "start_entity": {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+              "diversity_value": "Core utility function in the HTTP module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8680034279823303,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/utils/http.py:parse_http_date",
+              "type": "function",
+              "code": "```\n158 | def parse_http_date(date):\n159 |     \"\"\"\n160 |     Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161 | \n162 |     The three formats allowed by the RFC are accepted, even if only the first\n163 |     one is still in widespread use.\n164 | \n165 |     Return an integer expressed in seconds since the epoch, in UTC.\n166 |     \"\"\"\n167 |     # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168 |     # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169 |     # our own RFC-compliant parsing.\n170 |     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171 |         m = regex.match(date)\n172 |         if m is not None:\n173 |             break\n174 |     else:\n175 |         raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176 |     try:\n177 |         year = int(m.group('year'))\n178 |         if year < 100:\n179 |             if year < 70:\n180 |                 year += 2000\n181 |             else:\n182 |                 year += 1900\n183 |         month = MONTHS.index(m.group('mon').lower()) + 1\n184 |         day = int(m.group('day'))\n185 |         hour = int(m.group('hour'))\n186 |         min = int(m.group('min'))\n187 |         sec = int(m.group('sec'))\n188 |         result = datetime.datetime(year, month, day, hour, min, sec)\n189 |         return calendar.timegm(result.utctimetuple())\n190 |     except Exception as exc:\n191 |         raise ValueError(\"%r is not a valid date\" % date) from exc\n```",
+              "start_line": 158,
+              "end_line": 191,
+              "code_omitted": false,
+              "original_code_length": 1493
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/db/backends/utils.py:typecast_date",
+              "django/template/defaultfilters.py:date"
+            ],
+            "chain_length": 2,
+            "initial_entity": "rfc850-date",
+            "start_entity": {
+              "entity_id": "django/db/backends/utils.py:typecast_date",
+              "entity_type": "function",
+              "relevance_reason": "This function is used to typecast date strings into Python `datetime.date` objects, which might be involved in the process of handling and storing dates parsed from HTTP headers.",
+              "diversity_value": "Database backend utility, different file, handles date conversion"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8718708753585815,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/backends/utils.py:typecast_date",
+              "type": "function",
+              "code": "```\n138 | def typecast_date(s):\n139 |     return datetime.date(*map(int, s.split('-'))) if s else None\n```",
+              "start_line": 138,
+              "end_line": 139,
+              "code_omitted": false,
+              "original_code_length": 106
+            },
+            {
+              "entity_id": "django/template/defaultfilters.py:date",
+              "type": "function",
+              "code": "```\n696 | def date(value, arg=None):\n697 |     \"\"\"Format a date according to the given format.\"\"\"\n698 |     if value in (None, ''):\n699 |         return ''\n700 |     try:\n701 |         return formats.date_format(value, arg)\n702 |     except AttributeError:\n703 |         try:\n704 |             return format(value, arg)\n705 |         except AttributeError:\n706 |             return ''\n```",
+              "start_line": 696,
+              "end_line": 706,
+              "code_omitted": false,
+              "original_code_length": 388
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/core/handlers/base.py:BaseHandler.get_response",
+              "django/contrib/gis/geos/mutable_list.py:ListMixin.append"
+            ],
+            "chain_length": 2,
+            "initial_entity": "two-digit",
+            "start_entity": {
+              "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+              "entity_type": "function",
+              "relevance_reason": "This function processes the request and response cycle, which might involve handling HTTP dates.",
+              "diversity_value": "Request handling logic from a different module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8735746145248413,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/core/handlers/base.py:BaseHandler.get_response",
+              "type": "function",
+              "code": "```\n71 | def get_response(self, request):\n72 |         \"\"\"Return an HttpResponse object for the given HttpRequest.\"\"\"\n73 |         # Setup default url resolver for this thread\n74 |         set_urlconf(settings.ROOT_URLCONF)\n75 |         response = self._middleware_chain(request)\n76 |         response._closable_objects.append(request)\n77 |         if response.status_code >= 400:\n78 |             log_response(\n79 |                 '%s: %s', response.reason_phrase, request.path,\n80 |                 response=response,\n81 |                 request=request,\n82 |             )\n83 |         return response\n```",
+              "start_line": 71,
+              "end_line": 83,
+              "code_omitted": false,
+              "original_code_length": 610
+            },
+            {
+              "entity_id": "django/contrib/gis/geos/mutable_list.py:ListMixin.append",
+              "type": "function",
+              "code": "```\n185 | def append(self, val):\n186 |         \"Standard list append method\"\n187 |         self[len(self):] = [val]\n```",
+              "start_line": 185,
+              "end_line": 187,
+              "code_omitted": false,
+              "original_code_length": 119
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/views/generic/dates.py:YearMixin._get_current_year",
+              "django/views/generic/dates.py:YearMixin",
+              "django/views/generic/dates.py:YearMixin.get_year",
+              "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items"
+            ],
+            "chain_length": 4,
+            "initial_entity": "current_year",
+            "start_entity": {
+              "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+              "entity_type": "function",
+              "relevance_reason": "This function deals with year-related operations and might provide insights or reusable logic for handling current years.",
+              "diversity_value": "View mixin from different file"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8742627501487732,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin._get_current_year",
+              "type": "function",
+              "code": "```\n63 | def _get_current_year(self, date):\n64 |         \"\"\"Return the start date of the current interval.\"\"\"\n65 |         return date.replace(month=1, day=1)\n```",
+              "start_line": 63,
+              "end_line": 65,
+              "code_omitted": false,
+              "original_code_length": 162
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin",
+              "type": "class",
+              "code": "```\n19 | class YearMixin:\n20 |     \"\"\"Mixin for views manipulating year-based data.\"\"\"\n21 |     year_format = '%Y'\n22 |     year = None\n23 | \n24 |     def get_year_format(self):\n25 |         \"\"\"\n26 |         Get a year format string in strptime syntax to be used to parse the\n27 |         year from url variables.\n28 |         \"\"\"\n29 |         return self.year_format\n30 | \n31 |     def get_year(self):\n32 |         \"\"\"Return the year for which this view should display data.\"\"\"\n33 |         year = self.year\n34 |         if year is None:\n35 |             try:\n36 |                 year = self.kwargs['year']\n37 |             except KeyError:\n38 |                 try:\n39 |                     year = self.request.GET['year']\n40 |                 except KeyError:\n41 |                     raise Http404(_(\"No year specified\"))\n42 |         return year\n43 | \n44 |     def get_next_year(self, date):\n45 |         \"\"\"Get the next valid year.\"\"\"\n46 |         return _get_next_prev(self, date, is_previous=False, period='year')\n47 | \n48 |     def get_previous_year(self, date):\n49 |         \"\"\"Get the previous valid year.\"\"\"\n50 |         return _get_next_prev(self, date, is_previous=True, period='year')\n51 | \n52 |     def _get_next_year(self, date):\n53 |         \"\"\"\n54 |         Return the start date of the next interval.\n55 | \n56 |         The interval is defined by start date <= item date < next start date.\n57 |         \"\"\"\n58 |         try:\n59 |             return date.replace(year=date.year + 1, month=1, day=1)\n60 |         except ValueError:\n61 |             raise Http404(_(\"Date out of range\"))\n62 | \n63 |     def _get_current_year(self, date):\n64 |         \"\"\"Return the start date of the current interval.\"\"\"\n65 |         return date.replace(month=1, day=1)\n```",
+              "start_line": 19,
+              "end_line": 65,
+              "code_omitted": false,
+              "original_code_length": 1774
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:YearMixin.get_year",
+              "type": "function",
+              "code": "```\n31 | def get_year(self):\n32 |         \"\"\"Return the year for which this view should display data.\"\"\"\n33 |         year = self.year\n34 |         if year is None:\n35 |             try:\n36 |                 year = self.kwargs['year']\n37 |             except KeyError:\n38 |                 try:\n39 |                     year = self.request.GET['year']\n40 |                 except KeyError:\n41 |                     raise Http404(_(\"No year specified\"))\n42 |         return year\n```",
+              "start_line": 31,
+              "end_line": 42,
+              "code_omitted": false,
+              "original_code_length": 481
+            },
+            {
+              "entity_id": "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items",
+              "type": "function",
+              "code": "```\n402 | def get_dated_items(self):\n403 |         \"\"\"Return (date_list, items, extra_context) for this request.\"\"\"\n404 |         year = self.get_year()\n405 | \n406 |         date_field = self.get_date_field()\n407 |         date = _date_from_string(year, self.get_year_format())\n408 | \n409 |         since = self._make_date_lookup_arg(date)\n410 |         until = self._make_date_lookup_arg(self._get_next_year(date))\n411 |         lookup_kwargs = {\n412 |             '%s__gte' % date_field: since,\n413 |             '%s__lt' % date_field: until,\n414 |         }\n415 | \n416 |         qs = self.get_dated_queryset(**lookup_kwargs)\n417 |         date_list = self.get_date_list(qs)\n418 | \n419 |         if not self.get_make_object_list():\n420 |             # We need this to be a queryset since parent classes introspect it\n421 |             # to find information about the model.\n422 |             qs = qs.none()\n423 | \n424 |         return (date_list, qs, {\n425 |             'year': date,\n426 |             'next_year': self.get_next_year(date),\n427 |             'previous_year': self.get_previous_year(date),\n428 |         })\n```",
+              "start_line": 402,
+              "end_line": 428,
+              "code_omitted": false,
+              "original_code_length": 1129
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "django/utils/datetime_safe.py:date.strftime"
+            ],
+            "chain_length": 2,
+            "initial_entity": "timestamp",
+            "start_entity": {
+              "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "entity_type": "function",
+              "relevance_reason": "Generates timestamps for migration names, which might provide additional context on how timestamps are formatted and used in Django.",
+              "diversity_value": "Migration utility function from a different module"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8838310837745667,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/db/migrations/utils.py:get_migration_name_timestamp",
+              "type": "function",
+              "code": "```\n16 | def get_migration_name_timestamp():\n17 |     return datetime.datetime.now().strftime(\"%Y%m%d_%H%M\")\n```",
+              "start_line": 16,
+              "end_line": 17,
+              "code_omitted": false,
+              "original_code_length": 112
+            },
+            {
+              "entity_id": "django/utils/datetime_safe.py:date.strftime",
+              "type": "function",
+              "code": "```\n18 | def strftime(self, fmt):\n19 |         return strftime(self, fmt)\n```",
+              "start_line": 18,
+              "end_line": 19,
+              "code_omitted": false,
+              "original_code_length": 77
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_2",
+        "original_chain_info": {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "parse_http_date",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+            "diversity_value": "Core utility function in the HTTP module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8680034279823303,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "type": "function",
+            "code": "```\n158 | def parse_http_date(date):\n159 |     \"\"\"\n160 |     Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161 | \n162 |     The three formats allowed by the RFC are accepted, even if only the first\n163 |     one is still in widespread use.\n164 | \n165 |     Return an integer expressed in seconds since the epoch, in UTC.\n166 |     \"\"\"\n167 |     # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168 |     # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169 |     # our own RFC-compliant parsing.\n170 |     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171 |         m = regex.match(date)\n172 |         if m is not None:\n173 |             break\n174 |     else:\n175 |         raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176 |     try:\n177 |         year = int(m.group('year'))\n178 |         if year < 100:\n179 |             if year < 70:\n180 |                 year += 2000\n181 |             else:\n182 |                 year += 1900\n183 |         month = MONTHS.index(m.group('mon').lower()) + 1\n184 |         day = int(m.group('day'))\n185 |         hour = int(m.group('hour'))\n186 |         min = int(m.group('min'))\n187 |         sec = int(m.group('sec'))\n188 |         result = datetime.datetime(year, month, day, hour, min, sec)\n189 |         return calendar.timegm(result.utctimetuple())\n190 |     except Exception as exc:\n191 |         raise ValueError(\"%r is not a valid date\" % date) from exc\n```",
+            "start_line": 158,
+            "end_line": 191,
+            "code_omitted": false,
+            "original_code_length": 1493
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 2,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_2"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-06T17:47:37.985214",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "location_description": "Lines 178-182: Two-digit year interpretation logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current logic incorrectly assumes that years 0-69 belong to the 2000s and 70-99 belong to the 1900s. According to RFC 7231, the interpretation should be based on the current year to determine whether a two-digit year belongs to the past or the future.",
+                "suggested_approach": "1. Import the `datetime` module at the top of the file if it is not already imported.\n2. Modify the logic starting at line 178 to correctly interpret two-digit years based on the current year:\n```python\nimport datetime\n\n# ... existing code ...\n\n    try:\n        year = int(m.group('year'))\n        if year < 100:\n            current_year = datetime.datetime.now().year\n            current_century = current_year // 100 * 100\n            if year > (current_year % 100) + 50:\n                year += current_century - 100\n            else:\n                year += current_century\n        month = MONTHS.index(m.group('mon').lower()) + 1\n        day = int(m.group('day'))\n        hour = int(m.group('hour'))\n        min = int(m.group('min'))\n        sec = int(m.group('sec'))\n        result = datetime.datetime(year, month, day, hour, min, sec)\n        return calendar.timegm(result.utctimetuple())\n    except Exception as exc:\n        raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n3. Ensure that the `MONTHS` list is defined and contains the lowercase names of months as strings (e.g., ['jan', 'feb', 'mar', ...]).\n4. Test the function with various two-digit and four-digit year inputs to ensure it behaves as expected according to the RFC 7231 standard.\n5. Add unit tests to cover edge cases such as years exactly 50 years in the future or past, and years that are ambiguous without the current year context."
+              }
+            ],
+            "overall_strategy": "Update the two-digit year interpretation logic in the `parse_http_date` function to comply with RFC 7231. This involves calculating the current century and adjusting the year based on the current year to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "confidence": 95
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_2):**\n\n**Entity 1: django/utils/http.py:parse_http_date**\nType: function\nLines: 158-191\nCode:\n```\n```\n158 | def parse_http_date(date):\n159 |     \"\"\"\n160 |     Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161 | \n162 |     The three formats allowed by the RFC are accepted, even if only the first\n163 |     one is still in widespread use.\n164 | \n165 |     Return an integer expressed in seconds since the epoch, in UTC.\n166 |     \"\"\"\n167 |     # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168 |     # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169 |     # our own RFC-compliant parsing.\n170 |     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171 |         m = regex.match(date)\n172 |         if m is not None:\n173 |             break\n174 |     else:\n175 |         raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176 |     try:\n177 |         year = int(m.group('year'))\n178 |         if year < 100:\n179 |             if year < 70:\n180 |                 year += 2000\n181 |             else:\n182 |                 year += 1900\n183 |         month = MONTHS.index(m.group('mon').lower()) + 1\n184 |         day = int(m.group('day'))\n185 |         hour = int(m.group('hour'))\n186 |         min = int(m.group('min'))\n187 |         sec = int(m.group('sec'))\n188 |         result = datetime.datetime(year, month, day, hour, min, sec)\n189 |         return calendar.timegm(result.utctimetuple())\n190 |     except Exception as exc:\n191 |         raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n```\n\n",
+      "num_agents": 1
+    }
+  },
+  "stage_7_round2_analysis": {
+    "timestamp": "2026-10-06T17:47:37.991195",
+    "data": {
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "location_description": "Lines 178-182: Two-digit year interpretation logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current logic incorrectly assumes that years 0-69 belong to the 2000s and 70-99 belong to the 1900s. According to RFC 7231, the interpretation should be based on the current year to determine whether a two-digit year belongs to the past or the future.",
+                "suggested_approach": "1. Import the `datetime` module at the top of the file if it is not already imported.\n2. Modify the logic starting at line 178 to correctly interpret two-digit years based on the current year:\n```python\nimport datetime\n\n# ... existing code ...\n\n    try:\n        year = int(m.group('year'))\n        if year < 100:\n            current_year = datetime.datetime.now().year\n            current_century = current_year // 100 * 100\n            if year > (current_year % 100) + 50:\n                year += current_century - 100\n            else:\n                year += current_century\n        month = MONTHS.index(m.group('mon').lower()) + 1\n        day = int(m.group('day'))\n        hour = int(m.group('hour'))\n        min = int(m.group('min'))\n        sec = int(m.group('sec'))\n        result = datetime.datetime(year, month, day, hour, min, sec)\n        return calendar.timegm(result.utctimetuple())\n    except Exception as exc:\n        raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n3. Ensure that the `MONTHS` list is defined and contains the lowercase names of months as strings (e.g., ['jan', 'feb', 'mar', ...]).\n4. Test the function with various two-digit and four-digit year inputs to ensure it behaves as expected according to the RFC 7231 standard.\n5. Add unit tests to cover edge cases such as years exactly 50 years in the future or past, and years that are ambiguous without the current year context."
+              }
+            ],
+            "overall_strategy": "Update the two-digit year interpretation logic in the `parse_http_date` function to comply with RFC 7231. This involves calculating the current century and adjusting the year based on the current year to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "location_description": "Lines 178-182: Two-digit year interpretation logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current logic incorrectly assumes that years 0-69 belong to the 2000s and 70-99 belong to the 1900s. According to RFC 7231, the interpretation should be based on the current year to determine whether a two-digit year belongs to the past or the future.",
+                "suggested_approach": "1. Import the `datetime` module at the top of the file if it is not already imported.\n2. Modify the logic starting at line 178 to correctly interpret two-digit years based on the current year:\n```python\nimport datetime\n\n# ... existing code ...\n\n    try:\n        year = int(m.group('year'))\n        if year < 100:\n            current_year = datetime.datetime.now().year\n            current_century = current_year // 100 * 100\n            if year > (current_year % 100) + 50:\n                year += current_century - 100\n            else:\n                year += current_century\n        month = MONTHS.index(m.group('mon').lower()) + 1\n        day = int(m.group('day'))\n        hour = int(m.group('hour'))\n        min = int(m.group('min'))\n        sec = int(m.group('sec'))\n        result = datetime.datetime(year, month, day, hour, min, sec)\n        return calendar.timegm(result.utctimetuple())\n    except Exception as exc:\n        raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n3. Ensure that the `MONTHS` list is defined and contains the lowercase names of months as strings (e.g., ['jan', 'feb', 'mar', ...]).\n4. Test the function with various two-digit and four-digit year inputs to ensure it behaves as expected according to the RFC 7231 standard.\n5. Add unit tests to cover edge cases such as years exactly 50 years in the future or past, and years that are ambiguous without the current year context."
+              }
+            ]
+          }
+        }
+      ],
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "location_description": "Lines 178-182: Two-digit year interpretation logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current logic incorrectly assumes that years 0-69 belong to the 2000s and 70-99 belong to the 1900s. According to RFC 7231, the interpretation should be based on the current year to determine whether a two-digit year belongs to the past or the future.",
+                "suggested_approach": "1. Import the `datetime` module at the top of the file if it is not already imported.\n2. Modify the logic starting at line 178 to correctly interpret two-digit years based on the current year:\n```python\nimport datetime\n\n# ... existing code ...\n\n    try:\n        year = int(m.group('year'))\n        if year < 100:\n            current_year = datetime.datetime.now().year\n            current_century = current_year // 100 * 100\n            if year > (current_year % 100) + 50:\n                year += current_century - 100\n            else:\n                year += current_century\n        month = MONTHS.index(m.group('mon').lower()) + 1\n        day = int(m.group('day'))\n        hour = int(m.group('hour'))\n        min = int(m.group('min'))\n        sec = int(m.group('sec'))\n        result = datetime.datetime(year, month, day, hour, min, sec)\n        return calendar.timegm(result.utctimetuple())\n    except Exception as exc:\n        raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n3. Ensure that the `MONTHS` list is defined and contains the lowercase names of months as strings (e.g., ['jan', 'feb', 'mar', ...]).\n4. Test the function with various two-digit and four-digit year inputs to ensure it behaves as expected according to the RFC 7231 standard.\n5. Add unit tests to cover edge cases such as years exactly 50 years in the future or past, and years that are ambiguous without the current year context."
+              }
+            ],
+            "overall_strategy": "Update the two-digit year interpretation logic in the `parse_http_date` function to comply with RFC 7231. This involves calculating the current century and adjusting the year based on the current year to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "confidence": 95
+          }
+        }
+      ]
+    }
+  },
+  "stage_7_final_plan": {
+    "timestamp": "2026-10-06T17:48:18.529175",
+    "data": {
+      "final_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Update the two-digit year interpretation logic in the `parse_http_date` function to comply with RFC 7231. This involves dynamically calculating the correct century for the year based on the current year.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Import the `datetime` module at the top of the file",
+              "context": "django/utils/http.py: Line 1",
+              "type": "add_feature",
+              "priority": "high",
+              "rationale": "The `datetime` module is required to get the current year for the dynamic calculation of the correct century.",
+              "implementation_notes": "Add `import datetime` at the top of the file."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the two-digit year interpretation logic to dynamically calculate the correct century",
+              "context": "django/utils/http.py: Lines 178-182",
+              "type": "fix_bug",
+              "priority": "critical",
+              "rationale": "The current logic incorrectly assumes fixed ranges for the century. The new logic will adjust the year based on the current year to ensure compliance with RFC 7231.",
+              "implementation_notes": "Replace lines 178-182 with the following code:\n\n```python\nyear = int(m.group('year'))\ncurrent_year = datetime.datetime.now().year\ncurrent_century = current_year // 100 * 100\nif year < 100:\n    if year > (current_year % 100) + 50:\n        year += current_century - 100\n    else:\n        year += current_century\n```\nThis code calculates the current century and adjusts the year based on the current year to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits."
+            }
+          ],
+          "execution_order": "1, 2",
+          "testing_recommendations": "Write unit tests to validate the new year interpretation logic. Test cases should include dates from both the 1900s and 2000s, as well as edge cases around the 50-year threshold.",
+          "risk_assessment": "The primary risk is that the new logic might introduce bugs in edge cases. To mitigate this, thorough unit testing should be conducted to cover all possible scenarios, including leap years and dates near the 50-year boundary. Additionally, regression testing should be performed to ensure that existing functionality is not affected."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the two-digit year interpretation logic needs to be updated to comply with RFC 7231. They also agreed that the current logic is incorrect and that the new logic should dynamically calculate the correct century based on the current year.",
+        "resolved_conflicts": "There were no significant conflicts between the expert opinions. All experts provided similar recommendations for updating the year interpretation logic."
+      },
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "location_description": "Lines 178-182: Two-digit year interpretation logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current logic incorrectly assumes that years 0-69 belong to the 2000s and 70-99 belong to the 1900s. According to RFC 7231, the interpretation should be based on the current year to determine whether a two-digit year belongs to the past or the future.",
+                "suggested_approach": "1. Import the `datetime` module at the top of the file if it is not already imported.\n2. Modify the logic starting at line 178 to correctly interpret two-digit years based on the current year:\n```python\nimport datetime\n\n# ... existing code ...\n\n    try:\n        year = int(m.group('year'))\n        if year < 100:\n            current_year = datetime.datetime.now().year\n            current_century = current_year // 100 * 100\n            if year > (current_year % 100) + 50:\n                year += current_century - 100\n            else:\n                year += current_century\n        month = MONTHS.index(m.group('mon').lower()) + 1\n        day = int(m.group('day'))\n        hour = int(m.group('hour'))\n        min = int(m.group('min'))\n        sec = int(m.group('sec'))\n        result = datetime.datetime(year, month, day, hour, min, sec)\n        return calendar.timegm(result.utctimetuple())\n    except Exception as exc:\n        raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n3. Ensure that the `MONTHS` list is defined and contains the lowercase names of months as strings (e.g., ['jan', 'feb', 'mar', ...]).\n4. Test the function with various two-digit and four-digit year inputs to ensure it behaves as expected according to the RFC 7231 standard.\n5. Add unit tests to cover edge cases such as years exactly 50 years in the future or past, and years that are ambiguous without the current year context."
+              }
+            ],
+            "overall_strategy": "Update the two-digit year interpretation logic in the `parse_http_date` function to comply with RFC 7231. This involves calculating the current century and adjusting the year based on the current year to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/utils/http.py:parse_http_date",
+                "location_description": "Lines 178-182: Two-digit year interpretation logic",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current logic incorrectly assumes that years 0-69 belong to the 2000s and 70-99 belong to the 1900s. According to RFC 7231, the interpretation should be based on the current year to determine whether a two-digit year belongs to the past or the future.",
+                "suggested_approach": "1. Import the `datetime` module at the top of the file if it is not already imported.\n2. Modify the logic starting at line 178 to correctly interpret two-digit years based on the current year:\n```python\nimport datetime\n\n# ... existing code ...\n\n    try:\n        year = int(m.group('year'))\n        if year < 100:\n            current_year = datetime.datetime.now().year\n            current_century = current_year // 100 * 100\n            if year > (current_year % 100) + 50:\n                year += current_century - 100\n            else:\n                year += current_century\n        month = MONTHS.index(m.group('mon').lower()) + 1\n        day = int(m.group('day'))\n        hour = int(m.group('hour'))\n        min = int(m.group('min'))\n        sec = int(m.group('sec'))\n        result = datetime.datetime(year, month, day, hour, min, sec)\n        return calendar.timegm(result.utctimetuple())\n    except Exception as exc:\n        raise ValueError(\"%r is not a valid date\" % date) from exc\n```\n3. Ensure that the `MONTHS` list is defined and contains the lowercase names of months as strings (e.g., ['jan', 'feb', 'mar', ...]).\n4. Test the function with various two-digit and four-digit year inputs to ensure it behaves as expected according to the RFC 7231 standard.\n5. Add unit tests to cover edge cases such as years exactly 50 years in the future or past, and years that are ambiguous without the current year context."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "stage_8_edit_agent_prompt": {
+    "timestamp": "2026-10-06T17:48:18.534490",
+    "data": {
+      "edit_agent_prompt": "<issue>\ndjango.utils.http.parse_http_date two digit year check is incorrect\nDescription\n\t \n\t\t(last modified by Ad Timmering)\n\t \nRFC 850 does not mention this, but in RFC 7231 (and there's something similar in RFC 2822), there's the following quote:\nRecipients of a timestamp value in rfc850-date format, which uses a\ntwo-digit year, MUST interpret a timestamp that appears to be more\nthan 50 years in the future as representing the most recent year in\nthe past that had the same last two digits.\nCurrent logic is hard coded to consider 0-69 to be in 2000-2069, and 70-99 to be 1970-1999, instead of comparing versus the current year.\n\n</issue>\n\n<plan>\n***stage 1***\ninstruction: Import the `datetime` module at the top of the file\ncontext: django/utils/http.py: Line 1\n\n***stage 2***\ninstruction: Modify the two-digit year interpretation logic to dynamically calculate the correct century\ncontext: django/utils/http.py: Lines 178-182\n\n</plan>\n\n<code>\ndjango/utils/http.py:\n158   def parse_http_date(date):\n159       \"\"\"\n160       Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161   \n162       The three formats allowed by the RFC are accepted, even if only the first\n163       one is still in widespread use.\n164   \n165       Return an integer expressed in seconds since the epoch, in UTC.\n166       \"\"\"\n167       # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168       # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169       # our own RFC-compliant parsing.\n170       for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171           m = regex.match(date)\n172           if m is not None:\n173               break\n174       else:\n175           raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176       try:\n177           year = int(m.group('year'))\n178           if year < 100:\n179               if year < 70:\n180                   year += 2000\n181               else:\n182                   year += 1900\n183           month = MONTHS.index(m.group('mon').lower()) + 1\n184           day = int(m.group('day'))\n185           hour = int(m.group('hour'))\n186           min = int(m.group('min'))\n187           sec = int(m.group('sec'))\n188           result = datetime.datetime(year, month, day, hour, min, sec)\n189           return calendar.timegm(result.utctimetuple())\n190       except Exception as exc:\n191           raise ValueError(\"%r is not a valid date\" % date) from exc\n\n</code>",
+      "modification_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Update the two-digit year interpretation logic in the `parse_http_date` function to comply with RFC 7231. This involves dynamically calculating the correct century for the year based on the current year.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Import the `datetime` module at the top of the file",
+              "context": "django/utils/http.py: Line 1",
+              "type": "add_feature",
+              "priority": "high",
+              "rationale": "The `datetime` module is required to get the current year for the dynamic calculation of the correct century.",
+              "implementation_notes": "Add `import datetime` at the top of the file."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the two-digit year interpretation logic to dynamically calculate the correct century",
+              "context": "django/utils/http.py: Lines 178-182",
+              "type": "fix_bug",
+              "priority": "critical",
+              "rationale": "The current logic incorrectly assumes fixed ranges for the century. The new logic will adjust the year based on the current year to ensure compliance with RFC 7231.",
+              "implementation_notes": "Replace lines 178-182 with the following code:\n\n```python\nyear = int(m.group('year'))\ncurrent_year = datetime.datetime.now().year\ncurrent_century = current_year // 100 * 100\nif year < 100:\n    if year > (current_year % 100) + 50:\n        year += current_century - 100\n    else:\n        year += current_century\n```\nThis code calculates the current century and adjusts the year based on the current year to ensure that years more than 50 years in the future are interpreted as the most recent year in the past with the same last two digits."
+            }
+          ],
+          "execution_order": "1, 2",
+          "testing_recommendations": "Write unit tests to validate the new year interpretation logic. Test cases should include dates from both the 1900s and 2000s, as well as edge cases around the 50-year threshold.",
+          "risk_assessment": "The primary risk is that the new logic might introduce bugs in edge cases. To mitigate this, thorough unit testing should be conducted to cover all possible scenarios, including leap years and dates near the 50-year boundary. Additionally, regression testing should be performed to ensure that existing functionality is not affected."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the two-digit year interpretation logic needs to be updated to comply with RFC 7231. They also agreed that the current logic is incorrect and that the new logic should dynamically calculate the correct century based on the current year.",
+        "resolved_conflicts": "There were no significant conflicts between the expert opinions. All experts provided similar recommendations for updating the year interpretation logic."
+      },
+      "winning_chain": {
+        "chain_id": "chain_2",
+        "original_chain_info": {
+          "chain": [
+            "django/utils/http.py:parse_http_date"
+          ],
+          "chain_length": 1,
+          "initial_entity": "parse_http_date",
+          "start_entity": {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for parsing HTTP dates and contains the logic that needs to be corrected according to the RFC 7231 specification.",
+            "diversity_value": "Core utility function in the HTTP module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8680034279823303,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/utils/http.py:parse_http_date",
+            "type": "function",
+            "code": "```\n158 | def parse_http_date(date):\n159 |     \"\"\"\n160 |     Parse a date format as specified by HTTP RFC7231 section 7.1.1.1.\n161 | \n162 |     The three formats allowed by the RFC are accepted, even if only the first\n163 |     one is still in widespread use.\n164 | \n165 |     Return an integer expressed in seconds since the epoch, in UTC.\n166 |     \"\"\"\n167 |     # email.utils.parsedate() does the job for RFC1123 dates; unfortunately\n168 |     # RFC7231 makes it mandatory to support RFC850 dates too. So we roll\n169 |     # our own RFC-compliant parsing.\n170 |     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:\n171 |         m = regex.match(date)\n172 |         if m is not None:\n173 |             break\n174 |     else:\n175 |         raise ValueError(\"%r is not in a valid HTTP date format\" % date)\n176 |     try:\n177 |         year = int(m.group('year'))\n178 |         if year < 100:\n179 |             if year < 70:\n180 |                 year += 2000\n181 |             else:\n182 |                 year += 1900\n183 |         month = MONTHS.index(m.group('mon').lower()) + 1\n184 |         day = int(m.group('day'))\n185 |         hour = int(m.group('hour'))\n186 |         min = int(m.group('min'))\n187 |         sec = int(m.group('sec'))\n188 |         result = datetime.datetime(year, month, day, hour, min, sec)\n189 |         return calendar.timegm(result.utctimetuple())\n190 |     except Exception as exc:\n191 |         raise ValueError(\"%r is not a valid date\" % date) from exc\n```",
+            "start_line": 158,
+            "end_line": 191,
+            "code_omitted": false,
+            "original_code_length": 1493
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 2,
+        "is_longest": false
+      }
+    }
+  }
+}

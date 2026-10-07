@@ -17,6 +17,30 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-07 — First real ADAPTIVE run (72B, paired with original seed 3) and reuse-chains SC seed 2
+Raw: `baseline_72b_adaptive_lenient_v1/20261006-174449` (job 188238; arm adaptive, unanimous vote ->
+single-agent plan; --reuse-chains original seed 3; 75/75 ok, 1 h 30), `baseline_72b_sc_lenient_v1/
+20261006-140151` (job 187682; reuse of original seed 2; 75/75 ok, 58 min). Qwen2.5-72B @495f393,
+2x pro6000, lenient, vote logprobs. Chains identical to the reference seed in both.
+* Adaptive vs original (seed 3, same chains): Acc@1 0.787 vs 0.813; discordant 2 : 4, exact McNemar
+  p = 0.69; stage 6-7 tokens 62.6k vs 101.4k (-38%). Debate skipped on 58/75 (77%).
+  The replay predicted 81% skipped, 62.9k tokens (matches) and Acc@1 0.829 (does not).
+  Where the gap is: on the 58 skipped instances adaptive 0.810 vs original 0.776 on the same
+  instances; on the 17 debated ones adaptive 12/17 vs original 16/17, although both ran the same
+  released debate on the same chain set (the vote was re-sampled too). So the shortfall is re-run
+  variance of the vote + debate on split-vote instances, not the skip: rerunning the identical
+  procedure on the hardest 17 moved 4 answers.
+* SC reuse seed 2: 0.733 vs original 0.760, discordant 0 : 2, tokens 97.6k vs 99.8k.
+  Reuse-chains SC pooled over 3 seeds (identical chains): SC-only right 3, original-only right 8,
+  exact McNemar p = 0.23; SC mean 0.760 vs original 0.782. The equal-token single agent trends
+  ~2 points below the debate; not significant.
+Takeaway: adaptive debate saves ~38% of stage 6-7 tokens (~9% of all tokens) at an accuracy change
+inside run-to-run noise (one seed). Run-to-run variance on split votes is itself large enough that
+several seeds per arm are essential; adaptive seeds 1 and 2 are queued (189312, 189313).
+Caveats: one adaptive seed; n=75; 17 debated instances.
+
+---
+
 ## 2026-10-06 — Equal-token single agent on the SAME chains as the debate (reuse-chains SC seed 3)
 Raw: `baseline_72b_sc_lenient_v1/20261006-061753` (job 186863, `--reuse-chains
 baseline_72b_lenient_v1/20261004-215633` = original seed 3), Qwen2.5-72B @495f393, 2x pro6000,
