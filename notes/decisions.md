@@ -839,3 +839,14 @@ original-vs-rerun discordance is the floor any arm comparison must clear. Also e
 seeds 4-6 (reuse of lenient seeds 4-6 once they exist), giving six paired seeds (~3-3.5 point
 non-inferiority margin at the observed discordance; power numbers in for-chat.md). Queued as ug
 slots free; lenient seeds 4-6 stay (they are the references).
+
+## 2026-10-07 — Adaptive skip branch, second variant: five round-1 agents without round 2
+Trigger from 2026-10-06's "kept in reserve" rule: three paired seeds of the single-agent adaptive
+arm lose the same ~2 instances per seed (3 : 9, p = 0.15, -2.7 points), mostly on skipped instances,
+where one plan agent replaces five. New `skip_mode: round1_only` for the adaptive arm: on a unanimous
+vote the released round 1 (five analyses) and the discriminator run, only round 2 is skipped; the
+debated branch is unchanged. Replay estimate: ~70k stage 6-7 tokens (vs ~61k single-agent skip and
+~102k original). Config `baseline_72b_adaptive_r1_lenient_v1.yaml`, run with --reuse-chains on the
+same original seeds (1-3, then 4). Unit tests now live in the repo (`ablation/harness/test_arms.py`,
+all arms); one-instance check on gpu21 (`smoke_adaptive_r1_v1`). Both adaptive variants are reported;
+neither replaces the other until the noise-floor reruns are in.

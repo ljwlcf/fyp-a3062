@@ -387,8 +387,13 @@ def _apply_adaptive(pipeline, arm):
     if trig.get("signal") != "vote_agreement":
         raise ValueError(f"adaptive trigger signal must be vote_agreement: {trig}")
     tau = float(trig["threshold"])
+    # skip branch: "single_agent" (default; one round-1 analysis, round 2 skipped) or
+    # "round1_only" (the released five round-1 analyses, round 2 skipped; decisions.md 2026-10-07)
+    skip_mode = arm.get("skip_mode", "single_agent")
+    if skip_mode not in ("single_agent", "round1_only"):
+        raise ValueError(f"adaptive skip_mode must be single_agent or round1_only: {skip_mode}")
     info = {"name": "adaptive", "trigger": {"signal": "vote_agreement", "threshold": tau},
-            "agreement": None, "skipped": None}
+            "skip_mode": skip_mode, "agreement": None, "skipped": None}
     vote, plan = pipeline._vote_on_chains, pipeline._generate_modification_plan
     round2 = pipeline._conduct_second_round_analysis
 
@@ -400,8 +405,8 @@ def _apply_adaptive(pipeline, arm):
         return res
 
     def adaptive_plan(winning_chain, issue, num_agents=5, instance_id=None, cache_timestamp=None):
-        return plan(winning_chain, issue, 1 if info["skipped"] else num_agents, instance_id,
-                    cache_timestamp)
+        agents = 1 if info["skipped"] and skip_mode == "single_agent" else num_agents
+        return plan(winning_chain, issue, agents, instance_id, cache_timestamp)
 
     def adaptive_round2(*args, **kwargs):
         return (_skip_round2 if info["skipped"] else round2)(*args, **kwargs)
@@ -586,7 +591,8 @@ def main():
         if arm_cfg.get("name") == "self_consistency":
             return {"name": "self_consistency", "n_votes": arm_plans[iid]["n_votes"]}
         if arm_cfg.get("name") == "adaptive":
-            return {"name": "adaptive", "trigger": dict(arm_cfg["trigger"])}
+            return {"name": "adaptive", "trigger": dict(arm_cfg["trigger"]),
+                    "skip_mode": arm_cfg.get("skip_mode", "single_agent")}
         return {"name": arm_cfg.get("name", "original")}
 
     empty_tokens = {"total": {"calls": 0, "errors": 0, "truncated": 0, "prompt_tokens": 0,

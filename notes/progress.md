@@ -29,6 +29,11 @@ unanimous-skip -0.2 [-1.9, +1.8] at -39% tokens. Scorer fix for a '₁' logprob 
 recreated (json_repair, pyyaml) after the session restart.
 Adaptive seed 1 done: 0.747 vs 0.773 (1:3), -41% tokens; pooled seeds 1+3 3:7 (p=0.34), -40%.
 Adaptive seed 4 queued (190072, reuse of seed 4) after the noise-floor rerun; seed 5 re-pointed.
+Adaptive seed 2 done (0.733 vs 0.760, 0:2). Three paired seeds: 0.756 vs 0.782, 3:9 (p=0.15),
+-40% tokens, losses mostly on skipped instances -> built skip_mode round1_only (five round-1 agents,
+no round 2), unit tests moved into the repo (test_arms.py), gpu21 check ok (11 calls). Config
+baseline_72b_adaptive_r1_lenient_v1 on EEE; queue r1 seeds 1-3 as ug slots free. Second noise-floor
+rerun (seed-1 chains, 190480) queued.
 
 ## 2026-10-06
 Did: Fetched and scored lenient seed 1 (0.773, vote logprobs) and self-consistency seed 1 (0.707);

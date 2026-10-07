@@ -61,6 +61,14 @@ single-agent plan; --reuse-chains original seed 3; 75/75 ok, 1 h 30), `baseline_
   Pooled seeds 1+3: 3 : 7, exact McNemar p = 0.34; -40% stage 6-7 tokens; adaptive mean 0.767 vs
   0.793 on these two seeds (-2.7 points, not significant; the noise-floor rerun 189863 will show
   how much two runs of the same original arm disagree).
+* Adaptive seed 2 added (job 189313, raw `baseline_72b_adaptive_lenient_v1/20261007-082621`, reuse of
+  original seed 2; chains identical, 75/75 ok): 0.733 vs 0.760, discordant 0 : 2; tokens 57.6k vs
+  99.8k (-42%); skipped 64/75; debated 9 vs 9 of 11.
+* THREE PAIRED SEEDS (1-3): adaptive 0.756 vs original 0.782; discordant 3 : 9, exact McNemar p = 0.15;
+  difference -2.7 points, 95% bootstrap [-5.8, 0.0], one-sided 95% lower bound -5.3; stage 6-7
+  tokens 60.7k vs 101.9k (-40%). The same ~2-instance loss in every seed; mostly on SKIPPED instances
+  (the lone plan agent), the debated ones tie in seeds 1 and 2. Not significant, but consistent, so
+  the reserve skip branch (five round-1 agents, no round 2) is now being run (decisions.md 2026-10-07).
 Takeaway: adaptive debate saves ~38% of stage 6-7 tokens (~9% of all tokens) at an accuracy change
 inside run-to-run noise (one seed). Run-to-run variance on split votes is itself large enough that
 several seeds per arm are essential; adaptive seeds 1 and 2 are queued (189312, 189313).
