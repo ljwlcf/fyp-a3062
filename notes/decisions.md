@@ -828,3 +828,14 @@ reserve: five round-1 agents without round 2 (replay: same accuracy within one i
 tokens instead of ~55k); not built unless the single-agent skip loses accuracy in the real runs.
 This is the efficiency form of adaptive debate (option (a) in for-chat.md); the chain-level debate
 (option (b)) still waits on chat / A/P Chen.
+
+## 2026-10-07 — Noise-floor control and six paired seeds for the adaptive comparison
+The first adaptive run lost 4 of 17 split-vote instances that both arms handled with the identical
+released debate: re-running the same stage 6-8 procedure on the same chains changes answers. To read
+paired discordance (adaptive vs original 2:4, SC vs original 3:8) against chance, add a noise-floor
+control: the ORIGINAL arm re-run with --reuse-chains on its own seed's chains (config
+baseline_72b_lenient_v1 + --reuse-chains, new results subfolder by run id; ~1.5 h each); the
+original-vs-rerun discordance is the floor any arm comparison must clear. Also extend adaptive to
+seeds 4-6 (reuse of lenient seeds 4-6 once they exist), giving six paired seeds (~3-3.5 point
+non-inferiority margin at the observed discordance; power numbers in for-chat.md). Queued as ug
+slots free; lenient seeds 4-6 stay (they are the references).

@@ -9,6 +9,17 @@ Answered with a pointer.
 
 ## Open
 
+- **How strong a "no accuracy loss" claim do we need for adaptive debate? (seeds vs SWE-bench Lite)**
+  (Chat / A/P Chen; raised 2026-10-07.) Adaptive debate's claim is non-inferiority: same accuracy at
+  ~38% fewer stage 6-7 tokens. Paired runs disagree on ~5-11% of instances, so (one-sided alpha
+  0.05, power 0.8, true difference 0): 3 paired seeds of 75 can only show "no more than ~4-5 points
+  worse"; a 3-point margin needs ~5-10 seeds of 75 (~350-750 instance-runs) or ~1-2.5 runs of the
+  300-instance SWE-bench Lite; a 2-point margin ~10-23 seeds of 75 or ~3-6 runs of Lite. Same GPU
+  cost either way per instance-run; Lite adds generalisation (CLAUDE.md already allows expanding
+  to Lite "if statistical power is marginal"), more seeds keep the subset fixed. Questions: which
+  margin to commit to in the report (3 points?), and seeds-on-75 vs Lite. Code side meanwhile: six
+  paired seeds on the 75 (original seeds 1-6, adaptive on each via --reuse-chains, ~1.5 h per
+  adaptive run), plus a noise-floor control (decisions.md 2026-10-07).
 - **Adaptive debate: should the triggered branch debate the CHAIN CHOICE, not the plan?**
   (Direction for chat and A/P Chen; raised 2026-10-05, results.md "trigger, offline replay".)
   Replay on the 72B runs: with lenient parsing, skipping the debate entirely (one agent writes the
