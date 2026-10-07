@@ -177,7 +177,9 @@ def vote_logprob_signal(rec, n_chains):
         probs = {}
         for tok, lp in v["top"]:
             t = str(tok).strip()
-            if t.isdigit() and 1 <= int(t) <= max(n_chains, 1):
+            # isdecimal, not isdigit: "₁" (subscript one) passes isdigit but int() rejects it
+            # (seed 4, 2026-10-07); "２" (full width) is decimal and counts, as before.
+            if t.isdecimal() and 1 <= int(t) <= max(n_chains, 1):
                 probs[int(t)] = probs.get(int(t), 0.0) + math.exp(lp)
         mass = sum(probs.values())
         if mass <= 0:

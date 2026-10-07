@@ -23,6 +23,10 @@ the adaptive non-inferiority claim (3 paired seeds prove only ~4-5 points; 3 poi
 seeds of 75 or ~1-2.5 runs of Lite) parked in for-chat.md. Planned (decisions.md 2026-10-07): a
 noise-floor control (original arm re-run on its own chains, config baseline_72b_rerun_lenient_v1,
 copied to EEE) and adaptive seeds 4-6; queue both as ug slots free (next: when seed 4 ends).
+Seed 4 done (0.733; original arm mean 0.770 over 4 seeds); noise-floor rerun on seed-3 chains
+queued (189863, SEED=103) after adaptive s2, seed 5 re-pointed behind it. Replay over 4 seeds:
+unanimous-skip -0.2 [-1.9, +1.8] at -39% tokens. Scorer fix for a '₁' logprob token. Scratch venv
+recreated (json_repair, pyyaml) after the session restart.
 
 ## 2026-10-06
 Did: Fetched and scored lenient seed 1 (0.773, vote logprobs) and self-consistency seed 1 (0.707);

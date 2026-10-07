@@ -17,6 +17,27 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-07 — Lenient seed 4; adaptive-trigger replay over 4 original seeds
+Raw: `baseline_72b_lenient_v1/20261006-222229` (seed 4, job 184812, vote logprobs; 75/75 ok),
+`baseline_72b_lenient_v1/trigger_replay_pooled_s1234.json`. Qwen2.5-72B @495f393, 2x pro6000, lenient.
+* Seed 4: Acc@1 0.733 (55/75), selected 0.787, kept 0.907; debate effect 53 unchanged right, 18
+  unchanged wrong, 2 fixed, 1 broke, 1 no answer; mean lp_conf 0.856. Original arm (lenient), 4
+  seeds: 0.760 / 0.813 / 0.773 / 0.733, mean 0.770.
+* Replay, 4 seeds (300 rows): skip on a unanimous vote (83% skipped) -0.2 points [-1.9, +1.8] at
+  62k vs 102k stage 6-7 tokens (-39%); always-skip 0.755 vs 0.770.
+* lp_conf on the two fixed-order seeds with logprobs (1 and 4, 150 rows): >= 0.95 skips 54%, +0.1
+  [-0.9, +1.9] at -25% tokens; >= 0.99 skips 35%, +0.4 at -17%. Agreement on the same rows: -1.2
+  [-3.6, +1.1] at -37%. lp_conf is the safer trigger, agreement the cheaper one; neither difference
+  is significant. Self-reported confidence >= 90.4: held out on each seed, 3 of 4 at or above the
+  original, -18% tokens.
+* The strict held-out rule ("cheapest threshold with no in-sample loss") is unstable across seeds
+  (it jumps between never-skip and 0.8): with ~1-2 instances deciding it, a pre-set threshold
+  (unanimous) is the sounder choice; that is what the adaptive arm uses.
+Scorer fix (same day): vote-logprob tokens are parsed with isdecimal (seed 4 had a "₁" token that
+passes isdigit but not int()); rescoring seed 1 and the shuffled run gives identical lp fields.
+
+---
+
 ## 2026-10-07 — First real ADAPTIVE run (72B, paired with original seed 3) and reuse-chains SC seed 2
 Raw: `baseline_72b_adaptive_lenient_v1/20261006-174449` (job 188238; arm adaptive, unanimous vote ->
 single-agent plan; --reuse-chains original seed 3; 75/75 ok, 1 h 30), `baseline_72b_sc_lenient_v1/
