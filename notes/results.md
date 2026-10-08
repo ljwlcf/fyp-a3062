@@ -30,8 +30,12 @@ round1_only, --reuse-chains original seed 3; 75/75 ok, 1 h 34; chains identical)
   therefore biases the debated subset against adaptive and the skipped subset in its favour; only
   whole-run totals are fair comparisons. The statements "the loss is on skipped instances" (which
   motivated round1_only) and "the loss is on the re-run debate" are both unreliable for this reason.
-Takeaway so far: both skip variants are within the noise floor on seed 3; round1_only costs more
-tokens and is not better on this seed. Seeds 1 and 2 (192117, 192118) follow.
+* Seed 1 added (job 192117, raw `baseline_72b_adaptive_r1_lenient_v1/20261008-091203`, 75/75 ok, chains
+  identical; skipped 63/75): original 0.773 (104k), original rerun 0.720 (105k), adaptive single-agent
+  0.747 (62k), adaptive round1_only 0.733 (76k; 0 : 3 vs the first original run). Every arm lies inside
+  the spread of the original's own two runs (0.720-0.773).
+Takeaway so far: both skip variants are within the noise floor on seeds 1 and 3; round1_only costs
+more tokens and is not better. Seed 2 (192118) follows.
 
 ---
 

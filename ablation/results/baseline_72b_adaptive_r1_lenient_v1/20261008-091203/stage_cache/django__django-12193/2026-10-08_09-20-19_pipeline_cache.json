@@ -1,0 +1,2292 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-08T09:20:19.212755",
+    "data": {
+      "initial_entities": [
+        "SplitArrayField",
+        "BooleanField",
+        "CheckboxInput",
+        "get_context",
+        "final_attrs"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 773
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-08T09:20:19.214684",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "SplitArrayField",
+          "related_entities": [
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayField",
+              "entity_type": "class",
+              "relevance_reason": "This class is directly mentioned in the problem statement and is responsible for handling the array field logic.",
+              "diversity_value": "Core form field class from Django's PostgreSQL forms module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput",
+              "entity_type": "class",
+              "relevance_reason": "The problem specifically mentions that the CheckboxInput widget is modifying the attrs dict, which causes the issue.",
+              "diversity_value": "Widget class from Django's forms module"
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+              "entity_type": "class",
+              "relevance_reason": "This widget is used within SplitArrayField and is likely where the attrs dict is being passed and potentially modified.",
+              "diversity_value": "Widget class specific to PostgreSQL forms module"
+            },
+            {
+              "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+              "diversity_value": "Function from a different module that handles form field rendering"
+            }
+          ]
+        },
+        {
+          "initial_entity": "BooleanField",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "This class defines the BooleanField used in forms, which is central to the issue of checkboxes being checked incorrectly.",
+              "diversity_value": "Form field definition from different file"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput",
+              "entity_type": "class",
+              "relevance_reason": "The CheckboxInput widget is responsible for rendering the checkbox input, and the issue specifically mentions a problem with its get_context() method.",
+              "diversity_value": "Widget implementation from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "This class defines the BooleanField used in models, which might interact with the form field and could be relevant for understanding data flow.",
+              "diversity_value": "Model field definition from different file"
+            },
+            {
+              "entity_id": "django/forms/boundfield.py:get_context",
+              "entity_type": "function",
+              "relevance_reason": "The get_context method in BoundField is where the widget context is prepared, and it might be involved in passing the attrs dict to the widget.",
+              "diversity_value": "Context preparation from different file"
+            }
+          ]
+        },
+        {
+          "initial_entity": "CheckboxInput",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput",
+              "entity_type": "class",
+              "relevance_reason": "The CheckboxInput class is directly involved in the issue as it modifies the attrs dict to set 'checked' to True.",
+              "diversity_value": "Widget implementation from forms module"
+            },
+            {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+              "diversity_value": "Field implementation from forms module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+              "diversity_value": "Method within the CheckboxInput class"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:SplitArrayField",
+              "entity_type": "class",
+              "relevance_reason": "SplitArrayField is the container field that uses multiple instances of CheckboxInput, and it might need changes to prevent the issue.",
+              "diversity_value": "Different field type from forms module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "get_context",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement as the cause of the issue where it sets 'checked' to True.",
+              "diversity_value": "Core form widget functionality from forms module"
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+              "diversity_value": "PostgreSQL-specific form widget from contrib module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+              "diversity_value": "Parent widget class from forms module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:Widget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+              "diversity_value": "Base widget class from forms module"
+            }
+          ]
+        },
+        {
+          "initial_entity": "final_attrs",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for setting the 'checked' attribute, which is causing the issue.",
+              "diversity_value": "Core forms widget functionality from different file"
+            },
+            {
+              "entity_id": "django/forms/boundfield.py:BoundField.build_widget_attrs",
+              "entity_type": "function",
+              "relevance_reason": "This function builds the widget attributes, which might need adjustments to prevent the 'checked' attribute from being incorrectly set.",
+              "diversity_value": "Forms bound field handling from different file"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:Widget.build_attrs",
+              "entity_type": "function",
+              "relevance_reason": "This function constructs the attribute dictionary used by widgets, and understanding its behavior is crucial for fixing the issue.",
+              "diversity_value": "Base widget functionality from different file"
+            },
+            {
+              "entity_id": "django/forms/fields.py:SplitArrayField",
+              "entity_type": "class",
+              "relevance_reason": "This class is where the SplitArrayField is defined, and modifications here could help manage how BooleanField widgets are initialized.",
+              "diversity_value": "Form field definition from different file"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-08T09:20:19.220949",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "SplitArrayField",
+          "related_entities": [
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayField",
+              "entity_type": "class",
+              "relevance_reason": "This class is directly mentioned in the problem statement and is responsible for handling the array field logic.",
+              "diversity_value": "Core form field class from Django's PostgreSQL forms module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput",
+              "entity_type": "class",
+              "relevance_reason": "The problem specifically mentions that the CheckboxInput widget is modifying the attrs dict, which causes the issue.",
+              "diversity_value": "Widget class from Django's forms module"
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+              "entity_type": "class",
+              "relevance_reason": "This widget is used within SplitArrayField and is likely where the attrs dict is being passed and potentially modified.",
+              "diversity_value": "Widget class specific to PostgreSQL forms module"
+            },
+            {
+              "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+              "diversity_value": "Function from a different module that handles form field rendering"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayField",
+                "entity_type": "class",
+                "relevance_reason": "This class is directly mentioned in the problem statement and is responsible for handling the array field logic.",
+                "diversity_value": "Core form field class from Django's PostgreSQL forms module"
+              },
+              "chain": [
+                "django/contrib/postgres/forms/array.py:SplitArrayField",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:CheckboxInput",
+                "entity_type": "class",
+                "relevance_reason": "The problem specifically mentions that the CheckboxInput widget is modifying the attrs dict, which causes the issue.",
+                "diversity_value": "Widget class from Django's forms module"
+              },
+              "chain": [
+                "django/forms/widgets.py:CheckboxInput",
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+                "entity_type": "class",
+                "relevance_reason": "This widget is used within SplitArrayField and is likely where the attrs dict is being passed and potentially modified.",
+                "diversity_value": "Widget class specific to PostgreSQL forms module"
+              },
+              "chain": [
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+                "diversity_value": "Function from a different module that handles form field rendering"
+              },
+              "chain": [
+                "django/forms/boundfield.py:BoundField.as_widget"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "BooleanField",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "This class defines the BooleanField used in forms, which is central to the issue of checkboxes being checked incorrectly.",
+              "diversity_value": "Form field definition from different file"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput",
+              "entity_type": "class",
+              "relevance_reason": "The CheckboxInput widget is responsible for rendering the checkbox input, and the issue specifically mentions a problem with its get_context() method.",
+              "diversity_value": "Widget implementation from different file"
+            },
+            {
+              "entity_id": "django/db/models/fields/__init__.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "This class defines the BooleanField used in models, which might interact with the form field and could be relevant for understanding data flow.",
+              "diversity_value": "Model field definition from different file"
+            },
+            {
+              "entity_id": "django/forms/boundfield.py:get_context",
+              "entity_type": "function",
+              "relevance_reason": "The get_context method in BoundField is where the widget context is prepared, and it might be involved in passing the attrs dict to the widget.",
+              "diversity_value": "Context preparation from different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/forms/fields.py:BooleanField",
+                "entity_type": "class",
+                "relevance_reason": "This class defines the BooleanField used in forms, which is central to the issue of checkboxes being checked incorrectly.",
+                "diversity_value": "Form field definition from different file"
+              },
+              "chain": [
+                "django/forms/fields.py:BooleanField",
+                "django/forms/fields.py:BooleanField.to_python",
+                "django/contrib/postgres/forms/array.py:SplitArrayField.to_python"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:CheckboxInput",
+                "entity_type": "class",
+                "relevance_reason": "The CheckboxInput widget is responsible for rendering the checkbox input, and the issue specifically mentions a problem with its get_context() method.",
+                "diversity_value": "Widget implementation from different file"
+              },
+              "chain": [
+                "django/forms/widgets.py:CheckboxInput",
+                "django/forms/widgets.py:CheckboxInput.get_context",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/db/models/fields/__init__.py:BooleanField",
+                "entity_type": "class",
+                "relevance_reason": "This class defines the BooleanField used in models, which might interact with the form field and could be relevant for understanding data flow.",
+                "diversity_value": "Model field definition from different file"
+              },
+              "chain": [
+                "django/db/models/fields/__init__.py:BooleanField",
+                "django/db/models/fields/__init__.py:BooleanField.formfield",
+                "django/contrib/postgres/fields/array.py:ArrayField.formfield",
+                "django/db/models/fields/__init__.py:Field.formfield"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/boundfield.py:get_context",
+                "entity_type": "function",
+                "relevance_reason": "The get_context method in BoundField is where the widget context is prepared, and it might be involved in passing the attrs dict to the widget.",
+                "diversity_value": "Context preparation from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "CheckboxInput",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput",
+              "entity_type": "class",
+              "relevance_reason": "The CheckboxInput class is directly involved in the issue as it modifies the attrs dict to set 'checked' to True.",
+              "diversity_value": "Widget implementation from forms module"
+            },
+            {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+              "diversity_value": "Field implementation from forms module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+              "diversity_value": "Method within the CheckboxInput class"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:SplitArrayField",
+              "entity_type": "class",
+              "relevance_reason": "SplitArrayField is the container field that uses multiple instances of CheckboxInput, and it might need changes to prevent the issue.",
+              "diversity_value": "Different field type from forms module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:CheckboxInput",
+                "entity_type": "class",
+                "relevance_reason": "The CheckboxInput class is directly involved in the issue as it modifies the attrs dict to set 'checked' to True.",
+                "diversity_value": "Widget implementation from forms module"
+              },
+              "chain": [
+                "django/forms/widgets.py:CheckboxInput",
+                "django/forms/widgets.py:CheckboxInput.get_context",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/fields.py:BooleanField",
+                "entity_type": "class",
+                "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+                "diversity_value": "Field implementation from forms module"
+              },
+              "chain": [
+                "django/forms/fields.py:BooleanField",
+                "django/forms/fields.py:BooleanField.to_python",
+                "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+                "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+                "django/forms/fields.py:MultipleChoiceField.to_python"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+                "entity_type": "function",
+                "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+                "diversity_value": "Method within the CheckboxInput class"
+              },
+              "chain": [
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:SplitArrayField",
+                "entity_type": "class",
+                "relevance_reason": "SplitArrayField is the container field that uses multiple instances of CheckboxInput, and it might need changes to prevent the issue.",
+                "diversity_value": "Different field type from forms module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "get_context",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly mentioned in the problem statement as the cause of the issue where it sets 'checked' to True.",
+              "diversity_value": "Core form widget functionality from forms module"
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+              "diversity_value": "PostgreSQL-specific form widget from contrib module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+              "diversity_value": "Parent widget class from forms module"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:Widget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+              "diversity_value": "Base widget class from forms module"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly mentioned in the problem statement as the cause of the issue where it sets 'checked' to True.",
+                "diversity_value": "Core form widget functionality from forms module"
+              },
+              "chain": [
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "entity_type": "function",
+                "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+                "diversity_value": "PostgreSQL-specific form widget from contrib module"
+              },
+              "chain": [
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+                "entity_type": "function",
+                "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+                "diversity_value": "Parent widget class from forms module"
+              },
+              "chain": [
+                "django/forms/widgets.py:MultiWidget.get_context",
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:Widget.get_context",
+                "entity_type": "function",
+                "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+                "diversity_value": "Base widget class from forms module"
+              },
+              "chain": [
+                "django/forms/widgets.py:Widget.get_context",
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 2
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "final_attrs",
+          "related_entities": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is directly responsible for setting the 'checked' attribute, which is causing the issue.",
+              "diversity_value": "Core forms widget functionality from different file"
+            },
+            {
+              "entity_id": "django/forms/boundfield.py:BoundField.build_widget_attrs",
+              "entity_type": "function",
+              "relevance_reason": "This function builds the widget attributes, which might need adjustments to prevent the 'checked' attribute from being incorrectly set.",
+              "diversity_value": "Forms bound field handling from different file"
+            },
+            {
+              "entity_id": "django/forms/widgets.py:Widget.build_attrs",
+              "entity_type": "function",
+              "relevance_reason": "This function constructs the attribute dictionary used by widgets, and understanding its behavior is crucial for fixing the issue.",
+              "diversity_value": "Base widget functionality from different file"
+            },
+            {
+              "entity_id": "django/forms/fields.py:SplitArrayField",
+              "entity_type": "class",
+              "relevance_reason": "This class is where the SplitArrayField is defined, and modifications here could help manage how BooleanField widgets are initialized.",
+              "diversity_value": "Form field definition from different file"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+                "entity_type": "function",
+                "relevance_reason": "This function is directly responsible for setting the 'checked' attribute, which is causing the issue.",
+                "diversity_value": "Core forms widget functionality from different file"
+              },
+              "chain": [
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/boundfield.py:BoundField.build_widget_attrs",
+                "entity_type": "function",
+                "relevance_reason": "This function builds the widget attributes, which might need adjustments to prevent the 'checked' attribute from being incorrectly set.",
+                "diversity_value": "Forms bound field handling from different file"
+              },
+              "chain": [
+                "django/forms/boundfield.py:BoundField.build_widget_attrs",
+                "django/forms/widgets.py:Widget.use_required_attribute",
+                "django/forms/widgets.py:Widget",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+                "django/contrib/postgres/forms/array.py:SplitArrayWidget.id_for_label"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/widgets.py:Widget.build_attrs",
+                "entity_type": "function",
+                "relevance_reason": "This function constructs the attribute dictionary used by widgets, and understanding its behavior is crucial for fixing the issue.",
+                "diversity_value": "Base widget functionality from different file"
+              },
+              "chain": [
+                "django/forms/widgets.py:Widget.build_attrs",
+                "django/forms/widgets.py:Widget.get_context",
+                "django/forms/widgets.py:CheckboxInput.get_context"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "django/forms/fields.py:SplitArrayField",
+                "entity_type": "class",
+                "relevance_reason": "This class is where the SplitArrayField is defined, and modifications here could help manage how BooleanField widgets are initialized.",
+                "diversity_value": "Form field definition from different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "django/contrib/postgres/forms/array.py:SplitArrayField",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 3,
+          "initial_entity": "SplitArrayField",
+          "start_entity": {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayField",
+            "entity_type": "class",
+            "relevance_reason": "This class is directly mentioned in the problem statement and is responsible for handling the array field logic.",
+            "diversity_value": "Core form field class from Django's PostgreSQL forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput",
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 2,
+          "initial_entity": "SplitArrayField",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput",
+            "entity_type": "class",
+            "relevance_reason": "The problem specifically mentions that the CheckboxInput widget is modifying the attrs dict, which causes the issue.",
+            "diversity_value": "Widget class from Django's forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 2,
+          "initial_entity": "SplitArrayField",
+          "start_entity": {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+            "entity_type": "class",
+            "relevance_reason": "This widget is used within SplitArrayField and is likely where the attrs dict is being passed and potentially modified.",
+            "diversity_value": "Widget class specific to PostgreSQL forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/boundfield.py:BoundField.as_widget"
+          ],
+          "chain_length": 1,
+          "initial_entity": "SplitArrayField",
+          "start_entity": {
+            "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+            "diversity_value": "Function from a different module that handles form field rendering"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/fields.py:BooleanField",
+            "django/forms/fields.py:BooleanField.to_python",
+            "django/contrib/postgres/forms/array.py:SplitArrayField.to_python"
+          ],
+          "chain_length": 3,
+          "initial_entity": "BooleanField",
+          "start_entity": {
+            "entity_id": "django/forms/fields.py:BooleanField",
+            "entity_type": "class",
+            "relevance_reason": "This class defines the BooleanField used in forms, which is central to the issue of checkboxes being checked incorrectly.",
+            "diversity_value": "Form field definition from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput",
+            "django/forms/widgets.py:CheckboxInput.get_context",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 3,
+          "initial_entity": "BooleanField",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput",
+            "entity_type": "class",
+            "relevance_reason": "The CheckboxInput widget is responsible for rendering the checkbox input, and the issue specifically mentions a problem with its get_context() method.",
+            "diversity_value": "Widget implementation from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/db/models/fields/__init__.py:BooleanField",
+            "django/db/models/fields/__init__.py:BooleanField.formfield",
+            "django/contrib/postgres/fields/array.py:ArrayField.formfield",
+            "django/db/models/fields/__init__.py:Field.formfield"
+          ],
+          "chain_length": 4,
+          "initial_entity": "BooleanField",
+          "start_entity": {
+            "entity_id": "django/db/models/fields/__init__.py:BooleanField",
+            "entity_type": "class",
+            "relevance_reason": "This class defines the BooleanField used in models, which might interact with the form field and could be relevant for understanding data flow.",
+            "diversity_value": "Model field definition from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput",
+            "django/forms/widgets.py:CheckboxInput.get_context",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 3,
+          "initial_entity": "CheckboxInput",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput",
+            "entity_type": "class",
+            "relevance_reason": "The CheckboxInput class is directly involved in the issue as it modifies the attrs dict to set 'checked' to True.",
+            "diversity_value": "Widget implementation from forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/fields.py:BooleanField",
+            "django/forms/fields.py:BooleanField.to_python",
+            "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+            "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+            "django/forms/fields.py:MultipleChoiceField.to_python"
+          ],
+          "chain_length": 5,
+          "initial_entity": "CheckboxInput",
+          "start_entity": {
+            "entity_id": "django/forms/fields.py:BooleanField",
+            "entity_type": "class",
+            "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+            "diversity_value": "Field implementation from forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "CheckboxInput",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+            "diversity_value": "Method within the CheckboxInput class"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly mentioned in the problem statement as the cause of the issue where it sets 'checked' to True.",
+            "diversity_value": "Core form widget functionality from forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+            "diversity_value": "PostgreSQL-specific form widget from contrib module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:MultiWidget.get_context",
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+            "diversity_value": "Parent widget class from forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:Widget.get_context",
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:Widget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+            "diversity_value": "Base widget class from forms module"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "final_attrs",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This function is directly responsible for setting the 'checked' attribute, which is causing the issue.",
+            "diversity_value": "Core forms widget functionality from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/boundfield.py:BoundField.build_widget_attrs",
+            "django/forms/widgets.py:Widget.use_required_attribute",
+            "django/forms/widgets.py:Widget",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget",
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.id_for_label"
+          ],
+          "chain_length": 5,
+          "initial_entity": "final_attrs",
+          "start_entity": {
+            "entity_id": "django/forms/boundfield.py:BoundField.build_widget_attrs",
+            "entity_type": "function",
+            "relevance_reason": "This function builds the widget attributes, which might need adjustments to prevent the 'checked' attribute from being incorrectly set.",
+            "diversity_value": "Forms bound field handling from different file"
+          }
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:Widget.build_attrs",
+            "django/forms/widgets.py:Widget.get_context",
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 3,
+          "initial_entity": "final_attrs",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:Widget.build_attrs",
+            "entity_type": "function",
+            "relevance_reason": "This function constructs the attribute dictionary used by widgets, and understanding its behavior is crucial for fixing the issue.",
+            "diversity_value": "Base widget functionality from different file"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-08T09:20:19.225109",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "django/forms/fields.py:BooleanField",
+            "django/forms/fields.py:BooleanField.to_python",
+            "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+            "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+            "django/forms/fields.py:MultipleChoiceField.to_python"
+          ],
+          "chain_length": 5,
+          "initial_entity": "CheckboxInput",
+          "start_entity": {
+            "entity_id": "django/forms/fields.py:BooleanField",
+            "entity_type": "class",
+            "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+            "diversity_value": "Field implementation from forms module"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "CheckboxInput",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+            "diversity_value": "Method within the CheckboxInput class"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8622617721557617,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/forms/boundfield.py:BoundField.as_widget"
+          ],
+          "chain_length": 1,
+          "initial_entity": "SplitArrayField",
+          "start_entity": {
+            "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+            "diversity_value": "Function from a different module that handles form field rendering"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.8788952827453613,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+            "diversity_value": "PostgreSQL-specific form widget from contrib module"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8827582597732544,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:MultiWidget.get_context",
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+            "diversity_value": "Parent widget class from forms module"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.888575553894043,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "django/forms/widgets.py:Widget.get_context",
+            "django/forms/widgets.py:CheckboxInput.get_context"
+          ],
+          "chain_length": 2,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/forms/widgets.py:Widget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+            "diversity_value": "Base widget class from forms module"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.8907415270805359,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-08T09:20:19.229445",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/fields.py:BooleanField",
+              "django/forms/fields.py:BooleanField.to_python",
+              "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+              "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+              "django/forms/fields.py:MultipleChoiceField.to_python"
+            ],
+            "chain_length": 5,
+            "initial_entity": "CheckboxInput",
+            "start_entity": {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+              "diversity_value": "Field implementation from forms module"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "type": "class",
+              "code": "```\n697 | class BooleanField(Field):\n698 |     widget = CheckboxInput\n699 | \n700 |     def to_python(self, value):\n701 |         \"\"\"Return a Python boolean object.\"\"\"\n702 |         # Explicitly check for the string 'False', which is what a hidden field\n703 |         # will submit for False. Also check for '0', since this is what\n704 |         # RadioSelect will provide. Because bool(\"True\") == bool('1') == True,\n705 |         # we don't need to handle that explicitly.\n706 |         if isinstance(value, str) and value.lower() in ('false', '0'):\n707 |             value = False\n708 |         else:\n709 |             value = bool(value)\n710 |         return super().to_python(value)\n711 | \n712 |     def validate(self, value):\n713 |         if not value and self.required:\n714 |             raise ValidationError(self.error_messages['required'], code='required')\n715 | \n716 |     def has_changed(self, initial, data):\n717 |         if self.disabled:\n718 |             return False\n719 |         # Sometimes data or initial may be a string equivalent of a boolean\n720 |         # so we should run it through to_python first to get a boolean value\n721 |         return self.to_python(initial) != self.to_python(data)\n```",
+              "start_line": 697,
+              "end_line": 721,
+              "code_omitted": false,
+              "original_code_length": 1221
+            },
+            {
+              "entity_id": "django/forms/fields.py:BooleanField.to_python",
+              "type": "function",
+              "code": "```\n700 | def to_python(self, value):\n701 |         \"\"\"Return a Python boolean object.\"\"\"\n702 |         # Explicitly check for the string 'False', which is what a hidden field\n703 |         # will submit for False. Also check for '0', since this is what\n704 |         # RadioSelect will provide. Because bool(\"True\") == bool('1') == True,\n705 |         # we don't need to handle that explicitly.\n706 |         if isinstance(value, str) and value.lower() in ('false', '0'):\n707 |             value = False\n708 |         else:\n709 |             value = bool(value)\n710 |         return super().to_python(value)\n```",
+              "start_line": 700,
+              "end_line": 710,
+              "code_omitted": false,
+              "original_code_length": 612
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+              "type": "function",
+              "code": "```\n193 | def to_python(self, value):\n194 |         value = super().to_python(value)\n195 |         return [self.base_field.to_python(item) for item in value]\n```",
+              "start_line": 193,
+              "end_line": 195,
+              "code_omitted": false,
+              "original_code_length": 161
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+              "type": "function",
+              "code": "```\n39 | def to_python(self, value):\n40 |         if isinstance(value, list):\n41 |             items = value\n42 |         elif value:\n43 |             items = value.split(self.delimiter)\n44 |         else:\n45 |             items = []\n46 |         errors = []\n47 |         values = []\n48 |         for index, item in enumerate(items):\n49 |             try:\n50 |                 values.append(self.base_field.to_python(item))\n51 |             except ValidationError as error:\n52 |                 errors.append(prefix_validation_error(\n53 |                     error,\n54 |                     prefix=self.error_messages['item_invalid'],\n55 |                     code='item_invalid',\n56 |                     params={'nth': index + 1},\n57 |                 ))\n58 |         if errors:\n59 |             raise ValidationError(errors)\n60 |         return values\n```",
+              "start_line": 39,
+              "end_line": 60,
+              "code_omitted": false,
+              "original_code_length": 858
+            },
+            {
+              "entity_id": "django/forms/fields.py:MultipleChoiceField.to_python",
+              "type": "function",
+              "code": "```\n856 | def to_python(self, value):\n857 |         if not value:\n858 |             return []\n859 |         elif not isinstance(value, (list, tuple)):\n860 |             raise ValidationError(self.error_messages['invalid_list'], code='invalid_list')\n861 |         return [str(val) for val in value]\n```",
+              "start_line": 856,
+              "end_line": 861,
+              "code_omitted": false,
+              "original_code_length": 301
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/widgets.py:CheckboxInput.get_context"
+            ],
+            "chain_length": 1,
+            "initial_entity": "CheckboxInput",
+            "start_entity": {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+              "diversity_value": "Method within the CheckboxInput class"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8622617721557617,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "type": "function",
+              "code": "```\n523 | def get_context(self, name, value, attrs):\n524 |         if self.check_test(value):\n525 |             if attrs is None:\n526 |                 attrs = {}\n527 |             attrs['checked'] = True\n528 |         return super().get_context(name, value, attrs)\n```",
+              "start_line": 523,
+              "end_line": 528,
+              "code_omitted": false,
+              "original_code_length": 269
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/boundfield.py:BoundField.as_widget"
+            ],
+            "chain_length": 1,
+            "initial_entity": "SplitArrayField",
+            "start_entity": {
+              "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+              "diversity_value": "Function from a different module that handles form field rendering"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8788952827453613,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+              "type": "function",
+              "code": "```\n79 | def as_widget(self, widget=None, attrs=None, only_initial=False):\n80 |         \"\"\"\n81 |         Render the field by rendering the passed widget, adding any HTML\n82 |         attributes passed as attrs. If a widget isn't specified, use the\n83 |         field's default widget.\n84 |         \"\"\"\n85 |         widget = widget or self.field.widget\n86 |         if self.field.localize:\n87 |             widget.is_localized = True\n88 |         attrs = attrs or {}\n89 |         attrs = self.build_widget_attrs(attrs, widget)\n90 |         if self.auto_id and 'id' not in widget.attrs:\n91 |             attrs.setdefault('id', self.html_initial_id if only_initial else self.auto_id)\n92 |         return widget.render(\n93 |             name=self.html_initial_name if only_initial else self.html_name,\n94 |             value=self.value(),\n95 |             attrs=attrs,\n96 |             renderer=self.form.renderer,\n97 |         )\n```",
+              "start_line": 79,
+              "end_line": 97,
+              "code_omitted": false,
+              "original_code_length": 929
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+            ],
+            "chain_length": 1,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+              "diversity_value": "PostgreSQL-specific form widget from contrib module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8827582597732544,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "type": "function",
+              "code": "```\n133 | def get_context(self, name, value, attrs=None):\n134 |         attrs = {} if attrs is None else attrs\n135 |         context = super().get_context(name, value, attrs)\n136 |         if self.is_localized:\n137 |             self.widget.is_localized = self.is_localized\n138 |         value = value or []\n139 |         context['widget']['subwidgets'] = []\n140 |         final_attrs = self.build_attrs(attrs)\n141 |         id_ = final_attrs.get('id')\n142 |         for i in range(max(len(value), self.size)):\n143 |             try:\n144 |                 widget_value = value[i]\n145 |             except IndexError:\n146 |                 widget_value = None\n147 |             if id_:\n148 |                 final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149 |             context['widget']['subwidgets'].append(\n150 |                 self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151 |             )\n152 |         return context\n```",
+              "start_line": 133,
+              "end_line": 152,
+              "code_omitted": false,
+              "original_code_length": 974
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/widgets.py:MultiWidget.get_context",
+              "django/forms/widgets.py:CheckboxInput.get_context"
+            ],
+            "chain_length": 2,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+              "diversity_value": "Parent widget class from forms module"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.888575553894043,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+              "type": "function",
+              "code": "```\n811 | def get_context(self, name, value, attrs):\n812 |         context = super().get_context(name, value, attrs)\n813 |         if self.is_localized:\n814 |             for widget in self.widgets:\n815 |                 widget.is_localized = self.is_localized\n816 |         # value is a list of values, each corresponding to a widget\n817 |         # in self.widgets.\n818 |         if not isinstance(value, list):\n819 |             value = self.decompress(value)\n820 | \n821 |         final_attrs = context['widget']['attrs']\n822 |         input_type = final_attrs.pop('type', None)\n823 |         id_ = final_attrs.get('id')\n824 |         subwidgets = []\n825 |         for i, widget in enumerate(self.widgets):\n826 |             if input_type is not None:\n827 |                 widget.input_type = input_type\n828 |             widget_name = '%s_%s' % (name, i)\n829 |             try:\n830 |                 widget_value = value[i]\n831 |             except IndexError:\n832 |                 widget_value = None\n833 |             if id_:\n834 |                 widget_attrs = final_attrs.copy()\n835 |                 widget_attrs['id'] = '%s_%s' % (id_, i)\n836 |             else:\n837 |                 widget_attrs = final_attrs\n838 |             subwidgets.append(widget.get_context(widget_name, widget_value, widget_attrs)['widget'])\n839 |         context['widget']['subwidgets'] = subwidgets\n840 |         return context\n```",
+              "start_line": 811,
+              "end_line": 840,
+              "code_omitted": false,
+              "original_code_length": 1423
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "type": "function",
+              "code": "```\n523 | def get_context(self, name, value, attrs):\n524 |         if self.check_test(value):\n525 |             if attrs is None:\n526 |                 attrs = {}\n527 |             attrs['checked'] = True\n528 |         return super().get_context(name, value, attrs)\n```",
+              "start_line": 523,
+              "end_line": 528,
+              "code_omitted": false,
+              "original_code_length": 269
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/widgets.py:Widget.get_context",
+              "django/forms/widgets.py:CheckboxInput.get_context"
+            ],
+            "chain_length": 2,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/forms/widgets.py:Widget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+              "diversity_value": "Base widget class from forms module"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8907415270805359,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/widgets.py:Widget.get_context",
+              "type": "function",
+              "code": "```\n227 | def get_context(self, name, value, attrs):\n228 |         context = {}\n229 |         context['widget'] = {\n230 |             'name': name,\n231 |             'is_hidden': self.is_hidden,\n232 |             'required': self.is_required,\n233 |             'value': self.format_value(value),\n234 |             'attrs': self.build_attrs(self.attrs, attrs),\n235 |             'template_name': self.template_name,\n236 |         }\n237 |         return context\n```",
+              "start_line": 227,
+              "end_line": 237,
+              "code_omitted": false,
+              "original_code_length": 463
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "type": "function",
+              "code": "```\n523 | def get_context(self, name, value, attrs):\n524 |         if self.check_test(value):\n525 |             if attrs is None:\n526 |                 attrs = {}\n527 |             attrs['checked'] = True\n528 |         return super().get_context(name, value, attrs)\n```",
+              "start_line": 523,
+              "end_line": 528,
+              "code_omitted": false,
+              "original_code_length": 269
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-08T09:21:35.089038",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_4",
+        "winning_chain": {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+            ],
+            "chain_length": 1,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+              "diversity_value": "PostgreSQL-specific form widget from contrib module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8827582597732544,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "type": "function",
+              "code": "```\n133 | def get_context(self, name, value, attrs=None):\n134 |         attrs = {} if attrs is None else attrs\n135 |         context = super().get_context(name, value, attrs)\n136 |         if self.is_localized:\n137 |             self.widget.is_localized = self.is_localized\n138 |         value = value or []\n139 |         context['widget']['subwidgets'] = []\n140 |         final_attrs = self.build_attrs(attrs)\n141 |         id_ = final_attrs.get('id')\n142 |         for i in range(max(len(value), self.size)):\n143 |             try:\n144 |                 widget_value = value[i]\n145 |             except IndexError:\n146 |                 widget_value = None\n147 |             if id_:\n148 |                 final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149 |             context['widget']['subwidgets'].append(\n150 |                 self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151 |             )\n152 |         return context\n```",
+              "start_line": 133,
+              "end_line": 152,
+              "code_omitted": false,
+              "original_code_length": 974
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 90.0,
+        "vote_distribution": {
+          "chain_4": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering each sub-widget in the array. The issue described involves the `CheckboxInput` widget incorrectly setting the `checked` attribute for all subsequent checkboxes once it encounters a `True` value. Modifying the `SplitArrayWidget.get_context` method to ensure that the `attrs` dictionary is not shared across iterations would directly address the problem.",
+            "modification_strategy": "Ensure that the `attrs` dictionary is copied for each sub-widget to prevent shared state issues.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its `to_python` method, which is used to convert form data to a Python boolean. While related, it does not directly address the rendering issue.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which sets the `checked` attribute. However, this method is called for each individual checkbox and does not control the sharing of attributes across multiple checkboxes.",
+              "chain_3": "This chain includes the `BoundField.as_widget` method, which is part of the form rendering process. It does not directly handle the specific issue of shared attributes between checkboxes.",
+              "chain_4": "This chain is the most relevant because it handles the rendering of multiple sub-widgets in the `SplitArrayWidget`. The issue arises from the shared `attrs` dictionary, which can be fixed by ensuring each sub-widget gets a fresh copy of `attrs`.",
+              "chain_5": "This chain deals with the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but more general. While it could be a potential target, `SplitArrayWidget.get_context` is more specific to the issue at hand.",
+              "chain_6": "This chain includes the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic, and the `CheckboxInput.get_context` method is already identified as the source of the `checked` attribute being set."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering each sub-widget in the array. The issue described involves the `attrs` dictionary being modified by the `CheckboxInput.get_context` method, causing all subsequent checkboxes to be checked. By ensuring that `final_attrs` is not shared across iterations, we can prevent this side effect and resolve the issue.",
+            "modification_strategy": "Modify the `SplitArrayWidget.get_context` method to ensure that `final_attrs` is a fresh copy for each iteration of the loop, preventing the `checked` attribute from being propagated to subsequent widgets.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its conversion methods. While related, the issue is more about how the widget renders the field, not the field itself.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method where the `checked` attribute is set. However, modifying this method alone does not address the root cause of the issue, which is the shared `attrs` dictionary.",
+              "chain_3": "This chain involves the `BoundField.as_widget` method, which is part of the rendering process but is too high-level to directly address the specific issue with the `attrs` dictionary being modified.",
+              "chain_4": "This chain is the most relevant as it contains the `SplitArrayWidget.get_context` method, which is responsible for rendering each sub-widget. The shared `attrs` dictionary is the root cause of the issue, and modifying this method to use a fresh copy of `attrs` for each iteration will resolve the problem.",
+              "chain_5": "This chain contains the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but is more general. While it might also need a similar fix, `SplitArrayWidget.get_context` is the more specific and immediate target.",
+              "chain_6": "This chain includes the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic, and the `CheckboxInput.get_context` method alone does not address the shared `attrs` issue."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the SplitArrayField. The issue described is that once a checkbox is marked as checked, all subsequent checkboxes in the array are also marked as checked. This behavior is likely due to the `final_attrs` dictionary being modified and reused for each subwidget. By ensuring that `final_attrs` is not modified or is reset before each subwidget is rendered, we can prevent this issue from occurring.",
+            "modification_strategy": "Modify the `SplitArrayWidget.get_context` method to ensure that `final_attrs` is not modified or is reset before each subwidget is rendered. Specifically, create a new dictionary for each subwidget's attributes instead of reusing `final_attrs`.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the BooleanField and its conversion to Python boolean objects. While it is related to the handling of boolean values, it does not directly address the issue of rendering multiple checkboxes in a SplitArrayField.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which sets the 'checked' attribute based on the value. However, this method is called for each individual checkbox, and the issue lies in how the `final_attrs` dictionary is managed across multiple checkboxes in the SplitArrayWidget.",
+              "chain_3": "This chain deals with the `BoundField.as_widget` method, which is a higher-level method for rendering fields. It is not specific to the SplitArrayField or the CheckboxInput widget, and thus is not the best place to address the issue.",
+              "chain_4": "This chain contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the SplitArrayField. The issue described is likely due to the `final_attrs` dictionary being modified and reused for each subwidget. Modifying this chain would directly address the problem.",
+              "chain_5": "This chain contains the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but more general. While it could be a potential target, `SplitArrayWidget.get_context` is more specific to the issue at hand and is a better place to start.",
+              "chain_6": "This chain contains the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic, and the `CheckboxInput.get_context` method is already identified as part of the problem but not the root cause."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the individual widgets within the `SplitArrayField`. The issue described involves the `attrs` dictionary being modified by the `CheckboxInput` widget, causing all subsequent checkboxes to be checked. Modifying this method to ensure that the `attrs` dictionary is not shared across multiple widget instances would directly address the problem.",
+            "modification_strategy": "Ensure that a new copy of `final_attrs` is created for each widget instance to prevent the `checked` attribute from being shared.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its `to_python` method, which is not directly related to the rendering issue. While it processes boolean values, it does not influence the widget rendering logic.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which is where the `attrs` dictionary is modified. However, this is a symptom of the issue rather than the root cause. The problem lies in how the `attrs` dictionary is managed in the parent widget.",
+              "chain_3": "This chain deals with the `BoundField.as_widget` method, which is part of the form rendering process. While it sets up the initial `attrs` dictionary, it does not directly manage the rendering of individual widgets within a `SplitArrayField`.",
+              "chain_4": "This chain contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the individual widgets within the `SplitArrayField`. It is the most likely place where the `attrs` dictionary is being shared across multiple widget instances, leading to the described issue.",
+              "chain_5": "This chain contains the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but more general. While it could be a candidate, `SplitArrayWidget.get_context` is more specific to the `SplitArrayField` and thus a better target for the fix.",
+              "chain_6": "This chain contains the base `Widget.get_context` method, which is called by all widgets. Modifying this method could have broader implications and is less targeted compared to modifying `SplitArrayWidget.get_context`."
+            },
+            "agent_id": 5
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the `SplitArrayField`. The issue described involves the `CheckboxInput` widget incorrectly setting the `checked` attribute for all subsequent checkboxes after the first `True` value. This chain is the most likely location where the bug manifests because it is where the `CheckboxInput` widget's `get_context` method is called within the loop that iterates over the array values. By ensuring that the `attrs` dictionary is not modified in a way that affects subsequent iterations, we can directly address the problem.",
+            "modification_strategy": "Modify the `SplitArrayWidget.get_context` method to ensure that the `attrs` dictionary is not modified by the `CheckboxInput` widget during the loop. This can be achieved by passing a copy of `final_attrs` to the `get_context` method of each subwidget.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its `to_python` method, which converts input values to Python booleans. While related to the overall form handling, it does not directly influence the rendering of the checkboxes and thus is not the primary location of the issue.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which sets the `checked` attribute. However, this method is called from other parts of the code, and modifying it alone might not prevent the issue from occurring in the context of `SplitArrayField`. It is a contributing factor but not the root cause.",
+              "chain_3": "This chain includes the `BoundField.as_widget` method, which is part of the general form rendering process. While it is involved in the rendering of widgets, it does not directly handle the specific issue of `SplitArrayField` and `CheckboxInput` interaction.",
+              "chain_4": "This chain contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the `SplitArrayField`. It is the most likely location where the bug manifests because it is where the `CheckboxInput` widget's `get_context` method is called within the loop that iterates over the array values. Ensuring that the `attrs` dictionary is not modified during this loop will directly address the issue.",
+              "chain_5": "This chain deals with the `MultiWidget.get_context` method, which is a more general method for handling multiple widgets. While it shares some similarities with `SplitArrayWidget`, it is not specific to the `SplitArrayField` and `CheckboxInput` interaction. Modifying this chain might not resolve the issue as effectively as Chain 4.",
+              "chain_6": "This chain includes the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic and the `CheckboxInput.get_context` method, while relevant, is called from other parts of the code. This chain is less likely to be the primary modification target compared to Chain 4."
+            },
+            "agent_id": 4
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering each sub-widget in the array. The issue described involves the `CheckboxInput` widget incorrectly setting the `checked` attribute for all subsequent checkboxes once it encounters a `True` value. Modifying the `SplitArrayWidget.get_context` method to ensure that the `attrs` dictionary is not shared across iterations would directly address the problem.",
+            "modification_strategy": "Ensure that the `attrs` dictionary is copied for each sub-widget to prevent shared state issues.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its `to_python` method, which is used to convert form data to a Python boolean. While related, it does not directly address the rendering issue.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which sets the `checked` attribute. However, this method is called for each individual checkbox and does not control the sharing of attributes across multiple checkboxes.",
+              "chain_3": "This chain includes the `BoundField.as_widget` method, which is part of the form rendering process. It does not directly handle the specific issue of shared attributes between checkboxes.",
+              "chain_4": "This chain is the most relevant because it handles the rendering of multiple sub-widgets in the `SplitArrayWidget`. The issue arises from the shared `attrs` dictionary, which can be fixed by ensuring each sub-widget gets a fresh copy of `attrs`.",
+              "chain_5": "This chain deals with the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but more general. While it could be a potential target, `SplitArrayWidget.get_context` is more specific to the issue at hand.",
+              "chain_6": "This chain includes the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic, and the `CheckboxInput.get_context` method is already identified as the source of the `checked` attribute being set."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering each sub-widget in the array. The issue described involves the `attrs` dictionary being modified by the `CheckboxInput.get_context` method, causing all subsequent checkboxes to be checked. By ensuring that `final_attrs` is not shared across iterations, we can prevent this side effect and resolve the issue.",
+            "modification_strategy": "Modify the `SplitArrayWidget.get_context` method to ensure that `final_attrs` is a fresh copy for each iteration of the loop, preventing the `checked` attribute from being propagated to subsequent widgets.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its conversion methods. While related, the issue is more about how the widget renders the field, not the field itself.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method where the `checked` attribute is set. However, modifying this method alone does not address the root cause of the issue, which is the shared `attrs` dictionary.",
+              "chain_3": "This chain involves the `BoundField.as_widget` method, which is part of the rendering process but is too high-level to directly address the specific issue with the `attrs` dictionary being modified.",
+              "chain_4": "This chain is the most relevant as it contains the `SplitArrayWidget.get_context` method, which is responsible for rendering each sub-widget. The shared `attrs` dictionary is the root cause of the issue, and modifying this method to use a fresh copy of `attrs` for each iteration will resolve the problem.",
+              "chain_5": "This chain contains the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but is more general. While it might also need a similar fix, `SplitArrayWidget.get_context` is the more specific and immediate target.",
+              "chain_6": "This chain includes the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic, and the `CheckboxInput.get_context` method alone does not address the shared `attrs` issue."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the SplitArrayField. The issue described is that once a checkbox is marked as checked, all subsequent checkboxes in the array are also marked as checked. This behavior is likely due to the `final_attrs` dictionary being modified and reused for each subwidget. By ensuring that `final_attrs` is not modified or is reset before each subwidget is rendered, we can prevent this issue from occurring.",
+            "modification_strategy": "Modify the `SplitArrayWidget.get_context` method to ensure that `final_attrs` is not modified or is reset before each subwidget is rendered. Specifically, create a new dictionary for each subwidget's attributes instead of reusing `final_attrs`.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the BooleanField and its conversion to Python boolean objects. While it is related to the handling of boolean values, it does not directly address the issue of rendering multiple checkboxes in a SplitArrayField.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which sets the 'checked' attribute based on the value. However, this method is called for each individual checkbox, and the issue lies in how the `final_attrs` dictionary is managed across multiple checkboxes in the SplitArrayWidget.",
+              "chain_3": "This chain deals with the `BoundField.as_widget` method, which is a higher-level method for rendering fields. It is not specific to the SplitArrayField or the CheckboxInput widget, and thus is not the best place to address the issue.",
+              "chain_4": "This chain contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the SplitArrayField. The issue described is likely due to the `final_attrs` dictionary being modified and reused for each subwidget. Modifying this chain would directly address the problem.",
+              "chain_5": "This chain contains the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but more general. While it could be a potential target, `SplitArrayWidget.get_context` is more specific to the issue at hand and is a better place to start.",
+              "chain_6": "This chain contains the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic, and the `CheckboxInput.get_context` method is already identified as part of the problem but not the root cause."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the individual widgets within the `SplitArrayField`. The issue described involves the `attrs` dictionary being modified by the `CheckboxInput` widget, causing all subsequent checkboxes to be checked. Modifying this method to ensure that the `attrs` dictionary is not shared across multiple widget instances would directly address the problem.",
+            "modification_strategy": "Ensure that a new copy of `final_attrs` is created for each widget instance to prevent the `checked` attribute from being shared.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its `to_python` method, which is not directly related to the rendering issue. While it processes boolean values, it does not influence the widget rendering logic.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which is where the `attrs` dictionary is modified. However, this is a symptom of the issue rather than the root cause. The problem lies in how the `attrs` dictionary is managed in the parent widget.",
+              "chain_3": "This chain deals with the `BoundField.as_widget` method, which is part of the form rendering process. While it sets up the initial `attrs` dictionary, it does not directly manage the rendering of individual widgets within a `SplitArrayField`.",
+              "chain_4": "This chain contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the individual widgets within the `SplitArrayField`. It is the most likely place where the `attrs` dictionary is being shared across multiple widget instances, leading to the described issue.",
+              "chain_5": "This chain contains the `MultiWidget.get_context` method, which is similar to `SplitArrayWidget.get_context` but more general. While it could be a candidate, `SplitArrayWidget.get_context` is more specific to the `SplitArrayField` and thus a better target for the fix.",
+              "chain_6": "This chain contains the base `Widget.get_context` method, which is called by all widgets. Modifying this method could have broader implications and is less targeted compared to modifying `SplitArrayWidget.get_context`."
+            },
+            "agent_id": 5
+          },
+          {
+            "voted_chain_id": "chain_4",
+            "confidence": 90,
+            "reasoning": "Chain 4 contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the `SplitArrayField`. The issue described involves the `CheckboxInput` widget incorrectly setting the `checked` attribute for all subsequent checkboxes after the first `True` value. This chain is the most likely location where the bug manifests because it is where the `CheckboxInput` widget's `get_context` method is called within the loop that iterates over the array values. By ensuring that the `attrs` dictionary is not modified in a way that affects subsequent iterations, we can directly address the problem.",
+            "modification_strategy": "Modify the `SplitArrayWidget.get_context` method to ensure that the `attrs` dictionary is not modified by the `CheckboxInput` widget during the loop. This can be achieved by passing a copy of `final_attrs` to the `get_context` method of each subwidget.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the `BooleanField` and its `to_python` method, which converts input values to Python booleans. While related to the overall form handling, it does not directly influence the rendering of the checkboxes and thus is not the primary location of the issue.",
+              "chain_2": "This chain contains the `CheckboxInput.get_context` method, which sets the `checked` attribute. However, this method is called from other parts of the code, and modifying it alone might not prevent the issue from occurring in the context of `SplitArrayField`. It is a contributing factor but not the root cause.",
+              "chain_3": "This chain includes the `BoundField.as_widget` method, which is part of the general form rendering process. While it is involved in the rendering of widgets, it does not directly handle the specific issue of `SplitArrayField` and `CheckboxInput` interaction.",
+              "chain_4": "This chain contains the `SplitArrayWidget.get_context` method, which is responsible for rendering the subwidgets of the `SplitArrayField`. It is the most likely location where the bug manifests because it is where the `CheckboxInput` widget's `get_context` method is called within the loop that iterates over the array values. Ensuring that the `attrs` dictionary is not modified during this loop will directly address the issue.",
+              "chain_5": "This chain deals with the `MultiWidget.get_context` method, which is a more general method for handling multiple widgets. While it shares some similarities with `SplitArrayWidget`, it is not specific to the `SplitArrayField` and `CheckboxInput` interaction. Modifying this chain might not resolve the issue as effectively as Chain 4.",
+              "chain_6": "This chain includes the base `Widget.get_context` method and the `CheckboxInput.get_context` method. The base method is too generic and the `CheckboxInput.get_context` method, while relevant, is called from other parts of the code. This chain is less likely to be the primary modification target compared to Chain 4."
+            },
+            "agent_id": 4
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/fields.py:BooleanField",
+              "django/forms/fields.py:BooleanField.to_python",
+              "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+              "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+              "django/forms/fields.py:MultipleChoiceField.to_python"
+            ],
+            "chain_length": 5,
+            "initial_entity": "CheckboxInput",
+            "start_entity": {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "entity_type": "class",
+              "relevance_reason": "BooleanField is used in conjunction with CheckboxInput and might need adjustments to handle the issue properly.",
+              "diversity_value": "Field implementation from forms module"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/fields.py:BooleanField",
+              "type": "class",
+              "code": "```\n697 | class BooleanField(Field):\n698 |     widget = CheckboxInput\n699 | \n700 |     def to_python(self, value):\n701 |         \"\"\"Return a Python boolean object.\"\"\"\n702 |         # Explicitly check for the string 'False', which is what a hidden field\n703 |         # will submit for False. Also check for '0', since this is what\n704 |         # RadioSelect will provide. Because bool(\"True\") == bool('1') == True,\n705 |         # we don't need to handle that explicitly.\n706 |         if isinstance(value, str) and value.lower() in ('false', '0'):\n707 |             value = False\n708 |         else:\n709 |             value = bool(value)\n710 |         return super().to_python(value)\n711 | \n712 |     def validate(self, value):\n713 |         if not value and self.required:\n714 |             raise ValidationError(self.error_messages['required'], code='required')\n715 | \n716 |     def has_changed(self, initial, data):\n717 |         if self.disabled:\n718 |             return False\n719 |         # Sometimes data or initial may be a string equivalent of a boolean\n720 |         # so we should run it through to_python first to get a boolean value\n721 |         return self.to_python(initial) != self.to_python(data)\n```",
+              "start_line": 697,
+              "end_line": 721,
+              "code_omitted": false,
+              "original_code_length": 1221
+            },
+            {
+              "entity_id": "django/forms/fields.py:BooleanField.to_python",
+              "type": "function",
+              "code": "```\n700 | def to_python(self, value):\n701 |         \"\"\"Return a Python boolean object.\"\"\"\n702 |         # Explicitly check for the string 'False', which is what a hidden field\n703 |         # will submit for False. Also check for '0', since this is what\n704 |         # RadioSelect will provide. Because bool(\"True\") == bool('1') == True,\n705 |         # we don't need to handle that explicitly.\n706 |         if isinstance(value, str) and value.lower() in ('false', '0'):\n707 |             value = False\n708 |         else:\n709 |             value = bool(value)\n710 |         return super().to_python(value)\n```",
+              "start_line": 700,
+              "end_line": 710,
+              "code_omitted": false,
+              "original_code_length": 612
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayField.to_python",
+              "type": "function",
+              "code": "```\n193 | def to_python(self, value):\n194 |         value = super().to_python(value)\n195 |         return [self.base_field.to_python(item) for item in value]\n```",
+              "start_line": 193,
+              "end_line": 195,
+              "code_omitted": false,
+              "original_code_length": 161
+            },
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SimpleArrayField.to_python",
+              "type": "function",
+              "code": "```\n39 | def to_python(self, value):\n40 |         if isinstance(value, list):\n41 |             items = value\n42 |         elif value:\n43 |             items = value.split(self.delimiter)\n44 |         else:\n45 |             items = []\n46 |         errors = []\n47 |         values = []\n48 |         for index, item in enumerate(items):\n49 |             try:\n50 |                 values.append(self.base_field.to_python(item))\n51 |             except ValidationError as error:\n52 |                 errors.append(prefix_validation_error(\n53 |                     error,\n54 |                     prefix=self.error_messages['item_invalid'],\n55 |                     code='item_invalid',\n56 |                     params={'nth': index + 1},\n57 |                 ))\n58 |         if errors:\n59 |             raise ValidationError(errors)\n60 |         return values\n```",
+              "start_line": 39,
+              "end_line": 60,
+              "code_omitted": false,
+              "original_code_length": 858
+            },
+            {
+              "entity_id": "django/forms/fields.py:MultipleChoiceField.to_python",
+              "type": "function",
+              "code": "```\n856 | def to_python(self, value):\n857 |         if not value:\n858 |             return []\n859 |         elif not isinstance(value, (list, tuple)):\n860 |             raise ValidationError(self.error_messages['invalid_list'], code='invalid_list')\n861 |         return [str(val) for val in value]\n```",
+              "start_line": 856,
+              "end_line": 861,
+              "code_omitted": false,
+              "original_code_length": 301
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/widgets.py:CheckboxInput.get_context"
+            ],
+            "chain_length": 1,
+            "initial_entity": "CheckboxInput",
+            "start_entity": {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This method is where the 'checked' attribute is being set, which is the root cause of the issue.",
+              "diversity_value": "Method within the CheckboxInput class"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8622617721557617,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "type": "function",
+              "code": "```\n523 | def get_context(self, name, value, attrs):\n524 |         if self.check_test(value):\n525 |             if attrs is None:\n526 |                 attrs = {}\n527 |             attrs['checked'] = True\n528 |         return super().get_context(name, value, attrs)\n```",
+              "start_line": 523,
+              "end_line": 528,
+              "code_omitted": false,
+              "original_code_length": 269
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/boundfield.py:BoundField.as_widget"
+            ],
+            "chain_length": 1,
+            "initial_entity": "SplitArrayField",
+            "start_entity": {
+              "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for rendering a form field as a widget, and might be involved in how the attrs are handled.",
+              "diversity_value": "Function from a different module that handles form field rendering"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8788952827453613,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/boundfield.py:BoundField.as_widget",
+              "type": "function",
+              "code": "```\n79 | def as_widget(self, widget=None, attrs=None, only_initial=False):\n80 |         \"\"\"\n81 |         Render the field by rendering the passed widget, adding any HTML\n82 |         attributes passed as attrs. If a widget isn't specified, use the\n83 |         field's default widget.\n84 |         \"\"\"\n85 |         widget = widget or self.field.widget\n86 |         if self.field.localize:\n87 |             widget.is_localized = True\n88 |         attrs = attrs or {}\n89 |         attrs = self.build_widget_attrs(attrs, widget)\n90 |         if self.auto_id and 'id' not in widget.attrs:\n91 |             attrs.setdefault('id', self.html_initial_id if only_initial else self.auto_id)\n92 |         return widget.render(\n93 |             name=self.html_initial_name if only_initial else self.html_name,\n94 |             value=self.value(),\n95 |             attrs=attrs,\n96 |             renderer=self.form.renderer,\n97 |         )\n```",
+              "start_line": 79,
+              "end_line": 97,
+              "code_omitted": false,
+              "original_code_length": 929
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+            ],
+            "chain_length": 1,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+              "diversity_value": "PostgreSQL-specific form widget from contrib module"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8827582597732544,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+              "type": "function",
+              "code": "```\n133 | def get_context(self, name, value, attrs=None):\n134 |         attrs = {} if attrs is None else attrs\n135 |         context = super().get_context(name, value, attrs)\n136 |         if self.is_localized:\n137 |             self.widget.is_localized = self.is_localized\n138 |         value = value or []\n139 |         context['widget']['subwidgets'] = []\n140 |         final_attrs = self.build_attrs(attrs)\n141 |         id_ = final_attrs.get('id')\n142 |         for i in range(max(len(value), self.size)):\n143 |             try:\n144 |                 widget_value = value[i]\n145 |             except IndexError:\n146 |                 widget_value = None\n147 |             if id_:\n148 |                 final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149 |             context['widget']['subwidgets'].append(\n150 |                 self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151 |             )\n152 |         return context\n```",
+              "start_line": 133,
+              "end_line": 152,
+              "code_omitted": false,
+              "original_code_length": 974
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/widgets.py:MultiWidget.get_context",
+              "django/forms/widgets.py:CheckboxInput.get_context"
+            ],
+            "chain_length": 2,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "MultiWidget is a parent class of SplitArrayWidget and its context handling might be relevant to understanding and fixing the issue.",
+              "diversity_value": "Parent widget class from forms module"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.888575553894043,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/widgets.py:MultiWidget.get_context",
+              "type": "function",
+              "code": "```\n811 | def get_context(self, name, value, attrs):\n812 |         context = super().get_context(name, value, attrs)\n813 |         if self.is_localized:\n814 |             for widget in self.widgets:\n815 |                 widget.is_localized = self.is_localized\n816 |         # value is a list of values, each corresponding to a widget\n817 |         # in self.widgets.\n818 |         if not isinstance(value, list):\n819 |             value = self.decompress(value)\n820 | \n821 |         final_attrs = context['widget']['attrs']\n822 |         input_type = final_attrs.pop('type', None)\n823 |         id_ = final_attrs.get('id')\n824 |         subwidgets = []\n825 |         for i, widget in enumerate(self.widgets):\n826 |             if input_type is not None:\n827 |                 widget.input_type = input_type\n828 |             widget_name = '%s_%s' % (name, i)\n829 |             try:\n830 |                 widget_value = value[i]\n831 |             except IndexError:\n832 |                 widget_value = None\n833 |             if id_:\n834 |                 widget_attrs = final_attrs.copy()\n835 |                 widget_attrs['id'] = '%s_%s' % (id_, i)\n836 |             else:\n837 |                 widget_attrs = final_attrs\n838 |             subwidgets.append(widget.get_context(widget_name, widget_value, widget_attrs)['widget'])\n839 |         context['widget']['subwidgets'] = subwidgets\n840 |         return context\n```",
+              "start_line": 811,
+              "end_line": 840,
+              "code_omitted": false,
+              "original_code_length": 1423
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "type": "function",
+              "code": "```\n523 | def get_context(self, name, value, attrs):\n524 |         if self.check_test(value):\n525 |             if attrs is None:\n526 |                 attrs = {}\n527 |             attrs['checked'] = True\n528 |         return super().get_context(name, value, attrs)\n```",
+              "start_line": 523,
+              "end_line": 528,
+              "code_omitted": false,
+              "original_code_length": 269
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "django/forms/widgets.py:Widget.get_context",
+              "django/forms/widgets.py:CheckboxInput.get_context"
+            ],
+            "chain_length": 2,
+            "initial_entity": "get_context",
+            "start_entity": {
+              "entity_id": "django/forms/widgets.py:Widget.get_context",
+              "entity_type": "function",
+              "relevance_reason": "Widget is the base class for all widgets, including CheckboxInput and SplitArrayWidget. Understanding how it handles context might provide insights into the issue.",
+              "diversity_value": "Base widget class from forms module"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8907415270805359,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "django/forms/widgets.py:Widget.get_context",
+              "type": "function",
+              "code": "```\n227 | def get_context(self, name, value, attrs):\n228 |         context = {}\n229 |         context['widget'] = {\n230 |             'name': name,\n231 |             'is_hidden': self.is_hidden,\n232 |             'required': self.is_required,\n233 |             'value': self.format_value(value),\n234 |             'attrs': self.build_attrs(self.attrs, attrs),\n235 |             'template_name': self.template_name,\n236 |         }\n237 |         return context\n```",
+              "start_line": 227,
+              "end_line": 237,
+              "code_omitted": false,
+              "original_code_length": 463
+            },
+            {
+              "entity_id": "django/forms/widgets.py:CheckboxInput.get_context",
+              "type": "function",
+              "code": "```\n523 | def get_context(self, name, value, attrs):\n524 |         if self.check_test(value):\n525 |             if attrs is None:\n526 |                 attrs = {}\n527 |             attrs['checked'] = True\n528 |         return super().get_context(name, value, attrs)\n```",
+              "start_line": 523,
+              "end_line": 528,
+              "code_omitted": false,
+              "original_code_length": 269
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_4",
+        "original_chain_info": {
+          "chain": [
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+            "diversity_value": "PostgreSQL-specific form widget from contrib module"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8827582597732544,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+            "type": "function",
+            "code": "```\n133 | def get_context(self, name, value, attrs=None):\n134 |         attrs = {} if attrs is None else attrs\n135 |         context = super().get_context(name, value, attrs)\n136 |         if self.is_localized:\n137 |             self.widget.is_localized = self.is_localized\n138 |         value = value or []\n139 |         context['widget']['subwidgets'] = []\n140 |         final_attrs = self.build_attrs(attrs)\n141 |         id_ = final_attrs.get('id')\n142 |         for i in range(max(len(value), self.size)):\n143 |             try:\n144 |                 widget_value = value[i]\n145 |             except IndexError:\n146 |                 widget_value = None\n147 |             if id_:\n148 |                 final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149 |             context['widget']['subwidgets'].append(\n150 |                 self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151 |             )\n152 |         return context\n```",
+            "start_line": 133,
+            "end_line": 152,
+            "code_omitted": false,
+            "original_code_length": 974
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 4,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_4"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-08T09:22:40.923280",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 2,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151: The loop that initializes subwidgets and the way final_attrs is handled",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across all iterations of the loop, leading to the 'checked' attribute being set to True once and affecting all subsequent widgets. To fix this, we need to ensure that each widget gets a fresh copy of `final_attrs`.",
+                "suggested_approach": "1. At line 141, instead of reusing `final_attrs`, create a new dictionary for each iteration of the loop. Modify the line as follows:\n\n```python\nfor i in range(max(len(value), self.size)):\n    try:\n        widget_value = value[i]\n    except IndexError:\n        widget_value = None\n    if id_:\n        # Create a new dictionary for each widget to avoid side effects\n        widget_final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n    else:\n        widget_final_attrs = final_attrs.copy()\n    context['widget']['subwidgets'].append(\n        self.widget.get_context(name + '_%s' % i, widget_value, widget_final_attrs)['widget']\n    )\n```\n\n2. Ensure that `final_attrs` is not modified outside the loop to prevent unintended side effects. This change ensures that each widget gets its own isolated attributes, preventing the 'checked' attribute from being propagated to all widgets after the first True value.\n\n3. Test the changes by providing a variety of input arrays to the `SplitArrayField` with mixed True and False values to verify that the checkboxes are correctly initialized."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget within the loop to prevent the 'checked' attribute from being shared and affecting other widgets. This ensures that each checkbox is initialized based on its corresponding value in the input array.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 3,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 143-151: The way final_attrs is being reused for each sub-widget initialization",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified and reused across multiple iterations of the for loop. When a checkbox is set to checked, this change persists and affects subsequent checkboxes. To resolve this, we need to ensure that each sub-widget receives a fresh copy of `final_attrs`.",
+                "suggested_approach": "To fix this issue, modify the `get_context` method in the `SplitArrayWidget` class as follows:\n\n1. At line 143, before the for loop, add the following import statement if not already present:\n   ```python\n   from copy import deepcopy\n   ```\n2. Inside the for loop, at line 149, modify the code to create a deep copy of `final_attrs` before passing it to the `get_context` method of the sub-widget:\n   ```python\n   149 | subwidget_final_attrs = deepcopy(final_attrs)\n   150 | if id_:\n   151 |     subwidget_final_attrs['id'] = '%s_%s' % (id_, i)\n   152 | context['widget']['subwidgets'].append(\n   153 |     self.widget.get_context(name + '_%s' % i, widget_value, subwidget_final_attrs)['widget']\n   154 | )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any side effects from modifying the original `final_attrs` dictionary.\n4. Test the changes with various arrays containing both True and False values to ensure that the checkboxes are correctly initialized based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes for each sub-widget by creating a deep copy of the `final_attrs` dictionary. This prevents the modification of one widget's attributes from affecting the others, ensuring that each checkbox is correctly initialized according to its corresponding value in the data array.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151 where the final_attrs are being passed to subwidgets",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified by the `CheckboxInput` widget's `get_context()` method. Since `final_attrs` is reused for each subwidget, once it gets set to `{'checked': True}`, all subsequent subwidgets inherit this attribute, causing them to be checked regardless of their actual value. To fix this, we need to ensure that `final_attrs` is not modified and that each subwidget receives a fresh copy of the attributes.",
+                "suggested_approach": "1. Import the `copy` module at the top of the file if it's not already imported.\n2. Modify line 141 to create a deep copy of `final_attrs` before passing it to each subwidget:\n   ```python\n   from copy import deepcopy\n   ...\n   141 | for i in range(max(len(value), self.size)):\n   142 |     try:\n   143 |         widget_value = value[i]\n   144 |     except IndexError:\n   145 |         widget_value = None\n   146 |     if id_:\n   147 |         subwidget_attrs = deepcopy(final_attrs)\n   148 |         subwidget_attrs['id'] = '%s_%s' % (id_, i)\n   149 |     else:\n   150 |         subwidget_attrs = deepcopy(final_attrs)\n   151 |     context['widget']['subwidgets'].append(\n   152 |         self.widget.get_context(name + '_%s' % i, widget_value, subwidget_attrs)['widget']\n   153 |     )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any modifications in the `CheckboxInput` widget from affecting other subwidgets.\n4. Test the changes with various inputs, including arrays with mixed `True` and `False` values, to ensure that the checkboxes are correctly checked or unchecked based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves ensuring that each subwidget in the `SplitArrayWidget` receives a fresh copy of the attributes dictionary (`final_attrs`). This prevents the `CheckboxInput` widget from modifying the shared attributes and affecting other subwidgets. By using `deepcopy`, we maintain the integrity of the attributes for each subwidget, thus fixing the bug.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 5,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in the get_context method of SplitArrayWidget",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused and modified by the `CheckboxInput` widget's `get_context` method. This causes all subsequent checkboxes to inherit the 'checked' attribute once it is set to True. To fix this, we need to ensure that each widget receives a fresh copy of the `final_attrs` dictionary.",
+                "suggested_approach": "To resolve this issue, modify the `get_context` method in the `SplitArrayWidget` class by creating a deep copy of `final_attrs` before passing it to each sub-widget. This ensures that each sub-widget gets its own independent attributes dictionary.\n\n1. Import the `copy` module at the top of the file:\n```python\nimport copy\n```\n2. Modify line 149 to use a deep copy of `final_attrs`:\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, copy.deepcopy(final_attrs))['widget']\n)\n```\nThis change will prevent the `CheckboxInput` widget from modifying the `final_attrs` dictionary used by other widgets. Ensure that the `copy` module is imported to avoid any issues with shallow copies."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes dictionary for each sub-widget to prevent unintended side effects. By making a deep copy of `final_attrs` before passing it to each sub-widget, we ensure that the 'checked' attribute is not propagated across multiple widgets when it should not be. This approach addresses the root cause of the issue without altering the behavior of the `CheckboxInput` widget itself.",
+            "confidence": 95
+          }
+        },
+        {
+          "agent_id": 4,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across multiple iterations of the loop, leading to the 'checked' attribute being set to True for all subsequent widgets once it is set for the first True value. To fix this, we need to ensure that `final_attrs` is not modified during the iteration and that a fresh copy is used for each widget.",
+                "suggested_approach": "1. Modify the `get_context` method in `SplitArrayWidget` by creating a fresh copy of `final_attrs` for each iteration of the loop. Specifically, change line 149 from:\n\n```python\nfinal_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\nto:\n\n```python\nwidget_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\n2. Update the call to `self.widget.get_context` on line 150 to use the new `widget_attrs` variable instead of `final_attrs`:\n\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, widget_attrs)['widget']\n)\n```\n3. Ensure that the `widget_attrs` dictionary is not modified by any other part of the code within the loop.\n4. Test the changes by providing a `SplitArrayField` with a mix of True and False values and verify that only the correct checkboxes are checked.\n5. Add unit tests to cover edge cases such as empty arrays, arrays with only False values, and arrays with only True values."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget to prevent the 'checked' attribute from being propagated to all subsequent widgets. By creating a fresh copy of `final_attrs` for each iteration, we ensure that the state of the attributes is preserved correctly.",
+            "confidence": 95
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_4):**\n\n**Entity 1: django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context**\nType: function\nLines: 133-152\nCode:\n```\n```\n133 | def get_context(self, name, value, attrs=None):\n134 |         attrs = {} if attrs is None else attrs\n135 |         context = super().get_context(name, value, attrs)\n136 |         if self.is_localized:\n137 |             self.widget.is_localized = self.is_localized\n138 |         value = value or []\n139 |         context['widget']['subwidgets'] = []\n140 |         final_attrs = self.build_attrs(attrs)\n141 |         id_ = final_attrs.get('id')\n142 |         for i in range(max(len(value), self.size)):\n143 |             try:\n144 |                 widget_value = value[i]\n145 |             except IndexError:\n146 |                 widget_value = None\n147 |             if id_:\n148 |                 final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149 |             context['widget']['subwidgets'].append(\n150 |                 self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151 |             )\n152 |         return context\n```\n```\n\n",
+      "num_agents": 5
+    }
+  },
+  "stage_7_round2_analysis": {
+    "timestamp": "2026-10-08T09:22:40.929593",
+    "data": {
+      "second_round_analyses": [
+        {
+          "agent_id": 2,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151: The loop that initializes subwidgets and the way final_attrs is handled",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across all iterations of the loop, leading to the 'checked' attribute being set to True once and affecting all subsequent widgets. To fix this, we need to ensure that each widget gets a fresh copy of `final_attrs`.",
+                "suggested_approach": "1. At line 141, instead of reusing `final_attrs`, create a new dictionary for each iteration of the loop. Modify the line as follows:\n\n```python\nfor i in range(max(len(value), self.size)):\n    try:\n        widget_value = value[i]\n    except IndexError:\n        widget_value = None\n    if id_:\n        # Create a new dictionary for each widget to avoid side effects\n        widget_final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n    else:\n        widget_final_attrs = final_attrs.copy()\n    context['widget']['subwidgets'].append(\n        self.widget.get_context(name + '_%s' % i, widget_value, widget_final_attrs)['widget']\n    )\n```\n\n2. Ensure that `final_attrs` is not modified outside the loop to prevent unintended side effects. This change ensures that each widget gets its own isolated attributes, preventing the 'checked' attribute from being propagated to all widgets after the first True value.\n\n3. Test the changes by providing a variety of input arrays to the `SplitArrayField` with mixed True and False values to verify that the checkboxes are correctly initialized."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget within the loop to prevent the 'checked' attribute from being shared and affecting other widgets. This ensures that each checkbox is initialized based on its corresponding value in the input array.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151: The loop that initializes subwidgets and the way final_attrs is handled",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across all iterations of the loop, leading to the 'checked' attribute being set to True once and affecting all subsequent widgets. To fix this, we need to ensure that each widget gets a fresh copy of `final_attrs`.",
+                "suggested_approach": "1. At line 141, instead of reusing `final_attrs`, create a new dictionary for each iteration of the loop. Modify the line as follows:\n\n```python\nfor i in range(max(len(value), self.size)):\n    try:\n        widget_value = value[i]\n    except IndexError:\n        widget_value = None\n    if id_:\n        # Create a new dictionary for each widget to avoid side effects\n        widget_final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n    else:\n        widget_final_attrs = final_attrs.copy()\n    context['widget']['subwidgets'].append(\n        self.widget.get_context(name + '_%s' % i, widget_value, widget_final_attrs)['widget']\n    )\n```\n\n2. Ensure that `final_attrs` is not modified outside the loop to prevent unintended side effects. This change ensures that each widget gets its own isolated attributes, preventing the 'checked' attribute from being propagated to all widgets after the first True value.\n\n3. Test the changes by providing a variety of input arrays to the `SplitArrayField` with mixed True and False values to verify that the checkboxes are correctly initialized."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 3,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 143-151: The way final_attrs is being reused for each sub-widget initialization",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified and reused across multiple iterations of the for loop. When a checkbox is set to checked, this change persists and affects subsequent checkboxes. To resolve this, we need to ensure that each sub-widget receives a fresh copy of `final_attrs`.",
+                "suggested_approach": "To fix this issue, modify the `get_context` method in the `SplitArrayWidget` class as follows:\n\n1. At line 143, before the for loop, add the following import statement if not already present:\n   ```python\n   from copy import deepcopy\n   ```\n2. Inside the for loop, at line 149, modify the code to create a deep copy of `final_attrs` before passing it to the `get_context` method of the sub-widget:\n   ```python\n   149 | subwidget_final_attrs = deepcopy(final_attrs)\n   150 | if id_:\n   151 |     subwidget_final_attrs['id'] = '%s_%s' % (id_, i)\n   152 | context['widget']['subwidgets'].append(\n   153 |     self.widget.get_context(name + '_%s' % i, widget_value, subwidget_final_attrs)['widget']\n   154 | )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any side effects from modifying the original `final_attrs` dictionary.\n4. Test the changes with various arrays containing both True and False values to ensure that the checkboxes are correctly initialized based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes for each sub-widget by creating a deep copy of the `final_attrs` dictionary. This prevents the modification of one widget's attributes from affecting the others, ensuring that each checkbox is correctly initialized according to its corresponding value in the data array.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 143-151: The way final_attrs is being reused for each sub-widget initialization",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified and reused across multiple iterations of the for loop. When a checkbox is set to checked, this change persists and affects subsequent checkboxes. To resolve this, we need to ensure that each sub-widget receives a fresh copy of `final_attrs`.",
+                "suggested_approach": "To fix this issue, modify the `get_context` method in the `SplitArrayWidget` class as follows:\n\n1. At line 143, before the for loop, add the following import statement if not already present:\n   ```python\n   from copy import deepcopy\n   ```\n2. Inside the for loop, at line 149, modify the code to create a deep copy of `final_attrs` before passing it to the `get_context` method of the sub-widget:\n   ```python\n   149 | subwidget_final_attrs = deepcopy(final_attrs)\n   150 | if id_:\n   151 |     subwidget_final_attrs['id'] = '%s_%s' % (id_, i)\n   152 | context['widget']['subwidgets'].append(\n   153 |     self.widget.get_context(name + '_%s' % i, widget_value, subwidget_final_attrs)['widget']\n   154 | )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any side effects from modifying the original `final_attrs` dictionary.\n4. Test the changes with various arrays containing both True and False values to ensure that the checkboxes are correctly initialized based on the actual data."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151 where the final_attrs are being passed to subwidgets",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified by the `CheckboxInput` widget's `get_context()` method. Since `final_attrs` is reused for each subwidget, once it gets set to `{'checked': True}`, all subsequent subwidgets inherit this attribute, causing them to be checked regardless of their actual value. To fix this, we need to ensure that `final_attrs` is not modified and that each subwidget receives a fresh copy of the attributes.",
+                "suggested_approach": "1. Import the `copy` module at the top of the file if it's not already imported.\n2. Modify line 141 to create a deep copy of `final_attrs` before passing it to each subwidget:\n   ```python\n   from copy import deepcopy\n   ...\n   141 | for i in range(max(len(value), self.size)):\n   142 |     try:\n   143 |         widget_value = value[i]\n   144 |     except IndexError:\n   145 |         widget_value = None\n   146 |     if id_:\n   147 |         subwidget_attrs = deepcopy(final_attrs)\n   148 |         subwidget_attrs['id'] = '%s_%s' % (id_, i)\n   149 |     else:\n   150 |         subwidget_attrs = deepcopy(final_attrs)\n   151 |     context['widget']['subwidgets'].append(\n   152 |         self.widget.get_context(name + '_%s' % i, widget_value, subwidget_attrs)['widget']\n   153 |     )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any modifications in the `CheckboxInput` widget from affecting other subwidgets.\n4. Test the changes with various inputs, including arrays with mixed `True` and `False` values, to ensure that the checkboxes are correctly checked or unchecked based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves ensuring that each subwidget in the `SplitArrayWidget` receives a fresh copy of the attributes dictionary (`final_attrs`). This prevents the `CheckboxInput` widget from modifying the shared attributes and affecting other subwidgets. By using `deepcopy`, we maintain the integrity of the attributes for each subwidget, thus fixing the bug.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151 where the final_attrs are being passed to subwidgets",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified by the `CheckboxInput` widget's `get_context()` method. Since `final_attrs` is reused for each subwidget, once it gets set to `{'checked': True}`, all subsequent subwidgets inherit this attribute, causing them to be checked regardless of their actual value. To fix this, we need to ensure that `final_attrs` is not modified and that each subwidget receives a fresh copy of the attributes.",
+                "suggested_approach": "1. Import the `copy` module at the top of the file if it's not already imported.\n2. Modify line 141 to create a deep copy of `final_attrs` before passing it to each subwidget:\n   ```python\n   from copy import deepcopy\n   ...\n   141 | for i in range(max(len(value), self.size)):\n   142 |     try:\n   143 |         widget_value = value[i]\n   144 |     except IndexError:\n   145 |         widget_value = None\n   146 |     if id_:\n   147 |         subwidget_attrs = deepcopy(final_attrs)\n   148 |         subwidget_attrs['id'] = '%s_%s' % (id_, i)\n   149 |     else:\n   150 |         subwidget_attrs = deepcopy(final_attrs)\n   151 |     context['widget']['subwidgets'].append(\n   152 |         self.widget.get_context(name + '_%s' % i, widget_value, subwidget_attrs)['widget']\n   153 |     )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any modifications in the `CheckboxInput` widget from affecting other subwidgets.\n4. Test the changes with various inputs, including arrays with mixed `True` and `False` values, to ensure that the checkboxes are correctly checked or unchecked based on the actual data."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 5,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in the get_context method of SplitArrayWidget",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused and modified by the `CheckboxInput` widget's `get_context` method. This causes all subsequent checkboxes to inherit the 'checked' attribute once it is set to True. To fix this, we need to ensure that each widget receives a fresh copy of the `final_attrs` dictionary.",
+                "suggested_approach": "To resolve this issue, modify the `get_context` method in the `SplitArrayWidget` class by creating a deep copy of `final_attrs` before passing it to each sub-widget. This ensures that each sub-widget gets its own independent attributes dictionary.\n\n1. Import the `copy` module at the top of the file:\n```python\nimport copy\n```\n2. Modify line 149 to use a deep copy of `final_attrs`:\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, copy.deepcopy(final_attrs))['widget']\n)\n```\nThis change will prevent the `CheckboxInput` widget from modifying the `final_attrs` dictionary used by other widgets. Ensure that the `copy` module is imported to avoid any issues with shallow copies."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes dictionary for each sub-widget to prevent unintended side effects. By making a deep copy of `final_attrs` before passing it to each sub-widget, we ensure that the 'checked' attribute is not propagated across multiple widgets when it should not be. This approach addresses the root cause of the issue without altering the behavior of the `CheckboxInput` widget itself.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in the get_context method of SplitArrayWidget",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused and modified by the `CheckboxInput` widget's `get_context` method. This causes all subsequent checkboxes to inherit the 'checked' attribute once it is set to True. To fix this, we need to ensure that each widget receives a fresh copy of the `final_attrs` dictionary.",
+                "suggested_approach": "To resolve this issue, modify the `get_context` method in the `SplitArrayWidget` class by creating a deep copy of `final_attrs` before passing it to each sub-widget. This ensures that each sub-widget gets its own independent attributes dictionary.\n\n1. Import the `copy` module at the top of the file:\n```python\nimport copy\n```\n2. Modify line 149 to use a deep copy of `final_attrs`:\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, copy.deepcopy(final_attrs))['widget']\n)\n```\nThis change will prevent the `CheckboxInput` widget from modifying the `final_attrs` dictionary used by other widgets. Ensure that the `copy` module is imported to avoid any issues with shallow copies."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 4,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across multiple iterations of the loop, leading to the 'checked' attribute being set to True for all subsequent widgets once it is set for the first True value. To fix this, we need to ensure that `final_attrs` is not modified during the iteration and that a fresh copy is used for each widget.",
+                "suggested_approach": "1. Modify the `get_context` method in `SplitArrayWidget` by creating a fresh copy of `final_attrs` for each iteration of the loop. Specifically, change line 149 from:\n\n```python\nfinal_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\nto:\n\n```python\nwidget_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\n2. Update the call to `self.widget.get_context` on line 150 to use the new `widget_attrs` variable instead of `final_attrs`:\n\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, widget_attrs)['widget']\n)\n```\n3. Ensure that the `widget_attrs` dictionary is not modified by any other part of the code within the loop.\n4. Test the changes by providing a `SplitArrayField` with a mix of True and False values and verify that only the correct checkboxes are checked.\n5. Add unit tests to cover edge cases such as empty arrays, arrays with only False values, and arrays with only True values."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget to prevent the 'checked' attribute from being propagated to all subsequent widgets. By creating a fresh copy of `final_attrs` for each iteration, we ensure that the state of the attributes is preserved correctly.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across multiple iterations of the loop, leading to the 'checked' attribute being set to True for all subsequent widgets once it is set for the first True value. To fix this, we need to ensure that `final_attrs` is not modified during the iteration and that a fresh copy is used for each widget.",
+                "suggested_approach": "1. Modify the `get_context` method in `SplitArrayWidget` by creating a fresh copy of `final_attrs` for each iteration of the loop. Specifically, change line 149 from:\n\n```python\nfinal_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\nto:\n\n```python\nwidget_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\n2. Update the call to `self.widget.get_context` on line 150 to use the new `widget_attrs` variable instead of `final_attrs`:\n\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, widget_attrs)['widget']\n)\n```\n3. Ensure that the `widget_attrs` dictionary is not modified by any other part of the code within the loop.\n4. Test the changes by providing a `SplitArrayField` with a mix of True and False values and verify that only the correct checkboxes are checked.\n5. Add unit tests to cover edge cases such as empty arrays, arrays with only False values, and arrays with only True values."
+              }
+            ]
+          }
+        }
+      ],
+      "first_round_analyses": [
+        {
+          "agent_id": 2,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151: The loop that initializes subwidgets and the way final_attrs is handled",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across all iterations of the loop, leading to the 'checked' attribute being set to True once and affecting all subsequent widgets. To fix this, we need to ensure that each widget gets a fresh copy of `final_attrs`.",
+                "suggested_approach": "1. At line 141, instead of reusing `final_attrs`, create a new dictionary for each iteration of the loop. Modify the line as follows:\n\n```python\nfor i in range(max(len(value), self.size)):\n    try:\n        widget_value = value[i]\n    except IndexError:\n        widget_value = None\n    if id_:\n        # Create a new dictionary for each widget to avoid side effects\n        widget_final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n    else:\n        widget_final_attrs = final_attrs.copy()\n    context['widget']['subwidgets'].append(\n        self.widget.get_context(name + '_%s' % i, widget_value, widget_final_attrs)['widget']\n    )\n```\n\n2. Ensure that `final_attrs` is not modified outside the loop to prevent unintended side effects. This change ensures that each widget gets its own isolated attributes, preventing the 'checked' attribute from being propagated to all widgets after the first True value.\n\n3. Test the changes by providing a variety of input arrays to the `SplitArrayField` with mixed True and False values to verify that the checkboxes are correctly initialized."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget within the loop to prevent the 'checked' attribute from being shared and affecting other widgets. This ensures that each checkbox is initialized based on its corresponding value in the input array.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 3,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 143-151: The way final_attrs is being reused for each sub-widget initialization",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified and reused across multiple iterations of the for loop. When a checkbox is set to checked, this change persists and affects subsequent checkboxes. To resolve this, we need to ensure that each sub-widget receives a fresh copy of `final_attrs`.",
+                "suggested_approach": "To fix this issue, modify the `get_context` method in the `SplitArrayWidget` class as follows:\n\n1. At line 143, before the for loop, add the following import statement if not already present:\n   ```python\n   from copy import deepcopy\n   ```\n2. Inside the for loop, at line 149, modify the code to create a deep copy of `final_attrs` before passing it to the `get_context` method of the sub-widget:\n   ```python\n   149 | subwidget_final_attrs = deepcopy(final_attrs)\n   150 | if id_:\n   151 |     subwidget_final_attrs['id'] = '%s_%s' % (id_, i)\n   152 | context['widget']['subwidgets'].append(\n   153 |     self.widget.get_context(name + '_%s' % i, widget_value, subwidget_final_attrs)['widget']\n   154 | )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any side effects from modifying the original `final_attrs` dictionary.\n4. Test the changes with various arrays containing both True and False values to ensure that the checkboxes are correctly initialized based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes for each sub-widget by creating a deep copy of the `final_attrs` dictionary. This prevents the modification of one widget's attributes from affecting the others, ensuring that each checkbox is correctly initialized according to its corresponding value in the data array.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151 where the final_attrs are being passed to subwidgets",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified by the `CheckboxInput` widget's `get_context()` method. Since `final_attrs` is reused for each subwidget, once it gets set to `{'checked': True}`, all subsequent subwidgets inherit this attribute, causing them to be checked regardless of their actual value. To fix this, we need to ensure that `final_attrs` is not modified and that each subwidget receives a fresh copy of the attributes.",
+                "suggested_approach": "1. Import the `copy` module at the top of the file if it's not already imported.\n2. Modify line 141 to create a deep copy of `final_attrs` before passing it to each subwidget:\n   ```python\n   from copy import deepcopy\n   ...\n   141 | for i in range(max(len(value), self.size)):\n   142 |     try:\n   143 |         widget_value = value[i]\n   144 |     except IndexError:\n   145 |         widget_value = None\n   146 |     if id_:\n   147 |         subwidget_attrs = deepcopy(final_attrs)\n   148 |         subwidget_attrs['id'] = '%s_%s' % (id_, i)\n   149 |     else:\n   150 |         subwidget_attrs = deepcopy(final_attrs)\n   151 |     context['widget']['subwidgets'].append(\n   152 |         self.widget.get_context(name + '_%s' % i, widget_value, subwidget_attrs)['widget']\n   153 |     )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any modifications in the `CheckboxInput` widget from affecting other subwidgets.\n4. Test the changes with various inputs, including arrays with mixed `True` and `False` values, to ensure that the checkboxes are correctly checked or unchecked based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves ensuring that each subwidget in the `SplitArrayWidget` receives a fresh copy of the attributes dictionary (`final_attrs`). This prevents the `CheckboxInput` widget from modifying the shared attributes and affecting other subwidgets. By using `deepcopy`, we maintain the integrity of the attributes for each subwidget, thus fixing the bug.",
+            "confidence": 90
+          }
+        },
+        {
+          "agent_id": 5,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in the get_context method of SplitArrayWidget",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused and modified by the `CheckboxInput` widget's `get_context` method. This causes all subsequent checkboxes to inherit the 'checked' attribute once it is set to True. To fix this, we need to ensure that each widget receives a fresh copy of the `final_attrs` dictionary.",
+                "suggested_approach": "To resolve this issue, modify the `get_context` method in the `SplitArrayWidget` class by creating a deep copy of `final_attrs` before passing it to each sub-widget. This ensures that each sub-widget gets its own independent attributes dictionary.\n\n1. Import the `copy` module at the top of the file:\n```python\nimport copy\n```\n2. Modify line 149 to use a deep copy of `final_attrs`:\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, copy.deepcopy(final_attrs))['widget']\n)\n```\nThis change will prevent the `CheckboxInput` widget from modifying the `final_attrs` dictionary used by other widgets. Ensure that the `copy` module is imported to avoid any issues with shallow copies."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes dictionary for each sub-widget to prevent unintended side effects. By making a deep copy of `final_attrs` before passing it to each sub-widget, we ensure that the 'checked' attribute is not propagated across multiple widgets when it should not be. This approach addresses the root cause of the issue without altering the behavior of the `CheckboxInput` widget itself.",
+            "confidence": 95
+          }
+        },
+        {
+          "agent_id": 4,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across multiple iterations of the loop, leading to the 'checked' attribute being set to True for all subsequent widgets once it is set for the first True value. To fix this, we need to ensure that `final_attrs` is not modified during the iteration and that a fresh copy is used for each widget.",
+                "suggested_approach": "1. Modify the `get_context` method in `SplitArrayWidget` by creating a fresh copy of `final_attrs` for each iteration of the loop. Specifically, change line 149 from:\n\n```python\nfinal_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\nto:\n\n```python\nwidget_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\n2. Update the call to `self.widget.get_context` on line 150 to use the new `widget_attrs` variable instead of `final_attrs`:\n\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, widget_attrs)['widget']\n)\n```\n3. Ensure that the `widget_attrs` dictionary is not modified by any other part of the code within the loop.\n4. Test the changes by providing a `SplitArrayField` with a mix of True and False values and verify that only the correct checkboxes are checked.\n5. Add unit tests to cover edge cases such as empty arrays, arrays with only False values, and arrays with only True values."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget to prevent the 'checked' attribute from being propagated to all subsequent widgets. By creating a fresh copy of `final_attrs` for each iteration, we ensure that the state of the attributes is preserved correctly.",
+            "confidence": 95
+          }
+        }
+      ]
+    }
+  },
+  "stage_7_final_plan": {
+    "timestamp": "2026-10-08T09:23:11.678140",
+    "data": {
+      "final_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Isolate the attributes dictionary for each sub-widget to prevent the 'checked' attribute from being propagated across multiple widgets.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Modify the for loop to create a deep copy of final_attrs for each sub-widget",
+              "context": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context, Lines 143-151",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "Creating a deep copy of final_attrs ensures that each sub-widget receives a fresh copy of the attributes, preventing the 'checked' attribute from being shared and affecting other sub-widgets.",
+              "implementation_notes": "Use the `copy.deepcopy` function to create a deep copy of final_attrs before passing it to each sub-widget."
+            }
+          ],
+          "execution_order": "The modification should be implemented in the specified for loop within the `get_context` method of `SplitArrayWidget`.",
+          "testing_recommendations": "Unit tests should be written to verify that the 'checked' attribute is correctly set for each sub-widget based on its corresponding value in the data array. Integration tests should also be conducted to ensure that the form behaves as expected with various input scenarios.",
+          "risk_assessment": "The risk of this modification is low, as it only affects the internal handling of attributes within the `SplitArrayWidget`. However, it is important to thoroughly test the form to ensure no unintended side effects occur. Mitigation strategies include writing comprehensive unit and integration tests and reviewing the changes with another team member."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the root cause of the issue is the reuse and modification of the `final_attrs` dictionary within the for loop. They all recommended creating a fresh copy of `final_attrs` for each sub-widget to prevent the 'checked' attribute from being shared.",
+        "resolved_conflicts": "There were no significant conflicts between the expert opinions. All experts suggested a similar approach, which was to create a deep copy of `final_attrs` for each sub-widget. The only minor difference was in the specific method used to create the copy, but `copy.deepcopy` was chosen for its reliability and clarity."
+      },
+      "second_round_analyses": [
+        {
+          "agent_id": 2,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151: The loop that initializes subwidgets and the way final_attrs is handled",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across all iterations of the loop, leading to the 'checked' attribute being set to True once and affecting all subsequent widgets. To fix this, we need to ensure that each widget gets a fresh copy of `final_attrs`.",
+                "suggested_approach": "1. At line 141, instead of reusing `final_attrs`, create a new dictionary for each iteration of the loop. Modify the line as follows:\n\n```python\nfor i in range(max(len(value), self.size)):\n    try:\n        widget_value = value[i]\n    except IndexError:\n        widget_value = None\n    if id_:\n        # Create a new dictionary for each widget to avoid side effects\n        widget_final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n    else:\n        widget_final_attrs = final_attrs.copy()\n    context['widget']['subwidgets'].append(\n        self.widget.get_context(name + '_%s' % i, widget_value, widget_final_attrs)['widget']\n    )\n```\n\n2. Ensure that `final_attrs` is not modified outside the loop to prevent unintended side effects. This change ensures that each widget gets its own isolated attributes, preventing the 'checked' attribute from being propagated to all widgets after the first True value.\n\n3. Test the changes by providing a variety of input arrays to the `SplitArrayField` with mixed True and False values to verify that the checkboxes are correctly initialized."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget within the loop to prevent the 'checked' attribute from being shared and affecting other widgets. This ensures that each checkbox is initialized based on its corresponding value in the input array.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151: The loop that initializes subwidgets and the way final_attrs is handled",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across all iterations of the loop, leading to the 'checked' attribute being set to True once and affecting all subsequent widgets. To fix this, we need to ensure that each widget gets a fresh copy of `final_attrs`.",
+                "suggested_approach": "1. At line 141, instead of reusing `final_attrs`, create a new dictionary for each iteration of the loop. Modify the line as follows:\n\n```python\nfor i in range(max(len(value), self.size)):\n    try:\n        widget_value = value[i]\n    except IndexError:\n        widget_value = None\n    if id_:\n        # Create a new dictionary for each widget to avoid side effects\n        widget_final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n    else:\n        widget_final_attrs = final_attrs.copy()\n    context['widget']['subwidgets'].append(\n        self.widget.get_context(name + '_%s' % i, widget_value, widget_final_attrs)['widget']\n    )\n```\n\n2. Ensure that `final_attrs` is not modified outside the loop to prevent unintended side effects. This change ensures that each widget gets its own isolated attributes, preventing the 'checked' attribute from being propagated to all widgets after the first True value.\n\n3. Test the changes by providing a variety of input arrays to the `SplitArrayField` with mixed True and False values to verify that the checkboxes are correctly initialized."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 3,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 143-151: The way final_attrs is being reused for each sub-widget initialization",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified and reused across multiple iterations of the for loop. When a checkbox is set to checked, this change persists and affects subsequent checkboxes. To resolve this, we need to ensure that each sub-widget receives a fresh copy of `final_attrs`.",
+                "suggested_approach": "To fix this issue, modify the `get_context` method in the `SplitArrayWidget` class as follows:\n\n1. At line 143, before the for loop, add the following import statement if not already present:\n   ```python\n   from copy import deepcopy\n   ```\n2. Inside the for loop, at line 149, modify the code to create a deep copy of `final_attrs` before passing it to the `get_context` method of the sub-widget:\n   ```python\n   149 | subwidget_final_attrs = deepcopy(final_attrs)\n   150 | if id_:\n   151 |     subwidget_final_attrs['id'] = '%s_%s' % (id_, i)\n   152 | context['widget']['subwidgets'].append(\n   153 |     self.widget.get_context(name + '_%s' % i, widget_value, subwidget_final_attrs)['widget']\n   154 | )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any side effects from modifying the original `final_attrs` dictionary.\n4. Test the changes with various arrays containing both True and False values to ensure that the checkboxes are correctly initialized based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes for each sub-widget by creating a deep copy of the `final_attrs` dictionary. This prevents the modification of one widget's attributes from affecting the others, ensuring that each checkbox is correctly initialized according to its corresponding value in the data array.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 143-151: The way final_attrs is being reused for each sub-widget initialization",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified and reused across multiple iterations of the for loop. When a checkbox is set to checked, this change persists and affects subsequent checkboxes. To resolve this, we need to ensure that each sub-widget receives a fresh copy of `final_attrs`.",
+                "suggested_approach": "To fix this issue, modify the `get_context` method in the `SplitArrayWidget` class as follows:\n\n1. At line 143, before the for loop, add the following import statement if not already present:\n   ```python\n   from copy import deepcopy\n   ```\n2. Inside the for loop, at line 149, modify the code to create a deep copy of `final_attrs` before passing it to the `get_context` method of the sub-widget:\n   ```python\n   149 | subwidget_final_attrs = deepcopy(final_attrs)\n   150 | if id_:\n   151 |     subwidget_final_attrs['id'] = '%s_%s' % (id_, i)\n   152 | context['widget']['subwidgets'].append(\n   153 |     self.widget.get_context(name + '_%s' % i, widget_value, subwidget_final_attrs)['widget']\n   154 | )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any side effects from modifying the original `final_attrs` dictionary.\n4. Test the changes with various arrays containing both True and False values to ensure that the checkboxes are correctly initialized based on the actual data."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151 where the final_attrs are being passed to subwidgets",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified by the `CheckboxInput` widget's `get_context()` method. Since `final_attrs` is reused for each subwidget, once it gets set to `{'checked': True}`, all subsequent subwidgets inherit this attribute, causing them to be checked regardless of their actual value. To fix this, we need to ensure that `final_attrs` is not modified and that each subwidget receives a fresh copy of the attributes.",
+                "suggested_approach": "1. Import the `copy` module at the top of the file if it's not already imported.\n2. Modify line 141 to create a deep copy of `final_attrs` before passing it to each subwidget:\n   ```python\n   from copy import deepcopy\n   ...\n   141 | for i in range(max(len(value), self.size)):\n   142 |     try:\n   143 |         widget_value = value[i]\n   144 |     except IndexError:\n   145 |         widget_value = None\n   146 |     if id_:\n   147 |         subwidget_attrs = deepcopy(final_attrs)\n   148 |         subwidget_attrs['id'] = '%s_%s' % (id_, i)\n   149 |     else:\n   150 |         subwidget_attrs = deepcopy(final_attrs)\n   151 |     context['widget']['subwidgets'].append(\n   152 |         self.widget.get_context(name + '_%s' % i, widget_value, subwidget_attrs)['widget']\n   153 |     )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any modifications in the `CheckboxInput` widget from affecting other subwidgets.\n4. Test the changes with various inputs, including arrays with mixed `True` and `False` values, to ensure that the checkboxes are correctly checked or unchecked based on the actual data."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves ensuring that each subwidget in the `SplitArrayWidget` receives a fresh copy of the attributes dictionary (`final_attrs`). This prevents the `CheckboxInput` widget from modifying the shared attributes and affecting other subwidgets. By using `deepcopy`, we maintain the integrity of the attributes for each subwidget, thus fixing the bug.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "location_description": "Lines 141-151 where the final_attrs are being passed to subwidgets",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being modified by the `CheckboxInput` widget's `get_context()` method. Since `final_attrs` is reused for each subwidget, once it gets set to `{'checked': True}`, all subsequent subwidgets inherit this attribute, causing them to be checked regardless of their actual value. To fix this, we need to ensure that `final_attrs` is not modified and that each subwidget receives a fresh copy of the attributes.",
+                "suggested_approach": "1. Import the `copy` module at the top of the file if it's not already imported.\n2. Modify line 141 to create a deep copy of `final_attrs` before passing it to each subwidget:\n   ```python\n   from copy import deepcopy\n   ...\n   141 | for i in range(max(len(value), self.size)):\n   142 |     try:\n   143 |         widget_value = value[i]\n   144 |     except IndexError:\n   145 |         widget_value = None\n   146 |     if id_:\n   147 |         subwidget_attrs = deepcopy(final_attrs)\n   148 |         subwidget_attrs['id'] = '%s_%s' % (id_, i)\n   149 |     else:\n   150 |         subwidget_attrs = deepcopy(final_attrs)\n   151 |     context['widget']['subwidgets'].append(\n   152 |         self.widget.get_context(name + '_%s' % i, widget_value, subwidget_attrs)['widget']\n   153 |     )\n   ```\n3. Ensure that the `deepcopy` function is used to prevent any modifications in the `CheckboxInput` widget from affecting other subwidgets.\n4. Test the changes with various inputs, including arrays with mixed `True` and `False` values, to ensure that the checkboxes are correctly checked or unchecked based on the actual data."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 5,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in the get_context method of SplitArrayWidget",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused and modified by the `CheckboxInput` widget's `get_context` method. This causes all subsequent checkboxes to inherit the 'checked' attribute once it is set to True. To fix this, we need to ensure that each widget receives a fresh copy of the `final_attrs` dictionary.",
+                "suggested_approach": "To resolve this issue, modify the `get_context` method in the `SplitArrayWidget` class by creating a deep copy of `final_attrs` before passing it to each sub-widget. This ensures that each sub-widget gets its own independent attributes dictionary.\n\n1. Import the `copy` module at the top of the file:\n```python\nimport copy\n```\n2. Modify line 149 to use a deep copy of `final_attrs`:\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, copy.deepcopy(final_attrs))['widget']\n)\n```\nThis change will prevent the `CheckboxInput` widget from modifying the `final_attrs` dictionary used by other widgets. Ensure that the `copy` module is imported to avoid any issues with shallow copies."
+              }
+            ],
+            "overall_strategy": "The overall strategy is to isolate the attributes dictionary for each sub-widget to prevent unintended side effects. By making a deep copy of `final_attrs` before passing it to each sub-widget, we ensure that the 'checked' attribute is not propagated across multiple widgets when it should not be. This approach addresses the root cause of the issue without altering the behavior of the `CheckboxInput` widget itself.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in the get_context method of SplitArrayWidget",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused and modified by the `CheckboxInput` widget's `get_context` method. This causes all subsequent checkboxes to inherit the 'checked' attribute once it is set to True. To fix this, we need to ensure that each widget receives a fresh copy of the `final_attrs` dictionary.",
+                "suggested_approach": "To resolve this issue, modify the `get_context` method in the `SplitArrayWidget` class by creating a deep copy of `final_attrs` before passing it to each sub-widget. This ensures that each sub-widget gets its own independent attributes dictionary.\n\n1. Import the `copy` module at the top of the file:\n```python\nimport copy\n```\n2. Modify line 149 to use a deep copy of `final_attrs`:\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, copy.deepcopy(final_attrs))['widget']\n)\n```\nThis change will prevent the `CheckboxInput` widget from modifying the `final_attrs` dictionary used by other widgets. Ensure that the `copy` module is imported to avoid any issues with shallow copies."
+              }
+            ]
+          }
+        },
+        {
+          "agent_id": 4,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across multiple iterations of the loop, leading to the 'checked' attribute being set to True for all subsequent widgets once it is set for the first True value. To fix this, we need to ensure that `final_attrs` is not modified during the iteration and that a fresh copy is used for each widget.",
+                "suggested_approach": "1. Modify the `get_context` method in `SplitArrayWidget` by creating a fresh copy of `final_attrs` for each iteration of the loop. Specifically, change line 149 from:\n\n```python\nfinal_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\nto:\n\n```python\nwidget_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\n2. Update the call to `self.widget.get_context` on line 150 to use the new `widget_attrs` variable instead of `final_attrs`:\n\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, widget_attrs)['widget']\n)\n```\n3. Ensure that the `widget_attrs` dictionary is not modified by any other part of the code within the loop.\n4. Test the changes by providing a `SplitArrayField` with a mix of True and False values and verify that only the correct checkboxes are checked.\n5. Add unit tests to cover edge cases such as empty arrays, arrays with only False values, and arrays with only True values."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves isolating the attributes dictionary for each widget to prevent the 'checked' attribute from being propagated to all subsequent widgets. By creating a fresh copy of `final_attrs` for each iteration, we ensure that the state of the attributes is preserved correctly.",
+            "confidence": 95,
+            "refined_modification_locations": [
+              {
+                "entity_id": "entity_1",
+                "location_description": "Line 149 in django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The issue arises because the `final_attrs` dictionary is being reused across multiple iterations of the loop, leading to the 'checked' attribute being set to True for all subsequent widgets once it is set for the first True value. To fix this, we need to ensure that `final_attrs` is not modified during the iteration and that a fresh copy is used for each widget.",
+                "suggested_approach": "1. Modify the `get_context` method in `SplitArrayWidget` by creating a fresh copy of `final_attrs` for each iteration of the loop. Specifically, change line 149 from:\n\n```python\nfinal_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\nto:\n\n```python\nwidget_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n```\n2. Update the call to `self.widget.get_context` on line 150 to use the new `widget_attrs` variable instead of `final_attrs`:\n\n```python\ncontext['widget']['subwidgets'].append(\n    self.widget.get_context(name + '_%s' % i, widget_value, widget_attrs)['widget']\n)\n```\n3. Ensure that the `widget_attrs` dictionary is not modified by any other part of the code within the loop.\n4. Test the changes by providing a `SplitArrayField` with a mix of True and False values and verify that only the correct checkboxes are checked.\n5. Add unit tests to cover edge cases such as empty arrays, arrays with only False values, and arrays with only True values."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "stage_8_edit_agent_prompt": {
+    "timestamp": "2026-10-08T09:23:11.685814",
+    "data": {
+      "edit_agent_prompt": "<issue>\nSplitArrayField with BooleanField always has widgets checked after the first True value.\nDescription\n\t \n\t\t(last modified by Peter Andersen)\n\t \nWhen providing a SplitArrayField BooleanField with preexisting data, the final_attrs dict is updated to include 'checked': True after the for loop has reached the first True value in the initial data array. Once this occurs every widget initialized after that defaults to checked even though the backing data may be False. This is caused by the CheckboxInput widget's get_context() modifying the attrs dict passed into it. This is the only widget that modifies the attrs dict passed into its get_context().\nCheckboxInput setting attrs['checked'] to True: ​https://github.com/django/django/blob/master/django/forms/widgets.py#L527\n\n</issue>\n\n<plan>\n***stage 1***\ninstruction: Modify the for loop to create a deep copy of final_attrs for each sub-widget\ncontext: django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context, Lines 143-151\n\n</plan>\n\n<code>\ndjango/contrib/postgres/forms/array.py:\n133   def get_context(self, name, value, attrs=None):\n134           attrs = {} if attrs is None else attrs\n135           context = super().get_context(name, value, attrs)\n136           if self.is_localized:\n137               self.widget.is_localized = self.is_localized\n138           value = value or []\n139           context['widget']['subwidgets'] = []\n140           final_attrs = self.build_attrs(attrs)\n141           id_ = final_attrs.get('id')\n142           for i in range(max(len(value), self.size)):\n143               try:\n144                   widget_value = value[i]\n145               except IndexError:\n146                   widget_value = None\n147               if id_:\n148                   final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149               context['widget']['subwidgets'].append(\n150                   self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151               )\n152           return context\n\n</code>",
+      "modification_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "Isolate the attributes dictionary for each sub-widget to prevent the 'checked' attribute from being propagated across multiple widgets.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Modify the for loop to create a deep copy of final_attrs for each sub-widget",
+              "context": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context, Lines 143-151",
+              "type": "fix_bug",
+              "priority": "high",
+              "rationale": "Creating a deep copy of final_attrs ensures that each sub-widget receives a fresh copy of the attributes, preventing the 'checked' attribute from being shared and affecting other sub-widgets.",
+              "implementation_notes": "Use the `copy.deepcopy` function to create a deep copy of final_attrs before passing it to each sub-widget."
+            }
+          ],
+          "execution_order": "The modification should be implemented in the specified for loop within the `get_context` method of `SplitArrayWidget`.",
+          "testing_recommendations": "Unit tests should be written to verify that the 'checked' attribute is correctly set for each sub-widget based on its corresponding value in the data array. Integration tests should also be conducted to ensure that the form behaves as expected with various input scenarios.",
+          "risk_assessment": "The risk of this modification is low, as it only affects the internal handling of attributes within the `SplitArrayWidget`. However, it is important to thoroughly test the form to ensure no unintended side effects occur. Mitigation strategies include writing comprehensive unit and integration tests and reviewing the changes with another team member."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the root cause of the issue is the reuse and modification of the `final_attrs` dictionary within the for loop. They all recommended creating a fresh copy of `final_attrs` for each sub-widget to prevent the 'checked' attribute from being shared.",
+        "resolved_conflicts": "There were no significant conflicts between the expert opinions. All experts suggested a similar approach, which was to create a deep copy of `final_attrs` for each sub-widget. The only minor difference was in the specific method used to create the copy, but `copy.deepcopy` was chosen for its reliability and clarity."
+      },
+      "winning_chain": {
+        "chain_id": "chain_4",
+        "original_chain_info": {
+          "chain": [
+            "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context"
+          ],
+          "chain_length": 1,
+          "initial_entity": "get_context",
+          "start_entity": {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+            "entity_type": "function",
+            "relevance_reason": "This function is part of the SplitArrayWidget, which is the specific widget type mentioned in the problem statement that is experiencing the issue.",
+            "diversity_value": "PostgreSQL-specific form widget from contrib module"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8827582597732544,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "django/contrib/postgres/forms/array.py:SplitArrayWidget.get_context",
+            "type": "function",
+            "code": "```\n133 | def get_context(self, name, value, attrs=None):\n134 |         attrs = {} if attrs is None else attrs\n135 |         context = super().get_context(name, value, attrs)\n136 |         if self.is_localized:\n137 |             self.widget.is_localized = self.is_localized\n138 |         value = value or []\n139 |         context['widget']['subwidgets'] = []\n140 |         final_attrs = self.build_attrs(attrs)\n141 |         id_ = final_attrs.get('id')\n142 |         for i in range(max(len(value), self.size)):\n143 |             try:\n144 |                 widget_value = value[i]\n145 |             except IndexError:\n146 |                 widget_value = None\n147 |             if id_:\n148 |                 final_attrs = {**final_attrs, 'id': '%s_%s' % (id_, i)}\n149 |             context['widget']['subwidgets'].append(\n150 |                 self.widget.get_context(name + '_%s' % i, widget_value, final_attrs)['widget']\n151 |             )\n152 |         return context\n```",
+            "start_line": 133,
+            "end_line": 152,
+            "code_omitted": false,
+            "original_code_length": 974
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 4,
+        "is_longest": false
+      }
+    }
+  }
+}
