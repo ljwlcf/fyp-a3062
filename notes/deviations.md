@@ -253,12 +253,13 @@ are this one model, as in the paper. Chosen over Qwen2.5-Coder-32B on a 10-insta
 
 
 ## 2026-10-08 — Stage-3 neighbour pre-filter exceeds the 64k context on a few sympy instances
-Our backbone serves 65,536 tokens (Qwen2.5-72B, YaRN x2); the paper's DeepSeek-V3 had a longer
-window. On a fixed handful of sympy instances (17139, 13798, 16766, 18698, 15976, 20916, ...) a
+Our backbone serves 65,536 tokens (Qwen2.5-72B, YaRN x2), the same window the paper's API allowed,
+so the paper's runs may have hit this too (its tokenizer differs, so not on the same instances). On a
+fixed handful of sympy instances (17139, 13798, 16766, 18698, 15976, 20916, ...) a
 `_prefilter_neighbors_with_llm` prompt plus its 1,000-token output cap exceeds the window; vLLM
 returns a context-length BadRequestError and the released code falls back to its heuristic
 neighbour selection (`_fallback_neighbor_prefiltering`). 151 such calls across all EEE runs to
 2026-10-08, ~2-4 instances per 75-instance run, the same instances in every arm. Deterministic and
 identical across arms (and shared outright under --reuse-chains), so it does not bias arm
-comparisons; it can lower stage-3 recall on those instances relative to a longer-context backbone.
+comparisons; it can lower stage-3 recall on those instances.
 Kept as is (no prompt truncation), recorded per call in raw.jsonl.
