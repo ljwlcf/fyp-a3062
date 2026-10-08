@@ -17,6 +17,29 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-08 — Noise floor measured; adaptive seed 4; adaptive is within run-to-run noise of the original
+Raw: `baseline_72b_rerun_lenient_v1/20261007-093747` (job 189863, original arm re-run on original
+seed 3's chains, vLLM SEED 103) and `/20261007-185521` (job 190480, on seed 1's chains, SEED 101);
+`baseline_72b_adaptive_lenient_v1/20261007-140626` (job 190072, adaptive, reuse of seed 4). All 75/75
+ok, chains identical to the reference seed. Qwen2.5-72B @495f393, 2x pro6000, lenient.
+* NOISE FLOOR, the identical original arm re-run on the same chains: seed 3 0.813 vs 0.813
+  (2 : 2), seed 1 0.720 vs 0.773 (0 : 4); pooled 2 : 6 against the first run, 5.3% of instances
+  discordant. Re-running the released vote + debate moves ~4 answers per 75, and the first run
+  happened to be the luckier one on seed 1 by 4 instances.
+* Adaptive seed 4: 0.733 vs 0.733 (1 : 1), 64.1k vs 103.5k tokens.
+* Adaptive, 4 paired seeds vs the single original run per seed: 4 : 10 (p = 0.18), discordance
+  4.7%, the same as the noise floor (5.3%); -40% stage 6-7 tokens.
+* Adaptive vs the MEAN of all original-arm runs on the same chains (both runs on seeds 1 and 3,
+  one on seeds 2 and 4): 0.750 vs 0.763, -1.3 points, 95% bootstrap [-3.3, +0.7], one-sided 95% lower
+  bound -3.0 points. On seed 1 adaptive (0.747) scores between the two original runs (0.773, 0.720).
+Takeaway: adaptive debate (skip on unanimous vote, single-agent plan) cuts stage 6-7 tokens by 40%
+and its accuracy difference is the size of re-running the original itself; non-inferiority at a
+3-point margin is borderline with 4 seeds. The round1_only variant (192116-192118) and more seeds
+(lenient 5-6 -> adaptive 5-6) will tighten it.
+Caveats: two noise-floor reruns; n=75; adaptive seeds are paired with the first original run.
+
+---
+
 ## 2026-10-07 — Lenient seed 4; adaptive-trigger replay over 4 original seeds
 Raw: `baseline_72b_lenient_v1/20261006-222229` (seed 4, job 184812, vote logprobs; 75/75 ok),
 `baseline_72b_lenient_v1/trigger_replay_pooled_s1234.json`. Qwen2.5-72B @495f393, 2x pro6000, lenient.

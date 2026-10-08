@@ -7,6 +7,18 @@ Did:
 Broke:
 Next:
 
+## 2026-10-08
+Did: Scored the two noise-floor reruns (original arm re-run on its own chains: 2:6 vs the first run,
+5.3% discordant; seed 1 rerun 0.720 vs 0.773) and adaptive seed 4 (0.733 = 0.733). Adaptive over 4
+paired seeds 4:10 (p=0.18), discordance 4.7% (= noise floor), -40% stage 6-7 tokens; vs the mean of
+all original-arm runs -1.3 points [-3.3, +0.7]. Queued round1_only adaptive seeds 3, 1, 2 (192116-
+192118) after lenient seed 5 (running); seed 6 re-pointed behind them.
+Broke: Nothing.
+Queue: ug 186752 seed 5 (running) -> 192116 -> 192117 -> 192118 -> 186753 seed 6 | killable 184607-9
+Live a-c, 184861 shuffle 2, 186864 Live seed 2 (all pending for days: no idle pro6000).
+Next: score round1_only seeds; adaptive seeds 5-6 after lenient seeds 5-6; consider noise-floor
+reruns on seeds 2 and 4; the killable lane is starved, so Live has made no progress since the pilot.
+
 ## 2026-10-07
 Did: Scored the first real adaptive run (paired with seed 3): 0.787 vs 0.813 (2:4, p=0.69) at -38%
 stage 6-7 tokens; the gap sits on the 17 split-vote instances where the same released debate was
