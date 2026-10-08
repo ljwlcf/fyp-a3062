@@ -850,3 +850,16 @@ debated branch is unchanged. Replay estimate: ~70k stage 6-7 tokens (vs ~61k sin
 same original seeds (1-3, then 4). Unit tests now live in the repo (`ablation/harness/test_arms.py`,
 all arms); one-instance check on gpu21 (`smoke_adaptive_r1_v1`). Both adaptive variants are reported;
 neither replaces the other until the noise-floor reruns are in.
+
+## 2026-10-08 — Infrastructure call failures are never outcomes: marked as errors and rerun
+Found: Live pilot seed 2 (live_pilot40_lenient_v1/20261006-101233, killable, preempted and resumed)
+recorded 33 of 40 instances as "ok" although their first LLM call had failed with
+APIConnectionError (server gone, apparently killed by the preemption while workers kept going); the
+pipeline treated the empty reply as "no initial entities" (Acc@1 0.075). Rule now in
+run_localization.py: a call failing with APIConnectionError / APITimeoutError / InternalServerError
+makes the record status "error" ("infrastructure: ..."), and --resume always reruns records with such
+failures, old or new, with or without --retry-errors, so requeued killable jobs repair themselves.
+Context-length BadRequestErrors are excluded (deterministic; deviations.md 2026-10-08). A scan of
+every EEE run found infrastructure failures only in that one run; all other call failures are the
+context-length kind. Repair job 192683 (killable) reruns the 33; it took the slot of the just-queued
+Live seed-2 part a (192675, cancelled while pending, to be resubmitted).

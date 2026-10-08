@@ -17,6 +17,15 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-08 — Live pilot seed 2: INVALID as recorded (33/40 hit a dead server); repair queued
+Raw: `live_pilot40_lenient_v1/20261006-101233` (job 186864, killable, resumed after preemption).
+As recorded: Acc@1 0.075, built 0.15, because 33 instances' first call failed with
+APIConnectionError and were written as "ok" with no entities (decisions.md 2026-10-08). Not a
+result; the 7 intact instances stay, the 33 are rerun by job 192683. Do not use this folder until the
+repair lands (the local copy is the broken one; re-fetch raw.jsonl explicitly afterwards).
+
+---
+
 ## 2026-10-08 — Noise floor measured; adaptive seed 4; adaptive is within run-to-run noise of the original
 Raw: `baseline_72b_rerun_lenient_v1/20261007-093747` (job 189863, original arm re-run on original
 seed 3's chains, vLLM SEED 103) and `/20261007-185521` (job 190480, on seed 1's chains, SEED 101);

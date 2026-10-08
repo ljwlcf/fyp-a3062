@@ -195,6 +195,10 @@ def run_one(iid, keep_fields, pipe, vote_logprobs=0, dataset=None, arm=None):
         json.dump(order, f)
     rec["tokens"] = calls.summary()
     rec["calls"] = calls.records
+    infra = infra_failures(rec)
+    if infra and rec["status"] == "ok":   # the pipeline carried on with an empty reply
+        rec["status"] = "error"
+        rec["error"] = f"infrastructure: {len(infra)} LLM call(s) failed, first {infra[0][:120]}"
     import resource  # peak RSS of this worker process; ru_maxrss is KiB on Linux
     rec["peak_rss_gb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 2**20, 2)
     return rec
@@ -444,13 +448,27 @@ def result_relevant(cfg):
             "dataset_file": cfg.get("dataset_file")}
 
 
+# Call failures that say nothing about the model or the pipeline: the server was unreachable (e.g.
+# killed by a preemption while workers were still running), timed out or crashed. A record with
+# any of these is never an outcome; it is rerun on resume (2026-10-07: 33 of 40 Live pilot seed-2
+# instances were recorded "ok" after their first call hit a dead server). Context-length
+# BadRequestErrors are NOT here: they are deterministic pipeline behaviour (deviations.md).
+INFRA_ERRORS = ("APIConnectionError", "APITimeoutError", "InternalServerError")
+
+
+def infra_failures(rec):
+    return [c["error"] for c in rec.get("calls", [])
+            if str(c.get("error", "")).startswith(INFRA_ERRORS)]
+
+
 def prepare_resume(run_dir, cfg, retry_errors=False):
     """Continue a run in place: return (manifest, ids already recorded). Every instance with a
     line in raw.jsonl is skipped whatever its status (a crash such as debate_collapsed is an
     outcome, not a gap); instances in progress when the job died have no line and run again.
     Refuses if the config differs from the original run in anything that changes results.
-    A torn last line (job killed mid-write) is dropped, keeping raw.jsonl.bak. With retry_errors,
-    instances recorded as errors are run again (their old lines are removed, kept in the .bak)."""
+    A torn last line (job killed mid-write) is dropped, keeping raw.jsonl.bak. Instances whose
+    record has an infrastructure call failure (infra_failures) are always run again; with
+    retry_errors, so are all instances recorded as errors (old lines removed, kept in the .bak)."""
     with open(os.path.join(run_dir, "manifest.json")) as f:
         manifest = json.load(f)
     before, now = result_relevant(manifest["config_body"]), result_relevant(cfg)
@@ -464,7 +482,7 @@ def prepare_resume(run_dir, cfg, retry_errors=False):
             for line in f:
                 try:
                     rec = json.loads(line)
-                    if retry_errors and rec.get("status") == "error":
+                    if infra_failures(rec) or (retry_errors and rec.get("status") == "error"):
                         retried.append(rec["instance_id"])
                         continue
                     done.add(rec["instance_id"])

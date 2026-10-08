@@ -1,0 +1,1798 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-08T04:42:23.652683",
+    "data": {
+      "initial_entities": [
+        "pybabel",
+        "msgid",
+        "msgctxt",
+        "update",
+        "PO"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 1495
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-08T04:44:14.537749",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "pybabel",
+          "related_entities": [
+            {
+              "entity_id": "babel/core.py:Locale",
+              "entity_type": "class",
+              "relevance_reason": "The Locale class manages locale-specific data, which could be involved in handling context-specific messages.",
+              "diversity_value": "Core class from different file"
+            },
+            {
+              "entity_id": "babel/localedata.py:Alias",
+              "entity_type": "class",
+              "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+              "diversity_value": "Different file, deals with data resolution"
+            },
+            {
+              "entity_id": "babel/util.py",
+              "entity_type": "file",
+              "relevance_reason": "This file likely contains utility functions that might be used in the process of updating and managing PO files.",
+              "diversity_value": "Utility file from different module"
+            },
+            {
+              "entity_id": "babel/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Initialization file that might contain high-level configurations or imports affecting how PO files are processed.",
+              "diversity_value": "Initialization file from root package"
+            }
+          ]
+        },
+        {
+          "initial_entity": "msgid",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser",
+              "entity_type": "class",
+              "relevance_reason": "Responsible for parsing PO files, which is where the issue with obsoletes is observed",
+              "diversity_value": "Core parsing logic from PO file handling module"
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "entity_type": "function",
+              "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+              "diversity_value": "Specific parsing function within the PO file handler"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+              "diversity_value": "Catalog management function from a different file"
+            },
+            {
+              "entity_id": "scripts/import_cldr.py",
+              "entity_type": "file",
+              "relevance_reason": "May contain scripts or utilities for handling and importing locale data, which could be relevant for context handling",
+              "diversity_value": "Script file from a different module, possibly related to locale data processing"
+            }
+          ]
+        },
+        {
+          "initial_entity": "msgctxt",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/pofile.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for adding messages to the catalog, which is where the issue of obsoleting messages might be handled.",
+              "diversity_value": "Core functionality related to message handling from a different file"
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:Message",
+              "entity_type": "class",
+              "relevance_reason": "The Message class represents individual messages in the PO file, including context and ID, which are central to the issue.",
+              "diversity_value": "Class representing the data structure of messages from a different file"
+            },
+            {
+              "entity_id": "babel/messages/frontend.py:update_catalog",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the command-line interface for updating PO files and is likely where the update process is initiated.",
+              "diversity_value": "Command-line interface function from a different module"
+            },
+            {
+              "entity_id": "conftest.py",
+              "entity_type": "file",
+              "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+              "diversity_value": "Test configuration file from a different location"
+            }
+          ]
+        },
+        {
+          "initial_entity": "update",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+              "diversity_value": "Core functionality in the catalog module"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+              "entity_type": "function",
+              "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+              "diversity_value": "Helper function within the same file, but a different part of the update process"
+            },
+            {
+              "entity_id": "babel/messages/setuptools_frontend.py:update_catalog",
+              "entity_type": "class",
+              "relevance_reason": "This class provides the command-line interface for updating catalogs, which is the entry point for the `pybabel update` command. Understanding its interaction with the `Catalog.update` method is crucial.",
+              "diversity_value": "Command-line interface in a different file, providing the entry point for updates"
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:write_po",
+              "entity_type": "function",
+              "relevance_reason": "This function writes the PO file and handles how messages are output, including obsolete messages. It might need changes to ensure all obsoletes from different contexts are retained.",
+              "diversity_value": "File writing functionality in a different module, ensuring correct output format"
+            }
+          ]
+        },
+        {
+          "initial_entity": "PO",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/pofile.py:read_po",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for reading PO files, which is where the issue with obsoletes is observed",
+              "diversity_value": "Different file, handles PO file parsing"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "Function used to add messages to the catalog, which might be where the context is lost",
+              "diversity_value": "Different file, core catalog management"
+            },
+            {
+              "entity_id": "babel/messages/frontend.py:update_catalog",
+              "entity_type": "function",
+              "relevance_reason": "Command-line interface function for updating catalogs, directly related to the reproduction steps",
+              "diversity_value": "Different file, command-line interface layer"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.obsolete",
+              "entity_type": "function",
+              "relevance_reason": "Function that marks messages as obsolete, potentially where the issue arises when handling multiple contexts",
+              "diversity_value": "Different file, core catalog management"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-08T04:57:02.164016",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "pybabel",
+          "related_entities": [
+            {
+              "entity_id": "babel/core.py:Locale",
+              "entity_type": "class",
+              "relevance_reason": "The Locale class manages locale-specific data, which could be involved in handling context-specific messages.",
+              "diversity_value": "Core class from different file"
+            },
+            {
+              "entity_id": "babel/localedata.py:Alias",
+              "entity_type": "class",
+              "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+              "diversity_value": "Different file, deals with data resolution"
+            },
+            {
+              "entity_id": "babel/util.py",
+              "entity_type": "file",
+              "relevance_reason": "This file likely contains utility functions that might be used in the process of updating and managing PO files.",
+              "diversity_value": "Utility file from different module"
+            },
+            {
+              "entity_id": "babel/__init__.py",
+              "entity_type": "file",
+              "relevance_reason": "Initialization file that might contain high-level configurations or imports affecting how PO files are processed.",
+              "diversity_value": "Initialization file from root package"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "babel/core.py:Locale",
+                "entity_type": "class",
+                "relevance_reason": "The Locale class manages locale-specific data, which could be involved in handling context-specific messages.",
+                "diversity_value": "Core class from different file"
+              },
+              "chain": [
+                "babel/core.py:Locale"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/localedata.py:Alias",
+                "entity_type": "class",
+                "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+                "diversity_value": "Different file, deals with data resolution"
+              },
+              "chain": [
+                "babel/localedata.py:Alias",
+                "babel/localedata.py:Alias.resolve",
+                "babel/localedata.py:LocaleDataDict.__getitem__",
+                "babel/localedata.py:LocaleDataDict",
+                "babel/localedata.py:LocaleDataDict.__setitem__"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/util.py",
+                "entity_type": "file",
+                "relevance_reason": "This file likely contains utility functions that might be used in the process of updating and managing PO files.",
+                "diversity_value": "Utility file from different module"
+              },
+              "chain": [
+                "babel/util.py",
+                "babel/messages/catalog.py",
+                "babel/messages/frontend.py",
+                "babel/messages/pofile.py:read_po",
+                "babel/core.py:Locale.parse"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/__init__.py",
+                "entity_type": "file",
+                "relevance_reason": "Initialization file that might contain high-level configurations or imports affecting how PO files are processed.",
+                "diversity_value": "Initialization file from root package"
+              },
+              "chain": [
+                "babel/__init__.py",
+                "babel/messages/catalog.py",
+                "babel/messages/catalog.py:Message",
+                "babel/messages/catalog.py:Catalog.add"
+              ],
+              "chain_length": 4
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "msgid",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser",
+              "entity_type": "class",
+              "relevance_reason": "Responsible for parsing PO files, which is where the issue with obsoletes is observed",
+              "diversity_value": "Core parsing logic from PO file handling module"
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "entity_type": "function",
+              "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+              "diversity_value": "Specific parsing function within the PO file handler"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+              "diversity_value": "Catalog management function from a different file"
+            },
+            {
+              "entity_id": "scripts/import_cldr.py",
+              "entity_type": "file",
+              "relevance_reason": "May contain scripts or utilities for handling and importing locale data, which could be relevant for context handling",
+              "diversity_value": "Script file from a different module, possibly related to locale data processing"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/pofile.py:PoFileParser",
+                "entity_type": "class",
+                "relevance_reason": "Responsible for parsing PO files, which is where the issue with obsoletes is observed",
+                "diversity_value": "Core parsing logic from PO file handling module"
+              },
+              "chain": [
+                "babel/messages/pofile.py:PoFileParser",
+                "babel/messages/pofile.py:PoFileParser._add_message",
+                "babel/messages/pofile.py:PoFileParser._finish_current_message",
+                "babel/messages/pofile.py:PoFileParser._process_keyword_line",
+                "babel/messages/pofile.py:_NormalizedString.append"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+                "entity_type": "function",
+                "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+                "diversity_value": "Specific parsing function within the PO file handler"
+              },
+              "chain": [
+                "babel/messages/pofile.py:PoFileParser._process_message_line",
+                "babel/messages/pofile.py:PoFileParser.parse",
+                "babel/messages/pofile.py:PoFileParser._add_message",
+                "babel/messages/pofile.py:PoFileParser._reset_message_state"
+              ],
+              "chain_length": 4
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/catalog.py:Catalog.add",
+                "entity_type": "function",
+                "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+                "diversity_value": "Catalog management function from a different file"
+              },
+              "chain": [
+                "babel/messages/catalog.py:Catalog.add"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "scripts/import_cldr.py",
+                "entity_type": "file",
+                "relevance_reason": "May contain scripts or utilities for handling and importing locale data, which could be relevant for context handling",
+                "diversity_value": "Script file from a different module, possibly related to locale data processing"
+              },
+              "chain": [
+                "scripts/import_cldr.py",
+                "scripts/import_cldr.py:main",
+                "babel/messages/catalog.py:Catalog.get"
+              ],
+              "chain_length": 3
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "msgctxt",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/pofile.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for adding messages to the catalog, which is where the issue of obsoleting messages might be handled.",
+              "diversity_value": "Core functionality related to message handling from a different file"
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:Message",
+              "entity_type": "class",
+              "relevance_reason": "The Message class represents individual messages in the PO file, including context and ID, which are central to the issue.",
+              "diversity_value": "Class representing the data structure of messages from a different file"
+            },
+            {
+              "entity_id": "babel/messages/frontend.py:update_catalog",
+              "entity_type": "function",
+              "relevance_reason": "This function is part of the command-line interface for updating PO files and is likely where the update process is initiated.",
+              "diversity_value": "Command-line interface function from a different module"
+            },
+            {
+              "entity_id": "conftest.py",
+              "entity_type": "file",
+              "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+              "diversity_value": "Test configuration file from a different location"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/pofile.py:Catalog.add",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for adding messages to the catalog, which is where the issue of obsoleting messages might be handled.",
+                "diversity_value": "Core functionality related to message handling from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/pofile.py:Message",
+                "entity_type": "class",
+                "relevance_reason": "The Message class represents individual messages in the PO file, including context and ID, which are central to the issue.",
+                "diversity_value": "Class representing the data structure of messages from a different file"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/frontend.py:update_catalog",
+                "entity_type": "function",
+                "relevance_reason": "This function is part of the command-line interface for updating PO files and is likely where the update process is initiated.",
+                "diversity_value": "Command-line interface function from a different module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "conftest.py",
+                "entity_type": "file",
+                "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+                "diversity_value": "Test configuration file from a different location"
+              },
+              "chain": [
+                "conftest.py",
+                "conftest.py:pytest_collect_file",
+                "conftest.py:_is_relative"
+              ],
+              "chain_length": 3
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "update",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+              "diversity_value": "Core functionality in the catalog module"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+              "entity_type": "function",
+              "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+              "diversity_value": "Helper function within the same file, but a different part of the update process"
+            },
+            {
+              "entity_id": "babel/messages/setuptools_frontend.py:update_catalog",
+              "entity_type": "class",
+              "relevance_reason": "This class provides the command-line interface for updating catalogs, which is the entry point for the `pybabel update` command. Understanding its interaction with the `Catalog.update` method is crucial.",
+              "diversity_value": "Command-line interface in a different file, providing the entry point for updates"
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:write_po",
+              "entity_type": "function",
+              "relevance_reason": "This function writes the PO file and handles how messages are output, including obsolete messages. It might need changes to ensure all obsoletes from different contexts are retained.",
+              "diversity_value": "File writing functionality in a different module, ensuring correct output format"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/catalog.py:Catalog.update",
+                "entity_type": "function",
+                "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+                "diversity_value": "Core functionality in the catalog module"
+              },
+              "chain": [
+                "babel/messages/catalog.py:Catalog.update"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+                "entity_type": "function",
+                "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+                "diversity_value": "Helper function within the same file, but a different part of the update process"
+              },
+              "chain": [
+                "babel/messages/catalog.py:Catalog.update._merge",
+                "babel/messages/catalog.py:Catalog.add"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/setuptools_frontend.py:update_catalog",
+                "entity_type": "class",
+                "relevance_reason": "This class provides the command-line interface for updating catalogs, which is the entry point for the `pybabel update` command. Understanding its interaction with the `Catalog.update` method is crucial.",
+                "diversity_value": "Command-line interface in a different file, providing the entry point for updates"
+              },
+              "chain": [
+                "babel/messages/setuptools_frontend.py:update_catalog",
+                "babel/messages/frontend.py:UpdateCatalog",
+                "babel/messages/frontend.py:UpdateCatalog.run",
+                "babel/messages/pofile.py:read_po",
+                "babel/core.py:Locale.parse"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/pofile.py:write_po",
+                "entity_type": "function",
+                "relevance_reason": "This function writes the PO file and handles how messages are output, including obsolete messages. It might need changes to ensure all obsoletes from different contexts are retained.",
+                "diversity_value": "File writing functionality in a different module, ensuring correct output format"
+              },
+              "chain": [
+                "babel/messages/pofile.py:write_po",
+                "babel/messages/frontend.py:UpdateCatalog.run",
+                "babel/messages/catalog.py:Catalog.update",
+                "babel/messages/catalog.py:Catalog._key_for",
+                "babel/messages/catalog.py:Catalog.__contains__"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "PO",
+          "related_entities": [
+            {
+              "entity_id": "babel/messages/pofile.py:read_po",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for reading PO files, which is where the issue with obsoletes is observed",
+              "diversity_value": "Different file, handles PO file parsing"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "Function used to add messages to the catalog, which might be where the context is lost",
+              "diversity_value": "Different file, core catalog management"
+            },
+            {
+              "entity_id": "babel/messages/frontend.py:update_catalog",
+              "entity_type": "function",
+              "relevance_reason": "Command-line interface function for updating catalogs, directly related to the reproduction steps",
+              "diversity_value": "Different file, command-line interface layer"
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.obsolete",
+              "entity_type": "function",
+              "relevance_reason": "Function that marks messages as obsolete, potentially where the issue arises when handling multiple contexts",
+              "diversity_value": "Different file, core catalog management"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/pofile.py:read_po",
+                "entity_type": "function",
+                "relevance_reason": "Responsible for reading PO files, which is where the issue with obsoletes is observed",
+                "diversity_value": "Different file, handles PO file parsing"
+              },
+              "chain": [
+                "babel/messages/pofile.py:read_po",
+                "babel/messages/frontend.py:UpdateCatalog.run",
+                "babel/messages/catalog.py:Catalog.update",
+                "babel/messages/catalog.py:Catalog._key_for",
+                "babel/messages/catalog.py:Catalog.__contains__"
+              ],
+              "chain_length": 5
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/catalog.py:Catalog.add",
+                "entity_type": "function",
+                "relevance_reason": "Function used to add messages to the catalog, which might be where the context is lost",
+                "diversity_value": "Different file, core catalog management"
+              },
+              "chain": [
+                "babel/messages/catalog.py:Catalog.add"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/frontend.py:update_catalog",
+                "entity_type": "function",
+                "relevance_reason": "Command-line interface function for updating catalogs, directly related to the reproduction steps",
+                "diversity_value": "Different file, command-line interface layer"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "babel/messages/catalog.py:Catalog.obsolete",
+                "entity_type": "function",
+                "relevance_reason": "Function that marks messages as obsolete, potentially where the issue arises when handling multiple contexts",
+                "diversity_value": "Different file, core catalog management"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "babel/core.py:Locale"
+          ],
+          "chain_length": 1,
+          "initial_entity": "pybabel",
+          "start_entity": {
+            "entity_id": "babel/core.py:Locale",
+            "entity_type": "class",
+            "relevance_reason": "The Locale class manages locale-specific data, which could be involved in handling context-specific messages.",
+            "diversity_value": "Core class from different file"
+          }
+        },
+        {
+          "chain": [
+            "babel/localedata.py:Alias",
+            "babel/localedata.py:Alias.resolve",
+            "babel/localedata.py:LocaleDataDict.__getitem__",
+            "babel/localedata.py:LocaleDataDict",
+            "babel/localedata.py:LocaleDataDict.__setitem__"
+          ],
+          "chain_length": 5,
+          "initial_entity": "pybabel",
+          "start_entity": {
+            "entity_id": "babel/localedata.py:Alias",
+            "entity_type": "class",
+            "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+            "diversity_value": "Different file, deals with data resolution"
+          }
+        },
+        {
+          "chain": [
+            "babel/util.py",
+            "babel/messages/catalog.py",
+            "babel/messages/frontend.py",
+            "babel/messages/pofile.py:read_po",
+            "babel/core.py:Locale.parse"
+          ],
+          "chain_length": 5,
+          "initial_entity": "pybabel",
+          "start_entity": {
+            "entity_id": "babel/util.py",
+            "entity_type": "file",
+            "relevance_reason": "This file likely contains utility functions that might be used in the process of updating and managing PO files.",
+            "diversity_value": "Utility file from different module"
+          }
+        },
+        {
+          "chain": [
+            "babel/__init__.py",
+            "babel/messages/catalog.py",
+            "babel/messages/catalog.py:Message",
+            "babel/messages/catalog.py:Catalog.add"
+          ],
+          "chain_length": 4,
+          "initial_entity": "pybabel",
+          "start_entity": {
+            "entity_id": "babel/__init__.py",
+            "entity_type": "file",
+            "relevance_reason": "Initialization file that might contain high-level configurations or imports affecting how PO files are processed.",
+            "diversity_value": "Initialization file from root package"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/pofile.py:PoFileParser",
+            "babel/messages/pofile.py:PoFileParser._add_message",
+            "babel/messages/pofile.py:PoFileParser._finish_current_message",
+            "babel/messages/pofile.py:PoFileParser._process_keyword_line",
+            "babel/messages/pofile.py:_NormalizedString.append"
+          ],
+          "chain_length": 5,
+          "initial_entity": "msgid",
+          "start_entity": {
+            "entity_id": "babel/messages/pofile.py:PoFileParser",
+            "entity_type": "class",
+            "relevance_reason": "Responsible for parsing PO files, which is where the issue with obsoletes is observed",
+            "diversity_value": "Core parsing logic from PO file handling module"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/pofile.py:PoFileParser._process_message_line",
+            "babel/messages/pofile.py:PoFileParser.parse",
+            "babel/messages/pofile.py:PoFileParser._add_message",
+            "babel/messages/pofile.py:PoFileParser._reset_message_state"
+          ],
+          "chain_length": 4,
+          "initial_entity": "msgid",
+          "start_entity": {
+            "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+            "entity_type": "function",
+            "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+            "diversity_value": "Specific parsing function within the PO file handler"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.add"
+          ],
+          "chain_length": 1,
+          "initial_entity": "msgid",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.add",
+            "entity_type": "function",
+            "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+            "diversity_value": "Catalog management function from a different file"
+          }
+        },
+        {
+          "chain": [
+            "scripts/import_cldr.py",
+            "scripts/import_cldr.py:main",
+            "babel/messages/catalog.py:Catalog.get"
+          ],
+          "chain_length": 3,
+          "initial_entity": "msgid",
+          "start_entity": {
+            "entity_id": "scripts/import_cldr.py",
+            "entity_type": "file",
+            "relevance_reason": "May contain scripts or utilities for handling and importing locale data, which could be relevant for context handling",
+            "diversity_value": "Script file from a different module, possibly related to locale data processing"
+          }
+        },
+        {
+          "chain": [
+            "conftest.py",
+            "conftest.py:pytest_collect_file",
+            "conftest.py:_is_relative"
+          ],
+          "chain_length": 3,
+          "initial_entity": "msgctxt",
+          "start_entity": {
+            "entity_id": "conftest.py",
+            "entity_type": "file",
+            "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+            "diversity_value": "Test configuration file from a different location"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.update"
+          ],
+          "chain_length": 1,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.update",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+            "diversity_value": "Core functionality in the catalog module"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.update._merge",
+            "babel/messages/catalog.py:Catalog.add"
+          ],
+          "chain_length": 2,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+            "entity_type": "function",
+            "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+            "diversity_value": "Helper function within the same file, but a different part of the update process"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/setuptools_frontend.py:update_catalog",
+            "babel/messages/frontend.py:UpdateCatalog",
+            "babel/messages/frontend.py:UpdateCatalog.run",
+            "babel/messages/pofile.py:read_po",
+            "babel/core.py:Locale.parse"
+          ],
+          "chain_length": 5,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/setuptools_frontend.py:update_catalog",
+            "entity_type": "class",
+            "relevance_reason": "This class provides the command-line interface for updating catalogs, which is the entry point for the `pybabel update` command. Understanding its interaction with the `Catalog.update` method is crucial.",
+            "diversity_value": "Command-line interface in a different file, providing the entry point for updates"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/pofile.py:write_po",
+            "babel/messages/frontend.py:UpdateCatalog.run",
+            "babel/messages/catalog.py:Catalog.update",
+            "babel/messages/catalog.py:Catalog._key_for",
+            "babel/messages/catalog.py:Catalog.__contains__"
+          ],
+          "chain_length": 5,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/pofile.py:write_po",
+            "entity_type": "function",
+            "relevance_reason": "This function writes the PO file and handles how messages are output, including obsolete messages. It might need changes to ensure all obsoletes from different contexts are retained.",
+            "diversity_value": "File writing functionality in a different module, ensuring correct output format"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/pofile.py:read_po",
+            "babel/messages/frontend.py:UpdateCatalog.run",
+            "babel/messages/catalog.py:Catalog.update",
+            "babel/messages/catalog.py:Catalog._key_for",
+            "babel/messages/catalog.py:Catalog.__contains__"
+          ],
+          "chain_length": 5,
+          "initial_entity": "PO",
+          "start_entity": {
+            "entity_id": "babel/messages/pofile.py:read_po",
+            "entity_type": "function",
+            "relevance_reason": "Responsible for reading PO files, which is where the issue with obsoletes is observed",
+            "diversity_value": "Different file, handles PO file parsing"
+          }
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.add"
+          ],
+          "chain_length": 1,
+          "initial_entity": "PO",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.add",
+            "entity_type": "function",
+            "relevance_reason": "Function used to add messages to the catalog, which might be where the context is lost",
+            "diversity_value": "Different file, core catalog management"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-08T04:57:08.621655",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "babel/localedata.py:Alias",
+            "babel/localedata.py:Alias.resolve",
+            "babel/localedata.py:LocaleDataDict.__getitem__",
+            "babel/localedata.py:LocaleDataDict",
+            "babel/localedata.py:LocaleDataDict.__setitem__"
+          ],
+          "chain_length": 5,
+          "initial_entity": "pybabel",
+          "start_entity": {
+            "entity_id": "babel/localedata.py:Alias",
+            "entity_type": "class",
+            "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+            "diversity_value": "Different file, deals with data resolution"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.update"
+          ],
+          "chain_length": 1,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.update",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+            "diversity_value": "Core functionality in the catalog module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8709284067153931,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.add"
+          ],
+          "chain_length": 1,
+          "initial_entity": "msgid",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.add",
+            "entity_type": "function",
+            "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+            "diversity_value": "Catalog management function from a different file"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.8727980852127075,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.update._merge",
+            "babel/messages/catalog.py:Catalog.add"
+          ],
+          "chain_length": 2,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+            "entity_type": "function",
+            "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+            "diversity_value": "Helper function within the same file, but a different part of the update process"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.883669376373291,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "babel/messages/pofile.py:PoFileParser._process_message_line",
+            "babel/messages/pofile.py:PoFileParser.parse",
+            "babel/messages/pofile.py:PoFileParser._add_message",
+            "babel/messages/pofile.py:PoFileParser._reset_message_state"
+          ],
+          "chain_length": 4,
+          "initial_entity": "msgid",
+          "start_entity": {
+            "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+            "entity_type": "function",
+            "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+            "diversity_value": "Specific parsing function within the PO file handler"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.8885951042175293,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "conftest.py",
+            "conftest.py:pytest_collect_file",
+            "conftest.py:_is_relative"
+          ],
+          "chain_length": 3,
+          "initial_entity": "msgctxt",
+          "start_entity": {
+            "entity_id": "conftest.py",
+            "entity_type": "file",
+            "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+            "diversity_value": "Test configuration file from a different location"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.8923104405403137,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-08T04:57:08.627829",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "babel/localedata.py:Alias",
+              "babel/localedata.py:Alias.resolve",
+              "babel/localedata.py:LocaleDataDict.__getitem__",
+              "babel/localedata.py:LocaleDataDict",
+              "babel/localedata.py:LocaleDataDict.__setitem__"
+            ],
+            "chain_length": 5,
+            "initial_entity": "pybabel",
+            "start_entity": {
+              "entity_id": "babel/localedata.py:Alias",
+              "entity_type": "class",
+              "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+              "diversity_value": "Different file, deals with data resolution"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/localedata.py:Alias",
+              "type": "class",
+              "code": "```\n207 | class Alias:\n208 |     \"\"\"Representation of an alias in the locale data.\n209 | \n210 |     An alias is a value that refers to some other part of the locale data,\n211 |     as specified by the `keys`.\n212 |     \"\"\"\n213 | \n214 |     def __init__(self, keys: tuple[str, ...]) -> None:\n215 |         self.keys = tuple(keys)\n216 | \n217 |     def __repr__(self) -> str:\n218 |         return f\"<{type(self).__name__} {self.keys!r}>\"\n219 | \n220 |     def resolve(self, data: Mapping[str | int | None, Any]) -> Mapping[str | int | None, Any]:\n221 |         \"\"\"Resolve the alias based on the given data.\n222 | \n223 |         This is done recursively, so if one alias resolves to a second alias,\n224 |         that second alias will also be resolved.\n225 | \n226 |         :param data: the locale data\n227 |         :type data: `dict`\n228 |         \"\"\"\n229 |         base = data\n230 |         for key in self.keys:\n231 |             data = data[key]\n232 |         if isinstance(data, Alias):\n233 |             data = data.resolve(base)\n234 |         elif isinstance(data, tuple):\n235 |             alias, others = data\n236 |             data = alias.resolve(base)\n237 |         return data\n```",
+              "start_line": 207,
+              "end_line": 237,
+              "code_omitted": false,
+              "original_code_length": 1190
+            },
+            {
+              "entity_id": "babel/localedata.py:Alias.resolve",
+              "type": "function",
+              "code": "```\n220 | def resolve(self, data: Mapping[str | int | None, Any]) -> Mapping[str | int | None, Any]:\n221 |         \"\"\"Resolve the alias based on the given data.\n222 | \n223 |         This is done recursively, so if one alias resolves to a second alias,\n224 |         that second alias will also be resolved.\n225 | \n226 |         :param data: the locale data\n227 |         :type data: `dict`\n228 |         \"\"\"\n229 |         base = data\n230 |         for key in self.keys:\n231 |             data = data[key]\n232 |         if isinstance(data, Alias):\n233 |             data = data.resolve(base)\n234 |         elif isinstance(data, tuple):\n235 |             alias, others = data\n236 |             data = alias.resolve(base)\n237 |         return data\n```",
+              "start_line": 220,
+              "end_line": 237,
+              "code_omitted": false,
+              "original_code_length": 748
+            },
+            {
+              "entity_id": "babel/localedata.py:LocaleDataDict.__getitem__",
+              "type": "function",
+              "code": "```\n257 | def __getitem__(self, key: str | int | None) -> Any:\n258 |         orig = val = self._data[key]\n259 |         if isinstance(val, Alias):  # resolve an alias\n260 |             val = val.resolve(self.base)\n261 |         if isinstance(val, tuple):  # Merge a partial dict with an alias\n262 |             alias, others = val\n263 |             val = alias.resolve(self.base).copy()\n264 |             merge(val, others)\n265 |         if isinstance(val, dict):  # Return a nested alias-resolving dict\n266 |             val = LocaleDataDict(val, base=self.base)\n267 |         if val is not orig:\n268 |             self._data[key] = val\n269 |         return val\n```",
+              "start_line": 257,
+              "end_line": 269,
+              "code_omitted": false,
+              "original_code_length": 666
+            },
+            {
+              "entity_id": "babel/localedata.py:LocaleDataDict",
+              "type": "class",
+              "code": "```\n240 | class LocaleDataDict(abc.MutableMapping):\n241 |     \"\"\"Dictionary wrapper that automatically resolves aliases to the actual\n242 |     values.\n243 |     \"\"\"\n244 | \n245 |     def __init__(self, data: MutableMapping[str | int | None, Any], base: Mapping[str | int | None, Any] | None = None):\n246 |         self._data = data\n247 |         if base is None:\n248 |             base = data\n249 |         self.base = base\n250 | \n251 |     def __len__(self) -> int:\n252 |         return len(self._data)\n253 | \n254 |     def __iter__(self) -> Iterator[str | int | None]:\n255 |         return iter(self._data)\n256 | \n257 |     def __getitem__(self, key: str | int | None) -> Any:\n258 |         orig = val = self._data[key]\n259 |         if isinstance(val, Alias):  # resolve an alias\n260 |             val = val.resolve(self.base)\n261 |         if isinstance(val, tuple):  # Merge a partial dict with an alias\n262 |             alias, others = val\n263 |             val = alias.resolve(self.base).copy()\n264 |             merge(val, others)\n265 |         if isinstance(val, dict):  # Return a nested alias-resolving dict\n266 |             val = LocaleDataDict(val, base=self.base)\n267 |         if val is not orig:\n268 |             self._data[key] = val\n269 |         return val\n270 | \n271 |     def __setitem__(self, key: str | int | None, value: Any) -> None:\n272 |         self._data[key] = value\n273 | \n274 |     def __delitem__(self, key: str | int | None) -> None:\n275 |         del self._data[key]\n276 | \n277 |     def copy(self) -> LocaleDataDict:\n278 |         return LocaleDataDict(self._data.copy(), base=self.base)\n```",
+              "start_line": 240,
+              "end_line": 278,
+              "code_omitted": false,
+              "original_code_length": 1630
+            },
+            {
+              "entity_id": "babel/localedata.py:LocaleDataDict.__setitem__",
+              "type": "function",
+              "code": "```\n271 | def __setitem__(self, key: str | int | None, value: Any) -> None:\n272 |         self._data[key] = value\n```",
+              "start_line": 271,
+              "end_line": 272,
+              "code_omitted": false,
+              "original_code_length": 117
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.update"
+            ],
+            "chain_length": 1,
+            "initial_entity": "update",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+              "diversity_value": "Core functionality in the catalog module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8709284067153931,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "type": "function",
+              "code": "```\n770 | def update(\n771 |         self,\n772 |         template: Catalog,\n773 |         no_fuzzy_matching: bool = False,\n774 |         update_header_comment: bool = False,\n775 |         keep_user_comments: bool = True,\n776 |         update_creation_date: bool = True,\n777 |     ) -> None:\n778 |         \"\"\"Update the catalog based on the given template catalog.\n779 | \n780 |         >>> from babel.messages import Catalog\n781 |         >>> template = Catalog()\n782 |         >>> template.add('green', locations=[('main.py', 99)])\n783 |         <Message ...>\n784 |         >>> template.add('blue', locations=[('main.py', 100)])\n785 |         <Message ...>\n786 |         >>> template.add(('salad', 'salads'), locations=[('util.py', 42)])\n787 |         <Message ...>\n788 |         >>> catalog = Catalog(locale='de_DE')\n789 |         >>> catalog.add('blue', u'blau', locations=[('main.py', 98)])\n790 |         <Message ...>\n791 |         >>> catalog.add('head', u'Kopf', locations=[('util.py', 33)])\n792 |         <Message ...>\n793 |         >>> catalog.add(('salad', 'salads'), (u'Salat', u'Salate'),\n794 |         ...             locations=[('util.py', 38)])\n795 |         <Message ...>\n796 | \n797 |         >>> catalog.update(template)\n798 |         >>> len(catalog)\n799 |         3\n800 | \n801 |         >>> msg1 = catalog['green']\n802 |         >>> msg1.string\n803 |         >>> msg1.locations\n804 |         [('main.py', 99)]\n805 | \n806 |         >>> msg2 = catalog['blue']\n807 |         >>> msg2.string\n808 |         u'blau'\n809 |         >>> msg2.locations\n810 |         [('main.py', 100)]\n811 | \n812 |         >>> msg3 = catalog['salad']\n813 |         >>> msg3.string\n814 |         (u'Salat', u'Salate')\n815 |         >>> msg3.locations\n816 |         [('util.py', 42)]\n817 | \n818 |         Messages that are in the catalog but not in the template are removed\n819 |         from the main collection, but can still be accessed via the `obsolete`\n820 |         member:\n821 | \n822 |         >>> 'head' in catalog\n823 |         False\n824 |         >>> list(catalog.obsolete.values())\n825 |         [<Message 'head' (flags: [])>]\n826 | \n827 |         :param template: the reference catalog, usually read from a POT file\n828 |         :param no_fuzzy_matching: whether to use fuzzy matching of message IDs\n829 |         \"\"\"\n830 |         messages = self._messages\n831 |         remaining = messages.copy()\n832 |         self._messages = OrderedDict()\n833 | \n834 |         # Prepare for fuzzy matching\n835 |         fuzzy_candidates = {}\n836 |         if not no_fuzzy_matching:\n837 |             for msgid in messages:\n838 |                 if msgid and messages[msgid].string:\n839 |                     key = self._key_for(msgid)\n840 |                     ctxt = messages[msgid].context\n841 |                     fuzzy_candidates[self._to_fuzzy_match_key(key)] = (key, ctxt)\n842 |         fuzzy_matches = set()\n843 | \n844 |         def _merge(message: Message, oldkey: tuple[str, str] | str, newkey: tuple[str, str] | str) -> None:\n845 |             message = message.clone()\n846 |             fuzzy = False\n847 |             if oldkey != newkey:\n848 |                 fuzzy = True\n849 |                 fuzzy_matches.add(oldkey)\n850 |                 oldmsg = messages.get(oldkey)\n851 |                 assert oldmsg is not None\n852 |                 if isinstance(oldmsg.id, str):\n853 |                     message.previous_id = [oldmsg.id]\n854 |                 else:\n855 |                     message.previous_id = list(oldmsg.id)\n856 |             else:\n857 |                 oldmsg = remaining.pop(oldkey, None)\n858 |                 assert oldmsg is not None\n859 |             message.string = oldmsg.string\n860 | \n861 |             if keep_user_comments:\n862 |                 message.user_comments = list(distinct(oldmsg.user_comments))\n863 | \n864 |             if isinstance(message.id, (list, tuple)):\n865 |                 if not isinstance(message.string, (list, tuple)):\n866 |                     fuzzy = True\n867 |                     message.string = tuple(\n868 |                         [message.string] + ([''] * (len(message.id) - 1)),\n869 |                     )\n870 |                 elif len(message.string) != self.num_plurals:\n871 |                     fuzzy = True\n872 |                     message.string = tuple(message.string[:len(oldmsg.string)])\n873 |             elif isinstance(message.string, (list, tuple)):\n874 |                 fuzzy = True\n875 |                 message.string = message.string[0]\n876 |             message.flags |= oldmsg.flags\n877 |             if fuzzy:\n878 |                 message.flags |= {'fuzzy'}\n879 |             self[message.id] = message\n880 | \n881 |         for message in template:\n882 |             if message.id:\n883 |                 key = self._key_for(message.id, message.context)\n884 |                 if key in messages:\n885 |                     _merge(message, key, key)\n886 |                 else:\n887 |                     if not no_fuzzy_matching:\n888 |                         # do some fuzzy matching with difflib\n889 |                         matches = get_close_matches(\n890 |                             self._to_fuzzy_match_key(key),\n891 |                             fuzzy_candidates.keys(),\n892 |                             1,\n893 |                         )\n894 |                         if matches:\n895 |                             modified_key = matches[0]\n896 |                             newkey, newctxt = fuzzy_candidates[modified_key]\n897 |                             if newctxt is not None:\n898 |                                 newkey = newkey, newctxt\n899 |                             _merge(message, newkey, key)\n900 |                             continue\n901 | \n902 |                     self[message.id] = message\n903 | \n904 |         for msgid in remaining:\n905 |             if no_fuzzy_matching or msgid not in fuzzy_matches:\n906 |                 self.obsolete[msgid] = remaining[msgid]\n907 | \n908 |         if update_header_comment:\n909 |             # Allow the updated catalog's header to be rewritten based on the\n910 |             # template's header\n911 |             self.header_comment = template.header_comment\n912 | \n913 |         # Make updated catalog's POT-Creation-Date equal to the template\n914 |         # used to update the catalog\n915 |         if update_creation_date:\n916 |             self.creation_date = template.creation_date\n```",
+              "start_line": 770,
+              "end_line": 916,
+              "code_omitted": false,
+              "original_code_length": 6460
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.add"
+            ],
+            "chain_length": 1,
+            "initial_entity": "msgid",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+              "diversity_value": "Catalog management function from a different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8727980852127075,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "type": "function",
+              "code": "```\n695 | def add(\n696 |         self,\n697 |         id: _MessageID,\n698 |         string: _MessageID | None = None,\n699 |         locations: Iterable[tuple[str, int]] = (),\n700 |         flags: Iterable[str] = (),\n701 |         auto_comments: Iterable[str] = (),\n702 |         user_comments: Iterable[str] = (),\n703 |         previous_id: _MessageID = (),\n704 |         lineno: int | None = None,\n705 |         context: str | None = None,\n706 |     ) -> Message:\n707 |         \"\"\"Add or update the message with the specified ID.\n708 | \n709 |         >>> catalog = Catalog()\n710 |         >>> catalog.add(u'foo')\n711 |         <Message ...>\n712 |         >>> catalog[u'foo']\n713 |         <Message u'foo' (flags: [])>\n714 | \n715 |         This method simply constructs a `Message` object with the given\n716 |         arguments and invokes `__setitem__` with that object.\n717 | \n718 |         :param id: the message ID, or a ``(singular, plural)`` tuple for\n719 |                    pluralizable messages\n720 |         :param string: the translated message string, or a\n721 |                        ``(singular, plural)`` tuple for pluralizable messages\n722 |         :param locations: a sequence of ``(filename, lineno)`` tuples\n723 |         :param flags: a set or sequence of flags\n724 |         :param auto_comments: a sequence of automatic comments\n725 |         :param user_comments: a sequence of user comments\n726 |         :param previous_id: the previous message ID, or a ``(singular, plural)``\n727 |                             tuple for pluralizable messages\n728 |         :param lineno: the line number on which the msgid line was found in the\n729 |                        PO file, if any\n730 |         :param context: the message context\n731 |         \"\"\"\n732 |         message = Message(id, string, list(locations), flags, auto_comments,\n733 |                           user_comments, previous_id, lineno=lineno,\n734 |                           context=context)\n735 |         self[id] = message\n736 |         return message\n```",
+              "start_line": 695,
+              "end_line": 736,
+              "code_omitted": false,
+              "original_code_length": 2041
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.update._merge",
+              "babel/messages/catalog.py:Catalog.add"
+            ],
+            "chain_length": 2,
+            "initial_entity": "update",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+              "entity_type": "function",
+              "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+              "diversity_value": "Helper function within the same file, but a different part of the update process"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.883669376373291,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+              "type": "function",
+              "code": "```\n844 | def _merge(message: Message, oldkey: tuple[str, str] | str, newkey: tuple[str, str] | str) -> None:\n845 |             message = message.clone()\n846 |             fuzzy = False\n847 |             if oldkey != newkey:\n848 |                 fuzzy = True\n849 |                 fuzzy_matches.add(oldkey)\n850 |                 oldmsg = messages.get(oldkey)\n851 |                 assert oldmsg is not None\n852 |                 if isinstance(oldmsg.id, str):\n853 |                     message.previous_id = [oldmsg.id]\n854 |                 else:\n855 |                     message.previous_id = list(oldmsg.id)\n856 |             else:\n857 |                 oldmsg = remaining.pop(oldkey, None)\n858 |                 assert oldmsg is not None\n859 |             message.string = oldmsg.string\n860 | \n861 |             if keep_user_comments:\n862 |                 message.user_comments = list(distinct(oldmsg.user_comments))\n863 | \n864 |             if isinstance(message.id, (list, tuple)):\n865 |                 if not isinstance(message.string, (list, tuple)):\n866 |                     fuzzy = True\n867 |                     message.string = tuple(\n868 |                         [message.string] + ([''] * (len(message.id) - 1)),\n869 |                     )\n870 |                 elif len(message.string) != self.num_plurals:\n871 |                     fuzzy = True\n872 |                     message.string = tuple(message.string[:len(oldmsg.string)])\n873 |             elif isinstance(message.string, (list, tuple)):\n874 |                 fuzzy = True\n875 |                 message.string = message.string[0]\n876 |             message.flags |= oldmsg.flags\n877 |             if fuzzy:\n878 |                 message.flags |= {'fuzzy'}\n879 |             self[message.id] = message\n```",
+              "start_line": 844,
+              "end_line": 879,
+              "code_omitted": false,
+              "original_code_length": 1785
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "type": "function",
+              "code": "```\n695 | def add(\n696 |         self,\n697 |         id: _MessageID,\n698 |         string: _MessageID | None = None,\n699 |         locations: Iterable[tuple[str, int]] = (),\n700 |         flags: Iterable[str] = (),\n701 |         auto_comments: Iterable[str] = (),\n702 |         user_comments: Iterable[str] = (),\n703 |         previous_id: _MessageID = (),\n704 |         lineno: int | None = None,\n705 |         context: str | None = None,\n706 |     ) -> Message:\n707 |         \"\"\"Add or update the message with the specified ID.\n708 | \n709 |         >>> catalog = Catalog()\n710 |         >>> catalog.add(u'foo')\n711 |         <Message ...>\n712 |         >>> catalog[u'foo']\n713 |         <Message u'foo' (flags: [])>\n714 | \n715 |         This method simply constructs a `Message` object with the given\n716 |         arguments and invokes `__setitem__` with that object.\n717 | \n718 |         :param id: the message ID, or a ``(singular, plural)`` tuple for\n719 |                    pluralizable messages\n720 |         :param string: the translated message string, or a\n721 |                        ``(singular, plural)`` tuple for pluralizable messages\n722 |         :param locations: a sequence of ``(filename, lineno)`` tuples\n723 |         :param flags: a set or sequence of flags\n724 |         :param auto_comments: a sequence of automatic comments\n725 |         :param user_comments: a sequence of user comments\n726 |         :param previous_id: the previous message ID, or a ``(singular, plural)``\n727 |                             tuple for pluralizable messages\n728 |         :param lineno: the line number on which the msgid line was found in the\n729 |                        PO file, if any\n730 |         :param context: the message context\n731 |         \"\"\"\n732 |         message = Message(id, string, list(locations), flags, auto_comments,\n733 |                           user_comments, previous_id, lineno=lineno,\n734 |                           context=context)\n735 |         self[id] = message\n736 |         return message\n```",
+              "start_line": 695,
+              "end_line": 736,
+              "code_omitted": false,
+              "original_code_length": 2041
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "babel/messages/pofile.py:PoFileParser.parse",
+              "babel/messages/pofile.py:PoFileParser._add_message",
+              "babel/messages/pofile.py:PoFileParser._reset_message_state"
+            ],
+            "chain_length": 4,
+            "initial_entity": "msgid",
+            "start_entity": {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "entity_type": "function",
+              "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+              "diversity_value": "Specific parsing function within the PO file handler"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8885951042175293,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "type": "function",
+              "code": "```\n252 | def _process_message_line(self, lineno, line, obsolete=False) -> None:\n253 |         if line.startswith('\"'):\n254 |             self._process_string_continuation_line(line, lineno)\n255 |         else:\n256 |             self._process_keyword_line(lineno, line, obsolete)\n```",
+              "start_line": 252,
+              "end_line": 256,
+              "code_omitted": false,
+              "original_code_length": 283
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser.parse",
+              "type": "function",
+              "code": "```\n338 | def parse(self, fileobj: IO[AnyStr] | Iterable[AnyStr]) -> None:\n339 |         \"\"\"\n340 |         Reads from the file-like object `fileobj` and adds any po file\n341 |         units found in it to the `Catalog` supplied to the constructor.\n342 |         \"\"\"\n343 | \n344 |         for lineno, line in enumerate(fileobj):\n345 |             line = line.strip()\n346 |             if not isinstance(line, str):\n347 |                 line = line.decode(self.catalog.charset)\n348 |             if not line:\n349 |                 continue\n350 |             if line.startswith('#'):\n351 |                 if line[1:].startswith('~'):\n352 |                     self._process_message_line(lineno, line[2:].lstrip(), obsolete=True)\n353 |                 else:\n354 |                     try:\n355 |                         self._process_comment(line)\n356 |                     except ValueError as exc:\n357 |                         self._invalid_pofile(line, lineno, str(exc))\n358 |             else:\n359 |                 self._process_message_line(lineno, line)\n360 | \n361 |         self._finish_current_message()\n362 | \n363 |         # No actual messages found, but there was some info in comments, from which\n364 |         # we'll construct an empty header message\n365 |         if not self.counter and (self.flags or self.user_comments or self.auto_comments):\n366 |             self.messages.append(_NormalizedString('\"\"'))\n367 |             self.translations.append([0, _NormalizedString('\"\"')])\n368 |             self._add_message()\n```",
+              "start_line": 338,
+              "end_line": 368,
+              "code_omitted": false,
+              "original_code_length": 1537
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._add_message",
+              "type": "function",
+              "code": "```\n216 | def _add_message(self) -> None:\n217 |         \"\"\"\n218 |         Add a message to the catalog based on the current parser state and\n219 |         clear the state ready to process the next message.\n220 |         \"\"\"\n221 |         self.translations.sort()\n222 |         if len(self.messages) > 1:\n223 |             msgid = tuple(m.denormalize() for m in self.messages)\n224 |         else:\n225 |             msgid = self.messages[0].denormalize()\n226 |         if isinstance(msgid, (list, tuple)):\n227 |             string = ['' for _ in range(self.catalog.num_plurals)]\n228 |             for idx, translation in self.translations:\n229 |                 if idx >= self.catalog.num_plurals:\n230 |                     self._invalid_pofile(\"\", self.offset, \"msg has more translations than num_plurals of catalog\")\n231 |                     continue\n232 |                 string[idx] = translation.denormalize()\n233 |             string = tuple(string)\n234 |         else:\n235 |             string = self.translations[0][1].denormalize()\n236 |         msgctxt = self.context.denormalize() if self.context else None\n237 |         message = Message(msgid, string, list(self.locations), set(self.flags),\n238 |                           self.auto_comments, self.user_comments, lineno=self.offset + 1,\n239 |                           context=msgctxt)\n240 |         if self.obsolete:\n241 |             if not self.ignore_obsolete:\n242 |                 self.catalog.obsolete[msgid] = message\n243 |         else:\n244 |             self.catalog[msgid] = message\n245 |         self.counter += 1\n246 |         self._reset_message_state()\n```",
+              "start_line": 216,
+              "end_line": 246,
+              "code_omitted": false,
+              "original_code_length": 1633
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._reset_message_state",
+              "type": "function",
+              "code": "```\n203 | def _reset_message_state(self) -> None:\n204 |         self.messages = []\n205 |         self.translations = []\n206 |         self.locations = []\n207 |         self.flags = []\n208 |         self.user_comments = []\n209 |         self.auto_comments = []\n210 |         self.context = None\n211 |         self.obsolete = False\n212 |         self.in_msgid = False\n213 |         self.in_msgstr = False\n214 |         self.in_msgctxt = False\n```",
+              "start_line": 203,
+              "end_line": 214,
+              "code_omitted": false,
+              "original_code_length": 444
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "conftest.py",
+              "conftest.py:pytest_collect_file",
+              "conftest.py:_is_relative"
+            ],
+            "chain_length": 3,
+            "initial_entity": "msgctxt",
+            "start_entity": {
+              "entity_id": "conftest.py",
+              "entity_type": "file",
+              "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+              "diversity_value": "Test configuration file from a different location"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8923104405403137,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "conftest.py",
+              "type": "file",
+              "code": "```\n 1 | from pathlib import Path\n 2 | \n 3 | from _pytest.doctest import DoctestModule\n 4 | \n 5 | collect_ignore = [\n 6 |     'babel/messages/setuptools_frontend.py',\n 7 |     'setup.py',\n 8 |     'tests/messages/data',\n 9 | ]\n10 | babel_path = Path(__file__).parent / 'babel'\n11 | \n12 | \n13 | # Via the stdlib implementation of Path.is_relative_to in Python 3.9\n14 | def _is_relative(p1: Path, p2: Path) -> bool:\n15 |     try:\n16 |         p1.relative_to(p2)\n17 |         return True\n18 |     except ValueError:\n19 |         return False\n20 | \n21 | \n22 | def pytest_collect_file(file_path: Path, parent):\n23 |     if _is_relative(file_path, babel_path) and file_path.suffix == '.py':\n24 |         return DoctestModule.from_parent(parent, path=file_path)\n25 | \n```",
+              "start_line": 1,
+              "end_line": 25,
+              "code_omitted": false,
+              "original_code_length": 764
+            },
+            {
+              "entity_id": "conftest.py:pytest_collect_file",
+              "type": "function",
+              "code": "```\n22 | def pytest_collect_file(file_path: Path, parent):\n23 |     if _is_relative(file_path, babel_path) and file_path.suffix == '.py':\n24 |         return DoctestModule.from_parent(parent, path=file_path)\n```",
+              "start_line": 22,
+              "end_line": 24,
+              "code_omitted": false,
+              "original_code_length": 211
+            },
+            {
+              "entity_id": "conftest.py:_is_relative",
+              "type": "function",
+              "code": "```\n14 | def _is_relative(p1: Path, p2: Path) -> bool:\n15 |     try:\n16 |         p1.relative_to(p2)\n17 |         return True\n18 |     except ValueError:\n19 |         return False\n```",
+              "start_line": 14,
+              "end_line": 19,
+              "code_omitted": false,
+              "original_code_length": 183
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-08T04:58:24.024510",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_2",
+        "winning_chain": {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.update"
+            ],
+            "chain_length": 1,
+            "initial_entity": "update",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+              "diversity_value": "Core functionality in the catalog module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8709284067153931,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "type": "function",
+              "code": "```\n770 | def update(\n771 |         self,\n772 |         template: Catalog,\n773 |         no_fuzzy_matching: bool = False,\n774 |         update_header_comment: bool = False,\n775 |         keep_user_comments: bool = True,\n776 |         update_creation_date: bool = True,\n777 |     ) -> None:\n778 |         \"\"\"Update the catalog based on the given template catalog.\n779 | \n780 |         >>> from babel.messages import Catalog\n781 |         >>> template = Catalog()\n782 |         >>> template.add('green', locations=[('main.py', 99)])\n783 |         <Message ...>\n784 |         >>> template.add('blue', locations=[('main.py', 100)])\n785 |         <Message ...>\n786 |         >>> template.add(('salad', 'salads'), locations=[('util.py', 42)])\n787 |         <Message ...>\n788 |         >>> catalog = Catalog(locale='de_DE')\n789 |         >>> catalog.add('blue', u'blau', locations=[('main.py', 98)])\n790 |         <Message ...>\n791 |         >>> catalog.add('head', u'Kopf', locations=[('util.py', 33)])\n792 |         <Message ...>\n793 |         >>> catalog.add(('salad', 'salads'), (u'Salat', u'Salate'),\n794 |         ...             locations=[('util.py', 38)])\n795 |         <Message ...>\n796 | \n797 |         >>> catalog.update(template)\n798 |         >>> len(catalog)\n799 |         3\n800 | \n801 |         >>> msg1 = catalog['green']\n802 |         >>> msg1.string\n803 |         >>> msg1.locations\n804 |         [('main.py', 99)]\n805 | \n806 |         >>> msg2 = catalog['blue']\n807 |         >>> msg2.string\n808 |         u'blau'\n809 |         >>> msg2.locations\n810 |         [('main.py', 100)]\n811 | \n812 |         >>> msg3 = catalog['salad']\n813 |         >>> msg3.string\n814 |         (u'Salat', u'Salate')\n815 |         >>> msg3.locations\n816 |         [('util.py', 42)]\n817 | \n818 |         Messages that are in the catalog but not in the template are removed\n819 |         from the main collection, but can still be accessed via the `obsolete`\n820 |         member:\n821 | \n822 |         >>> 'head' in catalog\n823 |         False\n824 |         >>> list(catalog.obsolete.values())\n825 |         [<Message 'head' (flags: [])>]\n826 | \n827 |         :param template: the reference catalog, usually read from a POT file\n828 |         :param no_fuzzy_matching: whether to use fuzzy matching of message IDs\n829 |         \"\"\"\n830 |         messages = self._messages\n831 |         remaining = messages.copy()\n832 |         self._messages = OrderedDict()\n833 | \n834 |         # Prepare for fuzzy matching\n835 |         fuzzy_candidates = {}\n836 |         if not no_fuzzy_matching:\n837 |             for msgid in messages:\n838 |                 if msgid and messages[msgid].string:\n839 |                     key = self._key_for(msgid)\n840 |                     ctxt = messages[msgid].context\n841 |                     fuzzy_candidates[self._to_fuzzy_match_key(key)] = (key, ctxt)\n842 |         fuzzy_matches = set()\n843 | \n844 |         def _merge(message: Message, oldkey: tuple[str, str] | str, newkey: tuple[str, str] | str) -> None:\n845 |             message = message.clone()\n846 |             fuzzy = False\n847 |             if oldkey != newkey:\n848 |                 fuzzy = True\n849 |                 fuzzy_matches.add(oldkey)\n850 |                 oldmsg = messages.get(oldkey)\n851 |                 assert oldmsg is not None\n852 |                 if isinstance(oldmsg.id, str):\n853 |                     message.previous_id = [oldmsg.id]\n854 |                 else:\n855 |                     message.previous_id = list(oldmsg.id)\n856 |             else:\n857 |                 oldmsg = remaining.pop(oldkey, None)\n858 |                 assert oldmsg is not None\n859 |             message.string = oldmsg.string\n860 | \n861 |             if keep_user_comments:\n862 |                 message.user_comments = list(distinct(oldmsg.user_comments))\n863 | \n864 |             if isinstance(message.id, (list, tuple)):\n865 |                 if not isinstance(message.string, (list, tuple)):\n866 |                     fuzzy = True\n867 |                     message.string = tuple(\n868 |                         [message.string] + ([''] * (len(message.id) - 1)),\n869 |                     )\n870 |                 elif len(message.string) != self.num_plurals:\n871 |                     fuzzy = True\n872 |                     message.string = tuple(message.string[:len(oldmsg.string)])\n873 |             elif isinstance(message.string, (list, tuple)):\n874 |                 fuzzy = True\n875 |                 message.string = message.string[0]\n876 |             message.flags |= oldmsg.flags\n877 |             if fuzzy:\n878 |                 message.flags |= {'fuzzy'}\n879 |             self[message.id] = message\n880 | \n881 |         for message in template:\n882 |             if message.id:\n883 |                 key = self._key_for(message.id, message.context)\n884 |                 if key in messages:\n885 |                     _merge(message, key, key)\n886 |                 else:\n887 |                     if not no_fuzzy_matching:\n888 |                         # do some fuzzy matching with difflib\n889 |                         matches = get_close_matches(\n890 |                             self._to_fuzzy_match_key(key),\n891 |                             fuzzy_candidates.keys(),\n892 |                             1,\n893 |                         )\n894 |                         if matches:\n895 |                             modified_key = matches[0]\n896 |                             newkey, newctxt = fuzzy_candidates[modified_key]\n897 |                             if newctxt is not None:\n898 |                                 newkey = newkey, newctxt\n899 |                             _merge(message, newkey, key)\n900 |                             continue\n901 | \n902 |                     self[message.id] = message\n903 | \n904 |         for msgid in remaining:\n905 |             if no_fuzzy_matching or msgid not in fuzzy_matches:\n906 |                 self.obsolete[msgid] = remaining[msgid]\n907 | \n908 |         if update_header_comment:\n909 |             # Allow the updated catalog's header to be rewritten based on the\n910 |             # template's header\n911 |             self.header_comment = template.header_comment\n912 | \n913 |         # Make updated catalog's POT-Creation-Date equal to the template\n914 |         # used to update the catalog\n915 |         if update_creation_date:\n916 |             self.creation_date = template.creation_date\n```",
+              "start_line": 770,
+              "end_line": 916,
+              "code_omitted": false,
+              "original_code_length": 6460
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 90.0,
+        "vote_distribution": {
+          "chain_2": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for updating the catalog based on a template. The issue described involves the removal of obsoletes with the same ID from different contexts, which suggests a problem in how the catalog is being updated and how obsoletes are being handled. Modifying the logic in this method to properly handle messages with the same ID but different contexts would directly address the reported issue.",
+            "modification_strategy": "Modify the `Catalog.update` method to ensure that messages with the same ID but different contexts are not overwritten when marking them as obsolete. Specifically, update the handling of the `remaining` dictionary to retain all messages with the same ID but different contexts.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the issue of handling multiple messages with the same ID but different contexts in a PO file.",
+              "chain_2": "This chain is the most likely candidate for the root cause of the issue. The `Catalog.update` method is where the catalog is updated based on a template, and the logic for handling obsoletes is implemented. The issue of removing messages with the same ID but different contexts likely stems from how this method processes and retains obsolete messages.",
+              "chain_3": "This chain deals with adding messages to the catalog, which is a related but secondary function. The primary issue is in the update process, not in the initial addition of messages.",
+              "chain_4": "This chain includes the `_merge` function, which is part of the `Catalog.update` method. While it is involved in merging messages, the core issue of retaining obsoletes with the same ID but different contexts is more likely to be in the higher-level logic of the `Catalog.update` method itself.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. It is important for the initial creation of the catalog but does not directly handle the update process where the issue manifests.",
+              "chain_6": "This chain is related to test collection and is not relevant to the issue of handling multiple messages with the same ID but different contexts in a PO file."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for updating the catalog based on a template. The issue described involves the handling of obsolete messages with the same ID but different contexts, which is directly managed within this method. Specifically, the problem lies in how messages are being marked as obsolete and added to the `obsolete` dictionary. The current implementation overwrites messages with the same `msgid`, ignoring the context, which leads to the loss of messages from different contexts.",
+            "modification_strategy": "Modify the `Catalog.update` method to ensure that messages with the same `msgid` but different contexts are stored uniquely in the `obsolete` dictionary. This could involve using a composite key of `msgid` and `context` for storing messages in the `obsolete` dictionary.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the handling of messages in the catalog. Modifying this chain would not address the issue.",
+              "chain_2": "This chain contains the `Catalog.update` method, which is the primary location where the issue manifests. It handles the merging and marking of messages as obsolete, and the current implementation does not account for different contexts when storing obsolete messages.",
+              "chain_3": "This chain includes the `Catalog.add` method, which is used to add or update messages in the catalog. While this method is involved in the overall process, the issue specifically arises during the update process, making Chain 2 a more direct target.",
+              "chain_4": "This chain is a subset of Chain 2 and focuses on the `_merge` function within `Catalog.update`. While this function is crucial for merging messages, the broader context of the `update` method in Chain 2 is more suitable for addressing the issue.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. The issue described is about how messages are handled during updates, not during initial parsing. Therefore, this chain is less relevant as a modification target.",
+              "chain_6": "This chain is related to test collection and is not directly involved in the message handling or update process. Modifying this chain would not address the issue."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for merging and updating messages in the catalog. The issue described involves messages being incorrectly removed or overwritten during the update process, especially when they share the same `msgid` but have different `msgctxt`. The `Catalog.update` method is where the logic for handling these updates and obsoleting messages is implemented, making it the most likely place to contain the root cause of the problem. Modifying this method to correctly handle messages with the same `msgid` but different `msgctxt` would directly address the issue.",
+            "modification_strategy": "Modify the `Catalog.update` method to ensure that messages with the same `msgid` but different `msgctxt` are treated as distinct entries and not overwritten. Specifically, update the logic in the `_merge` function and the handling of remaining messages to preserve all unique `msgctxt` entries.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the message update process in PO files. Modifying this chain would not address the issue of message overwriting.",
+              "chain_2": "This chain contains the `Catalog.update` method, which is the primary logic for updating and merging messages. It is the most likely place to contain the root cause of the issue and the best target for modification.",
+              "chain_3": "This chain deals with adding messages to the catalog, which is a separate process from updating and merging messages. While it is related, the issue described is more about the update process, not the initial addition of messages.",
+              "chain_4": "This chain includes both the `_merge` function and the `add` method. However, the `add` method is primarily for adding new messages, and the `_merge` function is already part of the `Catalog.update` method. The core issue lies in how `Catalog.update` handles existing messages, making Chain 2 a better target.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. While it is involved in reading and processing the PO file, the issue of message overwriting occurs during the update process, which is handled in Chain 2.",
+              "chain_6": "This chain is related to test collection and does not deal with the message update process at all. It is not relevant to the issue described."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for updating the catalog based on a template. The issue described involves the handling of obsolete messages with the same `msgid` but different `msgctxt`. The current implementation of `Catalog.update` does not seem to account for the context when marking messages as obsolete, leading to the loss of messages with the same `msgid` but different contexts. Modifying this method to properly handle context would directly address the issue.",
+            "modification_strategy": "Update the `Catalog.update` method to ensure that messages with the same `msgid` but different `msgctxt` are treated as distinct entries and not overwritten when marked as obsolete.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the handling of obsolete messages in PO files.",
+              "chain_2": "This chain is the most relevant as it contains the `Catalog.update` method, which is where the issue of removing obsolete messages with the same `msgid` but different `msgctxt` is likely to be occurring. Modifying this method to handle context correctly would resolve the issue.",
+              "chain_3": "This chain includes the `Catalog.add` method, which is used to add messages to the catalog. While it is related to message management, it does not directly handle the update process or the marking of messages as obsolete.",
+              "chain_4": "This chain includes the `_merge` function within the `Catalog.update` method. While it is part of the update process, the root cause of the issue is more likely to be in the higher-level logic of `Catalog.update` itself.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. It is important for the initial creation of the catalog but does not directly handle the update process or the marking of messages as obsolete.",
+              "chain_6": "This chain is related to test collection and is not directly involved in the PO file processing or message management."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for merging a template catalog into the current catalog. The issue described involves the removal of obsoletes with the same ID but different contexts, which suggests a problem in how the update method handles these cases. Specifically, the method seems to overwrite or remove older entries when it encounters a new one with the same ID, regardless of context. Modifying this method to correctly handle different contexts would directly address the issue.",
+            "modification_strategy": "Ensure that when adding messages to the `obsolete` dictionary, the context (`msgctxt`) is taken into account to avoid overwriting messages with the same `msgid` but different contexts.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the handling of obsoletes in PO files. Modifying this chain would not address the issue.",
+              "chain_2": "This chain contains the `Catalog.update` method, which is where the bug likely manifests. The method needs to be modified to handle different contexts correctly when marking messages as obsolete.",
+              "chain_3": "This chain deals with adding messages to the catalog, which is a prerequisite for the update process. However, the issue is more about how the update process handles existing messages, so this chain is less relevant.",
+              "chain_4": "This chain includes the `_merge` function used within `Catalog.update`, which is part of the update process. However, the primary issue seems to be in the higher-level logic of `Catalog.update` itself, making chain 2 a better target.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. While it is involved in the initial creation of the catalog, the issue described is more about how the update process handles existing messages, so this chain is less relevant.",
+              "chain_6": "This chain is related to test collection and does not involve the core functionality of handling PO files or updating catalogs. It is not relevant to the issue at hand."
+            },
+            "agent_id": 5
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for updating the catalog based on a template. The issue described involves the removal of obsoletes with the same ID from different contexts, which suggests a problem in how the catalog is being updated and how obsoletes are being handled. Modifying the logic in this method to properly handle messages with the same ID but different contexts would directly address the reported issue.",
+            "modification_strategy": "Modify the `Catalog.update` method to ensure that messages with the same ID but different contexts are not overwritten when marking them as obsolete. Specifically, update the handling of the `remaining` dictionary to retain all messages with the same ID but different contexts.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the issue of handling multiple messages with the same ID but different contexts in a PO file.",
+              "chain_2": "This chain is the most likely candidate for the root cause of the issue. The `Catalog.update` method is where the catalog is updated based on a template, and the logic for handling obsoletes is implemented. The issue of removing messages with the same ID but different contexts likely stems from how this method processes and retains obsolete messages.",
+              "chain_3": "This chain deals with adding messages to the catalog, which is a related but secondary function. The primary issue is in the update process, not in the initial addition of messages.",
+              "chain_4": "This chain includes the `_merge` function, which is part of the `Catalog.update` method. While it is involved in merging messages, the core issue of retaining obsoletes with the same ID but different contexts is more likely to be in the higher-level logic of the `Catalog.update` method itself.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. It is important for the initial creation of the catalog but does not directly handle the update process where the issue manifests.",
+              "chain_6": "This chain is related to test collection and is not relevant to the issue of handling multiple messages with the same ID but different contexts in a PO file."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for updating the catalog based on a template. The issue described involves the handling of obsolete messages with the same ID but different contexts, which is directly managed within this method. Specifically, the problem lies in how messages are being marked as obsolete and added to the `obsolete` dictionary. The current implementation overwrites messages with the same `msgid`, ignoring the context, which leads to the loss of messages from different contexts.",
+            "modification_strategy": "Modify the `Catalog.update` method to ensure that messages with the same `msgid` but different contexts are stored uniquely in the `obsolete` dictionary. This could involve using a composite key of `msgid` and `context` for storing messages in the `obsolete` dictionary.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the handling of messages in the catalog. Modifying this chain would not address the issue.",
+              "chain_2": "This chain contains the `Catalog.update` method, which is the primary location where the issue manifests. It handles the merging and marking of messages as obsolete, and the current implementation does not account for different contexts when storing obsolete messages.",
+              "chain_3": "This chain includes the `Catalog.add` method, which is used to add or update messages in the catalog. While this method is involved in the overall process, the issue specifically arises during the update process, making Chain 2 a more direct target.",
+              "chain_4": "This chain is a subset of Chain 2 and focuses on the `_merge` function within `Catalog.update`. While this function is crucial for merging messages, the broader context of the `update` method in Chain 2 is more suitable for addressing the issue.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. The issue described is about how messages are handled during updates, not during initial parsing. Therefore, this chain is less relevant as a modification target.",
+              "chain_6": "This chain is related to test collection and is not directly involved in the message handling or update process. Modifying this chain would not address the issue."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for merging and updating messages in the catalog. The issue described involves messages being incorrectly removed or overwritten during the update process, especially when they share the same `msgid` but have different `msgctxt`. The `Catalog.update` method is where the logic for handling these updates and obsoleting messages is implemented, making it the most likely place to contain the root cause of the problem. Modifying this method to correctly handle messages with the same `msgid` but different `msgctxt` would directly address the issue.",
+            "modification_strategy": "Modify the `Catalog.update` method to ensure that messages with the same `msgid` but different `msgctxt` are treated as distinct entries and not overwritten. Specifically, update the logic in the `_merge` function and the handling of remaining messages to preserve all unique `msgctxt` entries.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the message update process in PO files. Modifying this chain would not address the issue of message overwriting.",
+              "chain_2": "This chain contains the `Catalog.update` method, which is the primary logic for updating and merging messages. It is the most likely place to contain the root cause of the issue and the best target for modification.",
+              "chain_3": "This chain deals with adding messages to the catalog, which is a separate process from updating and merging messages. While it is related, the issue described is more about the update process, not the initial addition of messages.",
+              "chain_4": "This chain includes both the `_merge` function and the `add` method. However, the `add` method is primarily for adding new messages, and the `_merge` function is already part of the `Catalog.update` method. The core issue lies in how `Catalog.update` handles existing messages, making Chain 2 a better target.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. While it is involved in reading and processing the PO file, the issue of message overwriting occurs during the update process, which is handled in Chain 2.",
+              "chain_6": "This chain is related to test collection and does not deal with the message update process at all. It is not relevant to the issue described."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for updating the catalog based on a template. The issue described involves the handling of obsolete messages with the same `msgid` but different `msgctxt`. The current implementation of `Catalog.update` does not seem to account for the context when marking messages as obsolete, leading to the loss of messages with the same `msgid` but different contexts. Modifying this method to properly handle context would directly address the issue.",
+            "modification_strategy": "Update the `Catalog.update` method to ensure that messages with the same `msgid` but different `msgctxt` are treated as distinct entries and not overwritten when marked as obsolete.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the handling of obsolete messages in PO files.",
+              "chain_2": "This chain is the most relevant as it contains the `Catalog.update` method, which is where the issue of removing obsolete messages with the same `msgid` but different `msgctxt` is likely to be occurring. Modifying this method to handle context correctly would resolve the issue.",
+              "chain_3": "This chain includes the `Catalog.add` method, which is used to add messages to the catalog. While it is related to message management, it does not directly handle the update process or the marking of messages as obsolete.",
+              "chain_4": "This chain includes the `_merge` function within the `Catalog.update` method. While it is part of the update process, the root cause of the issue is more likely to be in the higher-level logic of `Catalog.update` itself.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. It is important for the initial creation of the catalog but does not directly handle the update process or the marking of messages as obsolete.",
+              "chain_6": "This chain is related to test collection and is not directly involved in the PO file processing or message management."
+            },
+            "agent_id": 4
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `Catalog.update` method, which is responsible for merging a template catalog into the current catalog. The issue described involves the removal of obsoletes with the same ID but different contexts, which suggests a problem in how the update method handles these cases. Specifically, the method seems to overwrite or remove older entries when it encounters a new one with the same ID, regardless of context. Modifying this method to correctly handle different contexts would directly address the issue.",
+            "modification_strategy": "Ensure that when adding messages to the `obsolete` dictionary, the context (`msgctxt`) is taken into account to avoid overwriting messages with the same `msgid` but different contexts.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with alias resolution in locale data, which is not directly related to the handling of obsoletes in PO files. Modifying this chain would not address the issue.",
+              "chain_2": "This chain contains the `Catalog.update` method, which is where the bug likely manifests. The method needs to be modified to handle different contexts correctly when marking messages as obsolete.",
+              "chain_3": "This chain deals with adding messages to the catalog, which is a prerequisite for the update process. However, the issue is more about how the update process handles existing messages, so this chain is less relevant.",
+              "chain_4": "This chain includes the `_merge` function used within `Catalog.update`, which is part of the update process. However, the primary issue seems to be in the higher-level logic of `Catalog.update` itself, making chain 2 a better target.",
+              "chain_5": "This chain deals with parsing PO files and adding messages to the catalog. While it is involved in the initial creation of the catalog, the issue described is more about how the update process handles existing messages, so this chain is less relevant.",
+              "chain_6": "This chain is related to test collection and does not involve the core functionality of handling PO files or updating catalogs. It is not relevant to the issue at hand."
+            },
+            "agent_id": 5
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "babel/localedata.py:Alias",
+              "babel/localedata.py:Alias.resolve",
+              "babel/localedata.py:LocaleDataDict.__getitem__",
+              "babel/localedata.py:LocaleDataDict",
+              "babel/localedata.py:LocaleDataDict.__setitem__"
+            ],
+            "chain_length": 5,
+            "initial_entity": "pybabel",
+            "start_entity": {
+              "entity_id": "babel/localedata.py:Alias",
+              "entity_type": "class",
+              "relevance_reason": "The Alias class deals with resolving aliases in locale data, which might be relevant for handling multiple contexts with the same ID.",
+              "diversity_value": "Different file, deals with data resolution"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/localedata.py:Alias",
+              "type": "class",
+              "code": "```\n207 | class Alias:\n208 |     \"\"\"Representation of an alias in the locale data.\n209 | \n210 |     An alias is a value that refers to some other part of the locale data,\n211 |     as specified by the `keys`.\n212 |     \"\"\"\n213 | \n214 |     def __init__(self, keys: tuple[str, ...]) -> None:\n215 |         self.keys = tuple(keys)\n216 | \n217 |     def __repr__(self) -> str:\n218 |         return f\"<{type(self).__name__} {self.keys!r}>\"\n219 | \n220 |     def resolve(self, data: Mapping[str | int | None, Any]) -> Mapping[str | int | None, Any]:\n221 |         \"\"\"Resolve the alias based on the given data.\n222 | \n223 |         This is done recursively, so if one alias resolves to a second alias,\n224 |         that second alias will also be resolved.\n225 | \n226 |         :param data: the locale data\n227 |         :type data: `dict`\n228 |         \"\"\"\n229 |         base = data\n230 |         for key in self.keys:\n231 |             data = data[key]\n232 |         if isinstance(data, Alias):\n233 |             data = data.resolve(base)\n234 |         elif isinstance(data, tuple):\n235 |             alias, others = data\n236 |             data = alias.resolve(base)\n237 |         return data\n```",
+              "start_line": 207,
+              "end_line": 237,
+              "code_omitted": false,
+              "original_code_length": 1190
+            },
+            {
+              "entity_id": "babel/localedata.py:Alias.resolve",
+              "type": "function",
+              "code": "```\n220 | def resolve(self, data: Mapping[str | int | None, Any]) -> Mapping[str | int | None, Any]:\n221 |         \"\"\"Resolve the alias based on the given data.\n222 | \n223 |         This is done recursively, so if one alias resolves to a second alias,\n224 |         that second alias will also be resolved.\n225 | \n226 |         :param data: the locale data\n227 |         :type data: `dict`\n228 |         \"\"\"\n229 |         base = data\n230 |         for key in self.keys:\n231 |             data = data[key]\n232 |         if isinstance(data, Alias):\n233 |             data = data.resolve(base)\n234 |         elif isinstance(data, tuple):\n235 |             alias, others = data\n236 |             data = alias.resolve(base)\n237 |         return data\n```",
+              "start_line": 220,
+              "end_line": 237,
+              "code_omitted": false,
+              "original_code_length": 748
+            },
+            {
+              "entity_id": "babel/localedata.py:LocaleDataDict.__getitem__",
+              "type": "function",
+              "code": "```\n257 | def __getitem__(self, key: str | int | None) -> Any:\n258 |         orig = val = self._data[key]\n259 |         if isinstance(val, Alias):  # resolve an alias\n260 |             val = val.resolve(self.base)\n261 |         if isinstance(val, tuple):  # Merge a partial dict with an alias\n262 |             alias, others = val\n263 |             val = alias.resolve(self.base).copy()\n264 |             merge(val, others)\n265 |         if isinstance(val, dict):  # Return a nested alias-resolving dict\n266 |             val = LocaleDataDict(val, base=self.base)\n267 |         if val is not orig:\n268 |             self._data[key] = val\n269 |         return val\n```",
+              "start_line": 257,
+              "end_line": 269,
+              "code_omitted": false,
+              "original_code_length": 666
+            },
+            {
+              "entity_id": "babel/localedata.py:LocaleDataDict",
+              "type": "class",
+              "code": "```\n240 | class LocaleDataDict(abc.MutableMapping):\n241 |     \"\"\"Dictionary wrapper that automatically resolves aliases to the actual\n242 |     values.\n243 |     \"\"\"\n244 | \n245 |     def __init__(self, data: MutableMapping[str | int | None, Any], base: Mapping[str | int | None, Any] | None = None):\n246 |         self._data = data\n247 |         if base is None:\n248 |             base = data\n249 |         self.base = base\n250 | \n251 |     def __len__(self) -> int:\n252 |         return len(self._data)\n253 | \n254 |     def __iter__(self) -> Iterator[str | int | None]:\n255 |         return iter(self._data)\n256 | \n257 |     def __getitem__(self, key: str | int | None) -> Any:\n258 |         orig = val = self._data[key]\n259 |         if isinstance(val, Alias):  # resolve an alias\n260 |             val = val.resolve(self.base)\n261 |         if isinstance(val, tuple):  # Merge a partial dict with an alias\n262 |             alias, others = val\n263 |             val = alias.resolve(self.base).copy()\n264 |             merge(val, others)\n265 |         if isinstance(val, dict):  # Return a nested alias-resolving dict\n266 |             val = LocaleDataDict(val, base=self.base)\n267 |         if val is not orig:\n268 |             self._data[key] = val\n269 |         return val\n270 | \n271 |     def __setitem__(self, key: str | int | None, value: Any) -> None:\n272 |         self._data[key] = value\n273 | \n274 |     def __delitem__(self, key: str | int | None) -> None:\n275 |         del self._data[key]\n276 | \n277 |     def copy(self) -> LocaleDataDict:\n278 |         return LocaleDataDict(self._data.copy(), base=self.base)\n```",
+              "start_line": 240,
+              "end_line": 278,
+              "code_omitted": false,
+              "original_code_length": 1630
+            },
+            {
+              "entity_id": "babel/localedata.py:LocaleDataDict.__setitem__",
+              "type": "function",
+              "code": "```\n271 | def __setitem__(self, key: str | int | None, value: Any) -> None:\n272 |         self._data[key] = value\n```",
+              "start_line": 271,
+              "end_line": 272,
+              "code_omitted": false,
+              "original_code_length": 117
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.update"
+            ],
+            "chain_length": 1,
+            "initial_entity": "update",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "entity_type": "function",
+              "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+              "diversity_value": "Core functionality in the catalog module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8709284067153931,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update",
+              "type": "function",
+              "code": "```\n770 | def update(\n771 |         self,\n772 |         template: Catalog,\n773 |         no_fuzzy_matching: bool = False,\n774 |         update_header_comment: bool = False,\n775 |         keep_user_comments: bool = True,\n776 |         update_creation_date: bool = True,\n777 |     ) -> None:\n778 |         \"\"\"Update the catalog based on the given template catalog.\n779 | \n780 |         >>> from babel.messages import Catalog\n781 |         >>> template = Catalog()\n782 |         >>> template.add('green', locations=[('main.py', 99)])\n783 |         <Message ...>\n784 |         >>> template.add('blue', locations=[('main.py', 100)])\n785 |         <Message ...>\n786 |         >>> template.add(('salad', 'salads'), locations=[('util.py', 42)])\n787 |         <Message ...>\n788 |         >>> catalog = Catalog(locale='de_DE')\n789 |         >>> catalog.add('blue', u'blau', locations=[('main.py', 98)])\n790 |         <Message ...>\n791 |         >>> catalog.add('head', u'Kopf', locations=[('util.py', 33)])\n792 |         <Message ...>\n793 |         >>> catalog.add(('salad', 'salads'), (u'Salat', u'Salate'),\n794 |         ...             locations=[('util.py', 38)])\n795 |         <Message ...>\n796 | \n797 |         >>> catalog.update(template)\n798 |         >>> len(catalog)\n799 |         3\n800 | \n801 |         >>> msg1 = catalog['green']\n802 |         >>> msg1.string\n803 |         >>> msg1.locations\n804 |         [('main.py', 99)]\n805 | \n806 |         >>> msg2 = catalog['blue']\n807 |         >>> msg2.string\n808 |         u'blau'\n809 |         >>> msg2.locations\n810 |         [('main.py', 100)]\n811 | \n812 |         >>> msg3 = catalog['salad']\n813 |         >>> msg3.string\n814 |         (u'Salat', u'Salate')\n815 |         >>> msg3.locations\n816 |         [('util.py', 42)]\n817 | \n818 |         Messages that are in the catalog but not in the template are removed\n819 |         from the main collection, but can still be accessed via the `obsolete`\n820 |         member:\n821 | \n822 |         >>> 'head' in catalog\n823 |         False\n824 |         >>> list(catalog.obsolete.values())\n825 |         [<Message 'head' (flags: [])>]\n826 | \n827 |         :param template: the reference catalog, usually read from a POT file\n828 |         :param no_fuzzy_matching: whether to use fuzzy matching of message IDs\n829 |         \"\"\"\n830 |         messages = self._messages\n831 |         remaining = messages.copy()\n832 |         self._messages = OrderedDict()\n833 | \n834 |         # Prepare for fuzzy matching\n835 |         fuzzy_candidates = {}\n836 |         if not no_fuzzy_matching:\n837 |             for msgid in messages:\n838 |                 if msgid and messages[msgid].string:\n839 |                     key = self._key_for(msgid)\n840 |                     ctxt = messages[msgid].context\n841 |                     fuzzy_candidates[self._to_fuzzy_match_key(key)] = (key, ctxt)\n842 |         fuzzy_matches = set()\n843 | \n844 |         def _merge(message: Message, oldkey: tuple[str, str] | str, newkey: tuple[str, str] | str) -> None:\n845 |             message = message.clone()\n846 |             fuzzy = False\n847 |             if oldkey != newkey:\n848 |                 fuzzy = True\n849 |                 fuzzy_matches.add(oldkey)\n850 |                 oldmsg = messages.get(oldkey)\n851 |                 assert oldmsg is not None\n852 |                 if isinstance(oldmsg.id, str):\n853 |                     message.previous_id = [oldmsg.id]\n854 |                 else:\n855 |                     message.previous_id = list(oldmsg.id)\n856 |             else:\n857 |                 oldmsg = remaining.pop(oldkey, None)\n858 |                 assert oldmsg is not None\n859 |             message.string = oldmsg.string\n860 | \n861 |             if keep_user_comments:\n862 |                 message.user_comments = list(distinct(oldmsg.user_comments))\n863 | \n864 |             if isinstance(message.id, (list, tuple)):\n865 |                 if not isinstance(message.string, (list, tuple)):\n866 |                     fuzzy = True\n867 |                     message.string = tuple(\n868 |                         [message.string] + ([''] * (len(message.id) - 1)),\n869 |                     )\n870 |                 elif len(message.string) != self.num_plurals:\n871 |                     fuzzy = True\n872 |                     message.string = tuple(message.string[:len(oldmsg.string)])\n873 |             elif isinstance(message.string, (list, tuple)):\n874 |                 fuzzy = True\n875 |                 message.string = message.string[0]\n876 |             message.flags |= oldmsg.flags\n877 |             if fuzzy:\n878 |                 message.flags |= {'fuzzy'}\n879 |             self[message.id] = message\n880 | \n881 |         for message in template:\n882 |             if message.id:\n883 |                 key = self._key_for(message.id, message.context)\n884 |                 if key in messages:\n885 |                     _merge(message, key, key)\n886 |                 else:\n887 |                     if not no_fuzzy_matching:\n888 |                         # do some fuzzy matching with difflib\n889 |                         matches = get_close_matches(\n890 |                             self._to_fuzzy_match_key(key),\n891 |                             fuzzy_candidates.keys(),\n892 |                             1,\n893 |                         )\n894 |                         if matches:\n895 |                             modified_key = matches[0]\n896 |                             newkey, newctxt = fuzzy_candidates[modified_key]\n897 |                             if newctxt is not None:\n898 |                                 newkey = newkey, newctxt\n899 |                             _merge(message, newkey, key)\n900 |                             continue\n901 | \n902 |                     self[message.id] = message\n903 | \n904 |         for msgid in remaining:\n905 |             if no_fuzzy_matching or msgid not in fuzzy_matches:\n906 |                 self.obsolete[msgid] = remaining[msgid]\n907 | \n908 |         if update_header_comment:\n909 |             # Allow the updated catalog's header to be rewritten based on the\n910 |             # template's header\n911 |             self.header_comment = template.header_comment\n912 | \n913 |         # Make updated catalog's POT-Creation-Date equal to the template\n914 |         # used to update the catalog\n915 |         if update_creation_date:\n916 |             self.creation_date = template.creation_date\n```",
+              "start_line": 770,
+              "end_line": 916,
+              "code_omitted": false,
+              "original_code_length": 6460
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.add"
+            ],
+            "chain_length": 1,
+            "initial_entity": "msgid",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "entity_type": "function",
+              "relevance_reason": "Method responsible for adding messages to the catalog, potentially where the issue arises",
+              "diversity_value": "Catalog management function from a different file"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.8727980852127075,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "type": "function",
+              "code": "```\n695 | def add(\n696 |         self,\n697 |         id: _MessageID,\n698 |         string: _MessageID | None = None,\n699 |         locations: Iterable[tuple[str, int]] = (),\n700 |         flags: Iterable[str] = (),\n701 |         auto_comments: Iterable[str] = (),\n702 |         user_comments: Iterable[str] = (),\n703 |         previous_id: _MessageID = (),\n704 |         lineno: int | None = None,\n705 |         context: str | None = None,\n706 |     ) -> Message:\n707 |         \"\"\"Add or update the message with the specified ID.\n708 | \n709 |         >>> catalog = Catalog()\n710 |         >>> catalog.add(u'foo')\n711 |         <Message ...>\n712 |         >>> catalog[u'foo']\n713 |         <Message u'foo' (flags: [])>\n714 | \n715 |         This method simply constructs a `Message` object with the given\n716 |         arguments and invokes `__setitem__` with that object.\n717 | \n718 |         :param id: the message ID, or a ``(singular, plural)`` tuple for\n719 |                    pluralizable messages\n720 |         :param string: the translated message string, or a\n721 |                        ``(singular, plural)`` tuple for pluralizable messages\n722 |         :param locations: a sequence of ``(filename, lineno)`` tuples\n723 |         :param flags: a set or sequence of flags\n724 |         :param auto_comments: a sequence of automatic comments\n725 |         :param user_comments: a sequence of user comments\n726 |         :param previous_id: the previous message ID, or a ``(singular, plural)``\n727 |                             tuple for pluralizable messages\n728 |         :param lineno: the line number on which the msgid line was found in the\n729 |                        PO file, if any\n730 |         :param context: the message context\n731 |         \"\"\"\n732 |         message = Message(id, string, list(locations), flags, auto_comments,\n733 |                           user_comments, previous_id, lineno=lineno,\n734 |                           context=context)\n735 |         self[id] = message\n736 |         return message\n```",
+              "start_line": 695,
+              "end_line": 736,
+              "code_omitted": false,
+              "original_code_length": 2041
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/catalog.py:Catalog.update._merge",
+              "babel/messages/catalog.py:Catalog.add"
+            ],
+            "chain_length": 2,
+            "initial_entity": "update",
+            "start_entity": {
+              "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+              "entity_type": "function",
+              "relevance_reason": "This helper function is used within the `update` method to merge messages. It might need adjustments to handle messages from different contexts correctly.",
+              "diversity_value": "Helper function within the same file, but a different part of the update process"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.883669376373291,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.update._merge",
+              "type": "function",
+              "code": "```\n844 | def _merge(message: Message, oldkey: tuple[str, str] | str, newkey: tuple[str, str] | str) -> None:\n845 |             message = message.clone()\n846 |             fuzzy = False\n847 |             if oldkey != newkey:\n848 |                 fuzzy = True\n849 |                 fuzzy_matches.add(oldkey)\n850 |                 oldmsg = messages.get(oldkey)\n851 |                 assert oldmsg is not None\n852 |                 if isinstance(oldmsg.id, str):\n853 |                     message.previous_id = [oldmsg.id]\n854 |                 else:\n855 |                     message.previous_id = list(oldmsg.id)\n856 |             else:\n857 |                 oldmsg = remaining.pop(oldkey, None)\n858 |                 assert oldmsg is not None\n859 |             message.string = oldmsg.string\n860 | \n861 |             if keep_user_comments:\n862 |                 message.user_comments = list(distinct(oldmsg.user_comments))\n863 | \n864 |             if isinstance(message.id, (list, tuple)):\n865 |                 if not isinstance(message.string, (list, tuple)):\n866 |                     fuzzy = True\n867 |                     message.string = tuple(\n868 |                         [message.string] + ([''] * (len(message.id) - 1)),\n869 |                     )\n870 |                 elif len(message.string) != self.num_plurals:\n871 |                     fuzzy = True\n872 |                     message.string = tuple(message.string[:len(oldmsg.string)])\n873 |             elif isinstance(message.string, (list, tuple)):\n874 |                 fuzzy = True\n875 |                 message.string = message.string[0]\n876 |             message.flags |= oldmsg.flags\n877 |             if fuzzy:\n878 |                 message.flags |= {'fuzzy'}\n879 |             self[message.id] = message\n```",
+              "start_line": 844,
+              "end_line": 879,
+              "code_omitted": false,
+              "original_code_length": 1785
+            },
+            {
+              "entity_id": "babel/messages/catalog.py:Catalog.add",
+              "type": "function",
+              "code": "```\n695 | def add(\n696 |         self,\n697 |         id: _MessageID,\n698 |         string: _MessageID | None = None,\n699 |         locations: Iterable[tuple[str, int]] = (),\n700 |         flags: Iterable[str] = (),\n701 |         auto_comments: Iterable[str] = (),\n702 |         user_comments: Iterable[str] = (),\n703 |         previous_id: _MessageID = (),\n704 |         lineno: int | None = None,\n705 |         context: str | None = None,\n706 |     ) -> Message:\n707 |         \"\"\"Add or update the message with the specified ID.\n708 | \n709 |         >>> catalog = Catalog()\n710 |         >>> catalog.add(u'foo')\n711 |         <Message ...>\n712 |         >>> catalog[u'foo']\n713 |         <Message u'foo' (flags: [])>\n714 | \n715 |         This method simply constructs a `Message` object with the given\n716 |         arguments and invokes `__setitem__` with that object.\n717 | \n718 |         :param id: the message ID, or a ``(singular, plural)`` tuple for\n719 |                    pluralizable messages\n720 |         :param string: the translated message string, or a\n721 |                        ``(singular, plural)`` tuple for pluralizable messages\n722 |         :param locations: a sequence of ``(filename, lineno)`` tuples\n723 |         :param flags: a set or sequence of flags\n724 |         :param auto_comments: a sequence of automatic comments\n725 |         :param user_comments: a sequence of user comments\n726 |         :param previous_id: the previous message ID, or a ``(singular, plural)``\n727 |                             tuple for pluralizable messages\n728 |         :param lineno: the line number on which the msgid line was found in the\n729 |                        PO file, if any\n730 |         :param context: the message context\n731 |         \"\"\"\n732 |         message = Message(id, string, list(locations), flags, auto_comments,\n733 |                           user_comments, previous_id, lineno=lineno,\n734 |                           context=context)\n735 |         self[id] = message\n736 |         return message\n```",
+              "start_line": 695,
+              "end_line": 736,
+              "code_omitted": false,
+              "original_code_length": 2041
+            }
+          ],
+          "chain_length": 2,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "babel/messages/pofile.py:PoFileParser.parse",
+              "babel/messages/pofile.py:PoFileParser._add_message",
+              "babel/messages/pofile.py:PoFileParser._reset_message_state"
+            ],
+            "chain_length": 4,
+            "initial_entity": "msgid",
+            "start_entity": {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "entity_type": "function",
+              "relevance_reason": "Directly processes lines in PO files, including those with `msgid` and `msgctxt`",
+              "diversity_value": "Specific parsing function within the PO file handler"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8885951042175293,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._process_message_line",
+              "type": "function",
+              "code": "```\n252 | def _process_message_line(self, lineno, line, obsolete=False) -> None:\n253 |         if line.startswith('\"'):\n254 |             self._process_string_continuation_line(line, lineno)\n255 |         else:\n256 |             self._process_keyword_line(lineno, line, obsolete)\n```",
+              "start_line": 252,
+              "end_line": 256,
+              "code_omitted": false,
+              "original_code_length": 283
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser.parse",
+              "type": "function",
+              "code": "```\n338 | def parse(self, fileobj: IO[AnyStr] | Iterable[AnyStr]) -> None:\n339 |         \"\"\"\n340 |         Reads from the file-like object `fileobj` and adds any po file\n341 |         units found in it to the `Catalog` supplied to the constructor.\n342 |         \"\"\"\n343 | \n344 |         for lineno, line in enumerate(fileobj):\n345 |             line = line.strip()\n346 |             if not isinstance(line, str):\n347 |                 line = line.decode(self.catalog.charset)\n348 |             if not line:\n349 |                 continue\n350 |             if line.startswith('#'):\n351 |                 if line[1:].startswith('~'):\n352 |                     self._process_message_line(lineno, line[2:].lstrip(), obsolete=True)\n353 |                 else:\n354 |                     try:\n355 |                         self._process_comment(line)\n356 |                     except ValueError as exc:\n357 |                         self._invalid_pofile(line, lineno, str(exc))\n358 |             else:\n359 |                 self._process_message_line(lineno, line)\n360 | \n361 |         self._finish_current_message()\n362 | \n363 |         # No actual messages found, but there was some info in comments, from which\n364 |         # we'll construct an empty header message\n365 |         if not self.counter and (self.flags or self.user_comments or self.auto_comments):\n366 |             self.messages.append(_NormalizedString('\"\"'))\n367 |             self.translations.append([0, _NormalizedString('\"\"')])\n368 |             self._add_message()\n```",
+              "start_line": 338,
+              "end_line": 368,
+              "code_omitted": false,
+              "original_code_length": 1537
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._add_message",
+              "type": "function",
+              "code": "```\n216 | def _add_message(self) -> None:\n217 |         \"\"\"\n218 |         Add a message to the catalog based on the current parser state and\n219 |         clear the state ready to process the next message.\n220 |         \"\"\"\n221 |         self.translations.sort()\n222 |         if len(self.messages) > 1:\n223 |             msgid = tuple(m.denormalize() for m in self.messages)\n224 |         else:\n225 |             msgid = self.messages[0].denormalize()\n226 |         if isinstance(msgid, (list, tuple)):\n227 |             string = ['' for _ in range(self.catalog.num_plurals)]\n228 |             for idx, translation in self.translations:\n229 |                 if idx >= self.catalog.num_plurals:\n230 |                     self._invalid_pofile(\"\", self.offset, \"msg has more translations than num_plurals of catalog\")\n231 |                     continue\n232 |                 string[idx] = translation.denormalize()\n233 |             string = tuple(string)\n234 |         else:\n235 |             string = self.translations[0][1].denormalize()\n236 |         msgctxt = self.context.denormalize() if self.context else None\n237 |         message = Message(msgid, string, list(self.locations), set(self.flags),\n238 |                           self.auto_comments, self.user_comments, lineno=self.offset + 1,\n239 |                           context=msgctxt)\n240 |         if self.obsolete:\n241 |             if not self.ignore_obsolete:\n242 |                 self.catalog.obsolete[msgid] = message\n243 |         else:\n244 |             self.catalog[msgid] = message\n245 |         self.counter += 1\n246 |         self._reset_message_state()\n```",
+              "start_line": 216,
+              "end_line": 246,
+              "code_omitted": false,
+              "original_code_length": 1633
+            },
+            {
+              "entity_id": "babel/messages/pofile.py:PoFileParser._reset_message_state",
+              "type": "function",
+              "code": "```\n203 | def _reset_message_state(self) -> None:\n204 |         self.messages = []\n205 |         self.translations = []\n206 |         self.locations = []\n207 |         self.flags = []\n208 |         self.user_comments = []\n209 |         self.auto_comments = []\n210 |         self.context = None\n211 |         self.obsolete = False\n212 |         self.in_msgid = False\n213 |         self.in_msgstr = False\n214 |         self.in_msgctxt = False\n```",
+              "start_line": 203,
+              "end_line": 214,
+              "code_omitted": false,
+              "original_code_length": 444
+            }
+          ],
+          "chain_length": 4,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "conftest.py",
+              "conftest.py:pytest_collect_file",
+              "conftest.py:_is_relative"
+            ],
+            "chain_length": 3,
+            "initial_entity": "msgctxt",
+            "start_entity": {
+              "entity_id": "conftest.py",
+              "entity_type": "file",
+              "relevance_reason": "This file may contain test configurations or fixtures that could help in reproducing and verifying the fix for the issue.",
+              "diversity_value": "Test configuration file from a different location"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8923104405403137,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "conftest.py",
+              "type": "file",
+              "code": "```\n 1 | from pathlib import Path\n 2 | \n 3 | from _pytest.doctest import DoctestModule\n 4 | \n 5 | collect_ignore = [\n 6 |     'babel/messages/setuptools_frontend.py',\n 7 |     'setup.py',\n 8 |     'tests/messages/data',\n 9 | ]\n10 | babel_path = Path(__file__).parent / 'babel'\n11 | \n12 | \n13 | # Via the stdlib implementation of Path.is_relative_to in Python 3.9\n14 | def _is_relative(p1: Path, p2: Path) -> bool:\n15 |     try:\n16 |         p1.relative_to(p2)\n17 |         return True\n18 |     except ValueError:\n19 |         return False\n20 | \n21 | \n22 | def pytest_collect_file(file_path: Path, parent):\n23 |     if _is_relative(file_path, babel_path) and file_path.suffix == '.py':\n24 |         return DoctestModule.from_parent(parent, path=file_path)\n25 | \n```",
+              "start_line": 1,
+              "end_line": 25,
+              "code_omitted": false,
+              "original_code_length": 764
+            },
+            {
+              "entity_id": "conftest.py:pytest_collect_file",
+              "type": "function",
+              "code": "```\n22 | def pytest_collect_file(file_path: Path, parent):\n23 |     if _is_relative(file_path, babel_path) and file_path.suffix == '.py':\n24 |         return DoctestModule.from_parent(parent, path=file_path)\n```",
+              "start_line": 22,
+              "end_line": 24,
+              "code_omitted": false,
+              "original_code_length": 211
+            },
+            {
+              "entity_id": "conftest.py:_is_relative",
+              "type": "function",
+              "code": "```\n14 | def _is_relative(p1: Path, p2: Path) -> bool:\n15 |     try:\n16 |         p1.relative_to(p2)\n17 |         return True\n18 |     except ValueError:\n19 |         return False\n```",
+              "start_line": 14,
+              "end_line": 19,
+              "code_omitted": false,
+              "original_code_length": 183
+            }
+          ],
+          "chain_length": 3,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_2",
+        "original_chain_info": {
+          "chain": [
+            "babel/messages/catalog.py:Catalog.update"
+          ],
+          "chain_length": 1,
+          "initial_entity": "update",
+          "start_entity": {
+            "entity_id": "babel/messages/catalog.py:Catalog.update",
+            "entity_type": "function",
+            "relevance_reason": "This function is responsible for updating the catalog based on a template, which is where the issue of removing obsoletes with the same ID from different contexts might be occurring.",
+            "diversity_value": "Core functionality in the catalog module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8709284067153931,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "babel/messages/catalog.py:Catalog.update",
+            "type": "function",
+            "code": "```\n770 | def update(\n771 |         self,\n772 |         template: Catalog,\n773 |         no_fuzzy_matching: bool = False,\n774 |         update_header_comment: bool = False,\n775 |         keep_user_comments: bool = True,\n776 |         update_creation_date: bool = True,\n777 |     ) -> None:\n778 |         \"\"\"Update the catalog based on the given template catalog.\n779 | \n780 |         >>> from babel.messages import Catalog\n781 |         >>> template = Catalog()\n782 |         >>> template.add('green', locations=[('main.py', 99)])\n783 |         <Message ...>\n784 |         >>> template.add('blue', locations=[('main.py', 100)])\n785 |         <Message ...>\n786 |         >>> template.add(('salad', 'salads'), locations=[('util.py', 42)])\n787 |         <Message ...>\n788 |         >>> catalog = Catalog(locale='de_DE')\n789 |         >>> catalog.add('blue', u'blau', locations=[('main.py', 98)])\n790 |         <Message ...>\n791 |         >>> catalog.add('head', u'Kopf', locations=[('util.py', 33)])\n792 |         <Message ...>\n793 |         >>> catalog.add(('salad', 'salads'), (u'Salat', u'Salate'),\n794 |         ...             locations=[('util.py', 38)])\n795 |         <Message ...>\n796 | \n797 |         >>> catalog.update(template)\n798 |         >>> len(catalog)\n799 |         3\n800 | \n801 |         >>> msg1 = catalog['green']\n802 |         >>> msg1.string\n803 |         >>> msg1.locations\n804 |         [('main.py', 99)]\n805 | \n806 |         >>> msg2 = catalog['blue']\n807 |         >>> msg2.string\n808 |         u'blau'\n809 |         >>> msg2.locations\n810 |         [('main.py', 100)]\n811 | \n812 |         >>> msg3 = catalog['salad']\n813 |         >>> msg3.string\n814 |         (u'Salat', u'Salate')\n815 |         >>> msg3.locations\n816 |         [('util.py', 42)]\n817 | \n818 |         Messages that are in the catalog but not in the template are removed\n819 |         from the main collection, but can still be accessed via the `obsolete`\n820 |         member:\n821 | \n822 |         >>> 'head' in catalog\n823 |         False\n824 |         >>> list(catalog.obsolete.values())\n825 |         [<Message 'head' (flags: [])>]\n826 | \n827 |         :param template: the reference catalog, usually read from a POT file\n828 |         :param no_fuzzy_matching: whether to use fuzzy matching of message IDs\n829 |         \"\"\"\n830 |         messages = self._messages\n831 |         remaining = messages.copy()\n832 |         self._messages = OrderedDict()\n833 | \n834 |         # Prepare for fuzzy matching\n835 |         fuzzy_candidates = {}\n836 |         if not no_fuzzy_matching:\n837 |             for msgid in messages:\n838 |                 if msgid and messages[msgid].string:\n839 |                     key = self._key_for(msgid)\n840 |                     ctxt = messages[msgid].context\n841 |                     fuzzy_candidates[self._to_fuzzy_match_key(key)] = (key, ctxt)\n842 |         fuzzy_matches = set()\n843 | \n844 |         def _merge(message: Message, oldkey: tuple[str, str] | str, newkey: tuple[str, str] | str) -> None:\n845 |             message = message.clone()\n846 |             fuzzy = False\n847 |             if oldkey != newkey:\n848 |                 fuzzy = True\n849 |                 fuzzy_matches.add(oldkey)\n850 |                 oldmsg = messages.get(oldkey)\n851 |                 assert oldmsg is not None\n852 |                 if isinstance(oldmsg.id, str):\n853 |                     message.previous_id = [oldmsg.id]\n854 |                 else:\n855 |                     message.previous_id = list(oldmsg.id)\n856 |             else:\n857 |                 oldmsg = remaining.pop(oldkey, None)\n858 |                 assert oldmsg is not None\n859 |             message.string = oldmsg.string\n860 | \n861 |             if keep_user_comments:\n862 |                 message.user_comments = list(distinct(oldmsg.user_comments))\n863 | \n864 |             if isinstance(message.id, (list, tuple)):\n865 |                 if not isinstance(message.string, (list, tuple)):\n866 |                     fuzzy = True\n867 |                     message.string = tuple(\n868 |                         [message.string] + ([''] * (len(message.id) - 1)),\n869 |                     )\n870 |                 elif len(message.string) != self.num_plurals:\n871 |                     fuzzy = True\n872 |                     message.string = tuple(message.string[:len(oldmsg.string)])\n873 |             elif isinstance(message.string, (list, tuple)):\n874 |                 fuzzy = True\n875 |                 message.string = message.string[0]\n876 |             message.flags |= oldmsg.flags\n877 |             if fuzzy:\n878 |                 message.flags |= {'fuzzy'}\n879 |             self[message.id] = message\n880 | \n881 |         for message in template:\n882 |             if message.id:\n883 |                 key = self._key_for(message.id, message.context)\n884 |                 if key in messages:\n885 |                     _merge(message, key, key)\n886 |                 else:\n887 |                     if not no_fuzzy_matching:\n888 |                         # do some fuzzy matching with difflib\n889 |                         matches = get_close_matches(\n890 |                             self._to_fuzzy_match_key(key),\n891 |                             fuzzy_candidates.keys(),\n892 |                             1,\n893 |                         )\n894 |                         if matches:\n895 |                             modified_key = matches[0]\n896 |                             newkey, newctxt = fuzzy_candidates[modified_key]\n897 |                             if newctxt is not None:\n898 |                                 newkey = newkey, newctxt\n899 |                             _merge(message, newkey, key)\n900 |                             continue\n901 | \n902 |                     self[message.id] = message\n903 | \n904 |         for msgid in remaining:\n905 |             if no_fuzzy_matching or msgid not in fuzzy_matches:\n906 |                 self.obsolete[msgid] = remaining[msgid]\n907 | \n908 |         if update_header_comment:\n909 |             # Allow the updated catalog's header to be rewritten based on the\n910 |             # template's header\n911 |             self.header_comment = template.header_comment\n912 | \n913 |         # Make updated catalog's POT-Creation-Date equal to the template\n914 |         # used to update the catalog\n915 |         if update_creation_date:\n916 |             self.creation_date = template.creation_date\n```",
+            "start_line": 770,
+            "end_line": 916,
+            "code_omitted": false,
+            "original_code_length": 6460
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 2,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_2"
+    }
+  }
+}

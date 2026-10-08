@@ -18,7 +18,12 @@ Queue: ug 186752 seed 5 (running) -> 192116 -> 192117 -> 192118 -> 186753 seed 6
 Live a-c, 184861 shuffle 2, 186864 Live seed 2 (all pending for days: no idle pro6000).
 Later: lenient seed 5 done (0.680; original mean 0.752 over 5 seeds); adaptive seed 5 queued (192615,
 reuse of seed 5) before seed 6; Live pilot seed 2 (186864) finally got killable cards.
-Next: score round1_only seeds; adaptive seed 6 after lenient seed 6; consider noise-floor
+Live pilot seed 2 finished but is invalid: 33/40 instances recorded ok after a dead-server first call.
+Fixed the runner (infrastructure call failures -> status error, always rerun on resume; scan of all
+runs: only this run affected; the 151 other call failures are context-length errors in the stage-3
+pre-filter, logged in deviations.md). Repair 192683 queued on killable in place of the pending Live
+seed-2 part a (192675, cancelled; resubmit when a killable slot frees). Live parts a, b running.
+Next: re-fetch and score the repaired seed-2 pilot; score round1_only seeds; adaptive seed 6 after lenient seed 6; consider noise-floor
 reruns on seeds 2 and 4; the killable lane is starved, so Live has made no progress since the pilot.
 
 ## 2026-10-07
