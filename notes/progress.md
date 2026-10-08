@@ -23,6 +23,9 @@ Fixed the runner (infrastructure call failures -> status error, always rerun on 
 runs: only this run affected; the 151 other call failures are context-length errors in the stage-3
 pre-filter, logged in deviations.md). Repair 192683 queued on killable in place of the pending Live
 seed-2 part a (192675, cancelled; resubmit when a killable slot frees). Live parts a, b running.
+Round1_only adaptive seed 3: 0.773 vs 0.813 (1:4) at 74k tokens; corrected the skipped/debated
+subset reading (conditions on the arm's own vote; only totals are fair). Noise-floor rerun seed 2
+queued (192818) after round1_only seed 2; adaptive seed 5 re-pointed behind it.
 Next: re-fetch and score the repaired seed-2 pilot; score round1_only seeds; adaptive seed 6 after lenient seed 6; consider noise-floor
 reruns on seeds 2 and 4; the killable lane is starved, so Live has made no progress since the pilot.
 

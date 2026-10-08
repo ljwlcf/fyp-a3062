@@ -17,6 +17,24 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-08 — Adaptive round1_only variant, seed 3; correction on the skipped/debated split
+Raw: `baseline_72b_adaptive_r1_lenient_v1/20261008-074136` (job 192116; adaptive, skip_mode
+round1_only, --reuse-chains original seed 3; 75/75 ok, 1 h 34; chains identical).
+* Seed 3, all on the same chains: original 0.813 (101k stage 6-7 tokens), original rerun 0.813
+  (103k), adaptive single-agent 0.787 (63k; 2 : 4 vs original), adaptive round1_only 0.773 (74k,
+  -27%; 1 : 4). Skipped 60/75.
+* CORRECTION (applies to the 2026-10-07 and 2026-10-08 entries): splitting an adaptive run into its
+  "skipped" and "debated" instances conditions on that run's OWN re-sampled vote. Its debated
+  instances are those where its vote split, i.e. where its chosen chain is more often wrong, while
+  the original's vote on the same instance may have been unanimous on the right chain. The split
+  therefore biases the debated subset against adaptive and the skipped subset in its favour; only
+  whole-run totals are fair comparisons. The statements "the loss is on skipped instances" (which
+  motivated round1_only) and "the loss is on the re-run debate" are both unreliable for this reason.
+Takeaway so far: both skip variants are within the noise floor on seed 3; round1_only costs more
+tokens and is not better on this seed. Seeds 1 and 2 (192117, 192118) follow.
+
+---
+
 ## 2026-10-08 — Live pilot seed 2: INVALID as recorded (33/40 hit a dead server); repair queued
 Raw: `live_pilot40_lenient_v1/20261006-101233` (job 186864, killable, resumed after preemption).
 As recorded: Acc@1 0.075, built 0.15, because 33 instances' first call failed with
