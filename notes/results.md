@@ -37,6 +37,12 @@ and its accuracy difference is the size of re-running the original itself; non-i
 3-point margin is borderline with 4 seeds. The round1_only variant (192116-192118) and more seeds
 (lenient 5-6 -> adaptive 5-6) will tighten it.
 Caveats: two noise-floor reruns; n=75; adaptive seeds are paired with the first original run.
+* Lenient seed 5 added (job 186752, raw `baseline_72b_lenient_v1/20261008-003045`, 75/75 ok, 7 h 11):
+  Acc@1 0.680, selected 0.640, kept 0.880; debate 1 fixed, 1 broke. Original arm over 5 seeds:
+  0.760 / 0.813 / 0.773 / 0.733 / 0.680, mean 0.752 (13-point spread between seeds, mostly from the
+  graph walk: kept 0.88-0.93, selected 0.64-0.83; the reason arm comparisons reuse chains). Replay over
+  5 seeds, unanimous skip: -0.4 [-2.0, +1.4] at -39% tokens; lp_conf >= 0.99 on seeds 1/4/5: +0.3
+  [-0.4, +1.4] at -16%.
 
 ---
 

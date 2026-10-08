@@ -16,7 +16,9 @@ all original-arm runs -1.3 points [-3.3, +0.7]. Queued round1_only adaptive seed
 Broke: Nothing.
 Queue: ug 186752 seed 5 (running) -> 192116 -> 192117 -> 192118 -> 186753 seed 6 | killable 184607-9
 Live a-c, 184861 shuffle 2, 186864 Live seed 2 (all pending for days: no idle pro6000).
-Next: score round1_only seeds; adaptive seeds 5-6 after lenient seeds 5-6; consider noise-floor
+Later: lenient seed 5 done (0.680; original mean 0.752 over 5 seeds); adaptive seed 5 queued (192615,
+reuse of seed 5) before seed 6; Live pilot seed 2 (186864) finally got killable cards.
+Next: score round1_only seeds; adaptive seed 6 after lenient seed 6; consider noise-floor
 reruns on seeds 2 and 4; the killable lane is starved, so Live has made no progress since the pilot.
 
 ## 2026-10-07
