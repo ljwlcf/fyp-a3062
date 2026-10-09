@@ -38,6 +38,12 @@ at a 3-point margin (one-sided 95% lower bound -2.4 points) while cutting stage 
 (4.3%). The round1_only skip is worse (p = 0.04 against the first run) and costs more: dropped.
 The equal-token single agent (self-consistency) shows no significant difference from the debate.
 Caveats: n=75 per seed; one backbone; adaptive seed 6, rerun seed 5 and SC seeds 4-5 are queued.
+* Lenient seed 6 added (job 186753, raw `baseline_72b_lenient_v1/20261009-022556`, 75/75 ok, 7 h 46):
+  Acc@1 0.747, selected 0.773, kept 0.907. Original arm, 6 seeds: 0.760 / 0.813 / 0.773 / 0.733 /
+  0.680 / 0.747, mean 0.751. Replay over 6 seeds, unanimous skip: -0.1 points [-1.6, +1.4] at -39%.
+  lp_conf, leave-one-seed-out over the four fixed-order seeds with logprobs (1, 4, 5, 6): the chosen
+  threshold jumps between 0.51 and 0.999 and the held-out result is never better than the unanimous
+  rule (-2.7, +1.3, -1.3, -0.3 points). Vote agreement stays the trigger.
 
 ---
 

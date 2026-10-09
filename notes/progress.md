@@ -17,6 +17,8 @@ seed 5, adaptive seed 6, SC reuse seeds 4-5 behind lenient seed 6.
 Broke: Live repair 192683 FAILED (job-script bug, fixed). The watcher missed completions overnight.
 Queue: ug 186753 seed 6 (running) -> 194636 rerun s5 -> 194637 adaptive s6 -> 194638 SC s4 -> 194639
 SC s5 | killable 184607-9 Live a-c, 184861 shuffle 2, 194629 Live seed-2 repair (all pending).
+Later: lenient seed 6 done (0.747; original mean 0.751 over 6 seeds); replay 6 seeds unanimous -0.1
+[-1.6, +1.4]; lp_conf held out never beats agreement. Noise-floor rerun seed 6 queued (195345).
 Next: score the queued runs and rerun paired_arms.py; re-fetch the Live seed-2 pilot after repair.
 
 ## 2026-10-08
