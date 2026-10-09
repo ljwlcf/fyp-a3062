@@ -863,3 +863,16 @@ Context-length BadRequestErrors are excluded (deterministic; deviations.md 2026-
 every EEE run found infrastructure failures only in that one run; all other call failures are the
 context-length kind. Repair job 192683 (killable) reruns the 33; it took the slot of the just-queued
 Live seed-2 part a (192675, cancelled while pending, to be resubmitted).
+
+## 2026-10-09 — round1_only skip dropped; adaptive single-agent is the arm; job-script requeue fix
+(1) Three paired seeds of the round1_only skip: 1 : 8 against the first original run (p = 0.04),
+-2.2 points vs the original-arm mean, 28% token saving vs 40% for the single-agent skip. Not run
+further; the single-agent skip (decisions.md 2026-10-06) remains the adaptive arm. Its own
+motivation (losses "on skipped instances") was an artefact of the biased subset split (results.md
+2026-10-08 correction). (2) run_localization_job.sh: on requeue the run-folder lookup (grep for the
+job id in manifests) exited 1 when the job had been preempted before its runner wrote a manifest,
+which under `set -eo pipefail` killed the job (Live repair 192683 FAILED this way). Now `|| true`, and
+the lookup is skipped when --resume was passed explicitly; resubmitted as 194629.
+(3) More paired seeds queued: noise-floor rerun seed 5, adaptive seed 6 (after lenient seed 6), and
+reuse-chains self-consistency seeds 4-5 (chained after seed 6 so their per-instance budgets, which
+glob baseline_72b_lenient_v1/*, never read a half-finished run).

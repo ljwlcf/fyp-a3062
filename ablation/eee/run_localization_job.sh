@@ -123,9 +123,11 @@ conda activate swed
 cd "$REPO"
 # After a requeue (preemption under the killable QoS, or a node failure) Slurm restarts the job
 # with the same job id: continue that job's run folder instead of starting a fresh run.
-if [ "${SLURM_RESTART_COUNT:-0}" -gt 0 ]; then
+# A job submitted with an explicit --resume keeps it. `|| true`: under set -eo pipefail a grep with
+# no match (preempted before the runner wrote a manifest) used to kill the job (192683, 2026-10-08).
+if [ "${SLURM_RESTART_COUNT:-0}" -gt 0 ] && [[ " ${EXTRA[*]} " != *" --resume "* ]]; then
     RESULTS=$(python -c "import yaml,sys; print(yaml.safe_load(open(sys.argv[1]))['paths']['results'])" "$CONFIG")
-    RUN_DIR=$(grep -l "\"slurm_job_id\": \"$SLURM_JOB_ID\"" "$RESULTS"/*/manifest.json 2>/dev/null | head -1 | xargs -r dirname)
+    RUN_DIR=$(grep -l "\"slurm_job_id\": \"$SLURM_JOB_ID\"" "$RESULTS"/*/manifest.json 2>/dev/null | head -1 | xargs -r dirname || true)
     if [ -n "$RUN_DIR" ]; then
         echo "== requeued (restart $SLURM_RESTART_COUNT): resuming $RUN_DIR"
         EXTRA+=(--resume "$RUN_DIR")

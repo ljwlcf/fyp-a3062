@@ -1,0 +1,1902 @@
+{
+  "stage_1_initial_entities": {
+    "timestamp": "2026-10-08T22:41:41.511715",
+    "data": {
+      "initial_entities": [
+        "Contains",
+        "as_set",
+        "as_relational",
+        "Piecewise",
+        "Reals"
+      ],
+      "context": "context",
+      "max_initial_entities": 5,
+      "context_length": 7,
+      "problem_statement_length": 766
+    }
+  },
+  "stage_2_related_entities": {
+    "timestamp": "2026-10-08T22:41:41.512157",
+    "data": {
+      "entity_groups": [
+        {
+          "initial_entity": "Contains",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/contains.py:Contains",
+              "entity_type": "class",
+              "relevance_reason": "The main class responsible for the Contains functionality, which is central to the issue.",
+              "diversity_value": "Core class definition in the sets module"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Set._contains",
+              "entity_type": "function",
+              "relevance_reason": "Defines how sets check for containment, which is used by Contains and may need adjustments.",
+              "diversity_value": "Different file, provides base functionality for sets"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "entity_type": "function",
+              "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+              "diversity_value": "Different file, part of the piecewise function implementation"
+            },
+            {
+              "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+              "diversity_value": "Different file, part of the printing system"
+            }
+          ]
+        },
+        {
+          "initial_entity": "as_set",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/contains.py:Contains.as_set",
+              "entity_type": "function",
+              "relevance_reason": "The method where the issue is directly observed, returning a 'Contains' object instead of a set.",
+              "diversity_value": "Directly related to the problematic method from the sets module"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.as_expr_set_pairs",
+              "entity_type": "function",
+              "relevance_reason": "This function uses `as_set` and fails when `Contains` does not return a set, indicating a point where the issue propagates.",
+              "diversity_value": "Function from the piecewise module, showing where the issue affects other parts of the code"
+            },
+            {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+              "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+            },
+            {
+              "entity_id": "sympy/logic/boolalg.py:BooleanTrue.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Another example of `as_set` implementation, specifically for the `BooleanTrue` class, which can help in designing the correct return type for `Contains`.",
+              "diversity_value": "Boolean logic module, but focuses on a specific boolean value implementation"
+            }
+          ]
+        },
+        {
+          "initial_entity": "as_relational",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/sets.py:Interval.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Provides an example of how a set can be converted to a relational expression, which is needed for the Contains issue.",
+              "diversity_value": "Different functionality from the sets module"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Union.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+              "diversity_value": "Different functionality from the sets module"
+            },
+            {
+              "entity_id": "sympy/sets/conditionset.py:ConditionSet.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Relevant for understanding how condition-based sets handle conversion to relational expressions, which might be similar to the Contains issue.",
+              "diversity_value": "Different file and functionality related to condition sets"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+              "entity_type": "function",
+              "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+              "diversity_value": "Different file and layer related to piecewise functions"
+            }
+          ]
+        },
+        {
+          "initial_entity": "Piecewise",
+          "related_entities": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+              "entity_type": "class",
+              "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+              "diversity_value": "Core class from the piecewise module"
+            },
+            {
+              "entity_id": "sympy/core/relational.py:Contains",
+              "entity_type": "class",
+              "relevance_reason": "The Contains class is used incorrectly as a set, which causes the AttributeError",
+              "diversity_value": "Class from the relational module that needs to be reviewed or modified"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Set.as_set",
+              "entity_type": "function",
+              "relevance_reason": "The as_set method should be reviewed to ensure it does not return a non-set object",
+              "diversity_value": "Function from the sets module that interacts with Contains"
+            },
+            {
+              "entity_id": "sympy/core/expr.py:Basic.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "The as_relational method is called on the result of as_set, which fails for Contains",
+              "diversity_value": "Function from the core expression module that is part of the error path"
+            }
+          ]
+        },
+        {
+          "initial_entity": "Reals",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/fancysets.py:Reals",
+              "entity_type": "class",
+              "relevance_reason": "The Reals class is directly involved in the issue as it is used in the Contains function.",
+              "diversity_value": "Core set representation from the sets module"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "entity_type": "function",
+              "relevance_reason": "The eval method of the Piecewise class is where the error occurs, indicating a need to handle Contains objects correctly.",
+              "diversity_value": "Function from the piecewise expressions module"
+            },
+            {
+              "entity_id": "sympy/core/relational.py:Relational.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "The as_relational method is missing from the Contains object, which is causing the failure. This method is crucial for relational operations.",
+              "diversity_value": "Function from the core relational module"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Contains",
+              "entity_type": "class",
+              "relevance_reason": "The Contains class is central to the issue as it is being returned instead of a set, and lacks the as_relational method.",
+              "diversity_value": "Class from the sets module that needs modification"
+            }
+          ]
+        }
+      ],
+      "total_related_entities": 20
+    }
+  },
+  "stage_3_localization_chains": {
+    "timestamp": "2026-10-08T22:41:41.515153",
+    "data": {
+      "grouped_localization_chains": [
+        {
+          "initial_entity": "Contains",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/contains.py:Contains",
+              "entity_type": "class",
+              "relevance_reason": "The main class responsible for the Contains functionality, which is central to the issue.",
+              "diversity_value": "Core class definition in the sets module"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Set._contains",
+              "entity_type": "function",
+              "relevance_reason": "Defines how sets check for containment, which is used by Contains and may need adjustments.",
+              "diversity_value": "Different file, provides base functionality for sets"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "entity_type": "function",
+              "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+              "diversity_value": "Different file, part of the piecewise function implementation"
+            },
+            {
+              "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+              "diversity_value": "Different file, part of the printing system"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/contains.py:Contains",
+                "entity_type": "class",
+                "relevance_reason": "The main class responsible for the Contains functionality, which is central to the issue.",
+                "diversity_value": "Core class definition in the sets module"
+              },
+              "chain": [
+                "sympy/sets/contains.py:Contains",
+                "sympy/sets/contains.py:Contains.as_set",
+                "sympy/solvers/solveset.py:_solveset"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/sets.py:Set._contains",
+                "entity_type": "function",
+                "relevance_reason": "Defines how sets check for containment, which is used by Contains and may need adjustments.",
+                "diversity_value": "Different file, provides base functionality for sets"
+              },
+              "chain": [
+                "sympy/sets/sets.py:Set._contains",
+                "sympy/sets/sets.py:Set.contains"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+                "entity_type": "function",
+                "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+                "diversity_value": "Different file, part of the piecewise function implementation"
+              },
+              "chain": [
+                "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+                "entity_type": "function",
+                "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+                "diversity_value": "Different file, part of the printing system"
+              },
+              "chain": [
+                "sympy/printing/latex.py:LatexPrinter._print_Contains",
+                "sympy/printing/printer.py:Printer._print",
+                "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+                "sympy/printing/pretty/pretty.py:PrettyPrinter",
+                "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise"
+              ],
+              "chain_length": 5
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "as_set",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/contains.py:Contains.as_set",
+              "entity_type": "function",
+              "relevance_reason": "The method where the issue is directly observed, returning a 'Contains' object instead of a set.",
+              "diversity_value": "Directly related to the problematic method from the sets module"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.as_expr_set_pairs",
+              "entity_type": "function",
+              "relevance_reason": "This function uses `as_set` and fails when `Contains` does not return a set, indicating a point where the issue propagates.",
+              "diversity_value": "Function from the piecewise module, showing where the issue affects other parts of the code"
+            },
+            {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+              "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+            },
+            {
+              "entity_id": "sympy/logic/boolalg.py:BooleanTrue.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Another example of `as_set` implementation, specifically for the `BooleanTrue` class, which can help in designing the correct return type for `Contains`.",
+              "diversity_value": "Boolean logic module, but focuses on a specific boolean value implementation"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/contains.py:Contains.as_set",
+                "entity_type": "function",
+                "relevance_reason": "The method where the issue is directly observed, returning a 'Contains' object instead of a set.",
+                "diversity_value": "Directly related to the problematic method from the sets module"
+              },
+              "chain": [
+                "sympy/sets/contains.py:Contains.as_set",
+                "sympy/sets/contains.py:Contains"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.as_expr_set_pairs",
+                "entity_type": "function",
+                "relevance_reason": "This function uses `as_set` and fails when `Contains` does not return a set, indicating a point where the issue propagates.",
+                "diversity_value": "Function from the piecewise module, showing where the issue affects other parts of the code"
+              },
+              "chain": [
+                "sympy/functions/elementary/piecewise.py:Piecewise.as_expr_set_pairs",
+                "sympy/logic/boolalg.py:Boolean.as_set",
+                "sympy/core/relational.py:Relational"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "entity_type": "function",
+                "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+                "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+              },
+              "chain": [
+                "sympy/logic/boolalg.py:Boolean.as_set"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/logic/boolalg.py:BooleanTrue.as_set",
+                "entity_type": "function",
+                "relevance_reason": "Another example of `as_set` implementation, specifically for the `BooleanTrue` class, which can help in designing the correct return type for `Contains`.",
+                "diversity_value": "Boolean logic module, but focuses on a specific boolean value implementation"
+              },
+              "chain": [
+                "sympy/logic/boolalg.py:BooleanTrue.as_set",
+                "sympy/logic/boolalg.py:BooleanTrue",
+                "sympy/solvers/solveset.py"
+              ],
+              "chain_length": 3
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "as_relational",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/sets.py:Interval.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Provides an example of how a set can be converted to a relational expression, which is needed for the Contains issue.",
+              "diversity_value": "Different functionality from the sets module"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Union.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+              "diversity_value": "Different functionality from the sets module"
+            },
+            {
+              "entity_id": "sympy/sets/conditionset.py:ConditionSet.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Relevant for understanding how condition-based sets handle conversion to relational expressions, which might be similar to the Contains issue.",
+              "diversity_value": "Different file and functionality related to condition sets"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+              "entity_type": "function",
+              "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+              "diversity_value": "Different file and layer related to piecewise functions"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/sets.py:Interval.as_relational",
+                "entity_type": "function",
+                "relevance_reason": "Provides an example of how a set can be converted to a relational expression, which is needed for the Contains issue.",
+                "diversity_value": "Different functionality from the sets module"
+              },
+              "chain": [
+                "sympy/sets/sets.py:Interval.as_relational",
+                "sympy/sets/sets.py:Interval._contains",
+                "sympy/sets/sets.py:Set.contains"
+              ],
+              "chain_length": 3
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/sets.py:Union.as_relational",
+                "entity_type": "function",
+                "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+                "diversity_value": "Different functionality from the sets module"
+              },
+              "chain": [
+                "sympy/sets/sets.py:Union.as_relational"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/conditionset.py:ConditionSet.as_relational",
+                "entity_type": "function",
+                "relevance_reason": "Relevant for understanding how condition-based sets handle conversion to relational expressions, which might be similar to the Contains issue.",
+                "diversity_value": "Different file and functionality related to condition sets"
+              },
+              "chain": [
+                "sympy/sets/conditionset.py:ConditionSet.as_relational",
+                "sympy/sets/sets.py:Set.contains"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+                "entity_type": "function",
+                "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+                "diversity_value": "Different file and layer related to piecewise functions"
+              },
+              "chain": [
+                "sympy/functions/elementary/piecewise.py:Piecewise.__new__"
+              ],
+              "chain_length": 1
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "Piecewise",
+          "related_entities": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+              "entity_type": "class",
+              "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+              "diversity_value": "Core class from the piecewise module"
+            },
+            {
+              "entity_id": "sympy/core/relational.py:Contains",
+              "entity_type": "class",
+              "relevance_reason": "The Contains class is used incorrectly as a set, which causes the AttributeError",
+              "diversity_value": "Class from the relational module that needs to be reviewed or modified"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Set.as_set",
+              "entity_type": "function",
+              "relevance_reason": "The as_set method should be reviewed to ensure it does not return a non-set object",
+              "diversity_value": "Function from the sets module that interacts with Contains"
+            },
+            {
+              "entity_id": "sympy/core/expr.py:Basic.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "The as_relational method is called on the result of as_set, which fails for Contains",
+              "diversity_value": "Function from the core expression module that is part of the error path"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+                "entity_type": "class",
+                "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+                "diversity_value": "Core class from the piecewise module"
+              },
+              "chain": [
+                "sympy/functions/elementary/piecewise.py:Piecewise"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/relational.py:Contains",
+                "entity_type": "class",
+                "relevance_reason": "The Contains class is used incorrectly as a set, which causes the AttributeError",
+                "diversity_value": "Class from the relational module that needs to be reviewed or modified"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/sets.py:Set.as_set",
+                "entity_type": "function",
+                "relevance_reason": "The as_set method should be reviewed to ensure it does not return a non-set object",
+                "diversity_value": "Function from the sets module that interacts with Contains"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/expr.py:Basic.as_relational",
+                "entity_type": "function",
+                "relevance_reason": "The as_relational method is called on the result of as_set, which fails for Contains",
+                "diversity_value": "Function from the core expression module that is part of the error path"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        },
+        {
+          "initial_entity": "Reals",
+          "related_entities": [
+            {
+              "entity_id": "sympy/sets/fancysets.py:Reals",
+              "entity_type": "class",
+              "relevance_reason": "The Reals class is directly involved in the issue as it is used in the Contains function.",
+              "diversity_value": "Core set representation from the sets module"
+            },
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "entity_type": "function",
+              "relevance_reason": "The eval method of the Piecewise class is where the error occurs, indicating a need to handle Contains objects correctly.",
+              "diversity_value": "Function from the piecewise expressions module"
+            },
+            {
+              "entity_id": "sympy/core/relational.py:Relational.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "The as_relational method is missing from the Contains object, which is causing the failure. This method is crucial for relational operations.",
+              "diversity_value": "Function from the core relational module"
+            },
+            {
+              "entity_id": "sympy/sets/sets.py:Contains",
+              "entity_type": "class",
+              "relevance_reason": "The Contains class is central to the issue as it is being returned instead of a set, and lacks the as_relational method.",
+              "diversity_value": "Class from the sets module that needs modification"
+            }
+          ],
+          "localization_chains": [
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/fancysets.py:Reals",
+                "entity_type": "class",
+                "relevance_reason": "The Reals class is directly involved in the issue as it is used in the Contains function.",
+                "diversity_value": "Core set representation from the sets module"
+              },
+              "chain": [
+                "sympy/sets/fancysets.py:Reals",
+                "sympy/sets/sets.py:Interval"
+              ],
+              "chain_length": 2
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+                "entity_type": "function",
+                "relevance_reason": "The eval method of the Piecewise class is where the error occurs, indicating a need to handle Contains objects correctly.",
+                "diversity_value": "Function from the piecewise expressions module"
+              },
+              "chain": [
+                "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+              ],
+              "chain_length": 1
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/core/relational.py:Relational.as_relational",
+                "entity_type": "function",
+                "relevance_reason": "The as_relational method is missing from the Contains object, which is causing the failure. This method is crucial for relational operations.",
+                "diversity_value": "Function from the core relational module"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            },
+            {
+              "start_entity": {
+                "entity_id": "sympy/sets/sets.py:Contains",
+                "entity_type": "class",
+                "relevance_reason": "The Contains class is central to the issue as it is being returned instead of a set, and lacks the as_relational method.",
+                "diversity_value": "Class from the sets module that needs modification"
+              },
+              "chain": [],
+              "chain_length": 0,
+              "error": "Entity not found in graph"
+            }
+          ],
+          "chain_count": 4
+        }
+      ],
+      "all_chains": [
+        {
+          "chain": [
+            "sympy/sets/contains.py:Contains",
+            "sympy/sets/contains.py:Contains.as_set",
+            "sympy/solvers/solveset.py:_solveset"
+          ],
+          "chain_length": 3,
+          "initial_entity": "Contains",
+          "start_entity": {
+            "entity_id": "sympy/sets/contains.py:Contains",
+            "entity_type": "class",
+            "relevance_reason": "The main class responsible for the Contains functionality, which is central to the issue.",
+            "diversity_value": "Core class definition in the sets module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/sets/sets.py:Set._contains",
+            "sympy/sets/sets.py:Set.contains"
+          ],
+          "chain_length": 2,
+          "initial_entity": "Contains",
+          "start_entity": {
+            "entity_id": "sympy/sets/sets.py:Set._contains",
+            "entity_type": "function",
+            "relevance_reason": "Defines how sets check for containment, which is used by Contains and may need adjustments.",
+            "diversity_value": "Different file, provides base functionality for sets"
+          }
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Contains",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+            "entity_type": "function",
+            "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+            "diversity_value": "Different file, part of the piecewise function implementation"
+          }
+        },
+        {
+          "chain": [
+            "sympy/printing/latex.py:LatexPrinter._print_Contains",
+            "sympy/printing/printer.py:Printer._print",
+            "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+            "sympy/printing/pretty/pretty.py:PrettyPrinter",
+            "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise"
+          ],
+          "chain_length": 5,
+          "initial_entity": "Contains",
+          "start_entity": {
+            "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+            "entity_type": "function",
+            "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+            "diversity_value": "Different file, part of the printing system"
+          }
+        },
+        {
+          "chain": [
+            "sympy/sets/contains.py:Contains.as_set",
+            "sympy/sets/contains.py:Contains"
+          ],
+          "chain_length": 2,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/sets/contains.py:Contains.as_set",
+            "entity_type": "function",
+            "relevance_reason": "The method where the issue is directly observed, returning a 'Contains' object instead of a set.",
+            "diversity_value": "Directly related to the problematic method from the sets module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise.as_expr_set_pairs",
+            "sympy/logic/boolalg.py:Boolean.as_set",
+            "sympy/core/relational.py:Relational"
+          ],
+          "chain_length": 3,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.as_expr_set_pairs",
+            "entity_type": "function",
+            "relevance_reason": "This function uses `as_set` and fails when `Contains` does not return a set, indicating a point where the issue propagates.",
+            "diversity_value": "Function from the piecewise module, showing where the issue affects other parts of the code"
+          }
+        },
+        {
+          "chain": [
+            "sympy/logic/boolalg.py:Boolean.as_set"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+            "entity_type": "function",
+            "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+            "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/logic/boolalg.py:BooleanTrue.as_set",
+            "sympy/logic/boolalg.py:BooleanTrue",
+            "sympy/solvers/solveset.py"
+          ],
+          "chain_length": 3,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/logic/boolalg.py:BooleanTrue.as_set",
+            "entity_type": "function",
+            "relevance_reason": "Another example of `as_set` implementation, specifically for the `BooleanTrue` class, which can help in designing the correct return type for `Contains`.",
+            "diversity_value": "Boolean logic module, but focuses on a specific boolean value implementation"
+          }
+        },
+        {
+          "chain": [
+            "sympy/sets/sets.py:Interval.as_relational",
+            "sympy/sets/sets.py:Interval._contains",
+            "sympy/sets/sets.py:Set.contains"
+          ],
+          "chain_length": 3,
+          "initial_entity": "as_relational",
+          "start_entity": {
+            "entity_id": "sympy/sets/sets.py:Interval.as_relational",
+            "entity_type": "function",
+            "relevance_reason": "Provides an example of how a set can be converted to a relational expression, which is needed for the Contains issue.",
+            "diversity_value": "Different functionality from the sets module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/sets/sets.py:Union.as_relational"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_relational",
+          "start_entity": {
+            "entity_id": "sympy/sets/sets.py:Union.as_relational",
+            "entity_type": "function",
+            "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+            "diversity_value": "Different functionality from the sets module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/sets/conditionset.py:ConditionSet.as_relational",
+            "sympy/sets/sets.py:Set.contains"
+          ],
+          "chain_length": 2,
+          "initial_entity": "as_relational",
+          "start_entity": {
+            "entity_id": "sympy/sets/conditionset.py:ConditionSet.as_relational",
+            "entity_type": "function",
+            "relevance_reason": "Relevant for understanding how condition-based sets handle conversion to relational expressions, which might be similar to the Contains issue.",
+            "diversity_value": "Different file and functionality related to condition sets"
+          }
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise.__new__"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_relational",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+            "entity_type": "function",
+            "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+            "diversity_value": "Different file and layer related to piecewise functions"
+          }
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Piecewise",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+            "entity_type": "class",
+            "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+            "diversity_value": "Core class from the piecewise module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/sets/fancysets.py:Reals",
+            "sympy/sets/sets.py:Interval"
+          ],
+          "chain_length": 2,
+          "initial_entity": "Reals",
+          "start_entity": {
+            "entity_id": "sympy/sets/fancysets.py:Reals",
+            "entity_type": "class",
+            "relevance_reason": "The Reals class is directly involved in the issue as it is used in the Contains function.",
+            "diversity_value": "Core set representation from the sets module"
+          }
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Reals",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+            "entity_type": "function",
+            "relevance_reason": "The eval method of the Piecewise class is where the error occurs, indicating a need to handle Contains objects correctly.",
+            "diversity_value": "Function from the piecewise expressions module"
+          }
+        }
+      ],
+      "total_chains_generated": 20
+    }
+  },
+  "stage_4_diverse_chains": {
+    "timestamp": "2026-10-08T22:41:41.516804",
+    "data": {
+      "selected_chains": [
+        {
+          "chain": [
+            "sympy/printing/latex.py:LatexPrinter._print_Contains",
+            "sympy/printing/printer.py:Printer._print",
+            "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+            "sympy/printing/pretty/pretty.py:PrettyPrinter",
+            "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise"
+          ],
+          "chain_length": 5,
+          "initial_entity": "Contains",
+          "start_entity": {
+            "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+            "entity_type": "function",
+            "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+            "diversity_value": "Different file, part of the printing system"
+          },
+          "selection_rank": 1,
+          "similarity_to_longest": 1.0,
+          "is_longest": true
+        },
+        {
+          "chain": [
+            "sympy/logic/boolalg.py:Boolean.as_set"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+            "entity_type": "function",
+            "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+            "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8595343232154846,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/sets/sets.py:Union.as_relational"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_relational",
+          "start_entity": {
+            "entity_id": "sympy/sets/sets.py:Union.as_relational",
+            "entity_type": "function",
+            "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+            "diversity_value": "Different functionality from the sets module"
+          },
+          "selection_rank": 3,
+          "similarity_to_longest": 0.869138777256012,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Contains",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+            "entity_type": "function",
+            "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+            "diversity_value": "Different file, part of the piecewise function implementation"
+          },
+          "selection_rank": 4,
+          "similarity_to_longest": 0.8743398189544678,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise.__new__"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_relational",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+            "entity_type": "function",
+            "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+            "diversity_value": "Different file and layer related to piecewise functions"
+          },
+          "selection_rank": 5,
+          "similarity_to_longest": 0.8817601203918457,
+          "is_longest": false
+        },
+        {
+          "chain": [
+            "sympy/functions/elementary/piecewise.py:Piecewise"
+          ],
+          "chain_length": 1,
+          "initial_entity": "Piecewise",
+          "start_entity": {
+            "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+            "entity_type": "class",
+            "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+            "diversity_value": "Core class from the piecewise module"
+          },
+          "selection_rank": 6,
+          "similarity_to_longest": 0.8831338286399841,
+          "is_longest": false
+        }
+      ],
+      "selected_chains_count": 6
+    }
+  },
+  "stage_5_chains_with_code": {
+    "timestamp": "2026-10-08T22:41:41.519572",
+    "data": {
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "sympy/printing/printer.py:Printer._print",
+              "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+              "sympy/printing/pretty/pretty.py:PrettyPrinter",
+              "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise"
+            ],
+            "chain_length": 5,
+            "initial_entity": "Contains",
+            "start_entity": {
+              "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+              "diversity_value": "Different file, part of the printing system"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "type": "function",
+              "code": "```\n2348 | def _print_Contains(self, e):\n2349 |         return r\"%s \\in %s\" % tuple(self._print(a) for a in e.args)\n```",
+              "start_line": 2348,
+              "end_line": 2349,
+              "code_omitted": false,
+              "original_code_length": 119
+            },
+            {
+              "entity_id": "sympy/printing/printer.py:Printer._print",
+              "type": "function",
+              "code": "```\n294 | def _print(self, expr, **kwargs) -> str:\n295 |         \"\"\"Internal dispatcher\n296 | \n297 |         Tries the following concepts to print an expression:\n298 |             1. Let the object print itself if it knows how.\n299 |             2. Take the best fitting method defined in the printer.\n300 |             3. As fall-back use the emptyPrinter method for the printer.\n301 |         \"\"\"\n302 |         self._print_level += 1\n303 |         try:\n304 |             # If the printer defines a name for a printing method\n305 |             # (Printer.printmethod) and the object knows for itself how it\n306 |             # should be printed, use that method.\n307 |             if (self.printmethod and hasattr(expr, self.printmethod)\n308 |                     and not isinstance(expr, BasicMeta)):\n309 |                 return getattr(expr, self.printmethod)(self, **kwargs)\n310 | \n311 |             # See if the class of expr is known, or if one of its super\n312 |             # classes is known, and use that print function\n313 |             # Exception: ignore the subclasses of Undefined, so that, e.g.,\n314 |             # Function('gamma') does not get dispatched to _print_gamma\n315 |             classes = type(expr).__mro__\n316 |             if AppliedUndef in classes:\n317 |                 classes = classes[classes.index(AppliedUndef):]\n318 |             if UndefinedFunction in classes:\n319 |                 classes = classes[classes.index(UndefinedFunction):]\n320 |             # Another exception: if someone subclasses a known function, e.g.,\n321 |             # gamma, and changes the name, then ignore _print_gamma\n322 |             if Function in classes:\n323 |                 i = classes.index(Function)\n324 |                 classes = tuple(c for c in classes[:i] if \\\n325 |                     c.__name__ == classes[0].__name__ or \\\n326 |                     c.__name__.endswith(\"Base\")) + classes[i:]\n327 |             for cls in classes:\n328 |                 printmethodname = '_print_' + cls.__name__\n329 |                 printmethod = getattr(self, printmethodname, None)\n330 |                 if printmethod is not None:\n331 |                     return printmethod(expr, **kwargs)\n332 |             # Unknown object, fall back to the emptyPrinter.\n333 |             return self.emptyPrinter(expr)\n334 |         finally:\n335 |             self._print_level -= 1\n```",
+              "start_line": 294,
+              "end_line": 335,
+              "code_omitted": false,
+              "original_code_length": 2401
+            },
+            {
+              "entity_id": "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+              "type": "function",
+              "code": "```\n2289 | def _print_Contains(self, e):\n2290 |         var, set = e.args\n2291 |         if self._use_unicode:\n2292 |             el = \" \\N{ELEMENT OF} \"\n2293 |             return prettyForm(*stringPict.next(self._print(var),\n2294 |                                                el, self._print(set)), binding=8)\n2295 |         else:\n2296 |             return prettyForm(sstr(e))\n```",
+              "start_line": 2289,
+              "end_line": 2296,
+              "code_omitted": false,
+              "original_code_length": 384
+            },
+            {
+              "entity_id": "sympy/printing/pretty/pretty.py:PrettyPrinter",
+              "type": "class",
+              "code": "# Code too long (121186 chars) - omitted for brevity",
+              "start_line": 30,
+              "end_line": 2854,
+              "code_omitted": true,
+              "original_code_length": 121186
+            },
+            {
+              "entity_id": "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise",
+              "type": "function",
+              "code": "```\n1350 | def _print_Piecewise(self, pexpr):\n1351 | \n1352 |         P = {}\n1353 |         for n, ec in enumerate(pexpr.args):\n1354 |             P[n, 0] = self._print(ec.expr)\n1355 |             if ec.cond == True:\n1356 |                 P[n, 1] = prettyForm('otherwise')\n1357 |             else:\n1358 |                 P[n, 1] = prettyForm(\n1359 |                     *prettyForm('for ').right(self._print(ec.cond)))\n1360 |         hsep = 2\n1361 |         vsep = 1\n1362 |         len_args = len(pexpr.args)\n1363 | \n1364 |         # max widths\n1365 |         maxw = [max([P[i, j].width() for i in range(len_args)])\n1366 |                 for j in range(2)]\n1367 | \n1368 |         # FIXME: Refactor this code and matrix into some tabular environment.\n1369 |         # drawing result\n1370 |         D = None\n1371 | \n1372 |         for i in range(len_args):\n1373 |             D_row = None\n1374 |             for j in range(2):\n1375 |                 p = P[i, j]\n1376 |                 assert p.width() <= maxw[j]\n1377 | \n1378 |                 wdelta = maxw[j] - p.width()\n1379 |                 wleft = wdelta // 2\n1380 |                 wright = wdelta - wleft\n1381 | \n1382 |                 p = prettyForm(*p.right(' '*wright))\n1383 |                 p = prettyForm(*p.left(' '*wleft))\n1384 | \n1385 |                 if D_row is None:\n1386 |                     D_row = p\n1387 |                     continue\n1388 | \n1389 |                 D_row = prettyForm(*D_row.right(' '*hsep))  # h-spacer\n1390 |                 D_row = prettyForm(*D_row.right(p))\n1391 |             if D is None:\n1392 |                 D = D_row       # first row in a picture\n1393 |                 continue\n1394 | \n1395 |             # v-spacer\n1396 |             for _ in range(vsep):\n1397 |                 D = prettyForm(*D.below(' '))\n1398 | \n1399 |             D = prettyForm(*D.below(D_row))\n1400 | \n1401 |         D = prettyForm(*D.parens('{', ''))\n1402 |         D.baseline = D.height()//2\n1403 |         D.binding = prettyForm.OPEN\n1404 |         return D\n```",
+              "start_line": 1350,
+              "end_line": 1404,
+              "code_omitted": false,
+              "original_code_length": 2045
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "sympy/logic/boolalg.py:Boolean.as_set"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_set",
+            "start_entity": {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+              "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8595343232154846,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "type": "function",
+              "code": "```\n135 | def as_set(self):\n136 |         \"\"\"\n137 |         Rewrites Boolean expression in terms of real sets.\n138 | \n139 |         Examples\n140 |         ========\n141 | \n142 |         >>> from sympy import Symbol, Eq, Or, And\n143 |         >>> x = Symbol('x', real=True)\n144 |         >>> Eq(x, 0).as_set()\n145 |         {0}\n146 |         >>> (x > 0).as_set()\n147 |         Interval.open(0, oo)\n148 |         >>> And(-2 < x, x < 2).as_set()\n149 |         Interval.open(-2, 2)\n150 |         >>> Or(x < -2, 2 < x).as_set()\n151 |         Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152 | \n153 |         \"\"\"\n154 |         from sympy.calculus.util import periodicity\n155 |         from sympy.core.relational import Relational\n156 | \n157 |         free = self.free_symbols\n158 |         if len(free) == 1:\n159 |             x = free.pop()\n160 |             if x.kind is NumberKind:\n161 |                 reps = {}\n162 |                 for r in self.atoms(Relational):\n163 |                     if periodicity(r, x) not in (0, None):\n164 |                         s = r._eval_as_set()\n165 |                         if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166 |                             reps[r] = s.as_relational(x)\n167 |                             continue\n168 |                         raise NotImplementedError(filldedent('''\n169 |                             as_set is not implemented for relationals\n170 |                             with periodic solutions\n171 |                             '''))\n172 |                 new = self.subs(reps)\n173 |                 if new.func != self.func:\n174 |                     return new.as_set()  # restart with new obj\n175 |                 else:\n176 |                     return new._eval_as_set()\n177 | \n178 |             return self._eval_as_set()\n179 |         else:\n180 |             raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181 |                                       \" implemented for multivariate\"\n182 |                                       \" expressions\")\n```",
+              "start_line": 135,
+              "end_line": 182,
+              "code_omitted": false,
+              "original_code_length": 2046
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "sympy/sets/sets.py:Union.as_relational"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_relational",
+            "start_entity": {
+              "entity_id": "sympy/sets/sets.py:Union.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+              "diversity_value": "Different functionality from the sets module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.869138777256012,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/sets/sets.py:Union.as_relational",
+              "type": "function",
+              "code": "```\n1416 | def as_relational(self, symbol):\n1417 |         \"\"\"Rewrite a Union in terms of equalities and logic operators. \"\"\"\n1418 |         if (len(self.args) == 2 and\n1419 |                 all(isinstance(i, Interval) for i in self.args)):\n1420 |             # optimization to give 3 args as (x > 1) & (x < 5) & Ne(x, 3)\n1421 |             # instead of as 4, ((1 <= x) & (x < 3)) | ((x <= 5) & (3 < x))\n1422 |             a, b = self.args\n1423 |             if (a.sup == b.inf and\n1424 |                     not any(a.sup in i for i in self.args)):\n1425 |                 return And(Ne(symbol, a.sup), symbol < b.sup, symbol > a.inf)\n1426 |         return Or(*[i.as_relational(symbol) for i in self.args])\n```",
+              "start_line": 1416,
+              "end_line": 1426,
+              "code_omitted": false,
+              "original_code_length": 711
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Contains",
+            "start_entity": {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "entity_type": "function",
+              "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+              "diversity_value": "Different file, part of the piecewise function implementation"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8743398189544678,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "type": "function",
+              "code": "```\n155 | def eval(cls, *_args):\n156 |         \"\"\"Either return a modified version of the args or, if no\n157 |         modifications were made, return None.\n158 | \n159 |         Modifications that are made here:\n160 | \n161 |         1. relationals are made canonical\n162 |         2. any False conditions are dropped\n163 |         3. any repeat of a previous condition is ignored\n164 |         4. any args past one with a true condition are dropped\n165 | \n166 |         If there are no args left, nan will be returned.\n167 |         If there is a single arg with a True condition, its\n168 |         corresponding expression will be returned.\n169 | \n170 |         EXAMPLES\n171 |         ========\n172 | \n173 |         >>> from sympy import Piecewise\n174 |         >>> from sympy.abc import x\n175 |         >>> cond = -x < -1\n176 |         >>> args = [(1, cond), (4, cond), (3, False), (2, True), (5, x < 1)]\n177 |         >>> Piecewise(*args, evaluate=False)\n178 |         Piecewise((1, -x < -1), (4, -x < -1), (2, True))\n179 |         >>> Piecewise(*args)\n180 |         Piecewise((1, x > 1), (2, True))\n181 |         \"\"\"\n182 |         if not _args:\n183 |             return Undefined\n184 | \n185 |         if len(_args) == 1 and _args[0][-1] == True:\n186 |             return _args[0][0]\n187 | \n188 |         newargs = []  # the unevaluated conditions\n189 |         current_cond = set()  # the conditions up to a given e, c pair\n190 |         for expr, cond in _args:\n191 |             cond = cond.replace(\n192 |                 lambda _: _.is_Relational, _canonical_coeff)\n193 |             # Check here if expr is a Piecewise and collapse if one of\n194 |             # the conds in expr matches cond. This allows the collapsing\n195 |             # of Piecewise((Piecewise((x,x<0)),x<0)) to Piecewise((x,x<0)).\n196 |             # This is important when using piecewise_fold to simplify\n197 |             # multiple Piecewise instances having the same conds.\n198 |             # Eventually, this code should be able to collapse Piecewise's\n199 |             # having different intervals, but this will probably require\n200 |             # using the new assumptions.\n201 |             if isinstance(expr, Piecewise):\n202 |                 unmatching = []\n203 |                 for i, (e, c) in enumerate(expr.args):\n204 |                     if c in current_cond:\n205 |                         # this would already have triggered\n206 |                         continue\n207 |                     if c == cond:\n208 |                         if c != True:\n209 |                             # nothing past this condition will ever\n210 |                             # trigger and only those args before this\n211 |                             # that didn't match a previous condition\n212 |                             # could possibly trigger\n213 |                             if unmatching:\n214 |                                 expr = Piecewise(*(\n215 |                                     unmatching + [(e, c)]))\n216 |                             else:\n217 |                                 expr = e\n218 |                         break\n219 |                     else:\n220 |                         unmatching.append((e, c))\n221 | \n222 |             # check for condition repeats\n223 |             got = False\n224 |             # -- if an And contains a condition that was\n225 |             #    already encountered, then the And will be\n226 |             #    False: if the previous condition was False\n227 |             #    then the And will be False and if the previous\n228 |             #    condition is True then then we wouldn't get to\n229 |             #    this point. In either case, we can skip this condition.\n230 |             for i in ([cond] +\n231 |                     (list(cond.args) if isinstance(cond, And) else\n232 |                     [])):\n233 |                 if i in current_cond:\n234 |                     got = True\n235 |                     break\n236 |             if got:\n237 |                 continue\n238 | \n239 |             # -- if not(c) is already in current_cond then c is\n240 |             #    a redundant condition in an And. This does not\n241 |             #    apply to Or, however: (e1, c), (e2, Or(~c, d))\n242 |             #    is not (e1, c), (e2, d) because if c and d are\n243 |             #    both False this would give no results when the\n244 |             #    true answer should be (e2, True)\n245 |             if isinstance(cond, And):\n246 |                 nonredundant = []\n247 |                 for c in cond.args:\n248 |                     if isinstance(c, Relational):\n249 |                         if c.negated.canonical in current_cond:\n250 |                             continue\n251 |                         # if a strict inequality appears after\n252 |                         # a non-strict one, then the condition is\n253 |                         # redundant\n254 |                         if isinstance(c, (Lt, Gt)) and (\n255 |                                 c.weak in current_cond):\n256 |                             cond = False\n257 |                             break\n258 |                     nonredundant.append(c)\n259 |                 else:\n260 |                     cond = cond.func(*nonredundant)\n261 |             elif isinstance(cond, Relational):\n262 |                 if cond.negated.canonical in current_cond:\n263 |                     cond = S.true\n264 | \n265 |             current_cond.add(cond)\n266 | \n267 |             # collect successive e,c pairs when exprs or cond match\n268 |             if newargs:\n269 |                 if newargs[-1].expr == expr:\n270 |                     orcond = Or(cond, newargs[-1].cond)\n271 |                     if isinstance(orcond, (And, Or)):\n272 |                         orcond = distribute_and_over_or(orcond)\n273 |                     newargs[-1] = ExprCondPair(expr, orcond)\n274 |                     continue\n275 |                 elif newargs[-1].cond == cond:\n276 |                     newargs[-1] = ExprCondPair(expr, cond)\n277 |                     continue\n278 | \n279 |             newargs.append(ExprCondPair(expr, cond))\n280 | \n281 |         # some conditions may have been redundant\n282 |         missing = len(newargs) != len(_args)\n283 |         # some conditions may have changed\n284 |         same = all(a == b for a, b in zip(newargs, _args))\n285 |         # if either change happened we return the expr with the\n286 |         # updated args\n287 |         if not newargs:\n288 |             raise ValueError(filldedent('''\n289 |                 There are no conditions (or none that\n290 |                 are not trivially false) to define an\n291 |                 expression.'''))\n292 |         if missing or not same:\n293 |             return cls(*newargs)\n```",
+              "start_line": 155,
+              "end_line": 293,
+              "code_omitted": false,
+              "original_code_length": 6795
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "sympy/functions/elementary/piecewise.py:Piecewise.__new__"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_relational",
+            "start_entity": {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+              "entity_type": "function",
+              "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+              "diversity_value": "Different file and layer related to piecewise functions"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8817601203918457,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+              "type": "function",
+              "code": "```\n129 | def __new__(cls, *args, **options):\n130 |         if len(args) == 0:\n131 |             raise TypeError(\"At least one (expr, cond) pair expected.\")\n132 |         # (Try to) sympify args first\n133 |         newargs = []\n134 |         for ec in args:\n135 |             # ec could be a ExprCondPair or a tuple\n136 |             pair = ExprCondPair(*getattr(ec, 'args', ec))\n137 |             cond = pair.cond\n138 |             if cond is false:\n139 |                 continue\n140 |             newargs.append(pair)\n141 |             if cond is true:\n142 |                 break\n143 | \n144 |         eval = options.pop('evaluate', global_parameters.evaluate)\n145 |         if eval:\n146 |             r = cls.eval(*newargs)\n147 |             if r is not None:\n148 |                 return r\n149 |         elif len(newargs) == 1 and newargs[0].cond == True:\n150 |             return newargs[0].expr\n151 | \n152 |         return Basic.__new__(cls, *newargs, **options)\n```",
+              "start_line": 129,
+              "end_line": 152,
+              "code_omitted": false,
+              "original_code_length": 973
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "sympy/functions/elementary/piecewise.py:Piecewise"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Piecewise",
+            "start_entity": {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+              "entity_type": "class",
+              "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+              "diversity_value": "Core class from the piecewise module"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8831338286399841,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+              "type": "class",
+              "code": "# Code too long (47018 chars) - omitted for brevity",
+              "start_line": 63,
+              "end_line": 1056,
+              "code_omitted": true,
+              "original_code_length": 47018
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "chains_with_code_count": 6
+    }
+  },
+  "stage_6_voting_result": {
+    "timestamp": "2026-10-08T22:42:46.717302",
+    "data": {
+      "voting_result": {
+        "success": true,
+        "winning_chain_id": "chain_2",
+        "winning_chain": {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "sympy/logic/boolalg.py:Boolean.as_set"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_set",
+            "start_entity": {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+              "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8595343232154846,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "type": "function",
+              "code": "```\n135 | def as_set(self):\n136 |         \"\"\"\n137 |         Rewrites Boolean expression in terms of real sets.\n138 | \n139 |         Examples\n140 |         ========\n141 | \n142 |         >>> from sympy import Symbol, Eq, Or, And\n143 |         >>> x = Symbol('x', real=True)\n144 |         >>> Eq(x, 0).as_set()\n145 |         {0}\n146 |         >>> (x > 0).as_set()\n147 |         Interval.open(0, oo)\n148 |         >>> And(-2 < x, x < 2).as_set()\n149 |         Interval.open(-2, 2)\n150 |         >>> Or(x < -2, 2 < x).as_set()\n151 |         Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152 | \n153 |         \"\"\"\n154 |         from sympy.calculus.util import periodicity\n155 |         from sympy.core.relational import Relational\n156 | \n157 |         free = self.free_symbols\n158 |         if len(free) == 1:\n159 |             x = free.pop()\n160 |             if x.kind is NumberKind:\n161 |                 reps = {}\n162 |                 for r in self.atoms(Relational):\n163 |                     if periodicity(r, x) not in (0, None):\n164 |                         s = r._eval_as_set()\n165 |                         if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166 |                             reps[r] = s.as_relational(x)\n167 |                             continue\n168 |                         raise NotImplementedError(filldedent('''\n169 |                             as_set is not implemented for relationals\n170 |                             with periodic solutions\n171 |                             '''))\n172 |                 new = self.subs(reps)\n173 |                 if new.func != self.func:\n174 |                     return new.as_set()  # restart with new obj\n175 |                 else:\n176 |                     return new._eval_as_set()\n177 | \n178 |             return self._eval_as_set()\n179 |         else:\n180 |             raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181 |                                       \" implemented for multivariate\"\n182 |                                       \" expressions\")\n```",
+              "start_line": 135,
+              "end_line": 182,
+              "code_omitted": false,
+              "original_code_length": 2046
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        "winning_votes": 5,
+        "total_valid_votes": 5,
+        "average_confidence": 90.0,
+        "vote_distribution": {
+          "chain_2": 5
+        },
+        "all_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly returning itself instead of a set, leading to the failure in the `Piecewise` evaluation. Modifying this method to ensure it returns a set when appropriate will directly resolve the issue.",
+            "modification_strategy": "Modify the `as_set` method in `Boolean` to handle `Contains` objects correctly by converting them to sets when necessary.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with printing `Contains` objects and is not directly related to the issue of `as_set` returning the wrong type. Modifying this chain would not address the core problem.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue originates. Fixing this method to handle `Contains` objects correctly will resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union`, which is called downstream from the `as_set` method. While related, the issue is not in this method but in the upstream `as_set` method.",
+              "chain_4": "This chain contains the `eval` method for `Piecewise`, which is where the error is raised due to the incorrect return type from `as_set`. However, the root cause is in the `as_set` method, not in the `eval` method.",
+              "chain_5": "This chain contains the `__new__` method for `Piecewise`, which is part of the object creation process. While it calls `eval`, the issue lies in the `as_set` method, which is not part of this chain.",
+              "chain_6": "This chain is the `Piecewise` class definition, which is too broad and does not specifically pinpoint the problematic method. The issue is more localized to the `as_set` method in `Boolean`."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly being returned as a set, leading to the failure in the `Piecewise` construction. Modifying this method to correctly handle `Contains` objects and ensure they are not treated as sets would directly resolve the issue.",
+            "modification_strategy": "Modify the `as_set` method to handle `Contains` objects by converting them to a form that can be used in `as_relational` or by raising an appropriate error if conversion is not possible.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with printing methods for `Contains`, which are not directly related to the issue of `as_set` returning incorrect types. Modifying these methods would not address the core problem.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue of `Contains` being returned as a set originates. Fixing this method would directly resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects, which is not directly related to the issue of `Contains` being incorrectly handled. Modifying this method would not address the core problem.",
+              "chain_4": "This chain contains the evaluation logic for `Piecewise` expressions, which is where the error is ultimately raised. However, the root cause lies in the `as_set` method of `Contains`, so modifying this chain would only treat the symptom, not the cause.",
+              "chain_5": "This chain contains the constructor for `Piecewise` expressions, which is where the error is caught. However, the root cause lies in the `as_set` method of `Contains`, so modifying this chain would only treat the symptom, not the cause.",
+              "chain_6": "This chain is a broader definition of the `Piecewise` class and does not specifically address the `as_set` method. Modifying this chain would not directly address the issue."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly returning itself instead of a set, leading to the failure in the `Piecewise` evaluation. By modifying the `as_set` method to correctly handle `Contains` objects, we can ensure that they are converted to a form that can be used by other methods, such as `as_relational`.",
+            "modification_strategy": "Implement a specific handling for `Contains` objects within the `as_set` method to convert them to a set representation.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the LaTeX and pretty printing of `Contains` objects. While it is related to the display of these objects, it does not address the core issue of incorrect set conversion.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue of `Contains` not being converted to a set is rooted. Modifying this method to handle `Contains` objects correctly would directly resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects. While it is related to converting sets to relational expressions, it does not address the issue of `Contains` objects not being converted to sets in the first place.",
+              "chain_4": "This chain contains the `eval` method for `Piecewise` expressions. The issue is not in the evaluation logic but in the input provided to it. Fixing the input (i.e., ensuring `Contains` objects are converted to sets) would resolve the problem, but modifying this chain would not directly fix the root cause.",
+              "chain_5": "This chain contains the `__new__` method for `Piecewise` expressions. Similar to Chain 4, the issue lies in the input provided to this method. Modifying this chain would not address the core issue of incorrect set conversion.",
+              "chain_6": "This chain contains the `Piecewise` class definition. While it is related to the overall structure of `Piecewise`, it does not contain the specific method (`as_set`) where the issue is occurring."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is directly responsible for converting a Boolean expression into a set. The issue described is that `Contains(x, Reals).as_set()` returns `Contains(x, Reals)` instead of a set, leading to further issues when `as_relational` is called. Modifying the `as_set` method to handle `Contains` objects correctly would directly address the root cause of the problem.",
+            "modification_strategy": "Implement a specific handling for `Contains` objects in the `as_set` method to ensure they are converted to a set representation that supports `as_relational`.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with printing `Contains` objects in LaTeX and pretty formats. While it is related to the `Contains` class, it does not address the core issue of the `as_set` method returning an incorrect type.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is the exact location where the issue manifests. Modifying this method to handle `Contains` objects correctly would resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects. While it is related to set operations, it is not the primary location where the issue occurs.",
+              "chain_4": "This chain contains the `eval` method for `Piecewise` expressions. The error occurs because `Contains` does not have an `as_relational` method, which is a symptom of the issue, not the root cause.",
+              "chain_5": "This chain contains the `__new__` method for `Piecewise` expressions. Similar to Chain 4, the error occurs because `Contains` does not have an `as_relational` method, which is a symptom of the issue, not the root cause.",
+              "chain_6": "This chain provides the overall definition of the `Piecewise` class. It is not the specific location where the issue occurs, and modifying it would not directly address the problem."
+            },
+            "agent_id": 5
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly returning itself when `as_set` is called, leading to the failure in `Piecewise` because `Contains` does not have an `as_relational` method. Modifying the `as_set` method to correctly handle `Contains` objects would directly resolve the issue.",
+            "modification_strategy": "Implement a specific handling for `Contains` objects in the `as_set` method to return a set representation that can be converted to a relational expression.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the LaTeX and pretty printing of `Contains` objects. While it is related, the issue is not about the visual representation but about the internal handling of `Contains` as a set. Modifying this chain would not address the core issue.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue originates. The `Contains` object is incorrectly handled here, leading to the described failures. This is the best place to implement a fix.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects. While it is related to the conversion between sets and relational expressions, the issue lies in the incorrect handling of `Contains` objects, which do not reach this method.",
+              "chain_4": "This chain contains the evaluation logic for `Piecewise` objects. The issue is not in the evaluation logic but in the input provided to it. Fixing the input by ensuring `Contains` objects are correctly converted to sets would prevent the error in this chain.",
+              "chain_5": "This chain deals with the creation of `Piecewise` objects. The issue is not in the creation process but in the handling of `Contains` objects during evaluation. Ensuring that `Contains` objects are correctly converted to sets before reaching this chain would prevent the error.",
+              "chain_6": "This chain is the overall `Piecewise` class definition. While it is related, the issue lies in the input provided to `Piecewise`, specifically in the `as_set` method of `Contains` objects. Modifying this chain would not address the core issue."
+            },
+            "agent_id": 4
+          }
+        ],
+        "valid_votes": [
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly returning itself instead of a set, leading to the failure in the `Piecewise` evaluation. Modifying this method to ensure it returns a set when appropriate will directly resolve the issue.",
+            "modification_strategy": "Modify the `as_set` method in `Boolean` to handle `Contains` objects correctly by converting them to sets when necessary.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with printing `Contains` objects and is not directly related to the issue of `as_set` returning the wrong type. Modifying this chain would not address the core problem.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue originates. Fixing this method to handle `Contains` objects correctly will resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union`, which is called downstream from the `as_set` method. While related, the issue is not in this method but in the upstream `as_set` method.",
+              "chain_4": "This chain contains the `eval` method for `Piecewise`, which is where the error is raised due to the incorrect return type from `as_set`. However, the root cause is in the `as_set` method, not in the `eval` method.",
+              "chain_5": "This chain contains the `__new__` method for `Piecewise`, which is part of the object creation process. While it calls `eval`, the issue lies in the `as_set` method, which is not part of this chain.",
+              "chain_6": "This chain is the `Piecewise` class definition, which is too broad and does not specifically pinpoint the problematic method. The issue is more localized to the `as_set` method in `Boolean`."
+            },
+            "agent_id": 1
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly being returned as a set, leading to the failure in the `Piecewise` construction. Modifying this method to correctly handle `Contains` objects and ensure they are not treated as sets would directly resolve the issue.",
+            "modification_strategy": "Modify the `as_set` method to handle `Contains` objects by converting them to a form that can be used in `as_relational` or by raising an appropriate error if conversion is not possible.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with printing methods for `Contains`, which are not directly related to the issue of `as_set` returning incorrect types. Modifying these methods would not address the core problem.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue of `Contains` being returned as a set originates. Fixing this method would directly resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects, which is not directly related to the issue of `Contains` being incorrectly handled. Modifying this method would not address the core problem.",
+              "chain_4": "This chain contains the evaluation logic for `Piecewise` expressions, which is where the error is ultimately raised. However, the root cause lies in the `as_set` method of `Contains`, so modifying this chain would only treat the symptom, not the cause.",
+              "chain_5": "This chain contains the constructor for `Piecewise` expressions, which is where the error is caught. However, the root cause lies in the `as_set` method of `Contains`, so modifying this chain would only treat the symptom, not the cause.",
+              "chain_6": "This chain is a broader definition of the `Piecewise` class and does not specifically address the `as_set` method. Modifying this chain would not directly address the issue."
+            },
+            "agent_id": 2
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly returning itself instead of a set, leading to the failure in the `Piecewise` evaluation. By modifying the `as_set` method to correctly handle `Contains` objects, we can ensure that they are converted to a form that can be used by other methods, such as `as_relational`.",
+            "modification_strategy": "Implement a specific handling for `Contains` objects within the `as_set` method to convert them to a set representation.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the LaTeX and pretty printing of `Contains` objects. While it is related to the display of these objects, it does not address the core issue of incorrect set conversion.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue of `Contains` not being converted to a set is rooted. Modifying this method to handle `Contains` objects correctly would directly resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects. While it is related to converting sets to relational expressions, it does not address the issue of `Contains` objects not being converted to sets in the first place.",
+              "chain_4": "This chain contains the `eval` method for `Piecewise` expressions. The issue is not in the evaluation logic but in the input provided to it. Fixing the input (i.e., ensuring `Contains` objects are converted to sets) would resolve the problem, but modifying this chain would not directly fix the root cause.",
+              "chain_5": "This chain contains the `__new__` method for `Piecewise` expressions. Similar to Chain 4, the issue lies in the input provided to this method. Modifying this chain would not address the core issue of incorrect set conversion.",
+              "chain_6": "This chain contains the `Piecewise` class definition. While it is related to the overall structure of `Piecewise`, it does not contain the specific method (`as_set`) where the issue is occurring."
+            },
+            "agent_id": 3
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is directly responsible for converting a Boolean expression into a set. The issue described is that `Contains(x, Reals).as_set()` returns `Contains(x, Reals)` instead of a set, leading to further issues when `as_relational` is called. Modifying the `as_set` method to handle `Contains` objects correctly would directly address the root cause of the problem.",
+            "modification_strategy": "Implement a specific handling for `Contains` objects in the `as_set` method to ensure they are converted to a set representation that supports `as_relational`.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with printing `Contains` objects in LaTeX and pretty formats. While it is related to the `Contains` class, it does not address the core issue of the `as_set` method returning an incorrect type.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is the exact location where the issue manifests. Modifying this method to handle `Contains` objects correctly would resolve the problem.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects. While it is related to set operations, it is not the primary location where the issue occurs.",
+              "chain_4": "This chain contains the `eval` method for `Piecewise` expressions. The error occurs because `Contains` does not have an `as_relational` method, which is a symptom of the issue, not the root cause.",
+              "chain_5": "This chain contains the `__new__` method for `Piecewise` expressions. Similar to Chain 4, the error occurs because `Contains` does not have an `as_relational` method, which is a symptom of the issue, not the root cause.",
+              "chain_6": "This chain provides the overall definition of the `Piecewise` class. It is not the specific location where the issue occurs, and modifying it would not directly address the problem."
+            },
+            "agent_id": 5
+          },
+          {
+            "voted_chain_id": "chain_2",
+            "confidence": 90,
+            "reasoning": "Chain 2 contains the `as_set` method for Boolean expressions, which is the root cause of the issue. The `Contains` object is incorrectly returning itself when `as_set` is called, leading to the failure in `Piecewise` because `Contains` does not have an `as_relational` method. Modifying the `as_set` method to correctly handle `Contains` objects would directly resolve the issue.",
+            "modification_strategy": "Implement a specific handling for `Contains` objects in the `as_set` method to return a set representation that can be converted to a relational expression.",
+            "chain_analysis": {
+              "chain_1": "This chain deals with the LaTeX and pretty printing of `Contains` objects. While it is related, the issue is not about the visual representation but about the internal handling of `Contains` as a set. Modifying this chain would not address the core issue.",
+              "chain_2": "This chain contains the `as_set` method for Boolean expressions, which is where the issue originates. The `Contains` object is incorrectly handled here, leading to the described failures. This is the best place to implement a fix.",
+              "chain_3": "This chain deals with the `as_relational` method for `Union` objects. While it is related to the conversion between sets and relational expressions, the issue lies in the incorrect handling of `Contains` objects, which do not reach this method.",
+              "chain_4": "This chain contains the evaluation logic for `Piecewise` objects. The issue is not in the evaluation logic but in the input provided to it. Fixing the input by ensuring `Contains` objects are correctly converted to sets would prevent the error in this chain.",
+              "chain_5": "This chain deals with the creation of `Piecewise` objects. The issue is not in the creation process but in the handling of `Contains` objects during evaluation. Ensuring that `Contains` objects are correctly converted to sets before reaching this chain would prevent the error.",
+              "chain_6": "This chain is the overall `Piecewise` class definition. While it is related, the issue lies in the input provided to `Piecewise`, specifically in the `as_set` method of `Contains` objects. Modifying this chain would not address the core issue."
+            },
+            "agent_id": 4
+          }
+        ],
+        "invalid_votes": []
+      },
+      "chains_with_code": [
+        {
+          "chain_id": "chain_1",
+          "original_chain_info": {
+            "chain": [
+              "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "sympy/printing/printer.py:Printer._print",
+              "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+              "sympy/printing/pretty/pretty.py:PrettyPrinter",
+              "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise"
+            ],
+            "chain_length": 5,
+            "initial_entity": "Contains",
+            "start_entity": {
+              "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "entity_type": "function",
+              "relevance_reason": "Responsible for printing Contains objects in LaTeX format, which might need updates to reflect changes.",
+              "diversity_value": "Different file, part of the printing system"
+            },
+            "selection_rank": 1,
+            "similarity_to_longest": 1.0,
+            "is_longest": true
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/printing/latex.py:LatexPrinter._print_Contains",
+              "type": "function",
+              "code": "```\n2348 | def _print_Contains(self, e):\n2349 |         return r\"%s \\in %s\" % tuple(self._print(a) for a in e.args)\n```",
+              "start_line": 2348,
+              "end_line": 2349,
+              "code_omitted": false,
+              "original_code_length": 119
+            },
+            {
+              "entity_id": "sympy/printing/printer.py:Printer._print",
+              "type": "function",
+              "code": "```\n294 | def _print(self, expr, **kwargs) -> str:\n295 |         \"\"\"Internal dispatcher\n296 | \n297 |         Tries the following concepts to print an expression:\n298 |             1. Let the object print itself if it knows how.\n299 |             2. Take the best fitting method defined in the printer.\n300 |             3. As fall-back use the emptyPrinter method for the printer.\n301 |         \"\"\"\n302 |         self._print_level += 1\n303 |         try:\n304 |             # If the printer defines a name for a printing method\n305 |             # (Printer.printmethod) and the object knows for itself how it\n306 |             # should be printed, use that method.\n307 |             if (self.printmethod and hasattr(expr, self.printmethod)\n308 |                     and not isinstance(expr, BasicMeta)):\n309 |                 return getattr(expr, self.printmethod)(self, **kwargs)\n310 | \n311 |             # See if the class of expr is known, or if one of its super\n312 |             # classes is known, and use that print function\n313 |             # Exception: ignore the subclasses of Undefined, so that, e.g.,\n314 |             # Function('gamma') does not get dispatched to _print_gamma\n315 |             classes = type(expr).__mro__\n316 |             if AppliedUndef in classes:\n317 |                 classes = classes[classes.index(AppliedUndef):]\n318 |             if UndefinedFunction in classes:\n319 |                 classes = classes[classes.index(UndefinedFunction):]\n320 |             # Another exception: if someone subclasses a known function, e.g.,\n321 |             # gamma, and changes the name, then ignore _print_gamma\n322 |             if Function in classes:\n323 |                 i = classes.index(Function)\n324 |                 classes = tuple(c for c in classes[:i] if \\\n325 |                     c.__name__ == classes[0].__name__ or \\\n326 |                     c.__name__.endswith(\"Base\")) + classes[i:]\n327 |             for cls in classes:\n328 |                 printmethodname = '_print_' + cls.__name__\n329 |                 printmethod = getattr(self, printmethodname, None)\n330 |                 if printmethod is not None:\n331 |                     return printmethod(expr, **kwargs)\n332 |             # Unknown object, fall back to the emptyPrinter.\n333 |             return self.emptyPrinter(expr)\n334 |         finally:\n335 |             self._print_level -= 1\n```",
+              "start_line": 294,
+              "end_line": 335,
+              "code_omitted": false,
+              "original_code_length": 2401
+            },
+            {
+              "entity_id": "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Contains",
+              "type": "function",
+              "code": "```\n2289 | def _print_Contains(self, e):\n2290 |         var, set = e.args\n2291 |         if self._use_unicode:\n2292 |             el = \" \\N{ELEMENT OF} \"\n2293 |             return prettyForm(*stringPict.next(self._print(var),\n2294 |                                                el, self._print(set)), binding=8)\n2295 |         else:\n2296 |             return prettyForm(sstr(e))\n```",
+              "start_line": 2289,
+              "end_line": 2296,
+              "code_omitted": false,
+              "original_code_length": 384
+            },
+            {
+              "entity_id": "sympy/printing/pretty/pretty.py:PrettyPrinter",
+              "type": "class",
+              "code": "# Code too long (121186 chars) - omitted for brevity",
+              "start_line": 30,
+              "end_line": 2854,
+              "code_omitted": true,
+              "original_code_length": 121186
+            },
+            {
+              "entity_id": "sympy/printing/pretty/pretty.py:PrettyPrinter._print_Piecewise",
+              "type": "function",
+              "code": "```\n1350 | def _print_Piecewise(self, pexpr):\n1351 | \n1352 |         P = {}\n1353 |         for n, ec in enumerate(pexpr.args):\n1354 |             P[n, 0] = self._print(ec.expr)\n1355 |             if ec.cond == True:\n1356 |                 P[n, 1] = prettyForm('otherwise')\n1357 |             else:\n1358 |                 P[n, 1] = prettyForm(\n1359 |                     *prettyForm('for ').right(self._print(ec.cond)))\n1360 |         hsep = 2\n1361 |         vsep = 1\n1362 |         len_args = len(pexpr.args)\n1363 | \n1364 |         # max widths\n1365 |         maxw = [max([P[i, j].width() for i in range(len_args)])\n1366 |                 for j in range(2)]\n1367 | \n1368 |         # FIXME: Refactor this code and matrix into some tabular environment.\n1369 |         # drawing result\n1370 |         D = None\n1371 | \n1372 |         for i in range(len_args):\n1373 |             D_row = None\n1374 |             for j in range(2):\n1375 |                 p = P[i, j]\n1376 |                 assert p.width() <= maxw[j]\n1377 | \n1378 |                 wdelta = maxw[j] - p.width()\n1379 |                 wleft = wdelta // 2\n1380 |                 wright = wdelta - wleft\n1381 | \n1382 |                 p = prettyForm(*p.right(' '*wright))\n1383 |                 p = prettyForm(*p.left(' '*wleft))\n1384 | \n1385 |                 if D_row is None:\n1386 |                     D_row = p\n1387 |                     continue\n1388 | \n1389 |                 D_row = prettyForm(*D_row.right(' '*hsep))  # h-spacer\n1390 |                 D_row = prettyForm(*D_row.right(p))\n1391 |             if D is None:\n1392 |                 D = D_row       # first row in a picture\n1393 |                 continue\n1394 | \n1395 |             # v-spacer\n1396 |             for _ in range(vsep):\n1397 |                 D = prettyForm(*D.below(' '))\n1398 | \n1399 |             D = prettyForm(*D.below(D_row))\n1400 | \n1401 |         D = prettyForm(*D.parens('{', ''))\n1402 |         D.baseline = D.height()//2\n1403 |         D.binding = prettyForm.OPEN\n1404 |         return D\n```",
+              "start_line": 1350,
+              "end_line": 1404,
+              "code_omitted": false,
+              "original_code_length": 2045
+            }
+          ],
+          "chain_length": 5,
+          "selection_rank": 1,
+          "is_longest": true
+        },
+        {
+          "chain_id": "chain_2",
+          "original_chain_info": {
+            "chain": [
+              "sympy/logic/boolalg.py:Boolean.as_set"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_set",
+            "start_entity": {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "entity_type": "function",
+              "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+              "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+            },
+            "selection_rank": 2,
+            "similarity_to_longest": 0.8595343232154846,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+              "type": "function",
+              "code": "```\n135 | def as_set(self):\n136 |         \"\"\"\n137 |         Rewrites Boolean expression in terms of real sets.\n138 | \n139 |         Examples\n140 |         ========\n141 | \n142 |         >>> from sympy import Symbol, Eq, Or, And\n143 |         >>> x = Symbol('x', real=True)\n144 |         >>> Eq(x, 0).as_set()\n145 |         {0}\n146 |         >>> (x > 0).as_set()\n147 |         Interval.open(0, oo)\n148 |         >>> And(-2 < x, x < 2).as_set()\n149 |         Interval.open(-2, 2)\n150 |         >>> Or(x < -2, 2 < x).as_set()\n151 |         Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152 | \n153 |         \"\"\"\n154 |         from sympy.calculus.util import periodicity\n155 |         from sympy.core.relational import Relational\n156 | \n157 |         free = self.free_symbols\n158 |         if len(free) == 1:\n159 |             x = free.pop()\n160 |             if x.kind is NumberKind:\n161 |                 reps = {}\n162 |                 for r in self.atoms(Relational):\n163 |                     if periodicity(r, x) not in (0, None):\n164 |                         s = r._eval_as_set()\n165 |                         if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166 |                             reps[r] = s.as_relational(x)\n167 |                             continue\n168 |                         raise NotImplementedError(filldedent('''\n169 |                             as_set is not implemented for relationals\n170 |                             with periodic solutions\n171 |                             '''))\n172 |                 new = self.subs(reps)\n173 |                 if new.func != self.func:\n174 |                     return new.as_set()  # restart with new obj\n175 |                 else:\n176 |                     return new._eval_as_set()\n177 | \n178 |             return self._eval_as_set()\n179 |         else:\n180 |             raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181 |                                       \" implemented for multivariate\"\n182 |                                       \" expressions\")\n```",
+              "start_line": 135,
+              "end_line": 182,
+              "code_omitted": false,
+              "original_code_length": 2046
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 2,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_3",
+          "original_chain_info": {
+            "chain": [
+              "sympy/sets/sets.py:Union.as_relational"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_relational",
+            "start_entity": {
+              "entity_id": "sympy/sets/sets.py:Union.as_relational",
+              "entity_type": "function",
+              "relevance_reason": "Another example of converting a set to a relational expression, useful for understanding the implementation pattern.",
+              "diversity_value": "Different functionality from the sets module"
+            },
+            "selection_rank": 3,
+            "similarity_to_longest": 0.869138777256012,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/sets/sets.py:Union.as_relational",
+              "type": "function",
+              "code": "```\n1416 | def as_relational(self, symbol):\n1417 |         \"\"\"Rewrite a Union in terms of equalities and logic operators. \"\"\"\n1418 |         if (len(self.args) == 2 and\n1419 |                 all(isinstance(i, Interval) for i in self.args)):\n1420 |             # optimization to give 3 args as (x > 1) & (x < 5) & Ne(x, 3)\n1421 |             # instead of as 4, ((1 <= x) & (x < 3)) | ((x <= 5) & (3 < x))\n1422 |             a, b = self.args\n1423 |             if (a.sup == b.inf and\n1424 |                     not any(a.sup in i for i in self.args)):\n1425 |                 return And(Ne(symbol, a.sup), symbol < b.sup, symbol > a.inf)\n1426 |         return Or(*[i.as_relational(symbol) for i in self.args])\n```",
+              "start_line": 1416,
+              "end_line": 1426,
+              "code_omitted": false,
+              "original_code_length": 711
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 3,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_4",
+          "original_chain_info": {
+            "chain": [
+              "sympy/functions/elementary/piecewise.py:Piecewise.eval"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Contains",
+            "start_entity": {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "entity_type": "function",
+              "relevance_reason": "The eval method where the error occurs, indicating a place where Contains is misused.",
+              "diversity_value": "Different file, part of the piecewise function implementation"
+            },
+            "selection_rank": 4,
+            "similarity_to_longest": 0.8743398189544678,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.eval",
+              "type": "function",
+              "code": "```\n155 | def eval(cls, *_args):\n156 |         \"\"\"Either return a modified version of the args or, if no\n157 |         modifications were made, return None.\n158 | \n159 |         Modifications that are made here:\n160 | \n161 |         1. relationals are made canonical\n162 |         2. any False conditions are dropped\n163 |         3. any repeat of a previous condition is ignored\n164 |         4. any args past one with a true condition are dropped\n165 | \n166 |         If there are no args left, nan will be returned.\n167 |         If there is a single arg with a True condition, its\n168 |         corresponding expression will be returned.\n169 | \n170 |         EXAMPLES\n171 |         ========\n172 | \n173 |         >>> from sympy import Piecewise\n174 |         >>> from sympy.abc import x\n175 |         >>> cond = -x < -1\n176 |         >>> args = [(1, cond), (4, cond), (3, False), (2, True), (5, x < 1)]\n177 |         >>> Piecewise(*args, evaluate=False)\n178 |         Piecewise((1, -x < -1), (4, -x < -1), (2, True))\n179 |         >>> Piecewise(*args)\n180 |         Piecewise((1, x > 1), (2, True))\n181 |         \"\"\"\n182 |         if not _args:\n183 |             return Undefined\n184 | \n185 |         if len(_args) == 1 and _args[0][-1] == True:\n186 |             return _args[0][0]\n187 | \n188 |         newargs = []  # the unevaluated conditions\n189 |         current_cond = set()  # the conditions up to a given e, c pair\n190 |         for expr, cond in _args:\n191 |             cond = cond.replace(\n192 |                 lambda _: _.is_Relational, _canonical_coeff)\n193 |             # Check here if expr is a Piecewise and collapse if one of\n194 |             # the conds in expr matches cond. This allows the collapsing\n195 |             # of Piecewise((Piecewise((x,x<0)),x<0)) to Piecewise((x,x<0)).\n196 |             # This is important when using piecewise_fold to simplify\n197 |             # multiple Piecewise instances having the same conds.\n198 |             # Eventually, this code should be able to collapse Piecewise's\n199 |             # having different intervals, but this will probably require\n200 |             # using the new assumptions.\n201 |             if isinstance(expr, Piecewise):\n202 |                 unmatching = []\n203 |                 for i, (e, c) in enumerate(expr.args):\n204 |                     if c in current_cond:\n205 |                         # this would already have triggered\n206 |                         continue\n207 |                     if c == cond:\n208 |                         if c != True:\n209 |                             # nothing past this condition will ever\n210 |                             # trigger and only those args before this\n211 |                             # that didn't match a previous condition\n212 |                             # could possibly trigger\n213 |                             if unmatching:\n214 |                                 expr = Piecewise(*(\n215 |                                     unmatching + [(e, c)]))\n216 |                             else:\n217 |                                 expr = e\n218 |                         break\n219 |                     else:\n220 |                         unmatching.append((e, c))\n221 | \n222 |             # check for condition repeats\n223 |             got = False\n224 |             # -- if an And contains a condition that was\n225 |             #    already encountered, then the And will be\n226 |             #    False: if the previous condition was False\n227 |             #    then the And will be False and if the previous\n228 |             #    condition is True then then we wouldn't get to\n229 |             #    this point. In either case, we can skip this condition.\n230 |             for i in ([cond] +\n231 |                     (list(cond.args) if isinstance(cond, And) else\n232 |                     [])):\n233 |                 if i in current_cond:\n234 |                     got = True\n235 |                     break\n236 |             if got:\n237 |                 continue\n238 | \n239 |             # -- if not(c) is already in current_cond then c is\n240 |             #    a redundant condition in an And. This does not\n241 |             #    apply to Or, however: (e1, c), (e2, Or(~c, d))\n242 |             #    is not (e1, c), (e2, d) because if c and d are\n243 |             #    both False this would give no results when the\n244 |             #    true answer should be (e2, True)\n245 |             if isinstance(cond, And):\n246 |                 nonredundant = []\n247 |                 for c in cond.args:\n248 |                     if isinstance(c, Relational):\n249 |                         if c.negated.canonical in current_cond:\n250 |                             continue\n251 |                         # if a strict inequality appears after\n252 |                         # a non-strict one, then the condition is\n253 |                         # redundant\n254 |                         if isinstance(c, (Lt, Gt)) and (\n255 |                                 c.weak in current_cond):\n256 |                             cond = False\n257 |                             break\n258 |                     nonredundant.append(c)\n259 |                 else:\n260 |                     cond = cond.func(*nonredundant)\n261 |             elif isinstance(cond, Relational):\n262 |                 if cond.negated.canonical in current_cond:\n263 |                     cond = S.true\n264 | \n265 |             current_cond.add(cond)\n266 | \n267 |             # collect successive e,c pairs when exprs or cond match\n268 |             if newargs:\n269 |                 if newargs[-1].expr == expr:\n270 |                     orcond = Or(cond, newargs[-1].cond)\n271 |                     if isinstance(orcond, (And, Or)):\n272 |                         orcond = distribute_and_over_or(orcond)\n273 |                     newargs[-1] = ExprCondPair(expr, orcond)\n274 |                     continue\n275 |                 elif newargs[-1].cond == cond:\n276 |                     newargs[-1] = ExprCondPair(expr, cond)\n277 |                     continue\n278 | \n279 |             newargs.append(ExprCondPair(expr, cond))\n280 | \n281 |         # some conditions may have been redundant\n282 |         missing = len(newargs) != len(_args)\n283 |         # some conditions may have changed\n284 |         same = all(a == b for a, b in zip(newargs, _args))\n285 |         # if either change happened we return the expr with the\n286 |         # updated args\n287 |         if not newargs:\n288 |             raise ValueError(filldedent('''\n289 |                 There are no conditions (or none that\n290 |                 are not trivially false) to define an\n291 |                 expression.'''))\n292 |         if missing or not same:\n293 |             return cls(*newargs)\n```",
+              "start_line": 155,
+              "end_line": 293,
+              "code_omitted": false,
+              "original_code_length": 6795
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 4,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_5",
+          "original_chain_info": {
+            "chain": [
+              "sympy/functions/elementary/piecewise.py:Piecewise.__new__"
+            ],
+            "chain_length": 1,
+            "initial_entity": "as_relational",
+            "start_entity": {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+              "entity_type": "function",
+              "relevance_reason": "Directly involved in the error traceback, indicating where the Contains issue causes problems.",
+              "diversity_value": "Different file and layer related to piecewise functions"
+            },
+            "selection_rank": 5,
+            "similarity_to_longest": 0.8817601203918457,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise.__new__",
+              "type": "function",
+              "code": "```\n129 | def __new__(cls, *args, **options):\n130 |         if len(args) == 0:\n131 |             raise TypeError(\"At least one (expr, cond) pair expected.\")\n132 |         # (Try to) sympify args first\n133 |         newargs = []\n134 |         for ec in args:\n135 |             # ec could be a ExprCondPair or a tuple\n136 |             pair = ExprCondPair(*getattr(ec, 'args', ec))\n137 |             cond = pair.cond\n138 |             if cond is false:\n139 |                 continue\n140 |             newargs.append(pair)\n141 |             if cond is true:\n142 |                 break\n143 | \n144 |         eval = options.pop('evaluate', global_parameters.evaluate)\n145 |         if eval:\n146 |             r = cls.eval(*newargs)\n147 |             if r is not None:\n148 |                 return r\n149 |         elif len(newargs) == 1 and newargs[0].cond == True:\n150 |             return newargs[0].expr\n151 | \n152 |         return Basic.__new__(cls, *newargs, **options)\n```",
+              "start_line": 129,
+              "end_line": 152,
+              "code_omitted": false,
+              "original_code_length": 973
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 5,
+          "is_longest": false
+        },
+        {
+          "chain_id": "chain_6",
+          "original_chain_info": {
+            "chain": [
+              "sympy/functions/elementary/piecewise.py:Piecewise"
+            ],
+            "chain_length": 1,
+            "initial_entity": "Piecewise",
+            "start_entity": {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+              "entity_type": "class",
+              "relevance_reason": "The main class where the error occurs when using Contains in a Piecewise condition",
+              "diversity_value": "Core class from the piecewise module"
+            },
+            "selection_rank": 6,
+            "similarity_to_longest": 0.8831338286399841,
+            "is_longest": false
+          },
+          "entities_with_code": [
+            {
+              "entity_id": "sympy/functions/elementary/piecewise.py:Piecewise",
+              "type": "class",
+              "code": "# Code too long (47018 chars) - omitted for brevity",
+              "start_line": 63,
+              "end_line": 1056,
+              "code_omitted": true,
+              "original_code_length": 47018
+            }
+          ],
+          "chain_length": 1,
+          "selection_rank": 6,
+          "is_longest": false
+        }
+      ],
+      "winning_chain": {
+        "chain_id": "chain_2",
+        "original_chain_info": {
+          "chain": [
+            "sympy/logic/boolalg.py:Boolean.as_set"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+            "entity_type": "function",
+            "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+            "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8595343232154846,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+            "type": "function",
+            "code": "```\n135 | def as_set(self):\n136 |         \"\"\"\n137 |         Rewrites Boolean expression in terms of real sets.\n138 | \n139 |         Examples\n140 |         ========\n141 | \n142 |         >>> from sympy import Symbol, Eq, Or, And\n143 |         >>> x = Symbol('x', real=True)\n144 |         >>> Eq(x, 0).as_set()\n145 |         {0}\n146 |         >>> (x > 0).as_set()\n147 |         Interval.open(0, oo)\n148 |         >>> And(-2 < x, x < 2).as_set()\n149 |         Interval.open(-2, 2)\n150 |         >>> Or(x < -2, 2 < x).as_set()\n151 |         Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152 | \n153 |         \"\"\"\n154 |         from sympy.calculus.util import periodicity\n155 |         from sympy.core.relational import Relational\n156 | \n157 |         free = self.free_symbols\n158 |         if len(free) == 1:\n159 |             x = free.pop()\n160 |             if x.kind is NumberKind:\n161 |                 reps = {}\n162 |                 for r in self.atoms(Relational):\n163 |                     if periodicity(r, x) not in (0, None):\n164 |                         s = r._eval_as_set()\n165 |                         if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166 |                             reps[r] = s.as_relational(x)\n167 |                             continue\n168 |                         raise NotImplementedError(filldedent('''\n169 |                             as_set is not implemented for relationals\n170 |                             with periodic solutions\n171 |                             '''))\n172 |                 new = self.subs(reps)\n173 |                 if new.func != self.func:\n174 |                     return new.as_set()  # restart with new obj\n175 |                 else:\n176 |                     return new._eval_as_set()\n177 | \n178 |             return self._eval_as_set()\n179 |         else:\n180 |             raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181 |                                       \" implemented for multivariate\"\n182 |                                       \" expressions\")\n```",
+            "start_line": 135,
+            "end_line": 182,
+            "code_omitted": false,
+            "original_code_length": 2046
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 2,
+        "is_longest": false
+      },
+      "winning_chain_id": "chain_2"
+    }
+  },
+  "stage_7_round1_analysis": {
+    "timestamp": "2026-10-08T22:44:01.505891",
+    "data": {
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "location_description": "Lines 162-167 where relational objects are being evaluated and replaced",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation does not handle the `Contains` relational correctly. It assumes that all relational objects can be converted to sets and then back to relational form, which is not true for `Contains`. This leads to the `AttributeError` when `Contains` is used in contexts expecting a set.",
+                "suggested_approach": "Modify the `as_set` method in `Boolean` class to handle `Contains` relational objects appropriately. Specifically, add a check to see if the relational is an instance of `Contains` and handle it differently.\n\n1. At line 162, add a new check to see if the relational is an instance of `Contains`:\n```python\nif isinstance(r, Contains):\n    # Handle Contains relational\n    s = r._eval_as_set()\n    if s in (S.EmptySet, S.UniversalSet, S.Reals):\n        reps[r] = s.as_relational(x)\n    else:\n        # If s is not a basic set, return the original Contains object\n        reps[r] = r\nelse:\n    # Continue with the existing logic for other relational types\n    if periodicity(r, x) not in (0, None):\n        s = r._eval_as_set()\n        if s in (S.EmptySet, S.UniversalSet, S.Reals):\n            reps[r] = s.as_relational(x)\n        else:\n            raise NotImplementedError(filldedent('''\n                as_set is not implemented for relationals\n                with periodic solutions\n                '''))\n```\n2. Ensure that the `Contains` class has a `_eval_as_set` method that returns a set representation of the containment condition. This method should be implemented in the `Contains` class if it doesn't already exist.\n3. Add the necessary import statements at the top of the file if they are not already present:\n```python\nfrom sympy.sets.contains import Contains\nfrom sympy.sets.sets import S\n```\n4. Test the modified method with various inputs, including `Contains(x, Reals)` and other relational conditions, to ensure it behaves as expected and does not break existing functionality."
+              },
+              {
+                "entity_id": "sympy/sets/contains.py:Contains._eval_as_set",
+                "location_description": "The `_eval_as_set` method in the `Contains` class",
+                "modification_type": "add_feature",
+                "priority": "high",
+                "reasoning": "The `Contains` class currently lacks a `_eval_as_set` method, which is necessary for converting the containment condition into a set. This method will allow `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+                "suggested_approach": "Add a `_eval_as_set` method to the `Contains` class to convert the containment condition into a set.\n\n1. In the `Contains` class, add the following method:\n```python\ndef _eval_as_set(self):\n    from sympy.sets.sets import S\n    if self.set.is_subset(S.Reals):\n        return S.Reals\n    elif self.set.is_subset(S.Complexes):\n        return S.Complexes\n    else:\n        return S.EmptySet\n```\n2. Ensure that the method returns a set that represents the containment condition. For example, if the set is a subset of the reals, return `S.Reals`; if it is a subset of the complex numbers, return `S.Complexes`; otherwise, return `S.EmptySet`.\n3. Test the `_eval_as_set` method with different sets to ensure it returns the correct set representation.\n4. Add the necessary import statement at the top of the file if it is not already present:\n```python\nfrom sympy.sets.sets import S\n```\n5. Document the method with appropriate docstrings to explain its purpose and behavior."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `as_set` method in the `Boolean` class to handle `Contains` relational objects correctly and adding a `_eval_as_set` method to the `Contains` class to provide a set representation of the containment condition. These changes will ensure that `Contains` can be used in contexts expecting a set without causing errors.",
+            "confidence": 90
+          }
+        }
+      ],
+      "chain_info": "**Winning Localization Chain (chain_2):**\n\n**Entity 1: sympy/logic/boolalg.py:Boolean.as_set**\nType: function\nLines: 135-182\nCode:\n```\n```\n135 | def as_set(self):\n136 |         \"\"\"\n137 |         Rewrites Boolean expression in terms of real sets.\n138 | \n139 |         Examples\n140 |         ========\n141 | \n142 |         >>> from sympy import Symbol, Eq, Or, And\n143 |         >>> x = Symbol('x', real=True)\n144 |         >>> Eq(x, 0).as_set()\n145 |         {0}\n146 |         >>> (x > 0).as_set()\n147 |         Interval.open(0, oo)\n148 |         >>> And(-2 < x, x < 2).as_set()\n149 |         Interval.open(-2, 2)\n150 |         >>> Or(x < -2, 2 < x).as_set()\n151 |         Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152 | \n153 |         \"\"\"\n154 |         from sympy.calculus.util import periodicity\n155 |         from sympy.core.relational import Relational\n156 | \n157 |         free = self.free_symbols\n158 |         if len(free) == 1:\n159 |             x = free.pop()\n160 |             if x.kind is NumberKind:\n161 |                 reps = {}\n162 |                 for r in self.atoms(Relational):\n163 |                     if periodicity(r, x) not in (0, None):\n164 |                         s = r._eval_as_set()\n165 |                         if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166 |                             reps[r] = s.as_relational(x)\n167 |                             continue\n168 |                         raise NotImplementedError(filldedent('''\n169 |                             as_set is not implemented for relationals\n170 |                             with periodic solutions\n171 |                             '''))\n172 |                 new = self.subs(reps)\n173 |                 if new.func != self.func:\n174 |                     return new.as_set()  # restart with new obj\n175 |                 else:\n176 |                     return new._eval_as_set()\n177 | \n178 |             return self._eval_as_set()\n179 |         else:\n180 |             raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181 |                                       \" implemented for multivariate\"\n182 |                                       \" expressions\")\n```\n```\n\n",
+      "num_agents": 1
+    }
+  },
+  "stage_7_round2_analysis": {
+    "timestamp": "2026-10-08T22:44:01.512500",
+    "data": {
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "location_description": "Lines 162-167 where relational objects are being evaluated and replaced",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation does not handle the `Contains` relational correctly. It assumes that all relational objects can be converted to sets and then back to relational form, which is not true for `Contains`. This leads to the `AttributeError` when `Contains` is used in contexts expecting a set.",
+                "suggested_approach": "Modify the `as_set` method in `Boolean` class to handle `Contains` relational objects appropriately. Specifically, add a check to see if the relational is an instance of `Contains` and handle it differently.\n\n1. At line 162, add a new check to see if the relational is an instance of `Contains`:\n```python\nif isinstance(r, Contains):\n    # Handle Contains relational\n    s = r._eval_as_set()\n    if s in (S.EmptySet, S.UniversalSet, S.Reals):\n        reps[r] = s.as_relational(x)\n    else:\n        # If s is not a basic set, return the original Contains object\n        reps[r] = r\nelse:\n    # Continue with the existing logic for other relational types\n    if periodicity(r, x) not in (0, None):\n        s = r._eval_as_set()\n        if s in (S.EmptySet, S.UniversalSet, S.Reals):\n            reps[r] = s.as_relational(x)\n        else:\n            raise NotImplementedError(filldedent('''\n                as_set is not implemented for relationals\n                with periodic solutions\n                '''))\n```\n2. Ensure that the `Contains` class has a `_eval_as_set` method that returns a set representation of the containment condition. This method should be implemented in the `Contains` class if it doesn't already exist.\n3. Add the necessary import statements at the top of the file if they are not already present:\n```python\nfrom sympy.sets.contains import Contains\nfrom sympy.sets.sets import S\n```\n4. Test the modified method with various inputs, including `Contains(x, Reals)` and other relational conditions, to ensure it behaves as expected and does not break existing functionality."
+              },
+              {
+                "entity_id": "sympy/sets/contains.py:Contains._eval_as_set",
+                "location_description": "The `_eval_as_set` method in the `Contains` class",
+                "modification_type": "add_feature",
+                "priority": "high",
+                "reasoning": "The `Contains` class currently lacks a `_eval_as_set` method, which is necessary for converting the containment condition into a set. This method will allow `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+                "suggested_approach": "Add a `_eval_as_set` method to the `Contains` class to convert the containment condition into a set.\n\n1. In the `Contains` class, add the following method:\n```python\ndef _eval_as_set(self):\n    from sympy.sets.sets import S\n    if self.set.is_subset(S.Reals):\n        return S.Reals\n    elif self.set.is_subset(S.Complexes):\n        return S.Complexes\n    else:\n        return S.EmptySet\n```\n2. Ensure that the method returns a set that represents the containment condition. For example, if the set is a subset of the reals, return `S.Reals`; if it is a subset of the complex numbers, return `S.Complexes`; otherwise, return `S.EmptySet`.\n3. Test the `_eval_as_set` method with different sets to ensure it returns the correct set representation.\n4. Add the necessary import statement at the top of the file if it is not already present:\n```python\nfrom sympy.sets.sets import S\n```\n5. Document the method with appropriate docstrings to explain its purpose and behavior."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `as_set` method in the `Boolean` class to handle `Contains` relational objects correctly and adding a `_eval_as_set` method to the `Contains` class to provide a set representation of the containment condition. These changes will ensure that `Contains` can be used in contexts expecting a set without causing errors.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "location_description": "Lines 162-167 where relational objects are being evaluated and replaced",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation does not handle the `Contains` relational correctly. It assumes that all relational objects can be converted to sets and then back to relational form, which is not true for `Contains`. This leads to the `AttributeError` when `Contains` is used in contexts expecting a set.",
+                "suggested_approach": "Modify the `as_set` method in `Boolean` class to handle `Contains` relational objects appropriately. Specifically, add a check to see if the relational is an instance of `Contains` and handle it differently.\n\n1. At line 162, add a new check to see if the relational is an instance of `Contains`:\n```python\nif isinstance(r, Contains):\n    # Handle Contains relational\n    s = r._eval_as_set()\n    if s in (S.EmptySet, S.UniversalSet, S.Reals):\n        reps[r] = s.as_relational(x)\n    else:\n        # If s is not a basic set, return the original Contains object\n        reps[r] = r\nelse:\n    # Continue with the existing logic for other relational types\n    if periodicity(r, x) not in (0, None):\n        s = r._eval_as_set()\n        if s in (S.EmptySet, S.UniversalSet, S.Reals):\n            reps[r] = s.as_relational(x)\n        else:\n            raise NotImplementedError(filldedent('''\n                as_set is not implemented for relationals\n                with periodic solutions\n                '''))\n```\n2. Ensure that the `Contains` class has a `_eval_as_set` method that returns a set representation of the containment condition. This method should be implemented in the `Contains` class if it doesn't already exist.\n3. Add the necessary import statements at the top of the file if they are not already present:\n```python\nfrom sympy.sets.contains import Contains\nfrom sympy.sets.sets import S\n```\n4. Test the modified method with various inputs, including `Contains(x, Reals)` and other relational conditions, to ensure it behaves as expected and does not break existing functionality."
+              },
+              {
+                "entity_id": "sympy/sets/contains.py:Contains._eval_as_set",
+                "location_description": "The `_eval_as_set` method in the `Contains` class",
+                "modification_type": "add_feature",
+                "priority": "high",
+                "reasoning": "The `Contains` class currently lacks a `_eval_as_set` method, which is necessary for converting the containment condition into a set. This method will allow `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+                "suggested_approach": "Add a `_eval_as_set` method to the `Contains` class to convert the containment condition into a set.\n\n1. In the `Contains` class, add the following method:\n```python\ndef _eval_as_set(self):\n    from sympy.sets.sets import S\n    if self.set.is_subset(S.Reals):\n        return S.Reals\n    elif self.set.is_subset(S.Complexes):\n        return S.Complexes\n    else:\n        return S.EmptySet\n```\n2. Ensure that the method returns a set that represents the containment condition. For example, if the set is a subset of the reals, return `S.Reals`; if it is a subset of the complex numbers, return `S.Complexes`; otherwise, return `S.EmptySet`.\n3. Test the `_eval_as_set` method with different sets to ensure it returns the correct set representation.\n4. Add the necessary import statement at the top of the file if it is not already present:\n```python\nfrom sympy.sets.sets import S\n```\n5. Document the method with appropriate docstrings to explain its purpose and behavior."
+              }
+            ]
+          }
+        }
+      ],
+      "first_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "first_round",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "location_description": "Lines 162-167 where relational objects are being evaluated and replaced",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation does not handle the `Contains` relational correctly. It assumes that all relational objects can be converted to sets and then back to relational form, which is not true for `Contains`. This leads to the `AttributeError` when `Contains` is used in contexts expecting a set.",
+                "suggested_approach": "Modify the `as_set` method in `Boolean` class to handle `Contains` relational objects appropriately. Specifically, add a check to see if the relational is an instance of `Contains` and handle it differently.\n\n1. At line 162, add a new check to see if the relational is an instance of `Contains`:\n```python\nif isinstance(r, Contains):\n    # Handle Contains relational\n    s = r._eval_as_set()\n    if s in (S.EmptySet, S.UniversalSet, S.Reals):\n        reps[r] = s.as_relational(x)\n    else:\n        # If s is not a basic set, return the original Contains object\n        reps[r] = r\nelse:\n    # Continue with the existing logic for other relational types\n    if periodicity(r, x) not in (0, None):\n        s = r._eval_as_set()\n        if s in (S.EmptySet, S.UniversalSet, S.Reals):\n            reps[r] = s.as_relational(x)\n        else:\n            raise NotImplementedError(filldedent('''\n                as_set is not implemented for relationals\n                with periodic solutions\n                '''))\n```\n2. Ensure that the `Contains` class has a `_eval_as_set` method that returns a set representation of the containment condition. This method should be implemented in the `Contains` class if it doesn't already exist.\n3. Add the necessary import statements at the top of the file if they are not already present:\n```python\nfrom sympy.sets.contains import Contains\nfrom sympy.sets.sets import S\n```\n4. Test the modified method with various inputs, including `Contains(x, Reals)` and other relational conditions, to ensure it behaves as expected and does not break existing functionality."
+              },
+              {
+                "entity_id": "sympy/sets/contains.py:Contains._eval_as_set",
+                "location_description": "The `_eval_as_set` method in the `Contains` class",
+                "modification_type": "add_feature",
+                "priority": "high",
+                "reasoning": "The `Contains` class currently lacks a `_eval_as_set` method, which is necessary for converting the containment condition into a set. This method will allow `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+                "suggested_approach": "Add a `_eval_as_set` method to the `Contains` class to convert the containment condition into a set.\n\n1. In the `Contains` class, add the following method:\n```python\ndef _eval_as_set(self):\n    from sympy.sets.sets import S\n    if self.set.is_subset(S.Reals):\n        return S.Reals\n    elif self.set.is_subset(S.Complexes):\n        return S.Complexes\n    else:\n        return S.EmptySet\n```\n2. Ensure that the method returns a set that represents the containment condition. For example, if the set is a subset of the reals, return `S.Reals`; if it is a subset of the complex numbers, return `S.Complexes`; otherwise, return `S.EmptySet`.\n3. Test the `_eval_as_set` method with different sets to ensure it returns the correct set representation.\n4. Add the necessary import statement at the top of the file if it is not already present:\n```python\nfrom sympy.sets.sets import S\n```\n5. Document the method with appropriate docstrings to explain its purpose and behavior."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `as_set` method in the `Boolean` class to handle `Contains` relational objects correctly and adding a `_eval_as_set` method to the `Contains` class to provide a set representation of the containment condition. These changes will ensure that `Contains` can be used in contexts expecting a set without causing errors.",
+            "confidence": 90
+          }
+        }
+      ]
+    }
+  },
+  "stage_7_final_plan": {
+    "timestamp": "2026-10-08T22:44:52.164603",
+    "data": {
+      "final_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "The modification plan involves adding a `_eval_as_set` method to the `Contains` class and updating the `as_set` method in the `Boolean` class to handle `Contains` relational objects correctly.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Add a `_eval_as_set` method to the `Contains` class",
+              "context": "sympy/sets/contains.py:Contains",
+              "type": "add_feature",
+              "priority": "critical",
+              "rationale": "This method is necessary to convert the containment condition into a set, allowing `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+              "implementation_notes": "The `_eval_as_set` method should return a set representation of the containment condition. For example, `Contains(x, Reals)` should return `Reals`."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the `as_set` method in the `Boolean` class to handle `Contains` relational objects",
+              "context": "sympy/logic/boolalg.py:Boolean.as_set",
+              "type": "fix_bug",
+              "priority": "critical",
+              "rationale": "The current implementation does not handle `Contains` relational objects correctly, leading to an `AttributeError`. This modification ensures that `Contains` is processed appropriately.",
+              "implementation_notes": "Update the code block from lines 162-167 to include handling for `Contains` objects. Specifically, check if the relational is an instance of `Contains` and use its `_eval_as_set` method to convert it to a set."
+            }
+          ],
+          "execution_order": "1, 2",
+          "testing_recommendations": "Unit tests should be added to cover the new `_eval_as_set` method in `Contains` and the updated `as_set` method in `Boolean`. Test cases should include various scenarios where `Contains` is used within `Boolean` expressions and ensure that the `as_set` method returns the correct set representation without raising errors.",
+          "risk_assessment": "The primary risk is that the new `_eval_as_set` method may not handle all edge cases correctly, leading to incorrect set representations. To mitigate this, thorough unit tests should be written to cover a wide range of input scenarios. Additionally, the changes should be reviewed by multiple team members to ensure correctness and consistency."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the `Contains` class needs a `_eval_as_set` method and that the `as_set` method in the `Boolean` class should be modified to handle `Contains` relational objects correctly.",
+        "resolved_conflicts": "No significant conflicts were identified among the expert opinions. All recommendations aligned with the need to add a `_eval_as_set` method to `Contains` and update the `as_set` method in `Boolean`."
+      },
+      "second_round_analyses": [
+        {
+          "agent_id": 1,
+          "round": "second_round_skipped",
+          "analysis": {
+            "modification_locations": [
+              {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "location_description": "Lines 162-167 where relational objects are being evaluated and replaced",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation does not handle the `Contains` relational correctly. It assumes that all relational objects can be converted to sets and then back to relational form, which is not true for `Contains`. This leads to the `AttributeError` when `Contains` is used in contexts expecting a set.",
+                "suggested_approach": "Modify the `as_set` method in `Boolean` class to handle `Contains` relational objects appropriately. Specifically, add a check to see if the relational is an instance of `Contains` and handle it differently.\n\n1. At line 162, add a new check to see if the relational is an instance of `Contains`:\n```python\nif isinstance(r, Contains):\n    # Handle Contains relational\n    s = r._eval_as_set()\n    if s in (S.EmptySet, S.UniversalSet, S.Reals):\n        reps[r] = s.as_relational(x)\n    else:\n        # If s is not a basic set, return the original Contains object\n        reps[r] = r\nelse:\n    # Continue with the existing logic for other relational types\n    if periodicity(r, x) not in (0, None):\n        s = r._eval_as_set()\n        if s in (S.EmptySet, S.UniversalSet, S.Reals):\n            reps[r] = s.as_relational(x)\n        else:\n            raise NotImplementedError(filldedent('''\n                as_set is not implemented for relationals\n                with periodic solutions\n                '''))\n```\n2. Ensure that the `Contains` class has a `_eval_as_set` method that returns a set representation of the containment condition. This method should be implemented in the `Contains` class if it doesn't already exist.\n3. Add the necessary import statements at the top of the file if they are not already present:\n```python\nfrom sympy.sets.contains import Contains\nfrom sympy.sets.sets import S\n```\n4. Test the modified method with various inputs, including `Contains(x, Reals)` and other relational conditions, to ensure it behaves as expected and does not break existing functionality."
+              },
+              {
+                "entity_id": "sympy/sets/contains.py:Contains._eval_as_set",
+                "location_description": "The `_eval_as_set` method in the `Contains` class",
+                "modification_type": "add_feature",
+                "priority": "high",
+                "reasoning": "The `Contains` class currently lacks a `_eval_as_set` method, which is necessary for converting the containment condition into a set. This method will allow `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+                "suggested_approach": "Add a `_eval_as_set` method to the `Contains` class to convert the containment condition into a set.\n\n1. In the `Contains` class, add the following method:\n```python\ndef _eval_as_set(self):\n    from sympy.sets.sets import S\n    if self.set.is_subset(S.Reals):\n        return S.Reals\n    elif self.set.is_subset(S.Complexes):\n        return S.Complexes\n    else:\n        return S.EmptySet\n```\n2. Ensure that the method returns a set that represents the containment condition. For example, if the set is a subset of the reals, return `S.Reals`; if it is a subset of the complex numbers, return `S.Complexes`; otherwise, return `S.EmptySet`.\n3. Test the `_eval_as_set` method with different sets to ensure it returns the correct set representation.\n4. Add the necessary import statement at the top of the file if it is not already present:\n```python\nfrom sympy.sets.sets import S\n```\n5. Document the method with appropriate docstrings to explain its purpose and behavior."
+              }
+            ],
+            "overall_strategy": "The overall strategy involves modifying the `as_set` method in the `Boolean` class to handle `Contains` relational objects correctly and adding a `_eval_as_set` method to the `Contains` class to provide a set representation of the containment condition. These changes will ensure that `Contains` can be used in contexts expecting a set without causing errors.",
+            "confidence": 90,
+            "refined_modification_locations": [
+              {
+                "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+                "location_description": "Lines 162-167 where relational objects are being evaluated and replaced",
+                "modification_type": "fix_bug",
+                "priority": "high",
+                "reasoning": "The current implementation does not handle the `Contains` relational correctly. It assumes that all relational objects can be converted to sets and then back to relational form, which is not true for `Contains`. This leads to the `AttributeError` when `Contains` is used in contexts expecting a set.",
+                "suggested_approach": "Modify the `as_set` method in `Boolean` class to handle `Contains` relational objects appropriately. Specifically, add a check to see if the relational is an instance of `Contains` and handle it differently.\n\n1. At line 162, add a new check to see if the relational is an instance of `Contains`:\n```python\nif isinstance(r, Contains):\n    # Handle Contains relational\n    s = r._eval_as_set()\n    if s in (S.EmptySet, S.UniversalSet, S.Reals):\n        reps[r] = s.as_relational(x)\n    else:\n        # If s is not a basic set, return the original Contains object\n        reps[r] = r\nelse:\n    # Continue with the existing logic for other relational types\n    if periodicity(r, x) not in (0, None):\n        s = r._eval_as_set()\n        if s in (S.EmptySet, S.UniversalSet, S.Reals):\n            reps[r] = s.as_relational(x)\n        else:\n            raise NotImplementedError(filldedent('''\n                as_set is not implemented for relationals\n                with periodic solutions\n                '''))\n```\n2. Ensure that the `Contains` class has a `_eval_as_set` method that returns a set representation of the containment condition. This method should be implemented in the `Contains` class if it doesn't already exist.\n3. Add the necessary import statements at the top of the file if they are not already present:\n```python\nfrom sympy.sets.contains import Contains\nfrom sympy.sets.sets import S\n```\n4. Test the modified method with various inputs, including `Contains(x, Reals)` and other relational conditions, to ensure it behaves as expected and does not break existing functionality."
+              },
+              {
+                "entity_id": "sympy/sets/contains.py:Contains._eval_as_set",
+                "location_description": "The `_eval_as_set` method in the `Contains` class",
+                "modification_type": "add_feature",
+                "priority": "high",
+                "reasoning": "The `Contains` class currently lacks a `_eval_as_set` method, which is necessary for converting the containment condition into a set. This method will allow `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+                "suggested_approach": "Add a `_eval_as_set` method to the `Contains` class to convert the containment condition into a set.\n\n1. In the `Contains` class, add the following method:\n```python\ndef _eval_as_set(self):\n    from sympy.sets.sets import S\n    if self.set.is_subset(S.Reals):\n        return S.Reals\n    elif self.set.is_subset(S.Complexes):\n        return S.Complexes\n    else:\n        return S.EmptySet\n```\n2. Ensure that the method returns a set that represents the containment condition. For example, if the set is a subset of the reals, return `S.Reals`; if it is a subset of the complex numbers, return `S.Complexes`; otherwise, return `S.EmptySet`.\n3. Test the `_eval_as_set` method with different sets to ensure it returns the correct set representation.\n4. Add the necessary import statement at the top of the file if it is not already present:\n```python\nfrom sympy.sets.sets import S\n```\n5. Document the method with appropriate docstrings to explain its purpose and behavior."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "stage_8_edit_agent_prompt": {
+    "timestamp": "2026-10-08T22:44:52.168150",
+    "data": {
+      "edit_agent_prompt": "<issue>\nContains.as_set returns Contains\n```py\r\n>>> Contains(x, Reals).as_set()\r\nContains(x, Reals)\r\n```\r\n\r\nThis is wrong because Contains is not a set (it's a boolean). It results in failures in other places because it doesn't have as_relational (since it isn't a set). For instance, from https://github.com/sympy/sympy/pull/14965#discussion_r205281989\r\n\r\n```pytb\r\n>>> Piecewise((6, Contains(x, Reals)), (7, True))\r\nTraceback (most recent call last):\r\n  File \"<stdin>\", line 1, in <module>\r\n  File \"./sympy/functions/elementary/piecewise.py\", line 136, in __new__\r\n    r = cls.eval(*newargs)\r\n  File \"./sympy/functions/elementary/piecewise.py\", line 185, in eval\r\n    c = c.as_set().as_relational(x)\r\nAttributeError: 'Contains' object has no attribute 'as_relational'\r\n```\n\n</issue>\n\n<plan>\n***stage 1***\ninstruction: Add a `_eval_as_set` method to the `Contains` class\ncontext: sympy/sets/contains.py:Contains\n\n***stage 2***\ninstruction: Modify the `as_set` method in the `Boolean` class to handle `Contains` relational objects\ncontext: sympy/logic/boolalg.py:Boolean.as_set\n\n</plan>\n\n<code>\nsympy/logic/boolalg.py:\n135   def as_set(self):\n136           \"\"\"\n137           Rewrites Boolean expression in terms of real sets.\n138   \n139           Examples\n140           ========\n141   \n142           >>> from sympy import Symbol, Eq, Or, And\n143           >>> x = Symbol('x', real=True)\n144           >>> Eq(x, 0).as_set()\n145           {0}\n146           >>> (x > 0).as_set()\n147           Interval.open(0, oo)\n148           >>> And(-2 < x, x < 2).as_set()\n149           Interval.open(-2, 2)\n150           >>> Or(x < -2, 2 < x).as_set()\n151           Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152   \n153           \"\"\"\n154           from sympy.calculus.util import periodicity\n155           from sympy.core.relational import Relational\n156   \n157           free = self.free_symbols\n158           if len(free) == 1:\n159               x = free.pop()\n160               if x.kind is NumberKind:\n161                   reps = {}\n162                   for r in self.atoms(Relational):\n163                       if periodicity(r, x) not in (0, None):\n164                           s = r._eval_as_set()\n165                           if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166                               reps[r] = s.as_relational(x)\n167                               continue\n168                           raise NotImplementedError(filldedent('''\n169                               as_set is not implemented for relationals\n170                               with periodic solutions\n171                               '''))\n172                   new = self.subs(reps)\n173                   if new.func != self.func:\n174                       return new.as_set()  # restart with new obj\n175                   else:\n176                       return new._eval_as_set()\n177   \n178               return self._eval_as_set()\n179           else:\n180               raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181                                         \" implemented for multivariate\"\n182                                         \" expressions\")\n\n</code>",
+      "modification_plan": {
+        "success": true,
+        "final_plan": {
+          "summary": "The modification plan involves adding a `_eval_as_set` method to the `Contains` class and updating the `as_set` method in the `Boolean` class to handle `Contains` relational objects correctly.",
+          "modifications": [
+            {
+              "step": 1,
+              "instruction": "Add a `_eval_as_set` method to the `Contains` class",
+              "context": "sympy/sets/contains.py:Contains",
+              "type": "add_feature",
+              "priority": "critical",
+              "rationale": "This method is necessary to convert the containment condition into a set, allowing `Contains` to be handled properly in the `as_set` method of `Boolean`.",
+              "implementation_notes": "The `_eval_as_set` method should return a set representation of the containment condition. For example, `Contains(x, Reals)` should return `Reals`."
+            },
+            {
+              "step": 2,
+              "instruction": "Modify the `as_set` method in the `Boolean` class to handle `Contains` relational objects",
+              "context": "sympy/logic/boolalg.py:Boolean.as_set",
+              "type": "fix_bug",
+              "priority": "critical",
+              "rationale": "The current implementation does not handle `Contains` relational objects correctly, leading to an `AttributeError`. This modification ensures that `Contains` is processed appropriately.",
+              "implementation_notes": "Update the code block from lines 162-167 to include handling for `Contains` objects. Specifically, check if the relational is an instance of `Contains` and use its `_eval_as_set` method to convert it to a set."
+            }
+          ],
+          "execution_order": "1, 2",
+          "testing_recommendations": "Unit tests should be added to cover the new `_eval_as_set` method in `Contains` and the updated `as_set` method in `Boolean`. Test cases should include various scenarios where `Contains` is used within `Boolean` expressions and ensure that the `as_set` method returns the correct set representation without raising errors.",
+          "risk_assessment": "The primary risk is that the new `_eval_as_set` method may not handle all edge cases correctly, leading to incorrect set representations. To mitigate this, thorough unit tests should be written to cover a wide range of input scenarios. Additionally, the changes should be reviewed by multiple team members to ensure correctness and consistency."
+        },
+        "confidence": 95,
+        "expert_consensus": "All experts agreed that the `Contains` class needs a `_eval_as_set` method and that the `as_set` method in the `Boolean` class should be modified to handle `Contains` relational objects correctly.",
+        "resolved_conflicts": "No significant conflicts were identified among the expert opinions. All recommendations aligned with the need to add a `_eval_as_set` method to `Contains` and update the `as_set` method in `Boolean`."
+      },
+      "winning_chain": {
+        "chain_id": "chain_2",
+        "original_chain_info": {
+          "chain": [
+            "sympy/logic/boolalg.py:Boolean.as_set"
+          ],
+          "chain_length": 1,
+          "initial_entity": "as_set",
+          "start_entity": {
+            "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+            "entity_type": "function",
+            "relevance_reason": "Provides a reference implementation of `as_set` for Boolean expressions, useful for understanding how `as_set` should work.",
+            "diversity_value": "Boolean logic module, providing a contrast to the sets module"
+          },
+          "selection_rank": 2,
+          "similarity_to_longest": 0.8595343232154846,
+          "is_longest": false
+        },
+        "entities_with_code": [
+          {
+            "entity_id": "sympy/logic/boolalg.py:Boolean.as_set",
+            "type": "function",
+            "code": "```\n135 | def as_set(self):\n136 |         \"\"\"\n137 |         Rewrites Boolean expression in terms of real sets.\n138 | \n139 |         Examples\n140 |         ========\n141 | \n142 |         >>> from sympy import Symbol, Eq, Or, And\n143 |         >>> x = Symbol('x', real=True)\n144 |         >>> Eq(x, 0).as_set()\n145 |         {0}\n146 |         >>> (x > 0).as_set()\n147 |         Interval.open(0, oo)\n148 |         >>> And(-2 < x, x < 2).as_set()\n149 |         Interval.open(-2, 2)\n150 |         >>> Or(x < -2, 2 < x).as_set()\n151 |         Union(Interval.open(-oo, -2), Interval.open(2, oo))\n152 | \n153 |         \"\"\"\n154 |         from sympy.calculus.util import periodicity\n155 |         from sympy.core.relational import Relational\n156 | \n157 |         free = self.free_symbols\n158 |         if len(free) == 1:\n159 |             x = free.pop()\n160 |             if x.kind is NumberKind:\n161 |                 reps = {}\n162 |                 for r in self.atoms(Relational):\n163 |                     if periodicity(r, x) not in (0, None):\n164 |                         s = r._eval_as_set()\n165 |                         if s in (S.EmptySet, S.UniversalSet, S.Reals):\n166 |                             reps[r] = s.as_relational(x)\n167 |                             continue\n168 |                         raise NotImplementedError(filldedent('''\n169 |                             as_set is not implemented for relationals\n170 |                             with periodic solutions\n171 |                             '''))\n172 |                 new = self.subs(reps)\n173 |                 if new.func != self.func:\n174 |                     return new.as_set()  # restart with new obj\n175 |                 else:\n176 |                     return new._eval_as_set()\n177 | \n178 |             return self._eval_as_set()\n179 |         else:\n180 |             raise NotImplementedError(\"Sorry, as_set has not yet been\"\n181 |                                       \" implemented for multivariate\"\n182 |                                       \" expressions\")\n```",
+            "start_line": 135,
+            "end_line": 182,
+            "code_omitted": false,
+            "original_code_length": 2046
+          }
+        ],
+        "chain_length": 1,
+        "selection_rank": 2,
+        "is_longest": false
+      }
+    }
+  }
+}

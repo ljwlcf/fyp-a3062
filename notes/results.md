@@ -17,6 +17,30 @@ Caveats: single seed, partial run, logged deviation, etc.
 
 ---
 
+## 2026-10-09 — Paired arms on identical chains, pooled: adaptive non-inferior at a 3-point margin, -40% tokens
+Tool: `ablation/harness/paired_arms.py` (finds every --reuse-chains run from its manifest; output
+`ablation/results/paired_arms_20261009.json`). New runs: adaptive round1_only seed 2
+(`baseline_72b_adaptive_r1_lenient_v1/20261008-103700`, job 192118), adaptive seed 5
+(`baseline_72b_adaptive_lenient_v1/20261008-220852`, job 192615), noise-floor reruns seed 2
+(`baseline_72b_rerun_lenient_v1/20261008-115640`, job 192818) and seed 4 (`/20261008-151604`, job
+193013). All 75/75 ok, chains identical to their reference seed. Qwen2.5-72B @495f393, 2x pro6000.
+| arm (pooled over seeds) | instance-runs | Acc@1 | stage 6-7 tokens | vs first original run | vs mean of all original-arm runs |
+|---|---|---|---|---|---|
+| original rerun (noise floor), seeds 1-4 | 300 | 0.760 | +1% | 5 : 8, p 0.58, 4.3% discordant | - |
+| adaptive single-agent, seeds 1-5 | 375 | 0.739 | 61.7k (-40%) | 6 : 11, p 0.33, 4.5% | -0.9 points [-2.8, +0.9]; one-sided 95% lower -2.4 |
+| adaptive round1_only, seeds 1-3 | 225 | 0.751 | 73.8k (-28%) | 1 : 8, p 0.04, 4.0% | -2.2 [-5.3, +0.4]; lower -4.7 |
+| self-consistency (reuse), seeds 1-3 | 225 | 0.760 | 99.8k (-2%) | 3 : 8, p 0.23, 4.9% | -1.3 [-3.6, +0.9]; lower -3.3 |
+("vs mean": each seed's reference is the average of its first original run and its noise-floor rerun
+where one exists, seeds 1-4; seed 5 has the first run only.)
+Takeaway: adaptive debate (skip on unanimous vote, single-agent plan) is non-inferior to the original
+at a 3-point margin (one-sided 95% lower bound -2.4 points) while cutting stage 6-7 tokens by 40%
+(~10% of all tokens). Its discordance with the original (4.5%) equals the original's with itself
+(4.3%). The round1_only skip is worse (p = 0.04 against the first run) and costs more: dropped.
+The equal-token single agent (self-consistency) shows no significant difference from the debate.
+Caveats: n=75 per seed; one backbone; adaptive seed 6, rerun seed 5 and SC seeds 4-5 are queued.
+
+---
+
 ## 2026-10-08 — Adaptive round1_only variant, seed 3; correction on the skipped/debated split
 Raw: `baseline_72b_adaptive_r1_lenient_v1/20261008-074136` (job 192116; adaptive, skip_mode
 round1_only, --reuse-chains original seed 3; 75/75 ok, 1 h 34; chains identical).

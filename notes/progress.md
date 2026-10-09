@@ -7,6 +7,18 @@ Did:
 Broke:
 Next:
 
+## 2026-10-09
+Did: Scored round1_only seed 2, adaptive seed 5, noise-floor reruns seeds 2 and 4. New
+`paired_arms.py`: adaptive single-agent over 5 paired seeds -0.9 points vs the original-arm mean
+[-2.8, +0.9], one-sided lower -2.4 (non-inferior at 3 points), -40% stage 6-7 tokens; noise floor
+4.3% discordance vs adaptive 4.5%; round1_only worse (1:8, p=0.04) -> dropped. Fixed the job script's
+requeue lookup (killed Live repair 192683 under pipefail); repair resubmitted (194629). Queued rerun
+seed 5, adaptive seed 6, SC reuse seeds 4-5 behind lenient seed 6.
+Broke: Live repair 192683 FAILED (job-script bug, fixed). The watcher missed completions overnight.
+Queue: ug 186753 seed 6 (running) -> 194636 rerun s5 -> 194637 adaptive s6 -> 194638 SC s4 -> 194639
+SC s5 | killable 184607-9 Live a-c, 184861 shuffle 2, 194629 Live seed-2 repair (all pending).
+Next: score the queued runs and rerun paired_arms.py; re-fetch the Live seed-2 pilot after repair.
+
 ## 2026-10-08
 Did: Scored the two noise-floor reruns (original arm re-run on its own chains: 2:6 vs the first run,
 5.3% discordant; seed 1 rerun 0.720 vs 0.773) and adaptive seed 4 (0.733 = 0.733). Adaptive over 4
